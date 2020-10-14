@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,9 +13,16 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cpen321.quizzical.Data.CourseCategory;
+import com.cpen321.quizzical.Data.Questions.QuestionsMC;
 import com.cpen321.quizzical.InitActivity;
 import com.cpen321.quizzical.R;
+import com.cpen321.quizzical.Utils.ChoicePair;
+import com.cpen321.quizzical.Utils.OtherUtils;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestPage extends AppCompatActivity {
 
@@ -22,6 +30,7 @@ public class TestPage extends AppCompatActivity {
 
     private Button picButton;
     private Button ContinueButton;
+    private Button uploadButton;
     private ImageView imageView;
     private Bitmap imageBitmap;
     private Bitmap croppedBitmap;
@@ -40,6 +49,10 @@ public class TestPage extends AppCompatActivity {
 
         ContinueButton = (Button)findViewById(R.id.test_page_continue);
         ContinueButton.setOnClickListener(view -> OnContinueClicked());
+
+        uploadButton = findViewById(R.id.test_upload_button);
+        uploadButton.setOnClickListener(view->testUpload());
+
     }
 
     private void TakePic()
@@ -104,5 +117,21 @@ public class TestPage extends AppCompatActivity {
             i.putExtra(getString(R.string.image), imageBitmap);
         }
         startActivity(i);
+    }
+
+    private void testUpload()
+    {
+        List<ChoicePair> choicePairList = new ArrayList<>();
+
+        choicePairList.add(new ChoicePair(false, "<p align=\"middle\">2</p>"));
+        choicePairList.add(new ChoicePair(true, "https://raw.githubusercontent.com/yuntaowu2000/testUploadModels/master/006.png"));
+        choicePairList.add(new ChoicePair(false, "<p>https://raw.githubusercontent.com/yuntaowu2000/testUploadModels/master/006.png</p>"));
+        choicePairList.add(new ChoicePair(false, "$$ c = \\sqrt{a^2 + b^2} $$"));
+
+        QuestionsMC testQ = new QuestionsMC(CourseCategory.Math, "calculate: $$1+1=$$", false, "", choicePairList, 1);
+        String q = testQ.toJsonString();
+        Log.d("question", q);
+
+        new Thread(()->OtherUtils.uploadStringToServer(q)).start();
     }
 }

@@ -34,7 +34,7 @@ import java.util.*;
 import katex.hourglass.in.mathlib.MathView;
 
 
-public class QuizPage extends AppCompatActivity {
+public class QuizActivity extends AppCompatActivity {
 
     private int questionNumber;
     private int totalPageNum;
@@ -333,7 +333,7 @@ public class QuizPage extends AppCompatActivity {
 
     public void OnFinishClicked()
     {
-        Intent intent = new Intent(QuizPage.this, QuizFinishedPage.class);
+        Intent intent = new Intent(QuizActivity.this, QuizFinishedActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(getString(R.string.correct_num), correctNumber);
         intent.putExtra(getString(R.string.total_num), totalQuestionNum);

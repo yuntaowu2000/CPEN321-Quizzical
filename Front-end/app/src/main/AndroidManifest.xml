@@ -33,8 +33,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".PageFunctions.LoginActivity" />
-        <activity android:name=".PageFunctions.QuizPage" />
-        <activity android:name=".PageFunctions.QuizFinishedPage" />
+        <activity android:name=".PageFunctions.QuizActivity" />
+        <activity android:name=".PageFunctions.QuizFinishedActivity" />
         <activity android:name=".PageFunctions.TestPage" />
     </application>
 

@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.cpen321.quizzical.PageFunctions.QuizPage;
+import com.cpen321.quizzical.PageFunctions.QuizActivity;
 import com.cpen321.quizzical.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -42,7 +42,7 @@ public class QuizFragment extends Fragment {
 
     private void SetupQuiz()
     {
-        Intent quizIntent = new Intent(getActivity(),QuizPage.class);
+        Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
         quizIntent.putExtra(getString(R.string.Question_Num), 0);
         startActivity(quizIntent);
 

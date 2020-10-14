@@ -86,9 +86,9 @@ public class OtherUtils {
         return result;
     }
 
-    public boolean uploadToServer(String string)
+    public static boolean uploadStringToServer(String string)
     {
-        String serverLink = "http://193.122.108.23:8080/Time";
+        String serverLink = "http://193.122.108.23:9090/";
         try {
             URL url = new URL(serverLink);
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -102,10 +102,38 @@ public class OtherUtils {
             wr.flush();
             wr.close();
 
+
             int responseCode = conn.getResponseCode();
             Log.d("HTTP POST", "response code: " + responseCode);
         } catch (Exception e)
         {
+            Log.d("error message", e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean uploadBitmapToServer(Bitmap image)
+    {
+        String serverLink = "http://193.122.108.23:8080/Time";
+        try {
+            URL url = new URL(serverLink);
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setConnectTimeout(1000);
+            conn.setDoOutput(true);
+            conn.connect();
+            DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+            wr.writeBytes(image.toString());
+            wr.flush();
+            wr.close();
+
+            int responseCode = conn.getResponseCode();
+            Log.d("HTTP POST", "response code: " + responseCode);
+        } catch (Exception e)
+        {
+
             return false;
         }
         return true;

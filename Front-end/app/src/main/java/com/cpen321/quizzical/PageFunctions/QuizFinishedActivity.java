@@ -13,7 +13,7 @@ import androidx.core.app.ActivityCompat;
 import com.cpen321.quizzical.HomeActivity;
 import com.cpen321.quizzical.R;
 
-public class QuizFinishedPage extends AppCompatActivity {
+public class QuizFinishedActivity extends AppCompatActivity {
 
     private TextView response;
     private Button button;
@@ -56,7 +56,7 @@ public class QuizFinishedPage extends AppCompatActivity {
 
     private void OnBackClicked()
     {
-        Intent intent = new Intent(QuizFinishedPage.this, HomeActivity.class);
+        Intent intent = new Intent(QuizFinishedActivity.this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         ActivityCompat.finishAffinity(this);
