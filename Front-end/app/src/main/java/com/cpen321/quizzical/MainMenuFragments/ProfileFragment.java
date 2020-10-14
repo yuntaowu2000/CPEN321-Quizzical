@@ -123,12 +123,17 @@ public class ProfileFragment extends Fragment {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContext().getContentResolver(), imageUri);
 
                 //used for saving the bitmap for future logins
+                Bitmap finalBitmap = bitmap;
+                new Thread(()->OtherUtils.uploadBitmapToServer(finalBitmap)).start();
+
                 String encoded = OtherUtils.encodeImage(bitmap);
                 sp.edit().putString(getString(R.string.profilepicture), encoded).apply();
 
                 //scale the image and make it round to fit into the image button.
                 bitmap = OtherUtils.scaleImage(bitmap);
                 imageButton.setImageBitmap(bitmap);
+
+
             } catch (IOException e) {
                 Log.d("Image error", "bit map conversion error");
             }

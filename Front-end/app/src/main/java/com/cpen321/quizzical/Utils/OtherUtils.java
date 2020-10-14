@@ -115,17 +115,17 @@ public class OtherUtils {
 
     public static boolean uploadBitmapToServer(Bitmap image)
     {
-        String serverLink = "http://193.122.108.23:8080/Time";
+        String serverLink = "http://193.122.108.23:7070";
         try {
             URL url = new URL(serverLink);
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Content-Type", "text/plain");
             conn.setConnectTimeout(1000);
             conn.setDoOutput(true);
             conn.connect();
             DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-            wr.writeBytes(image.toString());
+            wr.writeBytes(encodeImage(image));
             wr.flush();
             wr.close();
 
@@ -133,7 +133,6 @@ public class OtherUtils {
             Log.d("HTTP POST", "response code: " + responseCode);
         } catch (Exception e)
         {
-
             return false;
         }
         return true;
