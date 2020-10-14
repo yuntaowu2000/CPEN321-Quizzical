@@ -9,6 +9,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -202,26 +203,29 @@ public class QuizActivity extends AppCompatActivity {
 
     private IButtons SetUpButtons(ChoicePair choicePair)
     {
-        LinearLayout.LayoutParams layoutParams= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150);
+        LinearLayout.LayoutParams layoutParams= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200);
         layoutParams.setMargins(30,15,30,15);
 
         final IButtons button;
         if (choicePair.isPic())
         {
-            String str= "<p align=\"middle\"><img src=\""+choicePair.getStr()+"\" height=\"100%\"/></p>";
-            MathView mathButton = new MathView(this);
-            mathButton.setDisplayText(str);
-            mathButton.setViewBackgroundColor(Color.WHITE);
-            mathButton.setLayoutParams(layoutParams);
-            mathButton.setClickable(true);
+            Bitmap image = OtherUtils.getBitmapFromUrl(choicePair.getStr());
+            image = Bitmap.createScaledBitmap(image, 400, 200, true);
 
-            button = new MathButtonWrapper(mathButton);
-            mathButton.setOnClickListener(view->OnChioceClicked(button));
+            ImageButton imageButton = new ImageButton(this);
+            imageButton.setImageBitmap(image);
+            imageButton.setBackgroundColor(Color.WHITE);
+            imageButton.setLayoutParams(layoutParams);
+
+            button = new ImageButtonWrapper(imageButton);
+            imageButton.setOnClickListener(view->OnChioceClicked(button));
 
         } else {
 
             MathView mathButton = new MathView(this);
+
             mathButton.setDisplayText(choicePair.getStr());
+
             mathButton.setViewBackgroundColor(Color.WHITE);
             mathButton.setLayoutParams(layoutParams);
             mathButton.setClickable(true);
