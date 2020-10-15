@@ -3,7 +3,7 @@
     <string name="WelcomeStr">Welcome to Quizzical</string>
     <string name="Login">Login</string>
     <string name="Register">Register</string>
-    <string name="user_name">User Name</string>
+    <string name="user_name">Username</string>
     <string name="password">Password</string>
     <string name="title_activity_main2" translatable="false">MainActivity2</string>
     <string name="IS_INSTRUCTOR" translatable="false">IS_INSTRUCTOR</string>
@@ -27,7 +27,7 @@
     <string name="question">Question</string>
     <string name="username_hint">username</string>
     <string name="password_hint">password</string>
-    <string name="is_instructor_debug_selection">isInstructor</string>
+    <string name="is_instructor_msg">Are you an instructor?</string>
     <string name="test">Test</string>
     <string name="class_statistic_page_text1" translatable="false">This is the class statistic page for teachers</string>
     <string name="leader_board_page_text1" translatable="false">This is the leaderBoard page</string>
@@ -48,7 +48,15 @@
     <string name="rotate">Rotate 90</string>
     <string name="image" translatable="false">Image</string>
     <string name="Continue_text">Continue</string>
-    <string name="profilepicture" translatable="false">ProfilePicture</string>
+    <string name="profile_picture" translatable="false">ProfilePicture</string>
     <string name="Profile_Image">Profile Image</string>
     <string name="Change_Profile_Image_msg">Do you want to change the profile image?</string>
+    <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
+    <string name="client_secret" translatable="false">vDBDVmMeOSQx_8dIBwzsV5-Y</string>
+    <string name="Email" translatable="false">Email</string>
+    <string name="OK" translatable="false">OK</string>
+    <string name="USERNAME_MSG">Please enter a user name</string>
+    <string name="SCHOOL_EMAIL_MSG">Please enter your school district email.</string>
+    <string name="EXAMPLE_EMAIL" translatable="false">E.g. abc@example.com</string>
+    <string name="EXAMPLE_USERNAME" translatable="false">E.g. Valhalla</string>
 </resources>

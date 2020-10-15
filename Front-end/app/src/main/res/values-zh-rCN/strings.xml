@@ -20,7 +20,7 @@
     <string name="question">题目</string>
     <string name="username_hint">请输入用户名</string>
     <string name="password_hint">请输入密码</string>
-    <string name="is_instructor_debug_selection">老师？</string>
+    <string name="is_instructor_msg">老师？</string>
     <string name="test">测试功能</string>
     <string name="log_out">退出登录</string>
     <string name="finish_quiz_text">你完成了这次测试！</string>
@@ -37,4 +37,7 @@
     <string name="Continue_text">继续</string>
     <string name="Profile_Image">个人头像</string>
     <string name="Change_Profile_Image_msg">你想要换一张头像吗？</string>
+    <string name="USERNAME_MSG">请输入用户名</string>
+    <string name="USERNAME">用户名</string>
+    <string name="SCHOOL_EMAIL_MSG">请输入学校email地址</string>
 </resources>

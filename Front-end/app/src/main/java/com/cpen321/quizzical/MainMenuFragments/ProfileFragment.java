@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,7 +71,13 @@ public class ProfileFragment extends Fragment {
 
         sp = Objects.requireNonNull(getActivity()).getSharedPreferences(getString(R.string.Login), Context.MODE_PRIVATE);
 
-        String encodedProfileImg = sp.getString(getString(R.string.profilepicture), "");
+        TextView usernameText = getView().findViewById(R.id.profile_username);
+        usernameText.setText(sp.getString(getString(R.string.user_name), getString(R.string.user_name)));
+
+        TextView emailText = getView().findViewById(R.id.profile_email);
+        emailText.setText(sp.getString(getString(R.string.Email), getString(R.string.EXAMPLE_EMAIL)));
+
+        String encodedProfileImg = sp.getString(getString(R.string.profile_picture), "");
         if (!OtherUtils.StringIsNullOrEmpty(encodedProfileImg))
         {
             Bitmap profileImg = OtherUtils.decodeImage(encodedProfileImg);
@@ -83,6 +89,13 @@ public class ProfileFragment extends Fragment {
     private void logOut()
     {
         sp.edit().putBoolean(getString(R.string.LOGGED), false).apply();
+
+        //need to use server to get these info
+        sp.edit().remove(getString(R.string.profile_picture)).apply();
+        sp.edit().remove(getString(R.string.IS_INSTRUCTOR)).apply();
+        sp.edit().remove(getString(R.string.user_name)).apply();
+        sp.edit().remove(getString(R.string.Email)).apply();
+
         HomeActivity parentAct = (HomeActivity)getActivity();
 
         Intent i = new Intent(parentAct, InitActivity.class);
@@ -127,7 +140,7 @@ public class ProfileFragment extends Fragment {
                 new Thread(()->OtherUtils.uploadBitmapToServer(finalBitmap)).start();
 
                 String encoded = OtherUtils.encodeImage(bitmap);
-                sp.edit().putString(getString(R.string.profilepicture), encoded).apply();
+                sp.edit().putString(getString(R.string.profile_picture), encoded).apply();
 
                 //scale the image and make it round to fit into the image button.
                 bitmap = OtherUtils.scaleImage(bitmap);

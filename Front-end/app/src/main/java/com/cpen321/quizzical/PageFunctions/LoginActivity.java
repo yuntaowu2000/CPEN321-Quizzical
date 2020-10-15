@@ -50,9 +50,9 @@ public class LoginActivity extends AppCompatActivity {
 
         sp = getSharedPreferences(getString(R.string.Login), MODE_PRIVATE);
 
-
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).requestEmail().build();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.client_id))
+                .requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         SignInButton signInButton = findViewById(R.id.sign_in_button);
@@ -102,6 +102,20 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void ValidateAndLogin(GoogleSignInAccount account)
+    {
+        if (account == null)
+        {
+            failed_notification.setText("");
+        }
+        else {
+            sp.edit().putBoolean(getString(R.string.LOGGED), true).apply();
+
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+        }
+    }
+
     private void ValidateAndLogin()
     {
         String username = usernameInput.getText().toString();
@@ -130,16 +144,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void ValidateAndLogin(GoogleSignInAccount account)
-    {
-        if (account == null)
-        {
-            failed_notification.setText("");
-        }
-        else {
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(intent);
-        }
-    }
+
 
 }

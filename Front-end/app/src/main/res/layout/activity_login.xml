@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/test_login_check_box"
             android:layout_gravity="center"
-            android:text="@string/is_instructor_debug_selection"/>
+            android:text="@string/is_instructor_msg"/>
 
         <Button
             android:id="@+id/loginPageButton"
@@ -66,12 +66,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:text="@string/Login" />
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
 
     </LinearLayout>
 

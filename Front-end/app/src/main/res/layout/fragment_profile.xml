@@ -15,12 +15,6 @@
             android:layout_height="wrap_content"
             android:text="@string/profile_page_text_1"
             />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/profile_log_out_btn"
-            android:text="@string/log_out"
-            android:layout_gravity="center"/>
 
         <ImageButton
             android:id="@+id/profile_pic"
@@ -28,6 +22,34 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/round_button"
-            android:contentDescription="@string/profilepicture" />
+            android:contentDescription="@string/profile_picture" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/user_name"
+            android:textSize="20sp"
+            android:id="@+id/profile_username"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/EXAMPLE_EMAIL"
+            android:textSize="20sp"
+            android:id="@+id/profile_email"/>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_log_out_btn"
+            android:text="@string/log_out"
+            android:layout_gravity="center"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
