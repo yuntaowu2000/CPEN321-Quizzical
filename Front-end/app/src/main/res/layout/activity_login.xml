@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,20 +9,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="100dp"/>
+            android:layout_height="100dp" />
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TableRow>
+
                 <TextView
-                    android:text="@string/USERNAME"
-                    android:width="120dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp" />
+                    android:width="120dp"
+                    android:text="@string/USERNAME" />
+
                 <EditText
                     android:id="@+id/usernameInput"
                     android:width="200dp"
@@ -31,38 +33,40 @@
             </TableRow>
 
             <TableRow>
+
                 <TextView
-                    android:text="@string/PASSWORD"
-                    android:width="120dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp" />
+                    android:width="120dp"
+                    android:text="@string/PASSWORD" />
+
                 <EditText
                     android:id="@+id/pwdInput"
                     android:width="200dp"
                     android:hint="@string/password_hint"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword" />
             </TableRow>
         </TableLayout>
 
         <TextView
+            android:id="@+id/login_failed_notification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:id="@+id/login_failed_notification"
-            android:textSize="30sp"
             android:textColor="#F44336"
-            />
+            android:textSize="30sp" />
+
         <CheckBox
+            android:id="@+id/test_login_check_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/test_login_check_box"
             android:layout_gravity="center"
-            android:text="@string/is_instructor_msg"/>
+            android:text="@string/is_instructor_msg" />
 
         <Button
             android:id="@+id/loginPageButton"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:text="@string/LOGIN" />

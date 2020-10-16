@@ -9,6 +9,14 @@
     <string name="LOGGED" translatable="false">LOGGED</string>
     <string name="Continue_text">Continue</string>
 
+    <string name="class_code" translatable="false">Class_code</string>
+    <string name="curr_login_user" translatable="false">curr_login_user</string>
+
+    <!--    for integrating Google login API-->
+    <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
+    <string name="client_secret" translatable="false">vDBDVmMeOSQx_8dIBwzsV5-Y</string>
+
+
     <!--    used for debugging page, can be deleted later-->
     <string name="test">Test</string>
 
@@ -92,9 +100,5 @@
     <string name="rotate">Rotate 90</string>
     <string name="image" translatable="false">Image</string>
 
-
-
-    <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
-    <string name="client_secret" translatable="false">vDBDVmMeOSQx_8dIBwzsV5-Y</string>
 
 </resources>

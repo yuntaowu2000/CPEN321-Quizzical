@@ -1,26 +1,22 @@
 package com.cpen321.quizzical.Utils.ButtonWrappers;
 
-import android.graphics.Color;
 import android.widget.ImageButton;
 
 public class ImageButtonWrapper implements IButtons {
 
     private ImageButton imageButton;
 
-    public ImageButtonWrapper(ImageButton imageButton)
-    {
+    public ImageButtonWrapper(ImageButton imageButton) {
         this.imageButton = imageButton;
     }
 
     @Override
-    public ButtonTypes GetButtonType()
-    {
+    public ButtonTypes GetButtonType() {
         return ButtonTypes.Image;
     }
 
     @Override
-    public IButtons GetButton()
-    {
+    public IButtons GetButton() {
         return this;
     }
 
@@ -29,8 +25,7 @@ public class ImageButtonWrapper implements IButtons {
         imageButton.setBackgroundColor(color);
     }
 
-    public ImageButton GetButtonAsImageButton()
-    {
+    public ImageButton GetButtonAsImageButton() {
         return imageButton;
     }
 }

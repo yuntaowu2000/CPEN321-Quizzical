@@ -4,12 +4,9 @@ import com.cpen321.quizzical.Data.CourseCategory;
 import com.cpen321.quizzical.Utils.ChoicePair;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.List;
 
-import java.util.*;
-
-public class QuestionsMC implements IQuestion{
+public class QuestionsMC implements IQuestion {
 
     private int index;
     private CourseCategory category;
@@ -20,7 +17,7 @@ public class QuestionsMC implements IQuestion{
     private List<ChoicePair> choices;
     private int correctAnsNum;
 
-    public QuestionsMC (CourseCategory category, String question, boolean hasPic, String picSrc, List<ChoicePair> choices, int correctAnsNum) {
+    public QuestionsMC(CourseCategory category, String question, boolean hasPic, String picSrc, List<ChoicePair> choices, int correctAnsNum) {
         this.category = category;
         this.question = question;
         this.HasPic = hasPic;

@@ -1,9 +1,5 @@
 package com.cpen321.quizzical;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,6 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 
 import com.cpen321.quizzical.PageFunctions.LoginActivity;
 import com.cpen321.quizzical.PageFunctions.TestPage;
@@ -34,23 +34,21 @@ import java.util.regex.Pattern;
 
 public class InitActivity extends AppCompatActivity {
 
-    SharedPreferences sp;
-
     private static final int RC_SIGN_IN = 420;
+    protected boolean username_input_OK = false;
+    protected boolean email_input_OK = false;
+    SharedPreferences sp;
     private GoogleSignInClient mGoogleSignInClient;
-
     private LinearLayout linearLayout;
     private ConstraintLayout constraintLayout;
     private RelativeLayout relativeLayout;
     private CheckBox instructorCheckBox;
-    protected boolean username_input_OK = false;
-    protected boolean email_input_OK = false;
 
     /**
-        This is the class for the initial screen which includes login and test buttons
-        Login button will redirect the app to the login screen
-        Test button will redirect the app to our own on phone test/debug screen
-        and it will be removed in the final release.
+     * This is the class for the initial screen which includes login and test buttons
+     * Login button will redirect the app to the login screen
+     * Test button will redirect the app to our own on phone test/debug screen
+     * and it will be removed in the final release.
      */
 
     @Override
@@ -61,8 +59,8 @@ public class InitActivity extends AppCompatActivity {
         linearLayout = findViewById(R.id.init_linear_layout);
         constraintLayout = findViewById(R.id.init_constraint_layout);
         relativeLayout = findViewById(R.id.init_relative_layout);
-        Button loginButton = (Button) findViewById(R.id.loginButton);
-        Button testButton = (Button) findViewById(R.id.test_page_button);
+        Button loginButton = findViewById(R.id.loginButton);
+        Button testButton = findViewById(R.id.test_page_button);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.client_id))
@@ -73,12 +71,14 @@ public class InitActivity extends AppCompatActivity {
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_WIDE);
 
-        signInButton.setOnClickListener(view->signIn());
+        signInButton.setOnClickListener(view -> signIn());
 
         //use shared preference to record user login
         //so that a user does not need to login again on multiple use
         //also record all user-related info such as username, email and profile picture
-        sp = getSharedPreferences(getString(R.string.LOGIN), MODE_PRIVATE);
+        //may need to separate shared preference for different users
+        //or we can just completely depend on the server to do the job
+        sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
 
 
         //login button 
@@ -88,7 +88,7 @@ public class InitActivity extends AppCompatActivity {
             startActivity(intent);
             ActivityCompat.finishAffinity(this);
         });
-        
+
 
         //used for test and debug only
         testButton.setOnClickListener(view -> {
@@ -100,11 +100,9 @@ public class InitActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
-        if (sp.getBoolean(getString(R.string.LOGGED), false))
-        {
+        if (sp.getBoolean(getString(R.string.LOGGED), false)) {
             //the user has logged in before, and we have the credential
             //can be redirected to home screen directly.
             Intent intent = new Intent(InitActivity.this, HomeActivity.class);
@@ -113,15 +111,13 @@ public class InitActivity extends AppCompatActivity {
             ActivityCompat.finishAffinity(this);
             //completely stop this activity, so that user will not go back to this activity
             //by clicking the back button
-        } else
-        {
+        } else {
             //the user has logged out, we need to sign the user's google account out as well
             mGoogleSignInClient.signOut();
         }
     }
 
-    private void signIn()
-    {
+    private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -152,17 +148,12 @@ public class InitActivity extends AppCompatActivity {
         }
     }
 
-    private void validateAndLogin(GoogleSignInAccount account)
-    {
-        if (account != null)
-        {
+    private void validateAndLogin(GoogleSignInAccount account) {
+        if (account != null) {
             //need to get user name and other stuff from the server
-            if (OtherUtils.StringIsNullOrEmpty(sp.getString(getString(R.string.USERNAME), "")))
-            {
+            if (OtherUtils.StringIsNullOrEmpty(sp.getString(getString(R.string.USERNAME), ""))) {
                 requestUserNameAndEmail();
-            }
-            else
-            {
+            } else {
                 goToHomeActivity();
             }
         } else {
@@ -170,12 +161,11 @@ public class InitActivity extends AppCompatActivity {
         }
     }
 
-    private void requestUserNameAndEmail()
-    {
+    private void requestUserNameAndEmail() {
         //reset the view to get user inputs.
         constraintLayout.setBackgroundResource(0);
-        LinearLayout.LayoutParams layoutParams= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 120);
-        layoutParams.setMargins(30,10,30,0);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 120);
+        layoutParams.setMargins(30, 10, 30, 0);
 
         linearLayout.removeAllViews();
 
@@ -201,18 +191,13 @@ public class InitActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (OtherUtils.StringIsNullOrEmpty(editable.toString()))
-                {
+                if (OtherUtils.StringIsNullOrEmpty(editable.toString())) {
                     usernameErrorText.setText(R.string.USERNAME_MSG);
                     username_input_OK = false;
-                }
-                else if (!checkUserName(editable.toString()))
-                {
+                } else if (!checkUserName(editable.toString())) {
                     usernameErrorText.setText(R.string.USERNAME_INVALID_MSG);
                     username_input_OK = false;
-                }
-                else
-                {
+                } else {
                     usernameErrorText.setText("");
                     username_input_OK = true;
                 }
@@ -249,17 +234,13 @@ public class InitActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (OtherUtils.StringIsNullOrEmpty(editable.toString()))
-                {
+                if (OtherUtils.StringIsNullOrEmpty(editable.toString())) {
                     emailErrorText.setText(R.string.Please_enter_email);
                     email_input_OK = false;
-                }
-                else if (!checkEmail(editable.toString()))
-                {
+                } else if (!checkEmail(editable.toString())) {
                     emailErrorText.setText(R.string.email_invalid);
                     email_input_OK = false;
-                } else
-                {
+                } else {
                     emailErrorText.setText("");
                     email_input_OK = true;
                 }
@@ -287,32 +268,26 @@ public class InitActivity extends AppCompatActivity {
         finishButton.setAllCaps(false);
         finishButton.setLayoutParams(relativeLayoutParam);
 
-        finishButton.setOnClickListener(view->onFinishClicked());
+        finishButton.setOnClickListener(view -> onFinishClicked());
         relativeLayout.addView(finishButton);
 
 
     }
 
-    private void onFinishClicked()
-    {
-        if (username_input_OK && email_input_OK)
-        {
+    private void onFinishClicked() {
+        if (username_input_OK && email_input_OK) {
             sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), instructorCheckBox.isChecked()).apply();
             goToHomeActivity();
-        }
-        else
-        {
+        } else {
             Toast.makeText(this, "Please enter valid username and email", Toast.LENGTH_LONG).show();
         }
     }
 
 
-    private boolean checkUserName(String username)
-    {
+    private boolean checkUserName(String username) {
         //check if the username is valid or not
         //need to check if this username is registered on server or not
-        if (!Pattern.matches("^[aA-zZ0-9_-]{3,15}$",username))
-        {
+        if (!Pattern.matches("^[aA-zZ0-9_-]{3,15}$", username)) {
             return false;
         }
 
@@ -322,16 +297,14 @@ public class InitActivity extends AppCompatActivity {
     }
 
 
-    private boolean checkEmail(String email)
-    {
+    private boolean checkEmail(String email) {
         //check if the email is valid or not
         //and upload this email to the server
         //the server should push an authentication email to the email address
 
         String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
 
-        if (!Pattern.matches(regex, email))
-        {
+        if (!Pattern.matches(regex, email)) {
             //the email entered is not a valid format
             return false;
         }
@@ -342,8 +315,7 @@ public class InitActivity extends AppCompatActivity {
         return true;
     }
 
-    private void goToHomeActivity()
-    {
+    private void goToHomeActivity() {
         sp.edit().putBoolean(getString(R.string.LOGGED), true).apply();
         Intent intent = new Intent(InitActivity.this, HomeActivity.class);
         startActivity(intent);

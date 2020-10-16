@@ -2,9 +2,6 @@ package com.cpen321.quizzical.Data.Questions;
 
 import com.cpen321.quizzical.Data.CourseCategory;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 public class QuestionsBuzzer implements IQuestion {
 
     private QuestionType questionType = QuestionType.Buzzer;

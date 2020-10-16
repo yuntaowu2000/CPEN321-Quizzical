@@ -1,8 +1,7 @@
 package com.cpen321.quizzical.MainMenuFragments;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -38,26 +36,22 @@ public class StatisticFragment extends Fragment {
     FloatingActionButton fab;
 
     boolean is_Instructor;
+    int class_code;
 
-    public StatisticFragment(boolean is_Instructor)
-    {
+    public StatisticFragment(boolean is_Instructor) {
         this.is_Instructor = is_Instructor;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        if (is_Instructor)
-        {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (is_Instructor) {
             return inflater.inflate(R.layout.fragment_class_statistic, container, false);
-        }
-        else {
+        } else {
             return inflater.inflate(R.layout.fragment_leaderboard, container, false);
         }
 
@@ -70,71 +64,68 @@ public class StatisticFragment extends Fragment {
         StrictMode.setVmPolicy(
                 new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
 
+        class_code = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE).
+                getInt(getString(R.string.class_code), 0);
+        //if class code is 0, we need to prompt the user to
+        // create a class if instructor
+        // join a class if student
+
         swipeRefreshLayout = view.findViewById(R.id.statistic_swipe_layout);
 
         realTimeText = view.findViewById(R.id.statistic_test_text);
         new Thread(this::updateText).start();
 
-        swipeRefreshLayout.setOnRefreshListener(()->new Thread(this::updateText).start());
+        swipeRefreshLayout.setOnRefreshListener(() -> new Thread(this::updateText).start());
 
         rotateOpen = AnimationUtils.loadAnimation(this.getContext(), R.anim.rotate_open_anim);
         rotateClose = AnimationUtils.loadAnimation(this.getContext(), R.anim.rotate_close_anim);
         fromBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.from_bottom_anim);
         toBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.to_bottom_anim);
 
-        if (is_Instructor)
-        {
+        if (is_Instructor) {
             fab = getView().findViewById(R.id.teacher_class_switch_fab);
-        }
-        else
-        {
+        } else {
             fab = getView().findViewById(R.id.class_switch_fab);
         }
 
-        fab.setOnClickListener(v->onSwitchClassButtonClicked());
+        fab.setOnClickListener(v -> onSwitchClassButtonClicked());
 
     }
 
-    private void onSwitchClassButtonClicked()
-    {
+    private void onSwitchClassButtonClicked() {
         Toast.makeText(getContext(), "change class clicked", Toast.LENGTH_SHORT).show();
     }
 
-    private void updateText()
-    {
+    private void updateText() {
         //we need to update UI on UI thread, otherwise it will crash the app
         //however, it adds the load onto the Main thread, causing lags
         //so we need to run a new thread which runs this function
         String result = readFromURL();
-        getActivity().runOnUiThread(()->realTimeText.setText(result));
+        getActivity().runOnUiThread(() -> realTimeText.setText(result));
     }
 
 
-    private String readFromURL()
-    {
+    private String readFromURL() {
         String result = getString(R.string.server_get_failed);
         try {
             URL url = new URL(serverLink);
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(1000);
             conn.connect();
             InputStream is = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is,getString(R.string.encoding_utf_8)));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, getString(R.string.encoding_utf_8)));
             StringBuilder stb = new StringBuilder();
             String line;
-            while ((line=reader.readLine()) != null)
-            {
+            while ((line = reader.readLine()) != null) {
                 stb.append(line);
             }
             result = stb.toString();
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             String eMessage = e.getMessage() + "";
             Log.d("html exception", eMessage);
         }
-        if (swipeRefreshLayout.isRefreshing())
-        {
+        if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
         return result;

@@ -1,15 +1,14 @@
 package com.cpen321.quizzical.Utils.ButtonWrappers;
 
-import android.graphics.Color;
 import android.widget.Button;
 
-public class TextButtonWrapper implements IButtons{
+public class TextButtonWrapper implements IButtons {
     private Button button;
 
-    public TextButtonWrapper(Button button)
-    {
+    public TextButtonWrapper(Button button) {
         this.button = button;
     }
+
     @Override
     public ButtonTypes GetButtonType() {
         return ButtonTypes.Text;
@@ -25,8 +24,7 @@ public class TextButtonWrapper implements IButtons{
         button.setBackgroundColor(color);
     }
 
-    public Button GetButtonAsTextButton()
-    {
+    public Button GetButtonAsTextButton() {
         return this.button;
     }
 }

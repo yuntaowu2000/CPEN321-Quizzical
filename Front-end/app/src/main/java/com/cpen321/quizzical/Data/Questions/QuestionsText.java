@@ -2,9 +2,6 @@ package com.cpen321.quizzical.Data.Questions;
 
 import com.cpen321.quizzical.Data.CourseCategory;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 public class QuestionsText implements IQuestion {
     @Override
     public int getID() {

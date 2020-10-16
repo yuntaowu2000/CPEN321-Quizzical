@@ -27,39 +27,35 @@ import java.util.List;
 public class TestPage extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-
+    LinearLayout linearLayout;
     private Button picButton;
     private Button ContinueButton;
     private Button uploadButton;
     private ImageView imageView;
     private Bitmap imageBitmap;
     private Bitmap croppedBitmap;
-    LinearLayout linearLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug_test);
 
-        picButton = (Button)findViewById(R.id.test_page_take_photo_button);
-        imageView = (ImageView)findViewById(R.id.test_image);
-        linearLayout = (LinearLayout)findViewById(R.id.test_page_view);
-        picButton.setOnClickListener(view -> TakePic());
+        picButton = findViewById(R.id.test_page_take_photo_button);
+        imageView = findViewById(R.id.test_image);
+        linearLayout = findViewById(R.id.test_page_view);
+        picButton.setOnClickListener(view -> takePic());
 
-        ContinueButton = (Button)findViewById(R.id.test_page_continue);
-        ContinueButton.setOnClickListener(view -> OnContinueClicked());
+        ContinueButton = findViewById(R.id.test_page_continue);
+        ContinueButton.setOnClickListener(view -> onContinueClicked());
 
         uploadButton = findViewById(R.id.test_upload_button);
-        uploadButton.setOnClickListener(view->testUpload());
+        uploadButton.setOnClickListener(view -> testUpload());
 
     }
 
-    private void TakePic()
-    {
+    private void takePic() {
         Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (i.resolveActivity(getPackageManager()) != null)
-        {
+        if (i.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(i, REQUEST_IMAGE_CAPTURE);
         }
     }
@@ -71,14 +67,14 @@ public class TestPage extends AppCompatActivity {
             Bundle extras = data.getExtras();
 
             assert extras != null;
-            
+
             imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
 
             new AlertDialog.Builder(this).setTitle(R.string.modify_image).setMessage(R.string.modify_image_hint)
                     .setPositiveButton(R.string.YES, (dialogInterface, i) -> {
                         dialogInterface.dismiss();
-                        CropSetup();
+                        cropSetup();
                     })
                     .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -86,7 +82,7 @@ public class TestPage extends AppCompatActivity {
         }
     }
 
-    private void CropSetup() {
+    private void cropSetup() {
         final CropImageView cropImageView = new CropImageView(this);
         cropImageView.setImageBitmap(imageBitmap);
         linearLayout.addView(cropImageView);
@@ -106,12 +102,10 @@ public class TestPage extends AppCompatActivity {
         linearLayout.addView(rotateButton);
 
     }
-    
-    private void OnContinueClicked()
-    {
+
+    private void onContinueClicked() {
         Intent i = new Intent(this, InitActivity.class);
-        if (croppedBitmap != null)
-        {
+        if (croppedBitmap != null) {
             i.putExtra(getString(R.string.image), croppedBitmap);
         } else {
             i.putExtra(getString(R.string.image), imageBitmap);
@@ -119,8 +113,7 @@ public class TestPage extends AppCompatActivity {
         startActivity(i);
     }
 
-    private void testUpload()
-    {
+    private void testUpload() {
         List<ChoicePair> choicePairList = new ArrayList<>();
 
         choicePairList.add(new ChoicePair(false, "<p align=\"middle\">2</p>"));
@@ -132,6 +125,6 @@ public class TestPage extends AppCompatActivity {
         String q = testQ.toJsonString();
         Log.d("question", q);
 
-        new Thread(()->OtherUtils.uploadStringToServer(q)).start();
+        new Thread(() -> OtherUtils.uploadStringToServer(q)).start();
     }
 }

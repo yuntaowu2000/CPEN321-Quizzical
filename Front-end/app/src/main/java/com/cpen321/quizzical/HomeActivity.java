@@ -3,23 +3,23 @@ package com.cpen321.quizzical;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
 import com.cpen321.quizzical.ui.main.MyHomePagerAdapter;
 import com.google.android.material.tabs.TabLayout;
-
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
     boolean is_Instructor;
     SharedPreferences sp;
-    
+
 
     /**
-        This is the class for the main home screen of the APP
-        We use a tab layout for quiz, class statistics/leader board, and profile
-        Instructor and students will have different layout and functionalities    
+     * This is the class for the main home screen of the APP
+     * We use a tab layout for quiz, class statistics/leader board, and profile
+     * Instructor and students will have different layout and functionalities
      */
 
     @Override
@@ -28,7 +28,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         //check if the user is instructor from shared preferences
-        sp = getSharedPreferences(getString(R.string.LOGIN), MODE_PRIVATE);
+        sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
         is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
 
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -63,22 +63,17 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    private void setupTab(String tabText)
-    {
+    private void setupTab(String tabText) {
         TabLayout.Tab tab = tabLayout.newTab();
         tab.setText(tabText);
         tabLayout.addTab(tab);
     }
 
-    private void setupAllTabs()
-    {
+    private void setupAllTabs() {
         setupTab(getString(R.string.Quizzes));
-        if (is_Instructor)
-        {
+        if (is_Instructor) {
             setupTab(getString(R.string.Class_Statistics));
-        }
-        else
-        {
+        } else {
             setupTab(getString(R.string.LeaderBoard));
         }
         setupTab(getString(R.string.Profile));

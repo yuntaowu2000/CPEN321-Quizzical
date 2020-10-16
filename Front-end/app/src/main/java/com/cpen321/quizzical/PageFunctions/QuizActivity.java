@@ -30,30 +30,29 @@ import com.cpen321.quizzical.Utils.ChoicePair;
 import com.cpen321.quizzical.Utils.OtherUtils;
 import com.cpen321.quizzical.Utils.TestQuestionPackage;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import katex.hourglass.in.mathlib.MathView;
 
 
 public class QuizActivity extends AppCompatActivity {
 
-    private int questionNumber;
-    private int totalPageNum;
     private static final int totalQuestionNum = 3;
-    private List<IQuestion> questions;
-    private int correctNumber;
-
     IButtons selectedChoice;
     IButtons correctChoice;
-
     TextView infoLabel;
     Button submitButton;
     LinearLayout centerStack;
     LinearLayout questionStack;
-
     MathView currQuestion;
     ImageView currQuestionPic;
     TextView questionInfoText;
+    private int questionNumber;
+    private int totalPageNum;
+    private List<IQuestion> questions;
+    private int correctNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,71 +61,65 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
         this.questionNumber = getIntent().getIntExtra(getString(R.string.Question_Num), 0);
 
-        infoLabel = (TextView)findViewById(R.id.quiz_page_info_label);
-        submitButton = (Button)findViewById(R.id.quiz_page_submit_button);
-        centerStack = (LinearLayout)findViewById(R.id.center_stack);
-        questionStack = (LinearLayout)findViewById(R.id.question_stack);
+        infoLabel = findViewById(R.id.quiz_page_info_label);
+        submitButton = findViewById(R.id.quiz_page_submit_button);
+        centerStack = findViewById(R.id.center_stack);
+        questionStack = findViewById(R.id.question_stack);
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskWrites().detectNetwork().penaltyLog().build());
         StrictMode.setVmPolicy(
                 new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
-        if (this.questionNumber == 0)
-        {
-            SetUp();
-            while (questions == null || questions.size() == 0)
-            {
-                SetUp();
+        if (this.questionNumber == 0) {
+            setUp();
+            while (questions == null || questions.size() == 0) {
+                setUp();
             }
 
         }
         try {
-            GeneratePage();
+            generatePage();
         } catch (Exception e) {
             Log.d("Generate page error", "not implemented");
         }
     }
 
-    private void SetUp()
-    {
+    private void setUp() {
         questions = new ArrayList<>();
         TestQuestionPackage testPackage = new TestQuestionPackage();
 
-        questions = testPackage.GetPackage().GetQuestionsByCategory(CourseCategory.Math, totalQuestionNum);
+        questions = testPackage.GetPackage().getQuestionsByCategory(CourseCategory.Math, totalQuestionNum);
         totalPageNum = questions.size();
         correctNumber = 0;
     }
 
 
-    private void GeneratePage() throws Exception
-    {
+    private void generatePage() throws Exception {
         IQuestion question = questions.get(this.questionNumber);
         switch (question.getQuestionType()) {
             case MC:
-                GenerateMCPage(question);
+                generateMCPage(question);
                 break;
             case Text:
                 throw new Exception("Not implemented");
             default:
-                GenerateBlankPage();
+                generateBlankPage();
         }
     }
 
-    private void GenerateBlankPage()
-    {
+    private void generateBlankPage() {
         infoLabel.setText(R.string.error_generating_quiz_page);
         submitButton.setText(R.string.Next);
-        submitButton.setOnClickListener(view->OnNextClicked());
+        submitButton.setOnClickListener(view -> onNextClicked());
     }
 
-    private void GenerateMCPage(IQuestion question)
-    {
-        QuestionsMC q = (QuestionsMC)question;
-        UpdateSubmitButtonInfo();
+    private void generateMCPage(IQuestion question) {
+        QuestionsMC q = (QuestionsMC) question;
+        updateSubmitButtonInfo();
 
-        CleanUpQuestionStack();
+        cleanUpQuestionStack();
         selectedChoice = null;
 
-        if (!OtherUtils.StringIsNullOrEmpty(q.getQuestion())){
+        if (!OtherUtils.StringIsNullOrEmpty(q.getQuestion())) {
 
             MathView view = new MathView(this);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -136,40 +129,34 @@ public class QuizActivity extends AppCompatActivity {
             currQuestion = view;
         }
 
-        if (q.hasPic())
-        {
-            SetUpQuestionPicture(q);
+        if (q.hasPic()) {
+            setUpQuestionPicture(q);
         }
 
         List<IButtons> buttonsList = new ArrayList<>();
 
         List<ChoicePair> choices = q.getChoices();
-        for (ChoicePair choice : choices)
-        {
-            buttonsList.add(SetUpButtons(choice));
+        for (ChoicePair choice : choices) {
+            buttonsList.add(setUpButtons(choice));
         }
 
         correctChoice = buttonsList.get(q.getCorrectAnsNum() - 1);
 
         Collections.shuffle(buttonsList);
 
-        for (IButtons button : buttonsList)
-        {
-            if (button.GetButtonType().equals(ButtonTypes.Image))
-            {
-                ImageButtonWrapper imageButton = (ImageButtonWrapper)button;
+        for (IButtons button : buttonsList) {
+            if (button.GetButtonType().equals(ButtonTypes.Image)) {
+                ImageButtonWrapper imageButton = (ImageButtonWrapper) button;
                 centerStack.addView(imageButton.GetButtonAsImageButton());
-            }
-            else
-            {
-                MathButtonWrapper mathButton = (MathButtonWrapper)button;
+            } else {
+                MathButtonWrapper mathButton = (MathButtonWrapper) button;
                 centerStack.addView(mathButton.GetButtonAsMathButton());
             }
         }
 
     }
 
-    private void CleanUpQuestionStack() {
+    private void cleanUpQuestionStack() {
         if (currQuestion != null)
             questionStack.removeView(currQuestion);
         if (currQuestionPic != null)
@@ -178,12 +165,11 @@ public class QuizActivity extends AppCompatActivity {
             questionStack.removeView(questionInfoText);
     }
 
-    private void SetUpQuestionPicture(QuestionsMC q) {
+    private void setUpQuestionPicture(QuestionsMC q) {
 
         Bitmap pic = OtherUtils.getBitmapFromUrl(q.getPicSrc());
         questionInfoText = new TextView(this);
-        if (pic == null)
-        {
+        if (pic == null) {
             questionInfoText.setText(R.string.error_loading_pic);
             questionStack.addView(questionInfoText);
         } else {
@@ -192,7 +178,7 @@ public class QuizActivity extends AppCompatActivity {
 
             ImageView imageView = new ImageView(this);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600);
-            layoutParams.setMargins(0,30,0,0);
+            layoutParams.setMargins(0, 30, 0, 0);
             imageView.setLayoutParams(layoutParams);
 
             imageView.setImageBitmap(pic);
@@ -201,14 +187,12 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    private IButtons SetUpButtons(ChoicePair choicePair)
-    {
-        LinearLayout.LayoutParams layoutParams= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200);
-        layoutParams.setMargins(30,15,30,15);
+    private IButtons setUpButtons(ChoicePair choicePair) {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200);
+        layoutParams.setMargins(30, 15, 30, 15);
 
         final IButtons button;
-        if (choicePair.isPic())
-        {
+        if (choicePair.isPic()) {
             Bitmap image = OtherUtils.getBitmapFromUrl(choicePair.getStr());
             image = Bitmap.createScaledBitmap(image, 400, 200, true);
 
@@ -218,7 +202,7 @@ public class QuizActivity extends AppCompatActivity {
             imageButton.setLayoutParams(layoutParams);
 
             button = new ImageButtonWrapper(imageButton);
-            imageButton.setOnClickListener(view->OnChioceClicked(button));
+            imageButton.setOnClickListener(view -> onChoiceClicked(button));
 
         } else {
 
@@ -231,82 +215,66 @@ public class QuizActivity extends AppCompatActivity {
             mathButton.setClickable(true);
 
             button = new MathButtonWrapper(mathButton);
-            mathButton.setOnClickListener(view->OnChioceClicked(button));
+            mathButton.setOnClickListener(view -> onChoiceClicked(button));
 
         }
         return button;
     }
 
-    private void OnChioceClicked(IButtons button)
-    {
-        if (selectedChoice != null)
-        {
+    private void onChoiceClicked(IButtons button) {
+        if (selectedChoice != null) {
             selectedChoice.SetBackGroundColor(Color.WHITE);
         }
 
         selectedChoice = button;
-        selectedChoice.SetBackGroundColor(Color.GREEN);
+        selectedChoice.SetBackGroundColor(getResources().getColor(R.color.colorAqua));
     }
 
-    private void UpdateSubmitButtonInfo()
-    {
+    private void updateSubmitButtonInfo() {
         submitButton.setText(R.string.SUBMIT);
-        submitButton.setOnClickListener(view->OnSubmitClicked());
+        submitButton.setOnClickListener(view -> onSubmitClicked());
     }
 
-    private void OnSubmitClicked()
-    {
-        if (!CheckAnswer())
+    private void onSubmitClicked() {
+        if (!checkAnswer())
             return;
 
-        if (this.questionNumber < totalPageNum - 1)
-        {
+        if (this.questionNumber < totalPageNum - 1) {
             submitButton.setText(R.string.Next);
-            submitButton.setOnClickListener(view->OnNextClicked());
-        }
-        else {
+            submitButton.setOnClickListener(view -> onNextClicked());
+        } else {
             submitButton.setText(R.string.FINISH);
-            submitButton.setOnClickListener(view->OnFinishClicked());
+            submitButton.setOnClickListener(view -> onFinishClicked());
         }
 
     }
 
-    private boolean CheckAnswer()
-    {
-        if (questions.get(this.questionNumber).getQuestionType().equals(QuestionType.MC))
-        {
-            return CheckMC();
+    private boolean checkAnswer() {
+        if (questions.get(this.questionNumber).getQuestionType().equals(QuestionType.MC)) {
+            return checkMC();
         }
 
         return false;
     }
 
-    private boolean CheckMC()
-    {
+    private boolean checkMC() {
 
-        if (selectedChoice == null)
-        {
-            return ResponseNoAnswerEntered();
-        }
-        else if(selectedChoice.equals(correctChoice))
-        {
-            return ResponseCorrectAnswerEntered();
-        }
-        else
-        {
-            return ResponseWrongAnswerEntered();
+        if (selectedChoice == null) {
+            return responseNoAnswerEntered();
+        } else if (selectedChoice.equals(correctChoice)) {
+            return responseCorrectAnswerEntered();
+        } else {
+            return responseWrongAnswerEntered();
         }
     }
 
-    private boolean ResponseNoAnswerEntered()
-    {
+    private boolean responseNoAnswerEntered() {
         infoLabel.setText(R.string.No_answer_response);
         infoLabel.setTextColor(getResources().getColor(R.color.colorCrimson));
         return false;
     }
 
-    private boolean ResponseCorrectAnswerEntered()
-    {
+    private boolean responseCorrectAnswerEntered() {
         correctNumber++;
         @SuppressLint("DefaultLocale") String response = String.format("You are correct. You got %d/%d correct.", correctNumber, totalQuestionNum);
         infoLabel.setText(response);
@@ -314,29 +282,29 @@ public class QuizActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean ResponseWrongAnswerEntered()
-    {
+    private boolean responseWrongAnswerEntered() {
         @SuppressLint("DefaultLocale") String response = String.format("You are wrong. You got %d/%d correct.", correctNumber, totalQuestionNum);
         infoLabel.setText(response);
         infoLabel.setTextColor(getResources().getColor(R.color.colorCrimson));
+
+        selectedChoice.SetBackGroundColor(getResources().getColor(R.color.colorCrimson));
+        correctChoice.SetBackGroundColor(getResources().getColor(R.color.colorLawnGreen));
         return true;
     }
 
-    public void OnNextClicked()
-    {
+    public void onNextClicked() {
         centerStack.removeAllViews();
         this.questionNumber += 1;
         infoLabel.setText("");
 
         try {
-            GeneratePage();
+            generatePage();
         } catch (Exception e) {
             Log.d("Generate page error", "not implemented");
         }
     }
 
-    public void OnFinishClicked()
-    {
+    public void onFinishClicked() {
         Intent intent = new Intent(QuizActivity.this, QuizFinishedActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(getString(R.string.correct_num), correctNumber);

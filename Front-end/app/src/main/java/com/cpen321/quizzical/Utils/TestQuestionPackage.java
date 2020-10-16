@@ -7,13 +7,12 @@ import java.util.List;
 
 public class TestQuestionPackage {
     /**
-        This class is used for testing the functionality of Latex rendering and quiz set up
+     * This class is used for testing the functionality of Latex rendering and quiz set up
      */
 
     private QuestionPackage questionPackage;
 
-    public TestQuestionPackage()
-    {
+    public TestQuestionPackage() {
         questionPackage = new QuestionPackage();
 
         List<ChoicePair> choicePairList = new ArrayList<>();
@@ -23,10 +22,9 @@ public class TestQuestionPackage {
         choicePairList.add(new ChoicePair(false, "<p>https://raw.githubusercontent.com/yuntaowu2000/testUploadModels/master/006.png</p>"));
         choicePairList.add(new ChoicePair(false, "$$ c = \\sqrt{a^2 + b^2} $$"));
 
-        try{
+        try {
             questionPackage.AddMCQuestion(CourseCategory.Math, "calculate: $$1+1=$$", false, "", choicePairList, 1);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -36,28 +34,25 @@ public class TestQuestionPackage {
         choicePairList.add(new ChoicePair(false, "<p align=\"middle\">plain text</p>"));
         choicePairList.add(new ChoicePair(false, "<p align=\"middle\">$5$ with some text</p>"));
 
-        try{
+        try {
             questionPackage.AddMCQuestion(CourseCategory.Math, "calculate: $\\frac{\\sqrt{4}+2}{2}$",
                     false, "",
                     choicePairList, 1);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try{
+        try {
             questionPackage.AddMCQuestion(CourseCategory.Math, "",
                     true, "https://raw.githubusercontent.com/yuntaowu2000/testUploadModels/master/006.png",
                     choicePairList, 1);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public QuestionPackage GetPackage()
-    {
+    public QuestionPackage GetPackage() {
         return this.questionPackage;
     }
 }

@@ -6,10 +6,10 @@ public class MathButtonWrapper implements IButtons {
 
     MathView view;
 
-    public MathButtonWrapper(MathView view)
-    {
+    public MathButtonWrapper(MathView view) {
         this.view = view;
     }
+
     @Override
     public ButtonTypes GetButtonType() {
         return ButtonTypes.Math;
@@ -25,8 +25,7 @@ public class MathButtonWrapper implements IButtons {
         view.setViewBackgroundColor(color);
     }
 
-    public MathView GetButtonAsMathButton()
-    {
+    public MathView GetButtonAsMathButton() {
         return view;
     }
 }

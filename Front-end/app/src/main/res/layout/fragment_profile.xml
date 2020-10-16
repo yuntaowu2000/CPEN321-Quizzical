@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainMenuFragments.ProfileFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/profile_page_text_1"
-            />
+            android:text="@string/profile_page_text_1" />
 
         <ImageButton
             android:id="@+id/profile_pic"
@@ -25,31 +24,31 @@
             android:contentDescription="@string/Profile_Image" />
 
         <TextView
+            android:id="@+id/profile_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:text="@string/USERNAME"
-            android:textSize="20sp"
-            android:id="@+id/profile_username"/>
+            android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/profile_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:text="@string/EXAMPLE_EMAIL"
-            android:textSize="20sp"
-            android:id="@+id/profile_email"/>
+            android:textSize="20sp" />
 
 
         <Button
+            android:id="@+id/profile_log_out_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/profile_log_out_btn"
-            android:text="@string/log_out"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:text="@string/log_out" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
