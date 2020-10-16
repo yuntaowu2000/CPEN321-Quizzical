@@ -20,7 +20,7 @@
 
             <TableRow>
                 <TextView
-                    android:text="@string/user_name"
+                    android:text="@string/USERNAME"
                     android:width="120dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginStart="20dp" />
@@ -32,7 +32,7 @@
 
             <TableRow>
                 <TextView
-                    android:text="@string/password"
+                    android:text="@string/PASSWORD"
                     android:width="120dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginStart="20dp" />
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:text="@string/Login" />
+            android:text="@string/LOGIN" />
 
     </LinearLayout>
 

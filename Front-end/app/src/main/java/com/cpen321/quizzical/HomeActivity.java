@@ -28,7 +28,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         //check if the user is instructor from shared preferences
-        sp = getSharedPreferences(getString(R.string.Login), MODE_PRIVATE);
+        sp = getSharedPreferences(getString(R.string.LOGIN), MODE_PRIVATE);
         is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
 
         ViewPager viewPager = findViewById(R.id.view_pager);

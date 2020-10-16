@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="WelcomeStr">欢迎使用Quizzical</string>
-    <string name="Login">登录</string>
-    <string name="Register">注册</string>
-    <string name="user_name">用户名</string>
-    <string name="password">密码</string>
+    <string name="welcome_str">欢迎使用Quizzical</string>
+    <string name="LOGIN">登录</string>
+    <string name="USERNAME">用户名</string>
+    <string name="PASSWORD">密码</string>
     <string name="error_generating_quiz_page">无法加载此题，请按下一题继续</string>
     <string name="Next">下一题</string>
     <string name="error_loading_pic">无法加载图片</string>
     <string name="quiz_pic_hint">请下滑查看图片</string>
-    <string name="submit">提交</string>
-    <string name="Finish">完成</string>
+    <string name="SUBMIT">提交</string>
+    <string name="FINISH">完成</string>
     <string name="No_answer_response">提交前请先选择或输入答案</string>
     <string name="Quizzes">测试</string>
     <string name="Class_Statistics">班级数据</string>
@@ -30,14 +29,15 @@
     <string name="preview">预览</string>
     <string name="rotate">旋转90°</string>
     <string name="crop">修剪</string>
-    <string name="no">否</string>
-    <string name="yes">是</string>
+    <string name="NO">否</string>
+    <string name="YES">是</string>
     <string name="modify_image_hint">你想要修剪或旋转图片吗？</string>
     <string name="modify_image">修整图片</string>
     <string name="Continue_text">继续</string>
-    <string name="Profile_Image">个人头像</string>
     <string name="Change_Profile_Image_msg">你想要换一张头像吗？</string>
     <string name="USERNAME_MSG">请输入用户名</string>
-    <string name="USERNAME">用户名</string>
-    <string name="SCHOOL_EMAIL_MSG">请输入学校email地址</string>
+    <string name="SCHOOL_EMAIL_MSG">请输入邮箱地址</string>
+    <string name="Please_enter_email">请输入有效邮箱地址</string>
+    <string name="email_invalid">邮箱地址无效</string>
+    <string name="USERNAME_INVALID_MSG">用户名无效。仅支持3-15英文字符，0-9，下划线</string>
 </resources>

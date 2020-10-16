@@ -69,15 +69,15 @@ public class ProfileFragment extends Fragment {
         imageButton = Objects.requireNonNull(getView()).findViewById(R.id.profile_pic);
         imageButton.setOnClickListener(v->decideSetUpProfileImage());
 
-        sp = Objects.requireNonNull(getActivity()).getSharedPreferences(getString(R.string.Login), Context.MODE_PRIVATE);
+        sp = Objects.requireNonNull(getActivity()).getSharedPreferences(getString(R.string.LOGIN), Context.MODE_PRIVATE);
 
         TextView usernameText = getView().findViewById(R.id.profile_username);
-        usernameText.setText(sp.getString(getString(R.string.user_name), getString(R.string.user_name)));
+        usernameText.setText(sp.getString(getString(R.string.USERNAME), getString(R.string.USERNAME)));
 
         TextView emailText = getView().findViewById(R.id.profile_email);
         emailText.setText(sp.getString(getString(R.string.Email), getString(R.string.EXAMPLE_EMAIL)));
 
-        String encodedProfileImg = sp.getString(getString(R.string.profile_picture), "");
+        String encodedProfileImg = sp.getString(getString(R.string.Profile_Image), "");
         if (!OtherUtils.StringIsNullOrEmpty(encodedProfileImg))
         {
             Bitmap profileImg = OtherUtils.decodeImage(encodedProfileImg);
@@ -91,9 +91,9 @@ public class ProfileFragment extends Fragment {
         sp.edit().putBoolean(getString(R.string.LOGGED), false).apply();
 
         //need to use server to get these info
-        sp.edit().remove(getString(R.string.profile_picture)).apply();
+        sp.edit().remove(getString(R.string.Profile_Image)).apply();
         sp.edit().remove(getString(R.string.IS_INSTRUCTOR)).apply();
-        sp.edit().remove(getString(R.string.user_name)).apply();
+        sp.edit().remove(getString(R.string.USERNAME)).apply();
         sp.edit().remove(getString(R.string.Email)).apply();
 
         HomeActivity parentAct = (HomeActivity)getActivity();
@@ -110,11 +110,11 @@ public class ProfileFragment extends Fragment {
     private void decideSetUpProfileImage()
     {
         new AlertDialog.Builder(this.getContext()).setTitle(R.string.Profile_Image).setMessage(R.string.Change_Profile_Image_msg)
-                .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+                .setPositiveButton(R.string.YES, (dialogInterface, i) -> {
                     dialogInterface.dismiss();
                     checkPermissions();
                 })
-                .setNegativeButton(R.string.no, (dialogInterface, i) -> dialogInterface.dismiss())
+                .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
@@ -140,7 +140,7 @@ public class ProfileFragment extends Fragment {
                 new Thread(()->OtherUtils.uploadBitmapToServer(finalBitmap)).start();
 
                 String encoded = OtherUtils.encodeImage(bitmap);
-                sp.edit().putString(getString(R.string.profile_picture), encoded).apply();
+                sp.edit().putString(getString(R.string.Profile_Image), encoded).apply();
 
                 //scale the image and make it round to fit into the image button.
                 bitmap = OtherUtils.scaleImage(bitmap);

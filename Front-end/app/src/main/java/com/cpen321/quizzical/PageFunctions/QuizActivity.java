@@ -250,7 +250,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private void UpdateSubmitButtonInfo()
     {
-        submitButton.setText(R.string.submit);
+        submitButton.setText(R.string.SUBMIT);
         submitButton.setOnClickListener(view->OnSubmitClicked());
     }
 
@@ -265,7 +265,7 @@ public class QuizActivity extends AppCompatActivity {
             submitButton.setOnClickListener(view->OnNextClicked());
         }
         else {
-            submitButton.setText(R.string.Finish);
+            submitButton.setText(R.string.FINISH);
             submitButton.setOnClickListener(view->OnFinishClicked());
         }
 

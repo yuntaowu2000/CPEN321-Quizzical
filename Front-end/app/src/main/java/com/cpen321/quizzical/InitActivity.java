@@ -1,22 +1,21 @@
 package com.cpen321.quizzical;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +40,9 @@ public class InitActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
 
     private LinearLayout linearLayout;
+    private ConstraintLayout constraintLayout;
+    private RelativeLayout relativeLayout;
+    private CheckBox instructorCheckBox;
     protected boolean username_input_OK = false;
     protected boolean email_input_OK = false;
 
@@ -57,6 +59,8 @@ public class InitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_init);
 
         linearLayout = findViewById(R.id.init_linear_layout);
+        constraintLayout = findViewById(R.id.init_constraint_layout);
+        relativeLayout = findViewById(R.id.init_relative_layout);
         Button loginButton = (Button) findViewById(R.id.loginButton);
         Button testButton = (Button) findViewById(R.id.test_page_button);
 
@@ -74,7 +78,7 @@ public class InitActivity extends AppCompatActivity {
         //use shared preference to record user login
         //so that a user does not need to login again on multiple use
         //also record all user-related info such as username, email and profile picture
-        sp = getSharedPreferences(getString(R.string.Login), MODE_PRIVATE);
+        sp = getSharedPreferences(getString(R.string.LOGIN), MODE_PRIVATE);
 
 
         //login button 
@@ -153,7 +157,7 @@ public class InitActivity extends AppCompatActivity {
         if (account != null)
         {
             //need to get user name and other stuff from the server
-            if (OtherUtils.StringIsNullOrEmpty(sp.getString(getString(R.string.user_name), "")))
+            if (OtherUtils.StringIsNullOrEmpty(sp.getString(getString(R.string.USERNAME), "")))
             {
                 requestUserNameAndEmail();
             }
@@ -168,22 +172,20 @@ public class InitActivity extends AppCompatActivity {
 
     private void requestUserNameAndEmail()
     {
-
+        //reset the view to get user inputs.
+        constraintLayout.setBackgroundResource(0);
         LinearLayout.LayoutParams layoutParams= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 120);
         layoutParams.setMargins(30,10,30,0);
 
         linearLayout.removeAllViews();
 
-        final TextView usernameText = new TextView(this);
-        final EditText usernameInput = new EditText(this);
-        final TextView usernameErrorText = new TextView(this);
+        TextView usernameText = new TextView(this);
+        EditText usernameInput = new EditText(this);
+        TextView usernameErrorText = new TextView(this);
         usernameText.setText(R.string.USERNAME_MSG);
-        usernameText.setTextColor(Color.WHITE);
         usernameText.setLayoutParams(layoutParams);
 
         usernameInput.setHint(R.string.EXAMPLE_USERNAME);
-        usernameInput.setTextColor(Color.WHITE);
-        usernameInput.setHintTextColor(Color.WHITE);
         usernameInput.setLayoutParams(layoutParams);
 
         usernameInput.addTextChangedListener(new TextWatcher() {
@@ -201,12 +203,12 @@ public class InitActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (OtherUtils.StringIsNullOrEmpty(editable.toString()))
                 {
-                    usernameErrorText.setText("Please enter a username.");
+                    usernameErrorText.setText(R.string.USERNAME_MSG);
                     username_input_OK = false;
                 }
                 else if (!checkUserName(editable.toString()))
                 {
-                    usernameErrorText.setText("Username invalid: 3-15 characters with a-z,A-Z,0-9 and _ allowed.");
+                    usernameErrorText.setText(R.string.USERNAME_INVALID_MSG);
                     username_input_OK = false;
                 }
                 else
@@ -223,17 +225,14 @@ public class InitActivity extends AppCompatActivity {
         linearLayout.addView(usernameInput);
         linearLayout.addView(usernameErrorText);
 
-        final TextView emailText = new TextView(this);
-        final EditText emailInput = new EditText(this);
-        final TextView emailErrorText = new TextView(this);
+        TextView emailText = new TextView(this);
+        EditText emailInput = new EditText(this);
+        TextView emailErrorText = new TextView(this);
 
         emailText.setText(R.string.SCHOOL_EMAIL_MSG);
-        emailText.setTextColor(Color.WHITE);
         emailText.setLayoutParams(layoutParams);
 
         emailInput.setHint(R.string.EXAMPLE_EMAIL);
-        emailInput.setTextColor(Color.WHITE);
-        emailInput.setHintTextColor(Color.WHITE);
         emailInput.setLayoutParams(layoutParams);
 
         emailInput.addTextChangedListener(new TextWatcher() {
@@ -252,12 +251,12 @@ public class InitActivity extends AppCompatActivity {
 
                 if (OtherUtils.StringIsNullOrEmpty(editable.toString()))
                 {
-                    emailErrorText.setText("Please enter a valid email");
+                    emailErrorText.setText(R.string.Please_enter_email);
                     email_input_OK = false;
                 }
                 else if (!checkEmail(editable.toString()))
                 {
-                    emailErrorText.setText("email invalid");
+                    emailErrorText.setText(R.string.email_invalid);
                     email_input_OK = false;
                 } else
                 {
@@ -275,23 +274,31 @@ public class InitActivity extends AppCompatActivity {
         linearLayout.addView(emailInput);
         linearLayout.addView(emailErrorText);
 
+        instructorCheckBox = new CheckBox(this);
+        instructorCheckBox.setText(getString(R.string.is_instructor_msg));
+        instructorCheckBox.setLayoutParams(layoutParams);
+        linearLayout.addView(instructorCheckBox);
+
+        RelativeLayout.LayoutParams relativeLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        relativeLayoutParam.setMargins(30, 30, 30, 30);
 
         Button finishButton = new Button(this);
-        finishButton.setText(R.string.Finish);
+        finishButton.setText(R.string.FINISH);
         finishButton.setAllCaps(false);
-        finishButton.setLayoutParams(layoutParams);
-
-        finishButton.setGravity(Gravity.BOTTOM | Gravity.CENTER);
+        finishButton.setLayoutParams(relativeLayoutParam);
 
         finishButton.setOnClickListener(view->onFinishClicked());
-        linearLayout.addView(finishButton);
+        relativeLayout.addView(finishButton);
+
+
     }
 
     private void onFinishClicked()
     {
         if (username_input_OK && email_input_OK)
         {
-            checkInstructor();
+            sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), instructorCheckBox.isChecked()).apply();
+            goToHomeActivity();
         }
         else
         {
@@ -309,8 +316,8 @@ public class InitActivity extends AppCompatActivity {
             return false;
         }
 
-        sp.edit().putString(getString(R.string.user_name), username).apply();
-        Log.d(getString(R.string.user_name), username);
+        sp.edit().putString(getString(R.string.USERNAME), username).apply();
+        Log.d(getString(R.string.USERNAME), username);
         return true;
     }
 
@@ -333,23 +340,6 @@ public class InitActivity extends AppCompatActivity {
         sp.edit().putString(getString(R.string.Email), email).apply();
         Log.d(getString(R.string.Email), email);
         return true;
-    }
-
-    private void checkInstructor()
-    {
-        new AlertDialog.Builder(this).setMessage(getString(R.string.is_instructor_msg))
-                .setPositiveButton(R.string.yes, ((dialogInterface, i) ->
-                {
-                    sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), true).apply();
-                    goToHomeActivity();
-                    dialogInterface.dismiss();
-                }))
-                .setNegativeButton(R.string.no, (dialogInterface, i) -> {
-                    sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), false).apply();
-                    goToHomeActivity();
-                    dialogInterface.dismiss();
-                })
-                .show();
     }
 
     private void goToHomeActivity()

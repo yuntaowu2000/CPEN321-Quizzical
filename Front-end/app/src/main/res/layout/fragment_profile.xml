@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/round_button"
-            android:contentDescription="@string/profile_picture" />
+            android:contentDescription="@string/Profile_Image" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/user_name"
+            android:text="@string/USERNAME"
             android:textSize="20sp"
             android:id="@+id/profile_username"/>
 

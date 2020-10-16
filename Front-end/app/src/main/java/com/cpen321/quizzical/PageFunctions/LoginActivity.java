@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(view -> ValidateAndLogin());
 
-        sp = getSharedPreferences(getString(R.string.Login), MODE_PRIVATE);
+        sp = getSharedPreferences(getString(R.string.LOGIN), MODE_PRIVATE);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.client_id))

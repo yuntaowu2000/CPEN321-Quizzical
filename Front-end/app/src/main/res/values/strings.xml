@@ -1,62 +1,100 @@
 <resources>
+    <!--    general usage-->
     <string name="app_name" translatable="false">quizzical</string>
-    <string name="WelcomeStr">Welcome to Quizzical</string>
-    <string name="Login">Login</string>
-    <string name="Register">Register</string>
-    <string name="user_name">Username</string>
-    <string name="password">Password</string>
-    <string name="title_activity_main2" translatable="false">MainActivity2</string>
+
+    <string name="OK" translatable="false">OK</string>
+    <string name="YES">yes</string>
+    <string name="NO">no</string>
     <string name="IS_INSTRUCTOR" translatable="false">IS_INSTRUCTOR</string>
     <string name="LOGGED" translatable="false">LOGGED</string>
-    <string name="Question_Num" translatable="false">Question_Num</string>
-    <string name="error_generating_quiz_page">An error occurred, press next to continue</string>
-    <string name="Next">Next Question</string>
-    <string name="error_loading_pic">Error loading picture</string>
-    <string name="quiz_pic_hint">You may need to scroll down to see the picture</string>
-    <string name="submit">Submit</string>
-    <string name="Finish">Finish</string>
-    <string name="No_answer_response">Please answer the question before submission.</string>
-    <string name="correct_num" translatable="false">Correct_Num</string>
-    <string name="total_num" translatable="false">Total_Num</string>
+    <string name="Continue_text">Continue</string>
+
+    <!--    used for debugging page, can be deleted later-->
+    <string name="test">Test</string>
+
+    <!--    init_activity-->
+    <string name="welcome_str">Welcome to Quizzical</string>
+    <string name="LOGIN">Login</string>
+    <string name="PASSWORD">Password</string>
+
+    <string name="USERNAME">Username</string>
+    <string name="USERNAME_MSG">Please enter a user name</string>
+    <string name="EXAMPLE_USERNAME" translatable="false">E.g. Valhalla</string>
+    <string name="USERNAME_INVALID_MSG">Username invalid: 3-15 characters with a-z,A-Z,0-9 and _ allowed.</string>
+
+    <string name="SCHOOL_EMAIL_MSG">Please enter your school district email.</string>
+    <string name="EXAMPLE_EMAIL" translatable="false">E.g. abc@example.com</string>
+    <string name="Email" translatable="false">Email</string>
+    <string name="Please_enter_email">Please enter a valid email</string>
+    <string name="email_invalid">email invalid</string>
+
+    <string name="is_instructor_msg">Are you an instructor?</string>
+
+    <!--    not used in final product can be deleted after login activity is deleted-->
+    <string name="username_hint">username</string>
+    <string name="password_hint">password</string>
+
+    <!--    used in android manifest-->
+    <string name="title_activity_main2" translatable="false">MainActivity2</string>
+
+    <!--    used for home activity-->
     <string name="Quizzes">Quizzes</string>
     <string name="Class_Statistics">Class Statistics</string>
     <string name="LeaderBoard">LeaderBoard</string>
     <string name="Profile">Profile</string>
-    <string name="encoding_utf_8" translatable="false">utf-8</string>
-    <string name="server_get_failed">Failed to get from the server</string>
-    <string name="question">Question</string>
-    <string name="username_hint">username</string>
-    <string name="password_hint">password</string>
-    <string name="is_instructor_msg">Are you an instructor?</string>
-    <string name="test">Test</string>
-    <string name="class_statistic_page_text1" translatable="false">This is the class statistic page for teachers</string>
-    <string name="leader_board_page_text1" translatable="false">This is the leaderBoard page</string>
-    <string name="profile_page_text_1" translatable="false">This is the profile page</string>
-    <string name="log_out">Log out</string>
-    <string name="finish_quiz_text">You have finished the quiz!</string>
-    <string name="back_to_main_menu">Back to Main Menu</string>
+
+    <!--    used in quiz fragment-->
     <string name="go_to_quiz">Go to Quiz</string>
     <string name="quiz_fragment_debug_text" translatable="false">This is the quiz page</string>
     <string name="teacher_quiz_fragment_debug_text" translatable="false">This is the quiz page for teachers</string>
+
+    <!--    used in class statistic fragment (for teachers)-->
+    <string name="class_statistic_page_text1" translatable="false">This is the class statistic page for teachers</string>
+
+    <!--    used in leader board fragment (for students)-->
+    <string name="leader_board_page_text1" translatable="false">This is the leaderBoard page</string>
+
+    <!--    used in profile fragment-->
+    <string name="profile_page_text_1" translatable="false">This is the profile page</string>
+    <string name="Profile_Image" translatable="false">Profile Image</string>
+    <string name="Change_Profile_Image_msg">Do you want to change the profile image?</string>
+    <string name="log_out">Log out</string>
+
+    <!--    used in quiz activity-->
+    <string name="Question_Num" translatable="false">Question_Num</string>
+    <string name="error_generating_quiz_page">An error occurred, press next to continue</string>
+    <string name="question">Question</string>
+    <string name="Next">Next Question</string>
+    <string name="error_loading_pic">Error loading picture</string>
+    <string name="quiz_pic_hint">You may need to scroll down to see the picture</string>
+    <string name="SUBMIT">Submit</string>
+    <string name="FINISH">Finish</string>
+    <string name="No_answer_response">Please answer the question before submission.</string>
+    <string name="correct_num" translatable="false">Correct_Num</string>
+    <string name="total_num" translatable="false">Total_Num</string>
+
+    <!--    used in quiz finish activity-->
+    <string name="finish_quiz_text">You have finished the quiz!</string>
+    <string name="back_to_main_menu">Back to Main Menu</string>
+
+
+    <!--    used in interaction with server-->
+    <string name="encoding_utf_8" translatable="false">utf-8</string>
+    <string name="server_get_failed">Failed to get from the server</string>
+
+
+    <!--    used for taking pictures and image modification, for teacher creating quiz-->
     <string name="take_picture">take picture</string>
     <string name="preview">preview</string>
     <string name="modify_image">Modify image</string>
     <string name="modify_image_hint">Do you want to crop or rotate the image?</string>
-    <string name="yes">yes</string>
-    <string name="no">no</string>
     <string name="crop">Crop</string>
     <string name="rotate">Rotate 90</string>
     <string name="image" translatable="false">Image</string>
-    <string name="Continue_text">Continue</string>
-    <string name="profile_picture" translatable="false">ProfilePicture</string>
-    <string name="Profile_Image">Profile Image</string>
-    <string name="Change_Profile_Image_msg">Do you want to change the profile image?</string>
+
+
+
     <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
     <string name="client_secret" translatable="false">vDBDVmMeOSQx_8dIBwzsV5-Y</string>
-    <string name="Email" translatable="false">Email</string>
-    <string name="OK" translatable="false">OK</string>
-    <string name="USERNAME_MSG">Please enter a user name</string>
-    <string name="SCHOOL_EMAIL_MSG">Please enter your school district email.</string>
-    <string name="EXAMPLE_EMAIL" translatable="false">E.g. abc@example.com</string>
-    <string name="EXAMPLE_USERNAME" translatable="false">E.g. Valhalla</string>
+
 </resources>

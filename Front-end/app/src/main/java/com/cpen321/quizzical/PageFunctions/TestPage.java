@@ -76,11 +76,11 @@ public class TestPage extends AppCompatActivity {
             imageView.setImageBitmap(imageBitmap);
 
             new AlertDialog.Builder(this).setTitle(R.string.modify_image).setMessage(R.string.modify_image_hint)
-                    .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+                    .setPositiveButton(R.string.YES, (dialogInterface, i) -> {
                         dialogInterface.dismiss();
                         CropSetup();
                     })
-                    .setNegativeButton(R.string.no, (dialogInterface, i) -> dialogInterface.dismiss())
+                    .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         }
