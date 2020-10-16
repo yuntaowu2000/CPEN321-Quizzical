@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -19,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
-import com.cpen321.quizzical.PageFunctions.LoginActivity;
 import com.cpen321.quizzical.PageFunctions.TestPage;
 import com.cpen321.quizzical.Utils.OtherUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -38,6 +38,7 @@ public class InitActivity extends AppCompatActivity {
     protected boolean username_input_OK = false;
     protected boolean email_input_OK = false;
     SharedPreferences sp;
+    LinearLayout.LayoutParams layoutParams;
     private GoogleSignInClient mGoogleSignInClient;
     private LinearLayout linearLayout;
     private ConstraintLayout constraintLayout;
@@ -56,10 +57,12 @@ public class InitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
 
+        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 120);
+        layoutParams.setMargins(30, 10, 30, 0);
+
         linearLayout = findViewById(R.id.init_linear_layout);
         constraintLayout = findViewById(R.id.init_constraint_layout);
         relativeLayout = findViewById(R.id.init_relative_layout);
-        Button loginButton = findViewById(R.id.loginButton);
         Button testButton = findViewById(R.id.test_page_button);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -79,16 +82,6 @@ public class InitActivity extends AppCompatActivity {
         //may need to separate shared preference for different users
         //or we can just completely depend on the server to do the job
         sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
-
-
-        //login button 
-        loginButton.setOnClickListener(view -> {
-            Intent intent = new Intent(InitActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            ActivityCompat.finishAffinity(this);
-        });
-
 
         //used for test and debug only
         testButton.setOnClickListener(view -> {
@@ -164,11 +157,34 @@ public class InitActivity extends AppCompatActivity {
     private void requestUserNameAndEmail() {
         //reset the view to get user inputs.
         constraintLayout.setBackgroundResource(0);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 120);
-        layoutParams.setMargins(30, 10, 30, 0);
-
         linearLayout.removeAllViews();
 
+        setupUsernameInput();
+
+        setupEmailInput();
+
+        //setup instructor checkbox
+        instructorCheckBox = new CheckBox(this);
+        instructorCheckBox.setText(getString(R.string.is_instructor_msg));
+        instructorCheckBox.setLayoutParams(layoutParams);
+        linearLayout.addView(instructorCheckBox);
+
+        //setup finish button
+        RelativeLayout.LayoutParams relativeLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        relativeLayoutParam.setMargins(30, 30, 30, 30);
+
+        Button finishButton = new Button(this);
+        finishButton.setText(R.string.FINISH);
+        finishButton.setAllCaps(false);
+        finishButton.setLayoutParams(relativeLayoutParam);
+
+        finishButton.setOnClickListener(view -> onFinishClicked());
+        relativeLayout.addView(finishButton);
+
+
+    }
+
+    private void setupUsernameInput() {
         TextView usernameText = new TextView(this);
         EditText usernameInput = new EditText(this);
         TextView usernameErrorText = new TextView(this);
@@ -177,6 +193,8 @@ public class InitActivity extends AppCompatActivity {
 
         usernameInput.setHint(R.string.EXAMPLE_USERNAME);
         usernameInput.setLayoutParams(layoutParams);
+        usernameInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        usernameInput.setMaxLines(1);
 
         usernameInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -209,7 +227,9 @@ public class InitActivity extends AppCompatActivity {
         linearLayout.addView(usernameText);
         linearLayout.addView(usernameInput);
         linearLayout.addView(usernameErrorText);
+    }
 
+    private void setupEmailInput() {
         TextView emailText = new TextView(this);
         EditText emailInput = new EditText(this);
         TextView emailErrorText = new TextView(this);
@@ -219,6 +239,8 @@ public class InitActivity extends AppCompatActivity {
 
         emailInput.setHint(R.string.EXAMPLE_EMAIL);
         emailInput.setLayoutParams(layoutParams);
+        emailInput.setInputType(InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS);
+        emailInput.setMaxLines(1);
 
         emailInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -254,24 +276,6 @@ public class InitActivity extends AppCompatActivity {
         linearLayout.addView(emailText);
         linearLayout.addView(emailInput);
         linearLayout.addView(emailErrorText);
-
-        instructorCheckBox = new CheckBox(this);
-        instructorCheckBox.setText(getString(R.string.is_instructor_msg));
-        instructorCheckBox.setLayoutParams(layoutParams);
-        linearLayout.addView(instructorCheckBox);
-
-        RelativeLayout.LayoutParams relativeLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        relativeLayoutParam.setMargins(30, 30, 30, 30);
-
-        Button finishButton = new Button(this);
-        finishButton.setText(R.string.FINISH);
-        finishButton.setAllCaps(false);
-        finishButton.setLayoutParams(relativeLayoutParam);
-
-        finishButton.setOnClickListener(view -> onFinishClicked());
-        relativeLayout.addView(finishButton);
-
-
     }
 
     private void onFinishClicked() {

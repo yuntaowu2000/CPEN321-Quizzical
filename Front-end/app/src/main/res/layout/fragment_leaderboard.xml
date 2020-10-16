@@ -17,6 +17,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/leader_board_debug_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/leader_board_page_text1" />

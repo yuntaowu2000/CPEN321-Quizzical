@@ -11,8 +11,6 @@ import android.graphics.Rect;
 import android.util.Base64;
 import android.util.Log;
 
-import com.cpen321.quizzical.R;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -20,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class OtherUtils {
 
@@ -135,7 +134,7 @@ public class OtherUtils {
             conn.setConnectTimeout(1000);
             conn.connect();
             InputStream is = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             StringBuilder stb = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {

@@ -3,13 +3,11 @@ package com.cpen321.quizzical.MainMenuFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,12 +20,6 @@ import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.Utils.OtherUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 public class StatisticFragment extends Fragment {
 
     SwipeRefreshLayout swipeRefreshLayout;
@@ -39,6 +31,7 @@ public class StatisticFragment extends Fragment {
 
     boolean is_Instructor;
     int class_code;
+    int course_category = -1;
 
     public StatisticFragment(boolean is_Instructor) {
         this.is_Instructor = is_Instructor;
@@ -66,12 +59,6 @@ public class StatisticFragment extends Fragment {
         StrictMode.setVmPolicy(
                 new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
 
-        class_code = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE).
-                getInt(getString(R.string.class_code), 0);
-        //if class code is 0, we need to prompt the user to
-        // create a class if instructor
-        // join a class if student
-
         swipeRefreshLayout = view.findViewById(R.id.statistic_swipe_layout);
 
         realTimeText = view.findViewById(R.id.statistic_test_text);
@@ -84,10 +71,35 @@ public class StatisticFragment extends Fragment {
         fromBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.from_bottom_anim);
         toBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.to_bottom_anim);
 
+
         if (is_Instructor) {
             fab = getView().findViewById(R.id.teacher_class_switch_fab);
+            TextView debug_text = getView().findViewById(R.id.class_statistic_debug_text);
+
+            new Thread(() -> {
+                while (course_category == -1 || class_code == 0) {
+                    class_code = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE).
+                            getInt(getString(R.string.class_code), 0);
+                    course_category = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE).
+                            getInt(getString(R.string.course_category), -1);
+                }
+
+                getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + class_code + ", current category " + course_category));
+            }).start();
+
+
         } else {
             fab = getView().findViewById(R.id.class_switch_fab);
+
+            TextView debug_text = getView().findViewById(R.id.leader_board_debug_text);
+
+            new Thread(() -> {
+                while (class_code == 0) {
+                    class_code = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE).
+                            getInt(getString(R.string.class_code), 0);
+                }
+                getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + class_code));
+            }).start();
         }
 
         fab.setOnClickListener(v -> onSwitchClassButtonClicked());

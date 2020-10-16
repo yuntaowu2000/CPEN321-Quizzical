@@ -51,9 +51,6 @@ public class QuizFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         class_code = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE).
                 getInt(getString(R.string.class_code), 0);
-        //if class code is 0, we need to prompt the user to
-        // create a class if instructor
-        // join a class if student
 
         if (is_Instructor) {
             return inflater.inflate(R.layout.fragment_quiz_teacher, container, false);

@@ -279,6 +279,7 @@ public class QuizActivity extends AppCompatActivity {
         @SuppressLint("DefaultLocale") String response = String.format("You are correct. You got %d/%d correct.", correctNumber, totalQuestionNum);
         infoLabel.setText(response);
         infoLabel.setTextColor(getResources().getColor(R.color.colorLawnGreen));
+        selectedChoice.SetBackGroundColor(getResources().getColor(R.color.colorLawnGreen));
         return true;
     }
 

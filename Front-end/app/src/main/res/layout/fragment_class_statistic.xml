@@ -17,6 +17,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/class_statistic_debug_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/class_statistic_page_text1" />

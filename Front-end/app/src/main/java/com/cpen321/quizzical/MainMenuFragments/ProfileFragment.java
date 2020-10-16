@@ -88,6 +88,8 @@ public class ProfileFragment extends Fragment {
         sp.edit().remove(getString(R.string.IS_INSTRUCTOR)).apply();
         sp.edit().remove(getString(R.string.USERNAME)).apply();
         sp.edit().remove(getString(R.string.Email)).apply();
+        sp.edit().remove(getString(R.string.course_category)).apply();
+        sp.edit().remove(getString(R.string.class_code)).apply();
 
         HomeActivity parentAct = (HomeActivity) getActivity();
 
@@ -154,7 +156,7 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == permissioncode) {
             if (grantResults.length > 0) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
