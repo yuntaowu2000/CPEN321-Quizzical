@@ -11,9 +11,13 @@ import android.graphics.Rect;
 import android.util.Base64;
 import android.util.Log;
 
+import com.cpen321.quizzical.R;
+
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -120,5 +124,28 @@ public class OtherUtils {
             return false;
         }
         return true;
+    }
+
+    public static String readFromURL(String urlLink) {
+        String result = "";
+        try {
+            URL url = new URL(urlLink);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(1000);
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"));
+            StringBuilder stb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stb.append(line);
+            }
+            result = stb.toString();
+        } catch (Exception e) {
+            String eMessage = e.getMessage() + "";
+            Log.d("html exception", eMessage);
+        }
+        return result;
     }
 }

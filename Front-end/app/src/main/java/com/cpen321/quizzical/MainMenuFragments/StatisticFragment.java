@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cpen321.quizzical.R;
+import com.cpen321.quizzical.Utils.OtherUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.BufferedReader;
@@ -100,34 +102,14 @@ public class StatisticFragment extends Fragment {
         //we need to update UI on UI thread, otherwise it will crash the app
         //however, it adds the load onto the Main thread, causing lags
         //so we need to run a new thread which runs this function
-        String result = readFromURL();
-        getActivity().runOnUiThread(() -> realTimeText.setText(result));
-    }
-
-
-    private String readFromURL() {
-        String result = getString(R.string.server_get_failed);
-        try {
-            URL url = new URL(serverLink);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setConnectTimeout(1000);
-            conn.connect();
-            InputStream is = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, getString(R.string.encoding_utf_8)));
-            StringBuilder stb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                stb.append(line);
-            }
-            result = stb.toString();
-        } catch (Exception e) {
-            String eMessage = e.getMessage() + "";
-            Log.d("html exception", eMessage);
-        }
+        String result = OtherUtils.readFromURL(serverLink);
+        result = OtherUtils.StringIsNullOrEmpty(result) ? getString(R.string.server_get_failed) : result;
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
-        return result;
+        final String text = result;
+
+        getActivity().runOnUiThread(() -> realTimeText.setText(text));
     }
+
 }
