@@ -1,6 +1,5 @@
 package com.cpen321.quizzical;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -71,12 +70,12 @@ public class HomeActivity extends AppCompatActivity {
         add_class_button = findViewById(R.id.add_class_button);
 
         class_switch_button = findViewById(R.id.class_switch_fab);
-        class_switch_button.setOnClickListener(v->onClassSwitchButtonClicked());
+        class_switch_button.setOnClickListener(v -> onClassSwitchButtonClicked());
 
         if (is_Instructor) {
-            add_class_button.setOnClickListener(v->createClass());
+            add_class_button.setOnClickListener(v -> createClass());
         } else {
-            add_class_button.setOnClickListener(v->joinClass());
+            add_class_button.setOnClickListener(v -> joinClass());
         }
 
         //we need to initialize the list based on server info
@@ -161,18 +160,18 @@ public class HomeActivity extends AppCompatActivity {
         layout.addView(editText);
         layout.addView(errorText);
 
-        AlertDialog.Builder alertBuilder= new AlertDialog.Builder(this).setTitle(R.string.enter_class_code_hint)
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle(R.string.enter_class_code_hint)
                 .setView(layout)
-                .setPositiveButton(R.string.SUBMIT, ((dialogInterface, i) -> {}));
+                .setPositiveButton(R.string.SUBMIT, ((dialogInterface, i) -> {
+                }));
 
         final AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
 
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v->
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v ->
         {
             int class_code = Integer.parseInt(editText.getText().toString());
             if (OtherUtils.checkClassCode(class_code)) {
-                sp.edit().putInt(getString(R.string.class_code), class_code).apply();
                 appendNewClassToList(class_code);
                 alertDialog.dismiss();
             } else {
@@ -215,7 +214,6 @@ public class HomeActivity extends AppCompatActivity {
 
         appendNewClassToList(curr_class_code);
         sp.edit().putInt(getString(R.string.course_category), category).apply();
-        sp.edit().putInt(getString(R.string.class_code), curr_class_code).apply();
     }
 
     private void appendNewClassToList(int class_code) {
@@ -230,7 +228,7 @@ public class HomeActivity extends AppCompatActivity {
         //probably can have teachers to name their class
         String class_name = String.valueOf(class_code);
         newClassButton.setText(class_name);
-        newClassButton.setOnClickListener(v->switchClass(class_code));
+        newClassButton.setOnClickListener(v -> switchClass(class_code));
 
         class_list.add(newClassButton);
 
@@ -241,11 +239,13 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         class_scroll_content_layout.addView(add_class_button);
+
+        switchClass(class_code);
     }
 
     private void switchClass(int class_code) {
         sp.edit().putInt(getString(R.string.class_code), class_code).apply();
-        Log.d("home activity", "curr selected class code "+ class_code);
+        Log.d("home activity", "curr selected class code " + class_code);
     }
 
     private void setupTab(String tabText) {

@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +20,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.Utils.OtherUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.Objects;
 
 public class StatisticFragment extends Fragment {
 
@@ -33,10 +34,8 @@ public class StatisticFragment extends Fragment {
     FloatingActionButton fab;
 
     boolean is_Instructor;
-    int class_code;
+    int curr_class_code;
     int course_category = -1;
-
-    boolean exited;
 
     public StatisticFragment() {
     }
@@ -48,6 +47,10 @@ public class StatisticFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        sp = Objects.requireNonNull(getContext()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
+        is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
+        curr_class_code = sp.getInt(getString(R.string.class_code), 0);
+
         if (is_Instructor) {
             return inflater.inflate(R.layout.fragment_class_statistic, container, false);
         } else {
@@ -75,51 +78,33 @@ public class StatisticFragment extends Fragment {
         fromBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.from_bottom_anim);
         toBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.to_bottom_anim);
 
-        sp = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
-        exited = false;
-
-
-        //TODO: this code is buggy and laggy, refactor this part of code, and do the same for quiz fragment
+        //shared preference change listener is a bit buggy
+        //sometimes it works after exiting and restarting the app
+        //sometimes it doesn't
+        //we want it working at any time
+        //TODO: find and fix the bug and implement the same thing for the quiz fragment
         if (is_Instructor) {
             TextView debug_text = getView().findViewById(R.id.class_statistic_debug_text);
-
-            new Thread(() -> {
-                int prev_class_code = sp.getInt(getString(R.string.class_code), 0);
-                while (course_category == -1 || class_code == prev_class_code) {
-                    class_code = sp.getInt(getString(R.string.class_code), 0);
-                    course_category = sp.getInt(getString(R.string.course_category), -1);
-                }
-                getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + class_code + ", current category " + course_category));
-
-            }).start();
-
-
+            getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
+            sp.registerOnSharedPreferenceChangeListener((sp, key) -> onClassCodeChanged(key, debug_text));
         } else {
-
             TextView debug_text = getView().findViewById(R.id.leader_board_debug_text);
-
-            new Thread(() -> {
-                int prev_class_code = sp.getInt(getString(R.string.class_code), 0);
-                while (class_code == prev_class_code) {
-                    class_code = sp.getInt(getString(R.string.class_code), 0);
-                }
-                getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + class_code));
-            }).start();
+            getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
+            sp.registerOnSharedPreferenceChangeListener((sp, key) -> onClassCodeChanged(key, debug_text));
         }
-
-
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        exited = true;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        exited = true;
+    private void onClassCodeChanged(String key, TextView debug_text) {
+        String class_code_string = getContext().getString(R.string.class_code);
+        Log.d("In statistic", "on class code changed called");
+        if (key.equals(class_code_string)) {
+            int class_code = sp.getInt(class_code_string, 0);
+            if (class_code != 0) {
+                Log.d("In statistic", "class code changed to " + class_code);
+                curr_class_code = class_code;
+                getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
+            }
+        }
     }
 
     private void updateText() {
