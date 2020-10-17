@@ -47,4 +47,5 @@
     <string name="select_course_category_hint">请选择课程类型</string>
     <string name="invalid_class_code">课程代码无效</string>
     <string name="change_username">更改用户名</string>
+    <string name="You_have_joined_the_class">您已在这门课程中</string>
 </resources>

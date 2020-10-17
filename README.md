@@ -18,6 +18,7 @@ Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao
 2.2 Profile page image, username, email (change functions included) done  
 2.3 Currently leader board/class statistic page shows time and class code (+ course category)  
 2.4 Prompt user to setup/join class on first sign in  
+2.5 Multiple classes supported
 3. Quiz  
 3.1 A Quiz will load a set of questions (currently on multiple choices are supported)  
 3.2 Choices can be either plain text, latex, html, or image  

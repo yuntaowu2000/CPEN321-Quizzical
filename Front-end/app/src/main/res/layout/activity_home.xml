@@ -7,8 +7,10 @@
     tools:context=".HomeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.tabs.TabLayout
@@ -22,6 +24,49 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/class_switch_fab"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_gravity="bottom"
+        app:layout_anchorGravity="bottom"
+        app:srcCompat="@drawable/ic_baseline_add_24"
+        tools:ignore="VectorDrawableCompat" />
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:id="@+id/class_scroll_view"
+        android:layout_gravity="top"
+        app:layout_anchor="@id/class_switch_fab"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/class_scroll_linear_layout">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_class_button"
+                android:src="@drawable/ic_baseline_add_24"
+                android:contentDescription="@string/add_class" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

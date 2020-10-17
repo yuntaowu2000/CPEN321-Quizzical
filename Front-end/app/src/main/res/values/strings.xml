@@ -51,6 +51,8 @@
 
     <string name="example_course_code" translatable="false">E.g. 123456</string>
     <string name="enter_class_code_hint">Please enter your class code</string>
+    <string name="add_class" translatable="false">Add class</string>
+    <string name="You_have_joined_the_class">You have already joined the class</string>
     <string name="select_course_category_hint">Please select a course category</string>
     <string name="MATH">Math</string>
     <string name="ENGLISH">English</string>
@@ -105,6 +107,7 @@
     <string name="crop">Crop</string>
     <string name="rotate">Rotate 90</string>
     <string name="image" translatable="false">Image</string>
+
 
 
 </resources>

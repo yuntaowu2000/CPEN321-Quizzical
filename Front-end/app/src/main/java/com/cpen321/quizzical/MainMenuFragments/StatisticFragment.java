@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,8 @@ public class StatisticFragment extends Fragment {
     boolean is_Instructor;
     int class_code;
     int course_category = -1;
+
+    boolean exited;
 
     public StatisticFragment() {
     }
@@ -73,43 +76,50 @@ public class StatisticFragment extends Fragment {
         toBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.to_bottom_anim);
 
         sp = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
+        exited = false;
 
 
-        //TODO: refactor this part of code, and do the same for quiz fragment
-        //there is some problem with extracting the code to a new method, I am not sure why
+        //TODO: this code is buggy and laggy, refactor this part of code, and do the same for quiz fragment
         if (is_Instructor) {
-            fab = getView().findViewById(R.id.class_switch_fab);
             TextView debug_text = getView().findViewById(R.id.class_statistic_debug_text);
 
             new Thread(() -> {
-                while (course_category == -1 || class_code == 0) {
+                int prev_class_code = sp.getInt(getString(R.string.class_code), 0);
+                while (course_category == -1 || class_code == prev_class_code) {
                     class_code = sp.getInt(getString(R.string.class_code), 0);
                     course_category = sp.getInt(getString(R.string.course_category), -1);
                 }
-
                 getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + class_code + ", current category " + course_category));
+
             }).start();
 
 
         } else {
-            fab = getView().findViewById(R.id.class_switch_fab);
 
             TextView debug_text = getView().findViewById(R.id.leader_board_debug_text);
 
             new Thread(() -> {
-                while (class_code == 0) {
+                int prev_class_code = sp.getInt(getString(R.string.class_code), 0);
+                while (class_code == prev_class_code) {
                     class_code = sp.getInt(getString(R.string.class_code), 0);
                 }
                 getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + class_code));
             }).start();
         }
 
-        fab.setOnClickListener(v -> onSwitchClassButtonClicked());
 
     }
 
-    private void onSwitchClassButtonClicked() {
-        Toast.makeText(getContext(), "change class clicked", Toast.LENGTH_SHORT).show();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        exited = true;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        exited = true;
     }
 
     private void updateText() {
