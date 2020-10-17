@@ -36,7 +36,7 @@ import java.util.Objects;
 public class ProfileFragment extends Fragment {
 
     private static final int PICK_IMG = 10;
-    private static final int permissioncode = 1;
+    private static final int permission_code = 1;
     SharedPreferences sp;
     private Button logoutButton;
     private ImageButton imageButton;
@@ -73,7 +73,7 @@ public class ProfileFragment extends Fragment {
         emailText.setText(sp.getString(getString(R.string.Email), getString(R.string.EXAMPLE_EMAIL)));
 
         String encodedProfileImg = sp.getString(getString(R.string.Profile_Image), "");
-        if (!OtherUtils.StringIsNullOrEmpty(encodedProfileImg)) {
+        if (!OtherUtils.stringIsNullOrEmpty(encodedProfileImg)) {
             Bitmap profileImg = OtherUtils.decodeImage(encodedProfileImg);
             profileImg = OtherUtils.scaleImage(profileImg);
             imageButton.setImageBitmap(profileImg);
@@ -83,7 +83,7 @@ public class ProfileFragment extends Fragment {
     private void logOut() {
         sp.edit().putBoolean(getString(R.string.LOGGED), false).apply();
 
-        //need to use server to get these info
+        //TODO: need to use server to get these info
         sp.edit().remove(getString(R.string.Profile_Image)).apply();
         sp.edit().remove(getString(R.string.IS_INSTRUCTOR)).apply();
         sp.edit().remove(getString(R.string.USERNAME)).apply();
@@ -149,7 +149,7 @@ public class ProfileFragment extends Fragment {
         int readPermission = ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
 
         if (!(readPermission == PackageManager.PERMISSION_GRANTED)) {
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, permissioncode);
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, permission_code);
         } else {
             setUpProfileImage();
         }
@@ -157,7 +157,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == permissioncode) {
+        if (requestCode == permission_code) {
             if (grantResults.length > 0) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setUpProfileImage();

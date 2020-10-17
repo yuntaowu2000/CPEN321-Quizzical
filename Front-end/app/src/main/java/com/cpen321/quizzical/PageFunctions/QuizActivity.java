@@ -100,6 +100,7 @@ public class QuizActivity extends AppCompatActivity {
                 generateMCPage(question);
                 break;
             case Text:
+                //TODO: may implement this if we have time
                 throw new Exception("Not implemented");
             default:
                 generateBlankPage();
@@ -119,7 +120,7 @@ public class QuizActivity extends AppCompatActivity {
         cleanUpQuestionStack();
         selectedChoice = null;
 
-        if (!OtherUtils.StringIsNullOrEmpty(q.getQuestion())) {
+        if (!OtherUtils.stringIsNullOrEmpty(q.getQuestion())) {
 
             MathView view = new MathView(this);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

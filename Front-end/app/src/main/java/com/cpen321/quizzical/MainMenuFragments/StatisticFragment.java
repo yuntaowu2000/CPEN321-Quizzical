@@ -33,8 +33,7 @@ public class StatisticFragment extends Fragment {
     int class_code;
     int course_category = -1;
 
-    public StatisticFragment(boolean is_Instructor) {
-        this.is_Instructor = is_Instructor;
+    public StatisticFragment() {
     }
 
     @Override
@@ -72,8 +71,10 @@ public class StatisticFragment extends Fragment {
         toBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.to_bottom_anim);
 
 
+        //TODO: refactor this part of code, and do the same for quiz fragment
+        //there is some problem with extracting the code to a new method, I am not sure why
         if (is_Instructor) {
-            fab = getView().findViewById(R.id.teacher_class_switch_fab);
+            fab = getView().findViewById(R.id.class_switch_fab);
             TextView debug_text = getView().findViewById(R.id.class_statistic_debug_text);
 
             new Thread(() -> {
@@ -115,7 +116,7 @@ public class StatisticFragment extends Fragment {
         //however, it adds the load onto the Main thread, causing lags
         //so we need to run a new thread which runs this function
         String result = OtherUtils.readFromURL(serverLink);
-        result = OtherUtils.StringIsNullOrEmpty(result) ? getString(R.string.server_get_failed) : result;
+        result = OtherUtils.stringIsNullOrEmpty(result) ? getString(R.string.server_get_failed) : result;
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }

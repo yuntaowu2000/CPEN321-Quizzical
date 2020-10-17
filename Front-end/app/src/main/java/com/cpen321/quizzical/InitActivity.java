@@ -63,6 +63,8 @@ public class InitActivity extends AppCompatActivity {
         linearLayout = findViewById(R.id.init_linear_layout);
         constraintLayout = findViewById(R.id.init_constraint_layout);
         relativeLayout = findViewById(R.id.init_relative_layout);
+
+        //need to delete this afterwards
         Button testButton = findViewById(R.id.test_page_button);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -135,16 +137,14 @@ public class InitActivity extends AppCompatActivity {
             // Signed in successfully, show authenticated UI.
             validateAndLogin(account);
         } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
             validateAndLogin(null);
         }
     }
 
     private void validateAndLogin(GoogleSignInAccount account) {
         if (account != null) {
-            //need to get user name and other stuff from the server
-            if (OtherUtils.StringIsNullOrEmpty(sp.getString(getString(R.string.USERNAME), ""))) {
+            //TODO: need to get user name and other stuff from the server here
+            if (OtherUtils.stringIsNullOrEmpty(sp.getString(getString(R.string.USERNAME), ""))) {
                 requestUserNameAndEmail();
             } else {
                 goToHomeActivity();
@@ -209,7 +209,7 @@ public class InitActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (OtherUtils.StringIsNullOrEmpty(editable.toString())) {
+                if (OtherUtils.stringIsNullOrEmpty(editable.toString())) {
                     usernameErrorText.setText(R.string.USERNAME_MSG);
                     username_input_OK = false;
                 } else if (!checkUserName(editable.toString())) {
@@ -256,7 +256,7 @@ public class InitActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (OtherUtils.StringIsNullOrEmpty(editable.toString())) {
+                if (OtherUtils.stringIsNullOrEmpty(editable.toString())) {
                     emailErrorText.setText(R.string.Please_enter_email);
                     email_input_OK = false;
                 } else if (!checkEmail(editable.toString())) {
@@ -290,7 +290,7 @@ public class InitActivity extends AppCompatActivity {
 
     private boolean checkUserName(String username) {
         //check if the username is valid or not
-        //need to check if this username is registered on server or not
+        //TODO: need to check if this username is registered on server or not
         if (!Pattern.matches("^[aA-zZ0-9_-]{3,15}$", username)) {
             return false;
         }
@@ -303,8 +303,8 @@ public class InitActivity extends AppCompatActivity {
 
     private boolean checkEmail(String email) {
         //check if the email is valid or not
-        //and upload this email to the server
-        //the server should push an authentication email to the email address
+        //TODO: and upload this email to the server
+        //TODO: the server should push an authentication email to the email address
 
         String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
 

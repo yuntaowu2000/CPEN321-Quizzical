@@ -2,6 +2,7 @@ package com.cpen321.quizzical.MainMenuFragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class QuizFragment extends Fragment {
 
+    SharedPreferences sp;
+    View view;
     boolean is_Instructor;
     int class_code;
 
@@ -30,13 +33,12 @@ public class QuizFragment extends Fragment {
     boolean clicked = false;
     Button quizStartButton;
 
-    public QuizFragment(boolean is_Instructor) {
-        this.is_Instructor = is_Instructor;
+    public QuizFragment() {
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
     }
 
@@ -44,13 +46,15 @@ public class QuizFragment extends Fragment {
         Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
         quizIntent.putExtra(getString(R.string.Question_Num), 0);
         startActivity(quizIntent);
-
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        class_code = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE).
-                getInt(getString(R.string.class_code), 0);
+
+        sp = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
+
+        is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
+        class_code = sp.getInt(getString(R.string.class_code), 0);
 
         if (is_Instructor) {
             return inflater.inflate(R.layout.fragment_quiz_teacher, container, false);
@@ -61,7 +65,8 @@ public class QuizFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        //may need to separate for teacher and students
+        //TODO: may need to separate for teacher and students
+        //TODO: follow what is done in statistic fragment and get values from the server to setup the fragment
         quizStartButton = view.findViewById(R.id.quiz_fragment_go_to_quiz_button);
         quizStartButton.setOnClickListener(v -> setupQuiz());
 
@@ -82,7 +87,7 @@ public class QuizFragment extends Fragment {
 
         fab.setOnClickListener(v -> onAddButtonClicked());
 
-
+        //TODO: implement the actual function for these two buttons
         edit_fab.hide();
         edit_fab.setOnClickListener(v -> Toast.makeText(this.getContext(), "Add quiz button clicked", Toast.LENGTH_SHORT).show());
         note_fab.hide();

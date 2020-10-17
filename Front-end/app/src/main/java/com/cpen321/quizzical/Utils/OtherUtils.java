@@ -22,26 +22,13 @@ import java.nio.charset.StandardCharsets;
 
 public class OtherUtils {
 
-    public static boolean StringIsNullOrEmpty(String str) {
+    public static boolean stringIsNullOrEmpty(String str) {
         return (str == null || str.equals(""));
     }
 
-    public static Bitmap getBitmapFromUrl(String urlLink) {
-        //function used for downloading images from url link
-        try {
-            URL url = new URL(urlLink);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-
-            InputStream input = connection.getInputStream();
-            return BitmapFactory.decodeStream(input);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
+    /*
+     * Encoding and decoding images for storing in shared preferences and send to server
+     * */
     public static String encodeImage(Bitmap image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -56,6 +43,7 @@ public class OtherUtils {
     }
 
     public static Bitmap scaleImage(Bitmap image) {
+        //used for scaling image and making the image into a circle shape to fit in the profile image
         int radius = 200;
         Bitmap scaled = Bitmap.createScaledBitmap(image, 2 * radius, 2 * radius, true);
         Bitmap result = null;
@@ -77,6 +65,10 @@ public class OtherUtils {
         return result;
     }
 
+    /*
+     * upload strings, bitmap to the server
+     * returns true if success, false otherwise
+     * */
     public static boolean uploadStringToServer(String string) {
         String serverLink = "http://193.122.108.23:9090/";
         try {
@@ -125,6 +117,32 @@ public class OtherUtils {
         return true;
     }
 
+    /*
+     * function used for downloading images from url link
+     * mostly used in creating quiz
+     * may also be used for downloading user profile image
+     * */
+    public static Bitmap getBitmapFromUrl(String urlLink) {
+
+        try {
+            URL url = new URL(urlLink);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+
+            InputStream input = connection.getInputStream();
+            return BitmapFactory.decodeStream(input);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * get string content from the server,
+     * on success, return the content retrieved from the server
+     * on fail, return an empty string
+     */
     public static String readFromURL(String urlLink) {
         String result = "";
         try {

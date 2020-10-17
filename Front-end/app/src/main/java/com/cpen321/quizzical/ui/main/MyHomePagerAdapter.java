@@ -12,7 +12,6 @@ import com.cpen321.quizzical.MainMenuFragments.StatisticFragment;
 public class MyHomePagerAdapter extends FragmentPagerAdapter {
 
     int numOfTabs;
-    boolean is_Instructor;
 
     public MyHomePagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
@@ -25,9 +24,9 @@ public class MyHomePagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                return new QuizFragment(is_Instructor);
+                return new QuizFragment();
             case 1:
-                return new StatisticFragment(is_Instructor);
+                return new StatisticFragment();
             default:
                 return new ProfileFragment();
         }
@@ -39,7 +38,4 @@ public class MyHomePagerAdapter extends FragmentPagerAdapter {
         return numOfTabs;
     }
 
-    public void setIs_Instructor(boolean is_Instructor) {
-        this.is_Instructor = is_Instructor;
-    }
 }

@@ -15,23 +15,17 @@ import com.cpen321.quizzical.R;
 
 public class QuizFinishedActivity extends AppCompatActivity {
 
-    private TextView response;
-    private Button button;
-
-    private int totalNum;
-    private int correctNum;
-
     @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_finished);
 
-        response = findViewById(R.id.quiz_finished_page_response);
-        button = findViewById(R.id.quiz_finished_page_button);
+        TextView response = findViewById(R.id.quiz_finished_page_response);
+        Button button = findViewById(R.id.quiz_finished_page_button);
 
-        totalNum = getIntent().getIntExtra(getString(R.string.total_num), 0);
-        correctNum = getIntent().getIntExtra(getString(R.string.correct_num), 0);
+        int totalNum = getIntent().getIntExtra(getString(R.string.total_num), 0);
+        int correctNum = getIntent().getIntExtra(getString(R.string.correct_num), 0);
 
         if (correctNum < totalNum / 2) {
             response.setText(String.format("You got %d/%d correct. Keep learning!", correctNum, totalNum));

@@ -23,7 +23,9 @@ Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao
 3.2 Choices can be either plain text, latex, html, or image  
 3.3 Once a user click on the choice, it will change the color of the choice  
 3.4 After the user submits a question, they will be informed if they are correct or not. If they are incorrect, correct answer will also be shown.  
-3.5 After the user finishes a quiz, they will be shown how they did in the quiz.
+3.5 After the user finishes a quiz, they will be shown how they did in the quiz.  
+
+Most parts are translated in Chinese as well.  
 
 ### Back-end  
 1. Simple POST GET request handling done.
