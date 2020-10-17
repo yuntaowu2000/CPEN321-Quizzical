@@ -209,13 +209,15 @@ public class InitActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (OtherUtils.stringIsNullOrEmpty(editable.toString())) {
+                String username = editable.toString();
+                if (OtherUtils.stringIsNullOrEmpty(username)) {
                     usernameErrorText.setText(R.string.USERNAME_MSG);
                     username_input_OK = false;
-                } else if (!checkUserName(editable.toString())) {
+                } else if (!OtherUtils.checkUserName(username)) {
                     usernameErrorText.setText(R.string.USERNAME_INVALID_MSG);
                     username_input_OK = false;
                 } else {
+                    sp.edit().putString(getString(R.string.USERNAME), username).apply();
                     usernameErrorText.setText("");
                     username_input_OK = true;
                 }
@@ -255,14 +257,15 @@ public class InitActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
-                if (OtherUtils.stringIsNullOrEmpty(editable.toString())) {
+                String email = editable.toString();
+                if (OtherUtils.stringIsNullOrEmpty(email)) {
                     emailErrorText.setText(R.string.Please_enter_email);
                     email_input_OK = false;
-                } else if (!checkEmail(editable.toString())) {
+                } else if (!OtherUtils.checkEmail(email)) {
                     emailErrorText.setText(R.string.email_invalid);
                     email_input_OK = false;
                 } else {
+                    sp.edit().putString(getString(R.string.Email), email).apply();
                     emailErrorText.setText("");
                     email_input_OK = true;
                 }
@@ -285,38 +288,6 @@ public class InitActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Please enter valid username and email", Toast.LENGTH_LONG).show();
         }
-    }
-
-
-    private boolean checkUserName(String username) {
-        //check if the username is valid or not
-        //TODO: need to check if this username is registered on server or not
-        if (!Pattern.matches("^[aA-zZ0-9_-]{3,15}$", username)) {
-            return false;
-        }
-
-        sp.edit().putString(getString(R.string.USERNAME), username).apply();
-        Log.d(getString(R.string.USERNAME), username);
-        return true;
-    }
-
-
-    private boolean checkEmail(String email) {
-        //check if the email is valid or not
-        //TODO: and upload this email to the server
-        //TODO: the server should push an authentication email to the email address
-
-        String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
-
-        if (!Pattern.matches(regex, email)) {
-            //the email entered is not a valid format
-            return false;
-        }
-
-
-        sp.edit().putString(getString(R.string.Email), email).apply();
-        Log.d(getString(R.string.Email), email);
-        return true;
     }
 
     private void goToHomeActivity() {

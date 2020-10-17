@@ -11,6 +11,8 @@ import android.graphics.Rect;
 import android.util.Base64;
 import android.util.Log;
 
+import com.cpen321.quizzical.R;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -19,11 +21,43 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Pattern;
 
 public class OtherUtils {
 
     public static boolean stringIsNullOrEmpty(String str) {
         return (str == null || str.equals(""));
+    }
+
+    public static boolean checkUserName(String username) {
+        //check if the username is valid or not
+        //TODO: need to check if this username is registered on server or not
+        if (!Pattern.matches("^[aA-zZ0-9_-]{3,15}$", username)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean checkEmail(String email) {
+        //check if the email is valid or not
+        //TODO: and upload this email to the server
+        //TODO: the server should push an authentication email to the email address
+
+        String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
+
+        if (!Pattern.matches(regex, email)) {
+            //the email entered is not a valid format
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean checkClassCode(int class_code) {
+        //TODO: we need to check that the code is valid on the server
+        //TODO: use POST request with content: username=xxx;class_code=xxx
+        return class_code != 111;
     }
 
     /*
@@ -152,7 +186,7 @@ public class OtherUtils {
             conn.setConnectTimeout(1000);
             conn.connect();
             InputStream is = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"));
             StringBuilder stb = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {

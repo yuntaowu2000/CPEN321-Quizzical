@@ -1,6 +1,7 @@
 package com.cpen321.quizzical.MainMenuFragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class StatisticFragment extends Fragment {
 
+    SharedPreferences sp;
     SwipeRefreshLayout swipeRefreshLayout;
     TextView realTimeText;
     String serverLink = "http://193.122.108.23:8080/Time";
@@ -70,6 +72,8 @@ public class StatisticFragment extends Fragment {
         fromBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.from_bottom_anim);
         toBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.to_bottom_anim);
 
+        sp = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
+
 
         //TODO: refactor this part of code, and do the same for quiz fragment
         //there is some problem with extracting the code to a new method, I am not sure why
@@ -79,10 +83,8 @@ public class StatisticFragment extends Fragment {
 
             new Thread(() -> {
                 while (course_category == -1 || class_code == 0) {
-                    class_code = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE).
-                            getInt(getString(R.string.class_code), 0);
-                    course_category = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE).
-                            getInt(getString(R.string.course_category), -1);
+                    class_code = sp.getInt(getString(R.string.class_code), 0);
+                    course_category = sp.getInt(getString(R.string.course_category), -1);
                 }
 
                 getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + class_code + ", current category " + course_category));
@@ -96,8 +98,7 @@ public class StatisticFragment extends Fragment {
 
             new Thread(() -> {
                 while (class_code == 0) {
-                    class_code = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE).
-                            getInt(getString(R.string.class_code), 0);
+                    class_code = sp.getInt(getString(R.string.class_code), 0);
                 }
                 getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + class_code));
             }).start();

@@ -45,4 +45,5 @@
     <string name="QUANTUM_PHYSICS">量子物理</string>
     <string name="enter_class_code_hint">请输入老师提供的课程代码</string>
     <string name="select_course_category_hint">请选择课程类型</string>
+    <string name="invalid_class_code">课程代码无效</string>
 </resources>
