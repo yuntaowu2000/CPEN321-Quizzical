@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -29,8 +28,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-
-import java.util.regex.Pattern;
 
 public class InitActivity extends AppCompatActivity {
 
@@ -241,7 +238,7 @@ public class InitActivity extends AppCompatActivity {
 
         emailInput.setHint(R.string.EXAMPLE_EMAIL);
         emailInput.setLayoutParams(layoutParams);
-        emailInput.setInputType(InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS);
+        emailInput.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         emailInput.setMaxLines(1);
 
         emailInput.addTextChangedListener(new TextWatcher() {
@@ -262,7 +259,7 @@ public class InitActivity extends AppCompatActivity {
                     emailErrorText.setText(R.string.Please_enter_email);
                     email_input_OK = false;
                 } else if (!OtherUtils.checkEmail(email)) {
-                    emailErrorText.setText(R.string.email_invalid);
+                    emailErrorText.setText(R.string.EMAIL_INVALID_MSG);
                     email_input_OK = false;
                 } else {
                     sp.edit().putString(getString(R.string.Email), email).apply();

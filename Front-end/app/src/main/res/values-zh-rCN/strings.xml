@@ -38,7 +38,7 @@
     <string name="USERNAME_MSG">请输入用户名</string>
     <string name="SCHOOL_EMAIL_MSG">请输入邮箱地址</string>
     <string name="Please_enter_email">请输入有效邮箱地址</string>
-    <string name="email_invalid">邮箱地址无效</string>
+    <string name="EMAIL_INVALID_MSG">邮箱地址无效</string>
     <string name="USERNAME_INVALID_MSG">用户名无效。仅支持3-15英文字符，0-9，下划线</string>
     <string name="MATH">数学</string>
     <string name="ENGLISH">英语</string>
@@ -46,4 +46,5 @@
     <string name="enter_class_code_hint">请输入老师提供的课程代码</string>
     <string name="select_course_category_hint">请选择课程类型</string>
     <string name="invalid_class_code">课程代码无效</string>
+    <string name="change_username">更改用户名</string>
 </resources>

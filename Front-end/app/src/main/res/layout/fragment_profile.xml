@@ -23,25 +23,54 @@
             android:background="@drawable/round_button"
             android:contentDescription="@string/Profile_Image" />
 
-        <TextView
-            android:id="@+id/profile_username"
+        <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/USERNAME"
-            android:textSize="20sp" />
+            android:layout_gravity="center">
+            <TableRow>
 
-        <TextView
-            android:id="@+id/profile_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/EXAMPLE_EMAIL"
-            android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/profile_username"
+                    android:layout_width="146dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/USERNAME"
+                    android:textSize="20sp" />
+                <ImageButton
+                    android:id="@+id/profile_username_change_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_edit_24"
+                    android:layout_column="1"
+                    android:contentDescription="@string/change_username" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:id="@+id/profile_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/EXAMPLE_EMAIL"
+                    android:textSize="20sp" />
+
+                <ImageButton
+                    android:id="@+id/profile_email_change_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_edit_24"
+                    android:layout_column="1"
+                    android:contentDescription="@string/Change_Profile_Image_msg" />
+            </TableRow>
+        </TableLayout>
+
+
+
 
 
         <Button

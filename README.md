@@ -15,7 +15,7 @@ Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao
 1.3 Checkbox for instructor/teacher  
 2. Homepage  
 2.1 Basics UI setup  
-2.2 Profile page image, username, email done  
+2.2 Profile page image, username, email (change functions included) done  
 2.3 Currently leader board/class statistic page shows time and class code (+ course category)  
 2.4 Prompt user to setup/join class on first sign in  
 3. Quiz  

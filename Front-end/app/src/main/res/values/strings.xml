@@ -36,13 +36,9 @@
     <string name="EXAMPLE_EMAIL" translatable="false">E.g. abc@example.com</string>
     <string name="Email" translatable="false">Email</string>
     <string name="Please_enter_email">Please enter a valid email</string>
-    <string name="email_invalid">email invalid</string>
+    <string name="EMAIL_INVALID_MSG">email invalid</string>
 
     <string name="is_instructor_msg">Are you an instructor?</string>
-
-    <!--    not used in final product can be deleted after login activity is deleted-->
-    <string name="username_hint">username</string>
-    <string name="password_hint">password</string>
 
     <!--    used in android manifest-->
     <string name="title_activity_main2" translatable="false">MainActivity2</string>
@@ -75,6 +71,7 @@
     <string name="profile_page_text_1" translatable="false">This is the profile page</string>
     <string name="Profile_Image" translatable="false">Profile Image</string>
     <string name="Change_Profile_Image_msg">Do you want to change the profile image?</string>
+    <string name="change_username">change username</string>
     <string name="log_out">Log out</string>
 
     <!--    used in quiz activity-->
