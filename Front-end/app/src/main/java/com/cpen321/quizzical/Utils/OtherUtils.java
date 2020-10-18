@@ -11,7 +11,7 @@ import android.graphics.Rect;
 import android.util.Base64;
 import android.util.Log;
 
-import com.cpen321.quizzical.R;
+import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 public class OtherUtils {
@@ -103,7 +102,10 @@ public class OtherUtils {
      * upload strings, bitmap to the server
      * returns true if success, false otherwise
      * */
-    public static boolean uploadStringToServer(String string) {
+    public static boolean uploadToServer(String username, String type, String data) {
+
+        String jsonStringToSend = createJsonString(username, type, data);
+
         String serverLink = "http://193.122.108.23:9090/";
         try {
             URL url = new URL(serverLink);
@@ -114,7 +116,7 @@ public class OtherUtils {
             conn.setDoOutput(true);
             conn.connect();
             DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-            wr.writeBytes(string);
+            wr.writeBytes(jsonStringToSend);
             wr.flush();
             wr.close();
 
@@ -128,27 +130,18 @@ public class OtherUtils {
         return true;
     }
 
-    public static boolean uploadBitmapToServer(Bitmap image) {
-        String serverLink = "http://193.122.108.23:7070";
+    private static String createJsonString(String username, String type, String data)
+    {
+        JsonObject jsonObject = new JsonObject();
         try {
-            URL url = new URL(serverLink);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "text/plain");
-            conn.setConnectTimeout(1000);
-            conn.setDoOutput(true);
-            conn.connect();
-            DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-            wr.writeBytes(encodeImage(image));
-            wr.flush();
-            wr.close();
-
-            int responseCode = conn.getResponseCode();
-            Log.d("HTTP POST", "response code: " + responseCode);
+            jsonObject.addProperty("username", username);
+            jsonObject.addProperty("type", type);
+            jsonObject.addProperty("data", data);
         } catch (Exception e) {
-            return false;
+            Log.d("other utils", "create json object failed");
         }
-        return true;
+        Log.d("other util", "create success: " + jsonObject.toString());
+        return jsonObject.toString();
     }
 
     /*

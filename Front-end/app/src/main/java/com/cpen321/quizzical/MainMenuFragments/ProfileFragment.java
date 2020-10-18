@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -141,11 +140,15 @@ public class ProfileFragment extends Fragment {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContext().getContentResolver(), imageUri);
 
-                //used for saving the bitmap for future logins
-                Bitmap finalBitmap = bitmap;
-                new Thread(() -> OtherUtils.uploadBitmapToServer(finalBitmap)).start();
-
                 String encoded = OtherUtils.encodeImage(bitmap);
+
+                //the image doesn't change, no need to waste time on post or scaling
+//                if (encoded.equals(sp.getString(getString(R.string.Profile_Image), ""))) {
+//                    return;
+//                }
+
+                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.USERNAME), getString(R.string.USERNAME)),
+                        getString(R.string.Profile_Image), encoded)).start();
                 sp.edit().putString(getString(R.string.Profile_Image), encoded).apply();
 
                 //scale the image and make it round to fit into the image button.

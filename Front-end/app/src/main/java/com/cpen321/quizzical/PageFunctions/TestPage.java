@@ -125,6 +125,6 @@ public class TestPage extends AppCompatActivity {
         String q = testQ.toJsonString();
         Log.d("question", q);
 
-        new Thread(() -> OtherUtils.uploadStringToServer(q)).start();
+        new Thread(() -> OtherUtils.uploadToServer(getString(R.string.USERNAME), getString(R.string.question),q)).start();
     }
 }
