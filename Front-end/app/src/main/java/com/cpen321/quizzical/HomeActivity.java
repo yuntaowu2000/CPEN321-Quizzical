@@ -205,10 +205,8 @@ public class HomeActivity extends AppCompatActivity {
         //and wait for the server to respond with a class code
         //then cache them in the shared preferences
         curr_class_code = category + 1 + 2 + 3;
-        new AlertDialog.Builder(this).setTitle("You just created a new class")
-                .setMessage("Your class code is " + curr_class_code + ". " +
-                        "You will also get an email containing the code. " +
-                        "Please share it with your students.")
+        new AlertDialog.Builder(this).setTitle(R.string.create_class_success_msg)
+                .setMessage(String.format(getString(R.string.create_class_success_msg_details), curr_class_code))
                 .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
                 .show();
 

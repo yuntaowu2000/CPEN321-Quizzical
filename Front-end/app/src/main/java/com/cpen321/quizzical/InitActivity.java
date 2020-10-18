@@ -141,13 +141,16 @@ public class InitActivity extends AppCompatActivity {
     private void validateAndLogin(GoogleSignInAccount account) {
         if (account != null) {
             //TODO: need to get user name and other stuff from the server here
-            if (OtherUtils.stringIsNullOrEmpty(sp.getString(getString(R.string.USERNAME), ""))) {
+            if (OtherUtils.stringIsNullOrEmpty(sp.getString(getString(R.string.UI_username), ""))) {
                 //default is google credential
                 String username = account.getDisplayName().replace(" ", "_");
+                String email = account.getEmail();
+                username_input_OK = OtherUtils.checkUserName(username);
+                email_input_OK = OtherUtils.checkEmail(email);
                 //use google ID as our default id
                 sp.edit().putString(getString(R.string.UID), account.getId()).apply();
-                sp.edit().putString(getString(R.string.USERNAME), username).apply();
-                sp.edit().putString(getString(R.string.Email), account.getEmail()).apply();
+                sp.edit().putString(getString(R.string.UI_username), username).apply();
+                sp.edit().putString(getString(R.string.Email), email).apply();
                 requestUserNameAndEmail();
             } else {
                 goToHomeActivity();
@@ -168,7 +171,7 @@ public class InitActivity extends AppCompatActivity {
 
         //setup instructor checkbox
         instructorCheckBox = new CheckBox(this);
-        instructorCheckBox.setText(getString(R.string.is_instructor_msg));
+        instructorCheckBox.setText(getString(R.string.UI_is_instructor_msg));
         instructorCheckBox.setLayoutParams(layoutParams);
         linearLayout.addView(instructorCheckBox);
 
@@ -191,10 +194,10 @@ public class InitActivity extends AppCompatActivity {
         TextView usernameText = new TextView(this);
         EditText usernameInput = new EditText(this);
         TextView usernameErrorText = new TextView(this);
-        usernameText.setText(R.string.USERNAME_MSG);
+        usernameText.setText(R.string.UI_username_msg);
         usernameText.setLayoutParams(layoutParams);
 
-        usernameInput.setText(sp.getString(getString(R.string.USERNAME), getString(R.string.EXAMPLE_USERNAME)));
+        usernameInput.setText(sp.getString(getString(R.string.UI_username), getString(R.string.UI_example_username)));
         usernameInput.setLayoutParams(layoutParams);
         usernameInput.setInputType(InputType.TYPE_CLASS_TEXT);
         usernameInput.setMaxLines(1);
@@ -214,13 +217,13 @@ public class InitActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 String username = editable.toString();
                 if (OtherUtils.stringIsNullOrEmpty(username)) {
-                    usernameErrorText.setText(R.string.USERNAME_MSG);
+                    usernameErrorText.setText(R.string.UI_username_msg);
                     username_input_OK = false;
                 } else if (!OtherUtils.checkUserName(username)) {
-                    usernameErrorText.setText(R.string.USERNAME_INVALID_MSG);
+                    usernameErrorText.setText(R.string.UI_username_invalid_msg);
                     username_input_OK = false;
                 } else {
-                    sp.edit().putString(getString(R.string.USERNAME), username).apply();
+                    sp.edit().putString(getString(R.string.UI_username), username).apply();
                     usernameErrorText.setText("");
                     username_input_OK = true;
                 }
@@ -239,10 +242,10 @@ public class InitActivity extends AppCompatActivity {
         EditText emailInput = new EditText(this);
         TextView emailErrorText = new TextView(this);
 
-        emailText.setText(R.string.SCHOOL_EMAIL_MSG);
+        emailText.setText(R.string.UI_email_msg);
         emailText.setLayoutParams(layoutParams);
 
-        emailInput.setText(sp.getString(getString(R.string.Email), getString(R.string.EXAMPLE_EMAIL)));
+        emailInput.setText(sp.getString(getString(R.string.Email), getString(R.string.UI_example_email)));
         emailInput.setLayoutParams(layoutParams);
         emailInput.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         emailInput.setMaxLines(1);
@@ -265,7 +268,7 @@ public class InitActivity extends AppCompatActivity {
                     emailErrorText.setText(R.string.Please_enter_email);
                     email_input_OK = false;
                 } else if (!OtherUtils.checkEmail(email)) {
-                    emailErrorText.setText(R.string.EMAIL_INVALID_MSG);
+                    emailErrorText.setText(R.string.UI_email_invalid_msg);
                     email_input_OK = false;
                 } else {
                     sp.edit().putString(getString(R.string.Email), email).apply();
@@ -286,7 +289,20 @@ public class InitActivity extends AppCompatActivity {
 
     private void onFinishClicked() {
         if (username_input_OK && email_input_OK) {
+
             sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), instructorCheckBox.isChecked()).apply();
+
+            //if the user is newly created, we need to upload the credentials to the server
+            new Thread(()->OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USERNAME),
+                    sp.getString(getString(R.string.UI_username), ""))).start();
+
+            new Thread(()->OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.Email),
+                    sp.getString(getString(R.string.Email), ""))).start();
+
+            String is_instructor_string = instructorCheckBox.isChecked() ? getString(R.string.True) : getString(R.string.False);
+            new Thread(()->OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.IS_INSTRUCTOR),
+                    is_instructor_string)).start();
+
             goToHomeActivity();
         } else {
             Toast.makeText(this, "Please enter valid username and email", Toast.LENGTH_LONG).show();

@@ -37,7 +37,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:text="@string/USERNAME"
+                    android:text="@string/UI_username"
                     android:textSize="20sp" />
                 <ImageButton
                     android:id="@+id/profile_username_change_btn"
@@ -56,7 +56,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:text="@string/EXAMPLE_EMAIL"
+                    android:text="@string/UI_example_email"
                     android:textSize="20sp" />
 
                 <ImageButton

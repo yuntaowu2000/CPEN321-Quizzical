@@ -27,15 +27,15 @@ public class QuizFinishedActivity extends AppCompatActivity {
         int totalNum = getIntent().getIntExtra(getString(R.string.total_num), 0);
         int correctNum = getIntent().getIntExtra(getString(R.string.correct_num), 0);
 
-        if (correctNum < totalNum / 2) {
-            response.setText(String.format("You got %d/%d correct. Keep learning!", correctNum, totalNum));
+        if (correctNum < (double)totalNum / 2) {
+            response.setText(String.format(getString(R.string.quiz_finished_low_score_msg), correctNum, totalNum));
             response.setTextColor(Color.BLACK);
         } else if (correctNum == totalNum) {
-            response.setText(String.format("You got %d/%d correct. Congratulations!", correctNum, totalNum));
+            response.setText(String.format(getString(R.string.quiz_finished_full_score_msg), correctNum, totalNum));
             response.setTextColor(getResources().getColor(R.color.colorOrangeRed));
             response.setTextSize(16);
         } else {
-            response.setText(String.format("You got %d/%d correct. Keep learning!", correctNum, totalNum));
+            response.setText(String.format(getString(R.string.quiz_finished_normal_score_msg), correctNum, totalNum));
             response.setTextColor(getResources().getColor(R.color.colorLawnGreen));
             response.setTextSize(14);
         }

@@ -81,10 +81,10 @@ public class ProfileFragment extends Fragment {
         sp = Objects.requireNonNull(getActivity()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
 
         usernameText = getView().findViewById(R.id.profile_username);
-        usernameText.setText(sp.getString(getString(R.string.USERNAME), getString(R.string.USERNAME)));
+        usernameText.setText(sp.getString(getString(R.string.UI_username), getString(R.string.UI_username)));
 
         emailText = getView().findViewById(R.id.profile_email);
-        emailText.setText(sp.getString(getString(R.string.Email), getString(R.string.EXAMPLE_EMAIL)));
+        emailText.setText(sp.getString(getString(R.string.Email), getString(R.string.UI_example_email)));
 
         String encodedProfileImg = sp.getString(getString(R.string.Profile_Image), "");
         if (!OtherUtils.stringIsNullOrEmpty(encodedProfileImg)) {
@@ -100,7 +100,7 @@ public class ProfileFragment extends Fragment {
         //TODO: need to use server to get these info
         sp.edit().remove(getString(R.string.Profile_Image)).apply();
         sp.edit().remove(getString(R.string.IS_INSTRUCTOR)).apply();
-        sp.edit().remove(getString(R.string.USERNAME)).apply();
+        sp.edit().remove(getString(R.string.UI_username)).apply();
         sp.edit().remove(getString(R.string.Email)).apply();
         sp.edit().remove(getString(R.string.course_category)).apply();
         sp.edit().remove(getString(R.string.class_code)).apply();
@@ -147,7 +147,7 @@ public class ProfileFragment extends Fragment {
 //                    return;
 //                }
 
-                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), getString(R.string.USERNAME)),
+                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), getString(R.string.UI_username)),
                         getString(R.string.Profile_Image), encoded)).start();
                 sp.edit().putString(getString(R.string.Profile_Image), encoded).apply();
 
@@ -190,7 +190,7 @@ public class ProfileFragment extends Fragment {
         LinearLayout layout = new LinearLayout(thisContext);
         layout.setOrientation(LinearLayout.VERTICAL);
         EditText editText = new EditText(thisContext);
-        editText.setHint(R.string.EXAMPLE_USERNAME);
+        editText.setHint(R.string.UI_example_username);
         editText.setMaxLines(1);
         editText.setInputType(InputType.TYPE_CLASS_TEXT);
 
@@ -200,7 +200,7 @@ public class ProfileFragment extends Fragment {
 
         layout.addView(editText);
         layout.addView(errorText);
-        AlertDialog.Builder alertBuilder= new AlertDialog.Builder(thisContext).setTitle(R.string.USERNAME_MSG)
+        AlertDialog.Builder alertBuilder= new AlertDialog.Builder(thisContext).setTitle(R.string.UI_username_msg)
                 .setView(layout)
                 .setPositiveButton(R.string.SUBMIT, ((dialogInterface, i) -> {}));
 
@@ -210,12 +210,23 @@ public class ProfileFragment extends Fragment {
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v->
         {
             String newUsername = editText.getText().toString();
+
+            if (newUsername.equals(sp.getString(getString(R.string.UI_username), "")))
+            {
+                //check username will help screen out the invalid "" username
+                //the new username is the same as the previous one, no need to change
+                alertDialog.dismiss();
+                return;
+            }
             if (OtherUtils.checkUserName(newUsername)) {
+
                 usernameText.setText(newUsername);
-                sp.edit().putString(getString(R.string.USERNAME), newUsername).apply();
+                new Thread(()->OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), getString(R.string.UI_username)),
+                        getString(R.string.USERNAME), newUsername)).start();
+                sp.edit().putString(getString(R.string.UI_username), newUsername).apply();
                 alertDialog.dismiss();
             } else {
-                errorText.setText(R.string.USERNAME_INVALID_MSG);
+                errorText.setText(R.string.UI_username_invalid_msg);
             }
         });
     }
@@ -225,7 +236,7 @@ public class ProfileFragment extends Fragment {
         LinearLayout layout = new LinearLayout(thisContext);
         layout.setOrientation(LinearLayout.VERTICAL);
         EditText editText = new EditText(thisContext);
-        editText.setHint(R.string.EXAMPLE_EMAIL);
+        editText.setHint(R.string.UI_example_email);
         editText.setMaxLines(1);
         editText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
@@ -245,12 +256,23 @@ public class ProfileFragment extends Fragment {
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v->
         {
             String newEmail = editText.getText().toString();
+
+            if (newEmail.equals(sp.getString(getString(R.string.Email), "")))
+            {
+                //check email will help screen out the invalid "" email
+                //the new email is the same as the previous one, no need to change
+                alertDialog.dismiss();
+                return;
+            }
             if (OtherUtils.checkEmail(newEmail)) {
+
                 emailText.setText(newEmail);
+                new Thread(()->OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), getString(R.string.UI_username)),
+                        getString(R.string.Email), newEmail)).start();
                 sp.edit().putString(getString(R.string.Email), newEmail).apply();
                 alertDialog.dismiss();
             } else {
-                errorText.setText(R.string.EMAIL_INVALID_MSG);
+                errorText.setText(R.string.UI_email_invalid_msg);
             }
         });
     }

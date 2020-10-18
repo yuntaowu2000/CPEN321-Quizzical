@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="welcome_str">欢迎使用Quizzical</string>
-    <string name="LOGIN">登录</string>
-    <string name="USERNAME">用户名</string>
-    <string name="PASSWORD">密码</string>
+    <string name="UI_username">用户名</string>
     <string name="error_generating_quiz_page">无法加载此题，请按下一题继续</string>
     <string name="Next">下一题</string>
     <string name="error_loading_pic">无法加载图片</string>
@@ -17,9 +15,7 @@
     <string name="Profile">个人资料</string>
     <string name="server_get_failed">服务器链接失败</string>
     <string name="question">题目</string>
-    <string name="username_hint">请输入用户名</string>
-    <string name="password_hint">请输入密码</string>
-    <string name="is_instructor_msg">老师？</string>
+    <string name="UI_is_instructor_msg">老师？</string>
     <string name="test">测试功能</string>
     <string name="log_out">退出登录</string>
     <string name="finish_quiz_text">你完成了这次测试！</string>
@@ -35,11 +31,11 @@
     <string name="modify_image">修整图片</string>
     <string name="Continue_text">继续</string>
     <string name="Change_Profile_Image_msg">你想要换一张头像吗？</string>
-    <string name="USERNAME_MSG">请输入用户名</string>
-    <string name="SCHOOL_EMAIL_MSG">请输入邮箱地址</string>
+    <string name="UI_username_msg">请输入用户名</string>
+    <string name="UI_email_msg">请输入邮箱地址</string>
     <string name="Please_enter_email">请输入有效邮箱地址</string>
-    <string name="EMAIL_INVALID_MSG">邮箱地址无效</string>
-    <string name="USERNAME_INVALID_MSG">用户名无效。仅支持3-15英文字符，0-9，下划线</string>
+    <string name="UI_email_invalid_msg">邮箱地址无效</string>
+    <string name="UI_username_invalid_msg">用户名无效。仅支持3-15英文字符，0-9，下划线</string>
     <string name="MATH">数学</string>
     <string name="ENGLISH">英语</string>
     <string name="QUANTUM_PHYSICS">量子物理</string>
@@ -48,4 +44,9 @@
     <string name="invalid_class_code">课程代码无效</string>
     <string name="change_username">更改用户名</string>
     <string name="You_have_joined_the_class">您已在这门课程中</string>
+    <string name="quiz_finished_low_score_msg">%d/%d正确，继续努力！</string>
+    <string name="quiz_finished_full_score_msg">%d/%d正确，恭喜！</string>
+    <string name="quiz_finished_normal_score_msg">%d/%d正确，干得好！</string>
+    <string name="create_class_success_msg">你成功创立了一个课程。</string>
+    <string name="create_class_success_msg_details">您的新课程代码是：%d。请查看Email获取详细信息，并将此代码分享给您的学生。</string>
 </resources>

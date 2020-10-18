@@ -4,6 +4,11 @@
 
     <string name="UID" translatable="false">user_id</string>
 
+    <!--    set an untranslatable version of username for server communication-->
+    <string name="USERNAME" translatable="false">username</string>
+    <string name="True" translatable="false">True</string>
+    <string name="False" translatable="false">False</string>
+
     <string name="OK" translatable="false">OK</string>
     <string name="YES">yes</string>
     <string name="NO">no</string>
@@ -18,7 +23,6 @@
 
     <!--    for integrating Google login API-->
     <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
-    <string name="client_secret" translatable="false">vDBDVmMeOSQx_8dIBwzsV5-Y</string>
 
 
     <!--    used for debugging page, can be deleted later-->
@@ -26,21 +30,19 @@
 
     <!--    init_activity-->
     <string name="welcome_str">Welcome to Quizzical</string>
-    <string name="LOGIN">Login</string>
-    <string name="PASSWORD">Password</string>
 
-    <string name="USERNAME">Username</string>
-    <string name="USERNAME_MSG">Please enter a user name</string>
-    <string name="EXAMPLE_USERNAME" translatable="false">E.g. Valhalla</string>
-    <string name="USERNAME_INVALID_MSG">Username invalid: 3-15 characters with a-z,A-Z,0-9 and _ allowed.</string>
+    <string name="UI_username">Username</string>
+    <string name="UI_username_msg">Please enter a user name</string>
+    <string name="UI_example_username" translatable="false">E.g. Valhalla</string>
+    <string name="UI_username_invalid_msg">Username invalid: 3-15 characters with a-z,A-Z,0-9 and _ allowed.</string>
 
-    <string name="SCHOOL_EMAIL_MSG">Please enter your school district email.</string>
-    <string name="EXAMPLE_EMAIL" translatable="false">E.g. abc@example.com</string>
+    <string name="UI_email_msg">Please enter your email address.</string>
+    <string name="UI_example_email" translatable="false">E.g. abc@example.com</string>
     <string name="Email" translatable="false">Email</string>
     <string name="Please_enter_email">Please enter a valid email</string>
-    <string name="EMAIL_INVALID_MSG">email invalid</string>
+    <string name="UI_email_invalid_msg">email invalid</string>
 
-    <string name="is_instructor_msg">Are you an instructor?</string>
+    <string name="UI_is_instructor_msg">Are you an instructor?</string>
 
     <!--    used in android manifest-->
     <string name="title_activity_main2" translatable="false">MainActivity2</string>
@@ -59,6 +61,8 @@
     <string name="MATH">Math</string>
     <string name="ENGLISH">English</string>
     <string name="QUANTUM_PHYSICS">QuantumPhysic</string>
+    <string name="create_class_success_msg">You just created a new class</string>
+    <string name="create_class_success_msg_details">Your new class code is %d. You will also get an email containing the code. Please share it with your students.</string>
 
     <!--    used in quiz fragment-->
     <string name="go_to_quiz">Go to Quiz</string>
@@ -92,14 +96,14 @@
     <string name="total_num" translatable="false">Total_Num</string>
 
     <!--    used in quiz finish activity-->
+    <string name="quiz_finished_low_score_msg">You got %d/%d correct. Keep learning!</string>
+    <string name="quiz_finished_full_score_msg">You got %d/%d correct. Congratulations!</string>
+    <string name="quiz_finished_normal_score_msg">You got %d/%d correct. Great work!</string>
     <string name="finish_quiz_text">You have finished the quiz!</string>
     <string name="back_to_main_menu">Back to Main Menu</string>
 
-
     <!--    used in interaction with server-->
-    <string name="encoding_utf_8" translatable="false">utf-8</string>
     <string name="server_get_failed">Failed to get from the server</string>
-
 
     <!--    used for taking pictures and image modification, for teacher creating quiz-->
     <string name="take_picture">take picture</string>
@@ -109,6 +113,5 @@
     <string name="crop">Crop</string>
     <string name="rotate">Rotate 90</string>
     <string name="image" translatable="false">Image</string>
-
 
 </resources>
