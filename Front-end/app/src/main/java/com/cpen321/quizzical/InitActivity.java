@@ -142,6 +142,12 @@ public class InitActivity extends AppCompatActivity {
         if (account != null) {
             //TODO: need to get user name and other stuff from the server here
             if (OtherUtils.stringIsNullOrEmpty(sp.getString(getString(R.string.USERNAME), ""))) {
+                //default is google credential
+                String username = account.getDisplayName().replace(" ", "_");
+                //use google ID as our default id
+                sp.edit().putString(getString(R.string.UID), account.getId()).apply();
+                sp.edit().putString(getString(R.string.USERNAME), username).apply();
+                sp.edit().putString(getString(R.string.Email), account.getEmail()).apply();
                 requestUserNameAndEmail();
             } else {
                 goToHomeActivity();
@@ -188,7 +194,7 @@ public class InitActivity extends AppCompatActivity {
         usernameText.setText(R.string.USERNAME_MSG);
         usernameText.setLayoutParams(layoutParams);
 
-        usernameInput.setHint(R.string.EXAMPLE_USERNAME);
+        usernameInput.setText(sp.getString(getString(R.string.USERNAME), getString(R.string.EXAMPLE_USERNAME)));
         usernameInput.setLayoutParams(layoutParams);
         usernameInput.setInputType(InputType.TYPE_CLASS_TEXT);
         usernameInput.setMaxLines(1);
@@ -236,7 +242,7 @@ public class InitActivity extends AppCompatActivity {
         emailText.setText(R.string.SCHOOL_EMAIL_MSG);
         emailText.setLayoutParams(layoutParams);
 
-        emailInput.setHint(R.string.EXAMPLE_EMAIL);
+        emailInput.setText(sp.getString(getString(R.string.Email), getString(R.string.EXAMPLE_EMAIL)));
         emailInput.setLayoutParams(layoutParams);
         emailInput.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         emailInput.setMaxLines(1);

@@ -147,7 +147,7 @@ public class ProfileFragment extends Fragment {
 //                    return;
 //                }
 
-                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.USERNAME), getString(R.string.USERNAME)),
+                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), getString(R.string.USERNAME)),
                         getString(R.string.Profile_Image), encoded)).start();
                 sp.edit().putString(getString(R.string.Profile_Image), encoded).apply();
 

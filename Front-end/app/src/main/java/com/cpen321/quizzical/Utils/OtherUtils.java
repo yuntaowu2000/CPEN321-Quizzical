@@ -102,9 +102,9 @@ public class OtherUtils {
      * upload strings, bitmap to the server
      * returns true if success, false otherwise
      * */
-    public static boolean uploadToServer(String username, String type, String data) {
+    public static boolean uploadToServer(String uid, String type, String data) {
 
-        String jsonStringToSend = createJsonString(username, type, data);
+        String jsonStringToSend = createJsonString(uid, type, data);
 
         String serverLink = "http://193.122.108.23:9090/";
         try {
@@ -130,11 +130,11 @@ public class OtherUtils {
         return true;
     }
 
-    private static String createJsonString(String username, String type, String data)
+    private static String createJsonString(String uid, String type, String data)
     {
         JsonObject jsonObject = new JsonObject();
         try {
-            jsonObject.addProperty("username", username);
+            jsonObject.addProperty("uid", uid);
             jsonObject.addProperty("type", type);
             jsonObject.addProperty("data", data);
         } catch (Exception e) {

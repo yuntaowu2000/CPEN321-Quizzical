@@ -2,6 +2,8 @@
     <!--    general usage-->
     <string name="app_name" translatable="false">quizzical</string>
 
+    <string name="UID" translatable="false">user_id</string>
+
     <string name="OK" translatable="false">OK</string>
     <string name="YES">yes</string>
     <string name="NO">no</string>
@@ -107,7 +109,6 @@
     <string name="crop">Crop</string>
     <string name="rotate">Rotate 90</string>
     <string name="image" translatable="false">Image</string>
-
 
 
 </resources>

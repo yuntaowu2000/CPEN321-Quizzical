@@ -14,10 +14,17 @@ http.createServer(function(req, res) {
         //data is in utf-8 format hexadecimals
         //JSON.parse parses the data into human readable strings
         var str = data.join("")
-        var obj = JSON.parse(str.replace(" ", ""))
+        var obj
+        try
+        {
+            obj = JSON.parse(str)
+        } catch (ex)
+        {
+            obj = JSON.parse(str.replace(" ", ""))
+        }
         
 
-        console.log("Username: " + obj.username)
+        console.log("UID: " + obj.uid)
         console.log("Type: " + obj.type)
 
         if (obj.type == "ProfileImage")
