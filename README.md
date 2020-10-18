@@ -12,11 +12,14 @@ Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao
 1. Login  
 1.1 Google Authentication implemented  
 1.2 Prompt user for username, email  
+(default set to google username, email)  
 1.3 Checkbox for instructor/teacher  
+1.4 Validate username, email and upload to the server  
 2. Homepage  
 2.1 Basics UI setup  
 2.2 Profile page image, username, email (change functions included) done  
-2.3 Currently leader board/class statistic page shows time and class code (+ course category)  
+2.3 Currently leader board/class statistic page shows time and class code(+ course category)   
+(bug with ```onSharedPreferenceChangeListener```)  
 2.4 Prompt user to setup/join class on first sign in  
 2.5 Multiple classes supported
 3. Quiz  
@@ -41,6 +44,9 @@ Most parts are translated in Chinese as well.
 **Note:** most picture reading, processing related stuff are in OtherUtils, testActivity
 3. Front-Back end communication  
 3.1 user info (username, email, profile image, is_instructor, class taken, class statistics)  
-3.2 class info (class statistics)
+3.2 class info (class statistics)  
 3.3 quiz info (created quiz parsed and sent onto the server; retrive quiz from the server)  
-
+4. Push notification  
+4.1 email when account created  
+4.2 email when class created  
+4.3 mobile notification when quiz, leaderboard updated  
