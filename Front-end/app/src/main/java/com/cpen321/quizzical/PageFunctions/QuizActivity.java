@@ -59,7 +59,7 @@ public class QuizActivity extends AppCompatActivity {
         //set up page
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-        this.questionNumber = getIntent().getIntExtra(getString(R.string.Question_Num), 0);
+        this.questionNumber = 0;
 
         infoLabel = findViewById(R.id.quiz_page_info_label);
         submitButton = findViewById(R.id.quiz_page_submit_button);
@@ -108,8 +108,8 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void generateBlankPage() {
-        infoLabel.setText(R.string.error_generating_quiz_page);
-        submitButton.setText(R.string.Next);
+        infoLabel.setText(R.string.UI_error_generating_quiz_page_msg);
+        submitButton.setText(R.string.UI_next);
         submitButton.setOnClickListener(view -> onNextClicked());
     }
 
@@ -171,10 +171,10 @@ public class QuizActivity extends AppCompatActivity {
         Bitmap pic = OtherUtils.getBitmapFromUrl(q.getPicSrc());
         questionInfoText = new TextView(this);
         if (pic == null) {
-            questionInfoText.setText(R.string.error_loading_pic);
+            questionInfoText.setText(R.string.UI_error_loading_pic_msg);
             questionStack.addView(questionInfoText);
         } else {
-            questionInfoText.setText(R.string.quiz_pic_hint);
+            questionInfoText.setText(R.string.UI_quiz_pic_msg);
             questionStack.addView(questionInfoText);
 
             ImageView imageView = new ImageView(this);
@@ -232,7 +232,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void updateSubmitButtonInfo() {
-        submitButton.setText(R.string.SUBMIT);
+        submitButton.setText(R.string.UI_submit);
         submitButton.setOnClickListener(view -> onSubmitClicked());
     }
 
@@ -241,10 +241,10 @@ public class QuizActivity extends AppCompatActivity {
             return;
 
         if (this.questionNumber < totalPageNum - 1) {
-            submitButton.setText(R.string.Next);
+            submitButton.setText(R.string.UI_next);
             submitButton.setOnClickListener(view -> onNextClicked());
         } else {
-            submitButton.setText(R.string.FINISH);
+            submitButton.setText(R.string.UI_finish);
             submitButton.setOnClickListener(view -> onFinishClicked());
         }
 
@@ -270,7 +270,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private boolean responseNoAnswerEntered() {
-        infoLabel.setText(R.string.No_answer_response);
+        infoLabel.setText(R.string.UI_no_answer_response_msg);
         infoLabel.setTextColor(getResources().getColor(R.color.colorCrimson));
         return false;
     }

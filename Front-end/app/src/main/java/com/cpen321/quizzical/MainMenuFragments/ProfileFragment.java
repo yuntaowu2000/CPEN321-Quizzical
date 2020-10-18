@@ -73,20 +73,20 @@ public class ProfileFragment extends Fragment {
         profileImageButton.setOnClickListener(v -> decideSetUpProfileImage());
 
         changeUsernameButton = Objects.requireNonNull(getView()).findViewById(R.id.profile_username_change_btn);
-        changeUsernameButton.setOnClickListener(v->changeUsername());
+        changeUsernameButton.setOnClickListener(v -> changeUsername());
 
         changeEmailButton = Objects.requireNonNull(getView()).findViewById(R.id.profile_email_change_btn);
-        changeEmailButton.setOnClickListener(v->changeEmail());
+        changeEmailButton.setOnClickListener(v -> changeEmail());
 
         sp = Objects.requireNonNull(getActivity()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
 
         usernameText = getView().findViewById(R.id.profile_username);
-        usernameText.setText(sp.getString(getString(R.string.UI_username), getString(R.string.UI_username)));
+        usernameText.setText(sp.getString(getString(R.string.USERNAME), getString(R.string.UI_username)));
 
         emailText = getView().findViewById(R.id.profile_email);
-        emailText.setText(sp.getString(getString(R.string.Email), getString(R.string.UI_example_email)));
+        emailText.setText(sp.getString(getString(R.string.EMAIL), getString(R.string.UI_example_email)));
 
-        String encodedProfileImg = sp.getString(getString(R.string.Profile_Image), "");
+        String encodedProfileImg = sp.getString(getString(R.string.PROFILE_IMG), "");
         if (!OtherUtils.stringIsNullOrEmpty(encodedProfileImg)) {
             Bitmap profileImg = OtherUtils.decodeImage(encodedProfileImg);
             profileImg = OtherUtils.scaleImage(profileImg);
@@ -98,12 +98,12 @@ public class ProfileFragment extends Fragment {
         sp.edit().putBoolean(getString(R.string.LOGGED), false).apply();
 
         //TODO: need to use server to get these info
-        sp.edit().remove(getString(R.string.Profile_Image)).apply();
+        sp.edit().remove(getString(R.string.PROFILE_IMG)).apply();
         sp.edit().remove(getString(R.string.IS_INSTRUCTOR)).apply();
-        sp.edit().remove(getString(R.string.UI_username)).apply();
-        sp.edit().remove(getString(R.string.Email)).apply();
-        sp.edit().remove(getString(R.string.course_category)).apply();
-        sp.edit().remove(getString(R.string.class_code)).apply();
+        sp.edit().remove(getString(R.string.USERNAME)).apply();
+        sp.edit().remove(getString(R.string.EMAIL)).apply();
+        sp.edit().remove(getString(R.string.COURSE_CATEGORY)).apply();
+        sp.edit().remove(getString(R.string.CLASS_CODE)).apply();
 
         HomeActivity parentAct = (HomeActivity) getActivity();
 
@@ -117,7 +117,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void decideSetUpProfileImage() {
-        new AlertDialog.Builder(this.getContext()).setTitle(R.string.Profile_Image).setMessage(R.string.Change_Profile_Image_msg)
+        new AlertDialog.Builder(this.getContext()).setTitle(R.string.PROFILE_IMG).setMessage(R.string.UI_change_profile_image_msg)
                 .setPositiveButton(R.string.YES, (dialogInterface, i) -> {
                     dialogInterface.dismiss();
                     checkPermissions();
@@ -143,13 +143,13 @@ public class ProfileFragment extends Fragment {
                 String encoded = OtherUtils.encodeImage(bitmap);
 
                 //the image doesn't change, no need to waste time on post or scaling
-//                if (encoded.equals(sp.getString(getString(R.string.Profile_Image), ""))) {
-//                    return;
-//                }
+                if (encoded.equals(sp.getString(getString(R.string.PROFILE_IMG), ""))) {
+                    return;
+                }
 
-                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), getString(R.string.UI_username)),
-                        getString(R.string.Profile_Image), encoded)).start();
-                sp.edit().putString(getString(R.string.Profile_Image), encoded).apply();
+                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                        getString(R.string.PROFILE_IMG), encoded)).start();
+                sp.edit().putString(getString(R.string.PROFILE_IMG), encoded).apply();
 
                 //scale the image and make it round to fit into the image button.
                 bitmap = OtherUtils.scaleImage(bitmap);
@@ -200,19 +200,19 @@ public class ProfileFragment extends Fragment {
 
         layout.addView(editText);
         layout.addView(errorText);
-        AlertDialog.Builder alertBuilder= new AlertDialog.Builder(thisContext).setTitle(R.string.UI_username_msg)
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(thisContext).setTitle(R.string.UI_username_msg)
                 .setView(layout)
-                .setPositiveButton(R.string.SUBMIT, ((dialogInterface, i) -> {}));
+                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> {
+                }));
 
         final AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
 
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v->
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v ->
         {
             String newUsername = editText.getText().toString();
 
-            if (newUsername.equals(sp.getString(getString(R.string.UI_username), "")))
-            {
+            if (newUsername.equals(sp.getString(getString(R.string.USERNAME), ""))) {
                 //check username will help screen out the invalid "" username
                 //the new username is the same as the previous one, no need to change
                 alertDialog.dismiss();
@@ -221,9 +221,9 @@ public class ProfileFragment extends Fragment {
             if (OtherUtils.checkUserName(newUsername)) {
 
                 usernameText.setText(newUsername);
-                new Thread(()->OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), getString(R.string.UI_username)),
+                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
                         getString(R.string.USERNAME), newUsername)).start();
-                sp.edit().putString(getString(R.string.UI_username), newUsername).apply();
+                sp.edit().putString(getString(R.string.USERNAME), newUsername).apply();
                 alertDialog.dismiss();
             } else {
                 errorText.setText(R.string.UI_username_invalid_msg);
@@ -246,19 +246,19 @@ public class ProfileFragment extends Fragment {
 
         layout.addView(editText);
         layout.addView(errorText);
-        AlertDialog.Builder alertBuilder= new AlertDialog.Builder(thisContext).setTitle(R.string.Please_enter_email)
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(thisContext).setTitle(R.string.UI_prompt_for_valid_email)
                 .setView(layout)
-                .setPositiveButton(R.string.SUBMIT, ((dialogInterface, i) -> {}));
+                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> {
+                }));
 
         final AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
 
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v->
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v ->
         {
             String newEmail = editText.getText().toString();
 
-            if (newEmail.equals(sp.getString(getString(R.string.Email), "")))
-            {
+            if (newEmail.equals(sp.getString(getString(R.string.EMAIL), ""))) {
                 //check email will help screen out the invalid "" email
                 //the new email is the same as the previous one, no need to change
                 alertDialog.dismiss();
@@ -267,9 +267,9 @@ public class ProfileFragment extends Fragment {
             if (OtherUtils.checkEmail(newEmail)) {
 
                 emailText.setText(newEmail);
-                new Thread(()->OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), getString(R.string.UI_username)),
-                        getString(R.string.Email), newEmail)).start();
-                sp.edit().putString(getString(R.string.Email), newEmail).apply();
+                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                        getString(R.string.EMAIL), newEmail)).start();
+                sp.edit().putString(getString(R.string.EMAIL), newEmail).apply();
                 alertDialog.dismiss();
             } else {
                 errorText.setText(R.string.UI_email_invalid_msg);

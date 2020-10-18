@@ -49,7 +49,7 @@ public class StatisticFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sp = Objects.requireNonNull(getContext()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
         is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
-        curr_class_code = sp.getInt(getString(R.string.class_code), 0);
+        curr_class_code = sp.getInt(getString(R.string.CLASS_CODE), 0);
 
         if (is_Instructor) {
             return inflater.inflate(R.layout.fragment_class_statistic, container, false);
@@ -95,7 +95,7 @@ public class StatisticFragment extends Fragment {
     }
 
     private void onClassCodeChanged(String key, TextView debug_text) {
-        String class_code_string = getContext().getString(R.string.class_code);
+        String class_code_string = getContext().getString(R.string.CLASS_CODE);
         Log.d("In statistic", "on class code changed called");
         if (key.equals(class_code_string)) {
             int class_code = sp.getInt(class_code_string, 0);
@@ -112,7 +112,7 @@ public class StatisticFragment extends Fragment {
         //however, it adds the load onto the Main thread, causing lags
         //so we need to run a new thread which runs this function
         String result = OtherUtils.readFromURL(serverLink);
-        result = OtherUtils.stringIsNullOrEmpty(result) ? getString(R.string.server_get_failed) : result;
+        result = OtherUtils.stringIsNullOrEmpty(result) ? getString(R.string.UI_server_failure_msg) : result;
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }

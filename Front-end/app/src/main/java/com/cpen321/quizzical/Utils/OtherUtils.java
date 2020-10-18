@@ -130,8 +130,7 @@ public class OtherUtils {
         return true;
     }
 
-    private static String createJsonString(String uid, String type, String data)
-    {
+    private static String createJsonString(String uid, String type, String data) {
         JsonObject jsonObject = new JsonObject();
         try {
             jsonObject.addProperty("uid", uid);

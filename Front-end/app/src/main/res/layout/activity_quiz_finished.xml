@@ -17,7 +17,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="@string/finish_quiz_text"
+                android:text="@string/UI_finish_quiz_msg"
                 android:textAlignment="center"
                 android:textSize="20dp" />
 
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
-            android:text="@string/back_to_main_menu" />
+            android:text="@string/UI_back_to_main_menu" />
 
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

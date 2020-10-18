@@ -10,23 +10,20 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/profile_page_text_1" />
-
         <ImageButton
             android:id="@+id/profile_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="40dp"
             android:background="@drawable/round_button"
-            android:contentDescription="@string/Profile_Image" />
+            android:contentDescription="@string/PROFILE_IMG" />
 
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center">
+
             <TableRow>
 
                 <TextView
@@ -39,16 +36,18 @@
                     android:layout_marginBottom="10dp"
                     android:text="@string/UI_username"
                     android:textSize="20sp" />
+
                 <ImageButton
                     android:id="@+id/profile_username_change_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_edit_24"
                     android:layout_column="1"
-                    android:contentDescription="@string/change_username" />
+                    android:contentDescription="@string/UI_change_username"
+                    android:src="@drawable/ic_baseline_edit_24" />
             </TableRow>
 
             <TableRow>
+
                 <TextView
                     android:id="@+id/profile_email"
                     android:layout_width="wrap_content"
@@ -63,14 +62,11 @@
                     android:id="@+id/profile_email_change_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_edit_24"
                     android:layout_column="1"
-                    android:contentDescription="@string/Change_Profile_Image_msg" />
+                    android:contentDescription="@string/UI_change_email"
+                    android:src="@drawable/ic_baseline_edit_24" />
             </TableRow>
         </TableLayout>
-
-
-
 
 
         <Button
@@ -78,6 +74,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/log_out" />
+            android:text="@string/UI_log_out" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

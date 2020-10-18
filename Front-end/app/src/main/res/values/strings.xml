@@ -1,117 +1,126 @@
 <resources>
     <!--    general usage-->
     <string name="app_name" translatable="false">quizzical</string>
-
-    <string name="UID" translatable="false">user_id</string>
-
-    <!--    set an untranslatable version of username for server communication-->
-    <string name="USERNAME" translatable="false">username</string>
-    <string name="True" translatable="false">True</string>
-    <string name="False" translatable="false">False</string>
-
-    <string name="OK" translatable="false">OK</string>
     <string name="YES">yes</string>
     <string name="NO">no</string>
-    <string name="IS_INSTRUCTOR" translatable="false">IS_INSTRUCTOR</string>
-    <string name="LOGGED" translatable="false">LOGGED</string>
+
+    <string name="curr_login_user" translatable="false">curr_login_user</string>
+    <string name="LOGGED" translatable="false">logged</string>
+
     <string name="Continue_text">Continue</string>
 
-    <string name="class_code" translatable="false">Class_code</string>
-    <string name="invalid_class_code">Invalid class code.</string>
-    <string name="curr_login_user" translatable="false">curr_login_user</string>
-    <string name="course_category" translatable="false">course category</string>
+    <!--    set an untranslatable version of username for server communication-->
+    <string name="UID" translatable="false">user id</string>
+    <string name="USERNAME" translatable="false">username</string>
+    <string name="EMAIL" translatable="false">Email</string>
+    <string name="PROFILE_IMG" translatable="false">Profile Image</string>
+
+    <string name="TRUE" translatable="false">True</string>
+    <string name="FALSE" translatable="false">False</string>
+    <string name="OK" translatable="false">OK</string>
+
+    <string name="IS_INSTRUCTOR" translatable="false">IS_INSTRUCTOR</string>
+
+    <string name="CLASS_CODE" translatable="false">class code</string>
+
+    <string name="COURSE_CATEGORY" translatable="false">course category</string>
+
+    <string name="MATH">Math</string>
+    <string name="ENGLISH">English</string>
+    <string name="QUANTUM_PHYSICS">QuantumPhysic</string>
+
+    <!--    use this version for server communication of quiz questions-->
+    <string name="QUESTION" translatable="false">question</string>
+
+    <!--    used in interaction with server-->
+    <string name="UI_server_failure_msg">Failed to connect to the server</string>
 
     <!--    for integrating Google login API-->
     <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
-
 
     <!--    used for debugging page, can be deleted later-->
     <string name="test">Test</string>
 
     <!--    init_activity-->
-    <string name="welcome_str">Welcome to Quizzical</string>
+    <string name="UI_welcome_str">Welcome to Quizzical</string>
 
+    <!--    this is the default username to be shown in the app-->
     <string name="UI_username">Username</string>
     <string name="UI_username_msg">Please enter a user name</string>
     <string name="UI_example_username" translatable="false">E.g. Valhalla</string>
-    <string name="UI_username_invalid_msg">Username invalid: 3-15 characters with a-z,A-Z,0-9 and _ allowed.</string>
+    <string name="UI_username_invalid_msg">Username invalid: 3–15 characters with a–z,A-Z,0-9 and _ allowed.</string>
 
-    <string name="UI_email_msg">Please enter your email address.</string>
+    <string name="UI_email_msg">Please enter your email address</string>
     <string name="UI_example_email" translatable="false">E.g. abc@example.com</string>
-    <string name="Email" translatable="false">Email</string>
-    <string name="Please_enter_email">Please enter a valid email</string>
+    <string name="UI_prompt_for_valid_email">Please enter a valid email</string>
     <string name="UI_email_invalid_msg">email invalid</string>
 
     <string name="UI_is_instructor_msg">Are you an instructor?</string>
 
-    <!--    used in android manifest-->
-    <string name="title_activity_main2" translatable="false">MainActivity2</string>
-
     <!--    used for home activity-->
-    <string name="Quizzes">Quizzes</string>
-    <string name="Class_Statistics">Class Statistics</string>
-    <string name="LeaderBoard">LeaderBoard</string>
-    <string name="Profile">Profile</string>
+    <string name="UI_quizzes">Quizzes</string>
+    <string name="UI_class_statistics">Class Statistics</string>
+    <string name="UI_leader_board">LeaderBoard</string>
+    <string name="UI_profile">Profile</string>
 
-    <string name="example_course_code" translatable="false">E.g. 123456</string>
-    <string name="enter_class_code_hint">Please enter your class code</string>
-    <string name="add_class" translatable="false">Add class</string>
-    <string name="You_have_joined_the_class">You have already joined the class</string>
-    <string name="select_course_category_hint">Please select a course category</string>
-    <string name="MATH">Math</string>
-    <string name="ENGLISH">English</string>
-    <string name="QUANTUM_PHYSICS">QuantumPhysic</string>
-    <string name="create_class_success_msg">You just created a new class</string>
-    <string name="create_class_success_msg_details">Your new class code is %d. You will also get an email containing the code. Please share it with your students.</string>
+    <string name="UI_add_class" translatable="false">Add class</string>
+
+    <string name="UI_example_course_code" translatable="false">E.g. 123456</string>
+    <string name="UI_invalid_class_code_msg">Invalid class code</string>
+    <string name="UI_enter_class_code_msg">Please enter your class code</string>
+    <string name="UI_class_joined_already_msg">You have already joined the class</string>
+
+    <string name="UI_select_course_category_msg">Please select a course category</string>
+    <string name="UI_create_class_success_title">You just created a new class</string>
+    <string name="UI_create_class_success_msg">Your new class code is %d. You will also get an email containing the code. Please share it with your students.</string>
 
     <!--    used in quiz fragment-->
+    <!--    need update later-->
     <string name="go_to_quiz">Go to Quiz</string>
     <string name="quiz_fragment_debug_text" translatable="false">This is the quiz page</string>
     <string name="teacher_quiz_fragment_debug_text" translatable="false">This is the quiz page for teachers</string>
 
     <!--    used in class statistic fragment (for teachers)-->
+    <!--    need update later-->
     <string name="class_statistic_page_text1" translatable="false">This is the class statistic page for teachers</string>
 
     <!--    used in leader board fragment (for students)-->
+    <!--    need update later-->
     <string name="leader_board_page_text1" translatable="false">This is the leaderBoard page</string>
 
     <!--    used in profile fragment-->
-    <string name="profile_page_text_1" translatable="false">This is the profile page</string>
-    <string name="Profile_Image" translatable="false">Profile Image</string>
-    <string name="Change_Profile_Image_msg">Do you want to change the profile image?</string>
-    <string name="change_username">change username</string>
-    <string name="log_out">Log out</string>
+    <string name="UI_change_profile_image_msg">Do you want to change the profile image?</string>
+    <string name="UI_change_username">change username</string>
+    <string name="UI_change_email">change email</string>
+    <string name="UI_log_out">Log out</string>
 
     <!--    used in quiz activity-->
-    <string name="Question_Num" translatable="false">Question_Num</string>
-    <string name="error_generating_quiz_page">An error occurred, press next to continue</string>
-    <string name="question">Question</string>
-    <string name="Next">Next Question</string>
-    <string name="error_loading_pic">Error loading picture</string>
-    <string name="quiz_pic_hint">You may need to scroll down to see the picture</string>
-    <string name="SUBMIT">Submit</string>
-    <string name="FINISH">Finish</string>
-    <string name="No_answer_response">Please answer the question before submission.</string>
+    <string name="UI_error_generating_quiz_page_msg">An error occurred, press next to continue</string>
+    <string name="UI_question">Question</string>
+    <string name="UI_next">Next Question</string>
+    <string name="UI_error_loading_pic_msg">Error loading picture</string>
+    <string name="UI_quiz_pic_msg">You may need to scroll down to see the picture</string>
+    <string name="UI_submit">Submit</string>
+    <string name="UI_finish">Finish</string>
+    <string name="UI_no_answer_response_msg">Please answer the question before submission.</string>
+
     <string name="correct_num" translatable="false">Correct_Num</string>
     <string name="total_num" translatable="false">Total_Num</string>
 
     <!--    used in quiz finish activity-->
-    <string name="quiz_finished_low_score_msg">You got %d/%d correct. Keep learning!</string>
-    <string name="quiz_finished_full_score_msg">You got %d/%d correct. Congratulations!</string>
-    <string name="quiz_finished_normal_score_msg">You got %d/%d correct. Great work!</string>
-    <string name="finish_quiz_text">You have finished the quiz!</string>
-    <string name="back_to_main_menu">Back to Main Menu</string>
-
-    <!--    used in interaction with server-->
-    <string name="server_get_failed">Failed to get from the server</string>
+    <string name="UI_quiz_finished_low_score_msg">You got %d/%d correct. Keep learning!</string>
+    <string name="UI_quiz_finished_full_score_msg">You got %d/%d correct. Congratulations!</string>
+    <string name="UI_quiz_finished_normal_score_msg">You got %d/%d correct. Great work!</string>
+    <string name="UI_finish_quiz_msg">You have finished the quiz!</string>
+    <string name="UI_back_to_main_menu">Back to Main Menu</string>
 
     <!--    used for taking pictures and image modification, for teacher creating quiz-->
     <string name="take_picture">take picture</string>
     <string name="preview">preview</string>
-    <string name="modify_image">Modify image</string>
-    <string name="modify_image_hint">Do you want to crop or rotate the image?</string>
-    <string name="crop">Crop</string>
-    <string name="rotate">Rotate 90</string>
+    <string name="UI_modify_image_title">Modify image</string>
+    <string name="UI_modify_image_msg">Do you want to crop or rotate the image?</string>
+    <string name="UI_crop">Crop</string>
+    <string name="UI_rotate">Rotate 90</string>
     <string name="image" translatable="false">Image</string>
 
 </resources>

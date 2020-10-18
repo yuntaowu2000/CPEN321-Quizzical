@@ -71,7 +71,7 @@ public class TestPage extends AppCompatActivity {
             imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
 
-            new AlertDialog.Builder(this).setTitle(R.string.modify_image).setMessage(R.string.modify_image_hint)
+            new AlertDialog.Builder(this).setTitle(R.string.UI_modify_image_title).setMessage(R.string.UI_modify_image_msg)
                     .setPositiveButton(R.string.YES, (dialogInterface, i) -> {
                         dialogInterface.dismiss();
                         cropSetup();
@@ -89,7 +89,7 @@ public class TestPage extends AppCompatActivity {
         cropImageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600));
 
         final Button cropButton = new Button(this);
-        cropButton.setText(R.string.crop);
+        cropButton.setText(R.string.UI_crop);
         cropButton.setOnClickListener(view -> {
             croppedBitmap = cropImageView.getCroppedImage();
             imageView.setImageBitmap(croppedBitmap);
@@ -97,7 +97,7 @@ public class TestPage extends AppCompatActivity {
         linearLayout.addView(cropButton);
 
         final Button rotateButton = new Button(this);
-        rotateButton.setText(R.string.rotate);
+        rotateButton.setText(R.string.UI_rotate);
         rotateButton.setOnClickListener(view -> cropImageView.rotateImage(90));
         linearLayout.addView(rotateButton);
 
@@ -125,6 +125,6 @@ public class TestPage extends AppCompatActivity {
         String q = testQ.toJsonString();
         Log.d("question", q);
 
-        new Thread(() -> OtherUtils.uploadToServer(getString(R.string.UI_username), getString(R.string.question),q)).start();
+        new Thread(() -> OtherUtils.uploadToServer(getString(R.string.UI_username), getString(R.string.QUESTION), q)).start();
     }
 }

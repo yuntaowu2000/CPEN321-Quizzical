@@ -23,7 +23,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class QuizFragment extends Fragment {
 
     SharedPreferences sp;
-    View view;
     boolean is_Instructor;
     int class_code;
 
@@ -44,7 +43,6 @@ public class QuizFragment extends Fragment {
 
     private void setupQuiz() {
         Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
-        quizIntent.putExtra(getString(R.string.Question_Num), 0);
         startActivity(quizIntent);
     }
 
@@ -54,7 +52,7 @@ public class QuizFragment extends Fragment {
         sp = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
 
         is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
-        class_code = sp.getInt(getString(R.string.class_code), 0);
+        class_code = sp.getInt(getString(R.string.CLASS_CODE), 0);
 
         if (is_Instructor) {
             return inflater.inflate(R.layout.fragment_quiz_teacher, container, false);

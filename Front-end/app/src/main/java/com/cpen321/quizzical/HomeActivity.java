@@ -88,7 +88,7 @@ public class HomeActivity extends AppCompatActivity {
         // this will be default class code
         // we can have multiple class code stored on server and use a floating action button to switch class
         // for each class code, we need a teacher, a class stats, a set of notes/quizzes
-        curr_class_code = sp.getInt(getString(R.string.class_code), 0);
+        curr_class_code = sp.getInt(getString(R.string.CLASS_CODE), 0);
 
         if (curr_class_code == 0) {
             promptForClassCode();
@@ -116,6 +116,10 @@ public class HomeActivity extends AppCompatActivity {
                 if (class_scroll_view.getVisibility() == View.VISIBLE) {
                     class_switch_button.setAnimation(rotateClose);
                     class_scroll_view.setVisibility(View.INVISIBLE);
+                    for (Button b : class_list) {
+                        b.setVisibility(View.INVISIBLE);
+                        b.setClickable(false);
+                    }
                     class_scroll_view.setAnimation(toBottom);
                 }
             }
@@ -149,7 +153,7 @@ public class HomeActivity extends AppCompatActivity {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         EditText editText = new EditText(this);
-        editText.setHint(R.string.example_course_code);
+        editText.setHint(R.string.UI_example_course_code);
         editText.setMaxLines(1);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
 
@@ -160,9 +164,9 @@ public class HomeActivity extends AppCompatActivity {
         layout.addView(editText);
         layout.addView(errorText);
 
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle(R.string.enter_class_code_hint)
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle(R.string.UI_enter_class_code_msg)
                 .setView(layout)
-                .setPositiveButton(R.string.SUBMIT, ((dialogInterface, i) -> {
+                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> {
                 }));
 
         final AlertDialog alertDialog = alertBuilder.create();
@@ -175,7 +179,7 @@ public class HomeActivity extends AppCompatActivity {
                 appendNewClassToList(class_code);
                 alertDialog.dismiss();
             } else {
-                errorText.setText(R.string.invalid_class_code);
+                errorText.setText(R.string.UI_invalid_class_code_msg);
             }
         });
 
@@ -188,9 +192,9 @@ public class HomeActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, items);
         drop_down_list.setAdapter(adapter);
 
-        new AlertDialog.Builder(this).setTitle(R.string.select_course_category_hint)
+        new AlertDialog.Builder(this).setTitle(R.string.UI_select_course_category_msg)
                 .setView(drop_down_list)
-                .setPositiveButton(R.string.SUBMIT, ((dialogInterface, i) ->
+                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) ->
                 {
                     setupNewClassCode(drop_down_list.getSelectedItemPosition());
                     dialogInterface.dismiss();
@@ -205,19 +209,19 @@ public class HomeActivity extends AppCompatActivity {
         //and wait for the server to respond with a class code
         //then cache them in the shared preferences
         curr_class_code = category + 1 + 2 + 3;
-        new AlertDialog.Builder(this).setTitle(R.string.create_class_success_msg)
-                .setMessage(String.format(getString(R.string.create_class_success_msg_details), curr_class_code))
+        new AlertDialog.Builder(this).setTitle(R.string.UI_create_class_success_title)
+                .setMessage(String.format(getString(R.string.UI_create_class_success_msg), curr_class_code))
                 .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
                 .show();
 
         appendNewClassToList(curr_class_code);
-        sp.edit().putInt(getString(R.string.course_category), category).apply();
+        sp.edit().putInt(getString(R.string.COURSE_CATEGORY), category).apply();
     }
 
     private void appendNewClassToList(int class_code) {
 
         if (class_code_list.contains(class_code)) {
-            Toast.makeText(this, R.string.You_have_joined_the_class, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.UI_class_joined_already_msg, Toast.LENGTH_SHORT).show();
             return;
         }
         class_code_list.add(class_code);
@@ -242,7 +246,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void switchClass(int class_code) {
-        sp.edit().putInt(getString(R.string.class_code), class_code).apply();
+        sp.edit().putInt(getString(R.string.CLASS_CODE), class_code).apply();
         Log.d("home activity", "curr selected class code " + class_code);
     }
 
@@ -253,23 +257,31 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setupAllTabs() {
-        setupTab(getString(R.string.Quizzes));
+        setupTab(getString(R.string.UI_quizzes));
         if (is_Instructor) {
-            setupTab(getString(R.string.Class_Statistics));
+            setupTab(getString(R.string.UI_class_statistics));
         } else {
-            setupTab(getString(R.string.LeaderBoard));
+            setupTab(getString(R.string.UI_leader_board));
         }
-        setupTab(getString(R.string.Profile));
+        setupTab(getString(R.string.UI_profile));
     }
 
     private void onClassSwitchButtonClicked() {
         if (class_scroll_view.getVisibility() == View.INVISIBLE) {
             class_switch_button.setAnimation(rotateOpen);
             class_scroll_view.setVisibility(View.VISIBLE);
+            for (Button b : class_list) {
+                b.setVisibility(View.VISIBLE);
+                b.setClickable(true);
+            }
             class_scroll_view.setAnimation(fromBottom);
         } else {
             class_switch_button.setAnimation(rotateClose);
             class_scroll_view.setVisibility(View.INVISIBLE);
+            for (Button b : class_list) {
+                b.setVisibility(View.INVISIBLE);
+                b.setClickable(false);
+            }
             class_scroll_view.setAnimation(toBottom);
         }
     }

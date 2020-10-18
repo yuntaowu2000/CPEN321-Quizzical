@@ -141,7 +141,7 @@ public class InitActivity extends AppCompatActivity {
     private void validateAndLogin(GoogleSignInAccount account) {
         if (account != null) {
             //TODO: need to get user name and other stuff from the server here
-            if (OtherUtils.stringIsNullOrEmpty(sp.getString(getString(R.string.UI_username), ""))) {
+            if (OtherUtils.stringIsNullOrEmpty(sp.getString(getString(R.string.USERNAME), ""))) {
                 //default is google credential
                 String username = account.getDisplayName().replace(" ", "_");
                 String email = account.getEmail();
@@ -149,8 +149,8 @@ public class InitActivity extends AppCompatActivity {
                 email_input_OK = OtherUtils.checkEmail(email);
                 //use google ID as our default id
                 sp.edit().putString(getString(R.string.UID), account.getId()).apply();
-                sp.edit().putString(getString(R.string.UI_username), username).apply();
-                sp.edit().putString(getString(R.string.Email), email).apply();
+                sp.edit().putString(getString(R.string.USERNAME), username).apply();
+                sp.edit().putString(getString(R.string.EMAIL), email).apply();
                 requestUserNameAndEmail();
             } else {
                 goToHomeActivity();
@@ -180,7 +180,7 @@ public class InitActivity extends AppCompatActivity {
         relativeLayoutParam.setMargins(30, 30, 30, 30);
 
         Button finishButton = new Button(this);
-        finishButton.setText(R.string.FINISH);
+        finishButton.setText(R.string.UI_finish);
         finishButton.setAllCaps(false);
         finishButton.setLayoutParams(relativeLayoutParam);
 
@@ -197,7 +197,7 @@ public class InitActivity extends AppCompatActivity {
         usernameText.setText(R.string.UI_username_msg);
         usernameText.setLayoutParams(layoutParams);
 
-        usernameInput.setText(sp.getString(getString(R.string.UI_username), getString(R.string.UI_example_username)));
+        usernameInput.setText(sp.getString(getString(R.string.USERNAME), getString(R.string.UI_example_username)));
         usernameInput.setLayoutParams(layoutParams);
         usernameInput.setInputType(InputType.TYPE_CLASS_TEXT);
         usernameInput.setMaxLines(1);
@@ -223,7 +223,7 @@ public class InitActivity extends AppCompatActivity {
                     usernameErrorText.setText(R.string.UI_username_invalid_msg);
                     username_input_OK = false;
                 } else {
-                    sp.edit().putString(getString(R.string.UI_username), username).apply();
+                    sp.edit().putString(getString(R.string.USERNAME), username).apply();
                     usernameErrorText.setText("");
                     username_input_OK = true;
                 }
@@ -245,7 +245,7 @@ public class InitActivity extends AppCompatActivity {
         emailText.setText(R.string.UI_email_msg);
         emailText.setLayoutParams(layoutParams);
 
-        emailInput.setText(sp.getString(getString(R.string.Email), getString(R.string.UI_example_email)));
+        emailInput.setText(sp.getString(getString(R.string.EMAIL), getString(R.string.UI_example_email)));
         emailInput.setLayoutParams(layoutParams);
         emailInput.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         emailInput.setMaxLines(1);
@@ -265,13 +265,13 @@ public class InitActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 String email = editable.toString();
                 if (OtherUtils.stringIsNullOrEmpty(email)) {
-                    emailErrorText.setText(R.string.Please_enter_email);
+                    emailErrorText.setText(R.string.UI_prompt_for_valid_email);
                     email_input_OK = false;
                 } else if (!OtherUtils.checkEmail(email)) {
                     emailErrorText.setText(R.string.UI_email_invalid_msg);
                     email_input_OK = false;
                 } else {
-                    sp.edit().putString(getString(R.string.Email), email).apply();
+                    sp.edit().putString(getString(R.string.EMAIL), email).apply();
                     emailErrorText.setText("");
                     email_input_OK = true;
                 }
@@ -293,14 +293,14 @@ public class InitActivity extends AppCompatActivity {
             sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), instructorCheckBox.isChecked()).apply();
 
             //if the user is newly created, we need to upload the credentials to the server
-            new Thread(()->OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USERNAME),
-                    sp.getString(getString(R.string.UI_username), ""))).start();
+            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USERNAME),
+                    sp.getString(getString(R.string.USERNAME), ""))).start();
 
-            new Thread(()->OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.Email),
-                    sp.getString(getString(R.string.Email), ""))).start();
+            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.EMAIL),
+                    sp.getString(getString(R.string.EMAIL), ""))).start();
 
-            String is_instructor_string = instructorCheckBox.isChecked() ? getString(R.string.True) : getString(R.string.False);
-            new Thread(()->OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.IS_INSTRUCTOR),
+            String is_instructor_string = instructorCheckBox.isChecked() ? getString(R.string.TRUE) : getString(R.string.FALSE);
+            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.IS_INSTRUCTOR),
                     is_instructor_string)).start();
 
             goToHomeActivity();
