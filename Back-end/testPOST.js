@@ -27,12 +27,21 @@ http.createServer(function(req, res) {
         console.log("UID: " + obj.uid)
         console.log("Type: " + obj.type)
 
-        if (obj.type == "ProfileImage")
+        if (obj.type == "ProfileImage" || obj.type == "Profile Image")
         {
-            fs.writeFileSync(obj.username + "_profile_img.jpg", obj.data, {encoding:'base64'});
-        } else if (obj.type == "Question")
+            fs.writeFileSync("username" + "_profile_img.jpg", obj.data, {encoding:'base64'});
+        } 
+        else
         {
-            console.log(JSON.parse(obj.data))
+            fs.writeFileSync("username" + "_" + obj.type + ".txt", obj.data);
+            try 
+            {
+                console.log(JSON.parse(obj.data))
+            } catch(ex)
+            {
+                console.log(obj.data)
+            }
+            
         }
 
         // respond to the sender
