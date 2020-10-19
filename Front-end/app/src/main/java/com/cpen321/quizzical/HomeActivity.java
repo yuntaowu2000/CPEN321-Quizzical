@@ -268,18 +268,29 @@ public class HomeActivity extends AppCompatActivity {
         //and wait for the server to respond with a class code
         //then cache them in the shared preferences
         String parsed_data = parseClassDetails(course_category, grade_level, class_name);
-        new Thread(()->OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.UI_add_class), parsed_data)).start();
+        new Thread(()->
+        {
+            String response = OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.UI_add_class), parsed_data);
 
-        //probably needs to use startActivityForResult here.
-        int temp_val = (course_category.hashCode() + grade_level.hashCode() + class_name.hashCode()) % 65536;
-        curr_class_code = temp_val < 0 ? -temp_val : temp_val;
+            //use this for new class code
+            int new_class_code = parseResponseMsgForClassCode(response);
 
-        new AlertDialog.Builder(this).setTitle(R.string.UI_create_class_success_title)
-                .setMessage(String.format(getString(R.string.UI_create_class_success_msg), curr_class_code))
-                .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
-                .show();
+            //may change uploadToServer to return string for this.
+            int temp_val = (course_category.hashCode() + grade_level.hashCode() + class_name.hashCode()) % 65536;
+            curr_class_code = temp_val < 0 ? -temp_val : temp_val;
 
-        appendNewClassToList(curr_class_code);
+            runOnUiThread(()->
+            {
+                new AlertDialog.Builder(this).setTitle(R.string.UI_create_class_success_title)
+                        .setMessage(String.format(getString(R.string.UI_create_class_success_msg), curr_class_code))
+                        .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
+                        .show();
+                appendNewClassToList(curr_class_code);
+            });
+
+        }).start();
+
+
     }
 
     private String parseClassDetails(String course_category, String grade_level, String class_name) {
@@ -294,8 +305,15 @@ public class HomeActivity extends AppCompatActivity {
         return jsonObject.toString();
     }
 
-    private void appendNewClassToList(int class_code) {
+    private int parseResponseMsgForClassCode(String responseMsg) {
+        if (OtherUtils.stringIsNullOrEmpty(responseMsg)) {
+            return 0;
+        }
+        return Integer.parseInt(responseMsg);
+    }
 
+    private void appendNewClassToList(int class_code) {
+        //TODO change class_code to class name later
         if (class_code_list.contains(class_code)) {
             Toast.makeText(this, R.string.UI_class_joined_already_msg, Toast.LENGTH_SHORT).show();
             return;

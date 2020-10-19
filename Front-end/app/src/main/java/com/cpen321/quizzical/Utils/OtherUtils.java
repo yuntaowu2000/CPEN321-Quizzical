@@ -66,6 +66,7 @@ public class OtherUtils {
     public static boolean checkClassCode(int class_code) {
         //TODO: we need to check that the code is valid on the server
         //TODO: use POST request with content: username=xxx;class_code=xxx
+        //TODO: change to return string as class name later
         return class_code != 111;
     }
 
@@ -112,10 +113,10 @@ public class OtherUtils {
      * upload strings, bitmap to the server
      * returns true if success, false otherwise
      * */
-    public static boolean uploadToServer(String uid, String type, String data) {
+    public static String uploadToServer(String uid, String type, String data) {
 
         String jsonStringToSend = createJsonString(uid, type, data);
-
+        String response = "";
         String serverLink = "http://193.122.108.23:9090/";
         try {
             URL url = new URL(serverLink);
@@ -130,14 +131,12 @@ public class OtherUtils {
             wr.flush();
             wr.close();
 
-
-            int responseCode = conn.getResponseCode();
-            Log.d("HTTP POST", "response code: " + responseCode);
+            response = conn.getResponseMessage();
+            Log.d("HTTP POST", "response msg: " + response);
         } catch (Exception e) {
             Log.d("error message", e.getMessage());
-            return false;
         }
-        return true;
+        return response;
     }
 
     private static String createJsonString(String uid, String type, String data) {
