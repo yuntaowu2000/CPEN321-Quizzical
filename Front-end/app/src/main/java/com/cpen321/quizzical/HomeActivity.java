@@ -96,9 +96,8 @@ public class HomeActivity extends AppCompatActivity {
         if (curr_class_code == 0) {
             promptForClassCode();
         } else {
+            //set up the class list and default class
             appendNewClassToList(curr_class_code);
-            //set up the default class
-            switchClass(curr_class_code);
         }
 
         ViewPager viewPager = findViewById(R.id.view_pager);

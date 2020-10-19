@@ -94,6 +94,9 @@ public class StatisticFragment extends Fragment {
     }
 
     private void onClassCodeChanged(String key, TextView debug_text) {
+        if (getContext() == null) {
+            return;
+        }
         String class_code_string = getContext().getString(R.string.CLASS_CODE);
         Log.d("In statistic", "on class code changed called");
         if (key.equals(class_code_string)) {
