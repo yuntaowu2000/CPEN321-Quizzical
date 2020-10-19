@@ -31,9 +31,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PageFunctions.QuizActivity" />
-        <activity android:name=".PageFunctions.QuizFinishedActivity" />
-        <activity android:name=".PageFunctions.TestPage" />
+        <activity android:name=".QuizActivities.QuizActivity" />
+        <activity android:name=".QuizActivities.QuizFinishedActivity" />
+        <activity android:name=".TestPage" />
     </application>
 
 </manifest>
