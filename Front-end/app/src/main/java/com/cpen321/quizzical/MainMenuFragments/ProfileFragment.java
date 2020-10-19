@@ -102,7 +102,6 @@ public class ProfileFragment extends Fragment {
         sp.edit().remove(getString(R.string.IS_INSTRUCTOR)).apply();
         sp.edit().remove(getString(R.string.USERNAME)).apply();
         sp.edit().remove(getString(R.string.EMAIL)).apply();
-        sp.edit().remove(getString(R.string.COURSE_CATEGORY)).apply();
         sp.edit().remove(getString(R.string.CLASS_CODE)).apply();
 
         HomeActivity parentAct = (HomeActivity) getActivity();

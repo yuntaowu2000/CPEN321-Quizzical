@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -27,6 +28,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.JsonObject;
 
 public class InitActivity extends AppCompatActivity {
 
@@ -288,24 +290,33 @@ public class InitActivity extends AppCompatActivity {
 
     private void onFinishClicked() {
         if (username_input_OK && email_input_OK) {
+            boolean is_instructor = instructorCheckBox.isChecked();
 
-            sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), instructorCheckBox.isChecked()).apply();
+            sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), is_instructor).apply();
 
             //if the user is newly created, we need to upload the credentials to the server
-            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USERNAME),
-                    sp.getString(getString(R.string.USERNAME), ""))).start();
+            String user_cred = parseUserCredentials(sp.getString(getString(R.string.USERNAME), ""),
+                    sp.getString(getString(R.string.EMAIL), ""),
+                    is_instructor);
 
-            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.EMAIL),
-                    sp.getString(getString(R.string.EMAIL), ""))).start();
-
-            String is_instructor_string = instructorCheckBox.isChecked() ? getString(R.string.TRUE) : getString(R.string.FALSE);
-            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.IS_INSTRUCTOR),
-                    is_instructor_string)).start();
+            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USER_CREDENTIAL), user_cred)).start();
 
             goToHomeActivity();
         } else {
             Toast.makeText(this, "Please enter valid username and email", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private String parseUserCredentials(String username, String email, boolean is_instructor) {
+        JsonObject jsonObject = new JsonObject();
+        try {
+            jsonObject.addProperty(getString(R.string.USERNAME), username);
+            jsonObject.addProperty(getString(R.string.EMAIL), email);
+            jsonObject.addProperty(getString(R.string.IS_INSTRUCTOR), is_instructor);
+        } catch (Exception e) {
+            Log.d("parse credential", "failed");
+        }
+        return jsonObject.toString();
     }
 
     private void goToHomeActivity() {

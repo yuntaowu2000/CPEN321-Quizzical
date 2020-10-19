@@ -10,6 +10,7 @@
     <string name="Continue_text">Continue</string>
 
     <!--    set an untranslatable version of username for server communication-->
+    <string name="USER_CREDENTIAL" translatable="false">user credential</string>
     <string name="UID" translatable="false">user id</string>
     <string name="USERNAME" translatable="false">username</string>
     <string name="EMAIL" translatable="false">Email</string>
@@ -28,6 +29,24 @@
     <string name="MATH">Math</string>
     <string name="ENGLISH">English</string>
     <string name="QUANTUM_PHYSICS">QuantumPhysic</string>
+
+    <string-array name="course_category_array">
+        <item>Math</item>
+        <item>English</item>
+        <item>QuantumPhysic</item>
+    </string-array>
+
+    <string name="GRADE_LEVEL" translatable="false">grade level</string>
+
+    <string-array name="grades_array">
+        <item>Grade 9</item>
+        <item>Grade 10</item>
+        <item>Grade 11</item>
+        <item>Grade 12</item>
+        <item>University</item>
+    </string-array>
+
+    <string name="CLASS_NAME" translatable="false">class name</string>
 
     <!--    use this version for server communication of quiz questions-->
     <string name="QUESTION" translatable="false">question</string>
@@ -70,7 +89,12 @@
     <string name="UI_enter_class_code_msg">Please enter your class code</string>
     <string name="UI_class_joined_already_msg">You have already joined the class</string>
 
+    <string name="UI_creating_class_msg">Creating class</string>
     <string name="UI_select_course_category_msg">Please select a course category</string>
+    <string name="UI_select_grade_level_msg">Please select your class grade level</string>
+    <string name="UI_enter_class_name_msg">Please enter class name</string>
+    <string name="UI_example_class_name" translatable="false">E.g. Grade_10_math_class_A</string>
+    <string name="UI_class_name_invalid_msg">Class name invalid</string>
     <string name="UI_create_class_success_title">You just created a new class</string>
     <string name="UI_create_class_success_msg">Your new class code is %d. You will also get an email containing the code. Please share it with your students.</string>
 

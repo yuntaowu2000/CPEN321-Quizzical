@@ -39,6 +39,20 @@
     <string name="MATH">数学</string>
     <string name="ENGLISH">英语</string>
     <string name="QUANTUM_PHYSICS">量子物理</string>
+    <string-array name="course_category_array">
+        <item>数学</item>
+        <item>英语</item>
+        <item>量子物理</item>
+    </string-array>
+
+    <string-array name="grades_array">
+        <item>初三</item>
+        <item>高一</item>
+        <item>高二</item>
+        <item>高三</item>
+        <item>大学</item>
+    </string-array>
+
     <string name="UI_enter_class_code_msg">请输入老师提供的课程代码</string>
     <string name="UI_select_course_category_msg">请选择课程类型</string>
     <string name="UI_invalid_class_code_msg">课程代码无效</string>
@@ -52,4 +66,8 @@
     <string name="UI_change_email">更改Email</string>
     <string name="UI_in_quiz_correct_msg">回答正确。目前正确率：%d/%d</string>
     <string name="UI_in_quiz_wrong_msg">回答错误。目前正确率：%d/%d</string>
+    <string name="UI_creating_class_msg">创建新的课程</string>
+    <string name="UI_select_grade_level_msg">请选择课程年级</string>
+    <string name="UI_enter_class_name_msg">请输入课程名称</string>
+    <string name="UI_class_name_invalid_msg">课程名称无效</string>
 </resources>

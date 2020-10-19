@@ -53,6 +53,16 @@ public class OtherUtils {
         return true;
     }
 
+    public static boolean checkClassName(String class_name) {
+        //check if the username is valid or not
+        //TODO: need to check if this class name is registered on server or not
+        if (!Pattern.matches("^[aA-zZ0-9_-]{3,15}$", class_name)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public static boolean checkClassCode(int class_code) {
         //TODO: we need to check that the code is valid on the server
         //TODO: use POST request with content: username=xxx;class_code=xxx
