@@ -50,4 +50,6 @@
     <string name="UI_create_class_success_title">你成功创立了一个课程。</string>
     <string name="UI_create_class_success_msg">您的新课程代码是：%d。请查看Email获取详细信息，并将此代码分享给您的学生。</string>
     <string name="UI_change_email">更改Email</string>
+    <string name="UI_in_quiz_correct_msg">回答正确。目前正确率：%d/%d</string>
+    <string name="UI_in_quiz_wrong_msg">回答错误。目前正确率：%d/%d</string>
 </resources>

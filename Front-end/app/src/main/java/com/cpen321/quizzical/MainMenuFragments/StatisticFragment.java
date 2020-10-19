@@ -35,7 +35,6 @@ public class StatisticFragment extends Fragment {
 
     boolean is_Instructor;
     int curr_class_code;
-    int course_category = -1;
 
     public StatisticFragment() {
     }

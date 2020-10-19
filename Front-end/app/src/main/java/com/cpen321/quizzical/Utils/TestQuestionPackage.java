@@ -13,7 +13,7 @@ public class TestQuestionPackage {
     private QuestionPackage questionPackage;
 
     public TestQuestionPackage() {
-        questionPackage = new QuestionPackage();
+        questionPackage = new QuestionPackage(111);
 
         List<ChoicePair> choicePairList = new ArrayList<>();
 
@@ -23,7 +23,7 @@ public class TestQuestionPackage {
         choicePairList.add(new ChoicePair(false, "$$ c = \\sqrt{a^2 + b^2} $$"));
 
         try {
-            questionPackage.AddMCQuestion(CourseCategory.Math, "calculate: $$1+1=$$", false, "", choicePairList, 1);
+            questionPackage.AddMCQuestion(1, CourseCategory.Math, "calculate: $$1+1=$$", false, "", choicePairList, 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -35,7 +35,7 @@ public class TestQuestionPackage {
         choicePairList.add(new ChoicePair(false, "<p align=\"middle\">$5$ with some text</p>"));
 
         try {
-            questionPackage.AddMCQuestion(CourseCategory.Math, "calculate: $\\frac{\\sqrt{4}+2}{2}$",
+            questionPackage.AddMCQuestion(2, CourseCategory.Math, "calculate: $\\frac{\\sqrt{4}+2}{2}$",
                     false, "",
                     choicePairList, 1);
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class TestQuestionPackage {
         }
 
         try {
-            questionPackage.AddMCQuestion(CourseCategory.Math, "",
+            questionPackage.AddMCQuestion(3, CourseCategory.Math, "",
                     true, "https://raw.githubusercontent.com/yuntaowu2000/testUploadModels/master/006.png",
                     choicePairList, 1);
         } catch (Exception e) {

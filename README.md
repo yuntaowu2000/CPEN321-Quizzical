@@ -28,6 +28,7 @@ Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao
 3.3 Once a user click on the choice, it will change the color of the choice  
 3.4 After the user submits a question, they will be informed if they are correct or not. If they are incorrect, correct answer will also be shown.  
 3.5 After the user finishes a quiz, they will be shown how they did in the quiz.  
+3.6 The quiz result (including score and wrong question numbers) will be uploaded to the server.  
 
 Most parts are translated in Chinese as well.  
 

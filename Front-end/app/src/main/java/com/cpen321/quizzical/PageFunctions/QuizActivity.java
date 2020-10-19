@@ -1,7 +1,7 @@
 package com.cpen321.quizzical.PageFunctions;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,6 +29,8 @@ import com.cpen321.quizzical.Utils.ButtonWrappers.MathButtonWrapper;
 import com.cpen321.quizzical.Utils.ChoicePair;
 import com.cpen321.quizzical.Utils.OtherUtils;
 import com.cpen321.quizzical.Utils.TestQuestionPackage;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +55,8 @@ public class QuizActivity extends AppCompatActivity {
     private int totalPageNum;
     private List<IQuestion> questions;
     private int correctNumber;
+    private ArrayList<Integer> wrongQuestionIds;
+    private int quizId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +91,13 @@ public class QuizActivity extends AppCompatActivity {
         questions = new ArrayList<>();
         TestQuestionPackage testPackage = new TestQuestionPackage();
 
+        quizId = testPackage.GetPackage().getId();
+
         questions = testPackage.GetPackage().getQuestionsByCategory(CourseCategory.Math, totalQuestionNum);
         totalPageNum = questions.size();
+
         correctNumber = 0;
+        wrongQuestionIds = new ArrayList<>(0);
     }
 
 
@@ -277,7 +285,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private boolean responseCorrectAnswerEntered() {
         correctNumber++;
-        @SuppressLint("DefaultLocale") String response = String.format("You are correct. You got %d/%d correct.", correctNumber, totalQuestionNum);
+        String response = String.format(getString(R.string.UI_in_quiz_correct_msg), correctNumber, totalQuestionNum);
         infoLabel.setText(response);
         infoLabel.setTextColor(getResources().getColor(R.color.colorLawnGreen));
         selectedChoice.SetBackGroundColor(getResources().getColor(R.color.colorLawnGreen));
@@ -285,12 +293,14 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private boolean responseWrongAnswerEntered() {
-        @SuppressLint("DefaultLocale") String response = String.format("You are wrong. You got %d/%d correct.", correctNumber, totalQuestionNum);
+        String response = String.format(getString(R.string.UI_in_quiz_wrong_msg), correctNumber, totalQuestionNum);
         infoLabel.setText(response);
         infoLabel.setTextColor(getResources().getColor(R.color.colorCrimson));
 
         selectedChoice.SetBackGroundColor(getResources().getColor(R.color.colorCrimson));
         correctChoice.SetBackGroundColor(getResources().getColor(R.color.colorLawnGreen));
+
+        wrongQuestionIds.add(questions.get(this.questionNumber).getID());
         return true;
     }
 
@@ -307,11 +317,34 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     public void onFinishClicked() {
+        SharedPreferences sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
+        if (!sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false))
+        {
+            String uid = sp.getString(getString(R.string.UID), "");
+            String type = String.format(getString(R.string.quiz_result), quizId);
+            String parsedResult = parseQuizResults();
+            new Thread(()->OtherUtils.uploadToServer(uid, type, parsedResult)).start();
+        }
         Intent intent = new Intent(QuizActivity.this, QuizFinishedActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(getString(R.string.correct_num), correctNumber);
         intent.putExtra(getString(R.string.total_num), totalQuestionNum);
         startActivity(intent);
         ActivityCompat.finishAffinity(this);
+    }
+
+    private String parseQuizResults() {
+        Collections.sort(wrongQuestionIds);
+        Gson gson = new Gson();
+        String jsonForList = gson.toJson(wrongQuestionIds);
+        JsonObject jsonObject = new JsonObject();
+        try {
+            jsonObject.addProperty(getString(R.string.correct_num), correctNumber);
+            if (correctNumber != totalQuestionNum)
+                jsonObject.addProperty(getString(R.string.wrong_question_ids), jsonForList);
+        } catch (Exception e) {
+            Log.d("parse result failed", e.getMessage() + "");
+        }
+        return jsonObject.toString();
     }
 }

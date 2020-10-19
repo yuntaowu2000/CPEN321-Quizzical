@@ -26,6 +26,16 @@ public class QuestionsMC implements IQuestion {
         this.correctAnsNum = correctAnsNum;
     }
 
+    public QuestionsMC(int id, CourseCategory category, String question, boolean hasPic, String picSrc, List<ChoicePair> choices, int correctAnsNum) {
+        this.index = id;
+        this.category = category;
+        this.question = question;
+        this.HasPic = hasPic;
+        this.picSrc = picSrc;
+        this.choices = choices;
+        this.correctAnsNum = correctAnsNum;
+    }
+
     @Override
     public int getID() {
         return this.index;

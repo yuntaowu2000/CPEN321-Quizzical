@@ -104,8 +104,13 @@
     <string name="UI_finish">Finish</string>
     <string name="UI_no_answer_response_msg">Please answer the question before submission.</string>
 
+    <string name="UI_in_quiz_correct_msg">You are correct. You got %d/%d correct.</string>
+    <string name="UI_in_quiz_wrong_msg">You are wrong. You got %d/%d correct.</string>
+
     <string name="correct_num" translatable="false">Correct_Num</string>
     <string name="total_num" translatable="false">Total_Num</string>
+    <string name="wrong_question_ids" translatable="false">Wrong question ids</string>
+    <string name="quiz_result" translatable="false">Quiz %d result</string>
 
     <!--    used in quiz finish activity-->
     <string name="UI_quiz_finished_low_score_msg">You got %d/%d correct. Keep learning!</string>

@@ -1,6 +1,5 @@
 package com.cpen321.quizzical.PageFunctions;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import com.cpen321.quizzical.R;
 
 public class QuizFinishedActivity extends AppCompatActivity {
 
-    @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
