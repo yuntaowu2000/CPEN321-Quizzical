@@ -31,10 +31,10 @@ Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao
 3.5 After the user finishes a quiz, they will be shown how they did in the quiz.  
 3.6 The quiz result (including score and wrong question numbers) will be uploaded to the server.  
 4. Complex logic  
-4.1 A user is ranked by his/her EXP  
+4.1 A user is ranked by his/her overall EXP in a semester  
 4.2 The EXP for the student is calculated as follows:  
 after each quiz is finished  
-EXP = BASIC_EXP + 3/(1+exp(50-score)) + 1/(1+exp(67-score)) + 1/(1+exp(90-score))   
+<img src="pics/score_calculation.png"/>
 
 Most parts are translated in Chinese as well.  
 
