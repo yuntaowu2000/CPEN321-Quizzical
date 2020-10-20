@@ -70,4 +70,11 @@
     <string name="UI_select_grade_level_msg">请选择课程年级</string>
     <string name="UI_enter_class_name_msg">请输入课程名称</string>
     <string name="UI_class_name_invalid_msg">课程名称无效</string>
+    <string name="UI_statistics">统计</string>
+    <string name="UI_quiz_taken">通过测试：%d</string>
+    <string name="UI_total_exp">总计EXP：%d</string>
+    <string name="UI_course_taken">您的课程：</string>
+    <string name="UI_quiz_made">创建测试：%d</string>
+    <string name="UI_course_created">您的课程：</string>
+    <string name="UI_quiz_finished_earned_exp_msg">您获得了%dEXP！</string>
 </resources>

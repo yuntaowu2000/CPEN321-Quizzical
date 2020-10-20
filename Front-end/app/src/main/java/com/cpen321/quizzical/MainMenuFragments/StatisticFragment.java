@@ -26,6 +26,7 @@ import java.util.Objects;
 public class StatisticFragment extends Fragment {
 
     SharedPreferences sp;
+    public static SharedPreferences.OnSharedPreferenceChangeListener classCodeChangeListener;
     SwipeRefreshLayout swipeRefreshLayout;
     TextView realTimeText;
     String serverLink = "http://193.122.108.23:8080/Time";
@@ -85,11 +86,13 @@ public class StatisticFragment extends Fragment {
         if (is_Instructor) {
             TextView debug_text = getView().findViewById(R.id.class_statistic_debug_text);
             getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
-            sp.registerOnSharedPreferenceChangeListener((sp, key) -> onClassCodeChanged(key, debug_text));
+            classCodeChangeListener = (sp, key) -> onClassCodeChanged(key, debug_text);
+            sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
         } else {
             TextView debug_text = getView().findViewById(R.id.leader_board_debug_text);
             getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
-            sp.registerOnSharedPreferenceChangeListener((sp, key) -> onClassCodeChanged(key, debug_text));
+            classCodeChangeListener = (sp, key) -> onClassCodeChanged(key, debug_text);
+            sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
         }
     }
 

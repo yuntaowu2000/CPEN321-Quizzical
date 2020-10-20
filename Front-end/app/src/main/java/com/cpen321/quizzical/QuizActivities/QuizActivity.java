@@ -41,6 +41,8 @@ import katex.hourglass.in.mathlib.MathView;
 
 public class QuizActivity extends AppCompatActivity {
 
+    private static int BASIC_EXP = 10;
+
     private static final int totalQuestionNum = 3;
     IButtons selectedChoice;
     IButtons correctChoice;
@@ -139,7 +141,7 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         if (q.hasPic()) {
-            setUpQuestionPicture(q);
+            new Thread(()->setUpQuestionPicture(q)).start();
         }
 
         List<IButtons> buttonsList = new ArrayList<>();
@@ -177,23 +179,25 @@ public class QuizActivity extends AppCompatActivity {
     private void setUpQuestionPicture(QuestionsMC q) {
 
         Bitmap pic = OtherUtils.getBitmapFromUrl(q.getPicSrc());
-        questionInfoText = new TextView(this);
-        if (pic == null) {
-            questionInfoText.setText(R.string.UI_error_loading_pic_msg);
-            questionStack.addView(questionInfoText);
-        } else {
-            questionInfoText.setText(R.string.UI_quiz_pic_msg);
-            questionStack.addView(questionInfoText);
+        runOnUiThread(()-> {
+            questionInfoText = new TextView(this);
+            if (pic == null) {
+                questionInfoText.setText(R.string.UI_error_loading_pic_msg);
+                questionStack.addView(questionInfoText);
+            } else {
+                questionInfoText.setText(R.string.UI_quiz_pic_msg);
+                questionStack.addView(questionInfoText);
 
-            ImageView imageView = new ImageView(this);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600);
-            layoutParams.setMargins(0, 30, 0, 0);
-            imageView.setLayoutParams(layoutParams);
+                ImageView imageView = new ImageView(this);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600);
+                layoutParams.setMargins(0, 30, 0, 0);
+                imageView.setLayoutParams(layoutParams);
 
-            imageView.setImageBitmap(pic);
-            questionStack.addView(imageView);
-            currQuestionPic = imageView;
-        }
+                imageView.setImageBitmap(pic);
+                questionStack.addView(imageView);
+                currQuestionPic = imageView;
+            }
+        });
     }
 
     private IButtons setUpButtons(ChoicePair choicePair) {
@@ -202,13 +206,17 @@ public class QuizActivity extends AppCompatActivity {
 
         final IButtons button;
         if (choicePair.isPic()) {
-            Bitmap image = OtherUtils.getBitmapFromUrl(choicePair.getStr());
-            image = Bitmap.createScaledBitmap(image, 400, 200, true);
-
             ImageButton imageButton = new ImageButton(this);
-            imageButton.setImageBitmap(image);
+
             imageButton.setBackgroundColor(Color.WHITE);
             imageButton.setLayoutParams(layoutParams);
+
+            new Thread(()->
+            {
+                Bitmap image = OtherUtils.getBitmapFromUrl(choicePair.getStr());
+                Bitmap finalImage = Bitmap.createScaledBitmap(image, 400, 200, true);
+                runOnUiThread(()->imageButton.setImageBitmap(finalImage));
+            }).start();
 
             button = new ImageButtonWrapper(imageButton);
             imageButton.setOnClickListener(view -> onChoiceClicked(button));
@@ -318,33 +326,65 @@ public class QuizActivity extends AppCompatActivity {
 
     public void onFinishClicked() {
         SharedPreferences sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
-        if (!sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false))
-        {
-            String uid = sp.getString(getString(R.string.UID), "");
-            String type = String.format(getString(R.string.quiz_result), quizId);
-            String parsedResult = parseQuizResults();
-            new Thread(()->OtherUtils.uploadToServer(uid, type, parsedResult)).start();
-        }
         Intent intent = new Intent(QuizActivity.this, QuizFinishedActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(getString(R.string.correct_num), correctNumber);
         intent.putExtra(getString(R.string.total_num), totalQuestionNum);
+
+        if (!sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false))
+        {
+            String uid = sp.getString(getString(R.string.UID), "");
+            String type = String.format(getString(R.string.quiz_result), quizId);
+
+            int prev_EXP = sp.getInt(getString(R.string.EXP), 0);
+            int prev_quiz_num = sp.getInt(getString(R.string.USER_QUIZ_COUNT), 0);
+
+            int[] quizNumAndExp = updateQuizNumAndExp(sp, prev_quiz_num, prev_EXP);
+
+            intent.putExtra(getString(R.string.EXP_earned_for_quiz), quizNumAndExp[1] - prev_EXP);
+
+            String parsedResult = parseQuizResults(quizNumAndExp[0], quizNumAndExp[1]);
+            new Thread(()->OtherUtils.uploadToServer(uid, type, parsedResult)).start();
+        }
+
+
         startActivity(intent);
         ActivityCompat.finishAffinity(this);
     }
 
-    private String parseQuizResults() {
+    private String parseQuizResults(int quizNum, int exp) {
         Collections.sort(wrongQuestionIds);
         Gson gson = new Gson();
         String jsonForList = gson.toJson(wrongQuestionIds);
         JsonObject jsonObject = new JsonObject();
         try {
+            jsonObject.addProperty(getString(R.string.USER_QUIZ_COUNT), quizNum);
+            jsonObject.addProperty(getString(R.string.EXP), exp);
             jsonObject.addProperty(getString(R.string.correct_num), correctNumber);
             if (correctNumber != totalQuestionNum)
                 jsonObject.addProperty(getString(R.string.wrong_question_ids), jsonForList);
+
         } catch (Exception e) {
             Log.d("parse result failed", e.getMessage() + "");
         }
         return jsonObject.toString();
+    }
+
+    private int[] updateQuizNumAndExp(SharedPreferences sp, int prev_quiz_num, int prev_EXP) {
+        int new_quiz_num = prev_quiz_num + 1;
+        sp.edit().putInt(getString(R.string.USER_QUIZ_COUNT), new_quiz_num).apply();
+
+        //calculate the new EXP based on the correct number of questions
+        //all student will earn a BASIC_EXP for finishing the quiz, regardless of the score
+        //using the formula 3/(1+exp(50 - score)) + 1/(1+exp(67-score)) + 1/(1+exp(90-score) to calculate the bonus exp
+        //where score is correctNum/totalNum * 100
+        double score = (double)correctNumber / (double)totalQuestionNum * 100.0;
+        int additional_exp = (int)Math.round(3 / (1 + Math.exp(50.0 - score)) + 1 / (1 + Math.exp(67.0 - score)) + 1 / (1 + Math.exp(90.0 - score)));
+
+        int new_exp = prev_EXP + BASIC_EXP + additional_exp;
+
+        sp.edit().putInt(getString(R.string.EXP), new_exp).apply();
+
+        return new int[]{new_quiz_num, new_exp};
     }
 }

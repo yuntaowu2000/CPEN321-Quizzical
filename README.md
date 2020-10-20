@@ -21,7 +21,8 @@ Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao
 2.3 Currently leader board/class statistic page shows time and class code(+ course category)   
 (bug with ```onSharedPreferenceChangeListener```)  
 2.4 Prompt user to setup/join class on first sign in  
-2.5 Multiple classes supported
+2.5 Multiple classes supported  
+2.6 In the profile fragment, user can see how many classes he/she is enrolled in, how many quizzes he/she has created/done, how many EXP he/she has earned.  
 3. Quiz  
 3.1 A Quiz will load a set of questions (currently on multiple choices are supported)  
 3.2 Choices can be either plain text, latex, html, or image  
@@ -29,6 +30,11 @@ Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao
 3.4 After the user submits a question, they will be informed if they are correct or not. If they are incorrect, correct answer will also be shown.  
 3.5 After the user finishes a quiz, they will be shown how they did in the quiz.  
 3.6 The quiz result (including score and wrong question numbers) will be uploaded to the server.  
+4. Complex logic  
+4.1 A user is ranked by his/her EXP  
+4.2 The EXP for the student is calculated as follows:  
+after each quiz is finished  
+EXP = BASIC_EXP + 3/(1+exp(50-score)) + 1/(1+exp(67-score)) + 1/(1+exp(90-score))   
 
 Most parts are translated in Chinese as well.  
 
@@ -40,7 +46,8 @@ Most parts are translated in Chinese as well.
 1. UI set up for home activity  
 1.1 quiz fragment  
 1.2 leader board/class statistic fragment  
-**Note:** need to get info from the server for these layouts, such as quizzes available, class average scores, user ranking.
+**Note:** need to get info from the server for these layouts, such as quizzes available, class average scores, user ranking.  
+1.3 maybe we can add some review quizzes for all the wrong questions a student has got, the wrong question ids will be sent to the server  
 2. UI and logic set up for teacher creating quiz  
 **Note:** most picture reading, processing related stuff are in OtherUtils, testActivity
 3. Front-Back end communication  
@@ -51,3 +58,8 @@ Most parts are translated in Chinese as well.
 4.1 email when account created  
 4.2 email when class created  
 4.3 mobile notification when quiz, leaderboard updated  
+5. Complex logic  
+5.1 The EXP for the teacher is calculated as follows:  
+After each quiz is created  
+EXP = BASIC_EXP  
+When a student/another teacher liked the quiz, EXP += BONUS_EXP  

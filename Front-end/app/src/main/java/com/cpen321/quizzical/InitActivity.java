@@ -292,27 +292,35 @@ public class InitActivity extends AppCompatActivity {
         if (username_input_OK && email_input_OK) {
             boolean is_instructor = instructorCheckBox.isChecked();
 
+            sp.edit().putInt(getString(R.string.USER_QUIZ_COUNT), 0).apply();
+            sp.edit().putInt(getString(R.string.EXP), 0).apply();
             sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), is_instructor).apply();
 
-            //if the user is newly created, we need to upload the credentials to the server
-            String user_cred = parseUserCredentials(sp.getString(getString(R.string.USERNAME), ""),
+
+            //the user is newly created, we need to upload the credentials to the server
+            String user_info = parseUserInfo(sp.getString(getString(R.string.USERNAME), ""),
                     sp.getString(getString(R.string.EMAIL), ""),
                     is_instructor);
 
-            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USER_CREDENTIAL), user_cred)).start();
+            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USER_INFO), user_info)).start();
 
             goToHomeActivity();
         } else {
             Toast.makeText(this, "Please enter valid username and email", Toast.LENGTH_LONG).show();
         }
     }
+    
+        
+        
 
-    private String parseUserCredentials(String username, String email, boolean is_instructor) {
+    private String parseUserInfo(String username, String email, boolean is_instructor) {
         JsonObject jsonObject = new JsonObject();
         try {
             jsonObject.addProperty(getString(R.string.USERNAME), username);
             jsonObject.addProperty(getString(R.string.EMAIL), email);
             jsonObject.addProperty(getString(R.string.IS_INSTRUCTOR), is_instructor);
+            jsonObject.addProperty(getString(R.string.USER_QUIZ_COUNT), 0);
+            jsonObject.addProperty(getString(R.string.EXP), 0);
         } catch (Exception e) {
             Log.d("parse credential", "failed");
         }

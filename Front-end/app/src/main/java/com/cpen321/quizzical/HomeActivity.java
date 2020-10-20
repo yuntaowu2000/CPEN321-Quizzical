@@ -25,6 +25,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.cpen321.quizzical.MainMenuFragments.ProfileFragment;
+import com.cpen321.quizzical.MainMenuFragments.StatisticFragment;
 import com.cpen321.quizzical.Utils.OtherUtils;
 import com.cpen321.quizzical.ui.main.MyHomePagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -380,4 +382,30 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (ProfileFragment.quizNumAndExpChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(ProfileFragment.quizNumAndExpChangeListener);
+        if (StatisticFragment.classCodeChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(StatisticFragment.classCodeChangeListener);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (ProfileFragment.quizNumAndExpChangeListener != null)
+            sp.registerOnSharedPreferenceChangeListener(ProfileFragment.quizNumAndExpChangeListener);
+        if (StatisticFragment.classCodeChangeListener != null)
+            sp.registerOnSharedPreferenceChangeListener(StatisticFragment.classCodeChangeListener);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (ProfileFragment.quizNumAndExpChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(ProfileFragment.quizNumAndExpChangeListener);
+        if (StatisticFragment.classCodeChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(StatisticFragment.classCodeChangeListener);
+    }
 }

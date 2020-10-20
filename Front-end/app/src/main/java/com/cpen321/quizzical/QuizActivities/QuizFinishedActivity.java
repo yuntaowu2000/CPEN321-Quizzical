@@ -14,16 +14,19 @@ import com.cpen321.quizzical.R;
 
 public class QuizFinishedActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_finished);
 
         TextView response = findViewById(R.id.quiz_finished_page_response);
+        TextView exp_msg = findViewById(R.id.quiz_finished_page_exp_earned);
         Button button = findViewById(R.id.quiz_finished_page_button);
 
         int totalNum = getIntent().getIntExtra(getString(R.string.total_num), 0);
         int correctNum = getIntent().getIntExtra(getString(R.string.correct_num), 0);
+        int exp_gotten = getIntent().getIntExtra(getString(R.string.EXP_earned_for_quiz), 0);
 
         if (correctNum < (double) totalNum / 2) {
             response.setText(String.format(getString(R.string.UI_quiz_finished_low_score_msg), correctNum, totalNum));
@@ -38,8 +41,15 @@ public class QuizFinishedActivity extends AppCompatActivity {
             response.setTextSize(14);
         }
 
+        if (exp_gotten == 0) {
+            exp_msg.setText("");
+        } else {
+            exp_msg.setText(String.format(getString(R.string.UI_quiz_finished_earned_exp_msg), exp_gotten));
+        }
+
         button.setOnClickListener(view -> onBackClicked());
     }
+
 
     private void onBackClicked() {
         Intent intent = new Intent(QuizFinishedActivity.this, HomeActivity.class);

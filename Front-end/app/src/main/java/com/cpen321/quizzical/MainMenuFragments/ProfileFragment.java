@@ -48,7 +48,13 @@ public class ProfileFragment extends Fragment {
     private ImageButton changeEmailButton;
     private TextView usernameText;
     private TextView emailText;
+    private TextView quizNumText;
+    private TextView expText;
     private Uri imageUri;
+
+    private boolean is_instructor;
+
+    public static SharedPreferences.OnSharedPreferenceChangeListener quizNumAndExpChangeListener;
 
     public ProfileFragment() {
 
@@ -80,11 +86,26 @@ public class ProfileFragment extends Fragment {
 
         sp = Objects.requireNonNull(getActivity()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
 
+        is_instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
+
         usernameText = getView().findViewById(R.id.profile_username);
         usernameText.setText(sp.getString(getString(R.string.USERNAME), getString(R.string.UI_username)));
 
         emailText = getView().findViewById(R.id.profile_email);
         emailText.setText(sp.getString(getString(R.string.EMAIL), getString(R.string.UI_example_email)));
+
+        quizNumText = getView().findViewById(R.id.profile_quiz_num_text);
+        if (is_instructor)
+            quizNumText.setText(String.format(getString(R.string.UI_quiz_made), 0));
+        else
+            quizNumText.setText(String.format(getString(R.string.UI_quiz_taken),0));
+
+        expText = getView().findViewById(R.id.profile_exp_text);
+        expText.setText(String.format(getString(R.string.UI_total_exp), sp.getInt(getString(R.string.EXP), 0)));
+
+        quizNumAndExpChangeListener = (sp, key)->updateQuizNumbersAndExpUI(key);
+
+        sp.registerOnSharedPreferenceChangeListener(quizNumAndExpChangeListener);
 
         String encodedProfileImg = sp.getString(getString(R.string.PROFILE_IMG), "");
         if (!OtherUtils.stringIsNullOrEmpty(encodedProfileImg)) {
@@ -103,6 +124,13 @@ public class ProfileFragment extends Fragment {
         sp.edit().remove(getString(R.string.USERNAME)).apply();
         sp.edit().remove(getString(R.string.EMAIL)).apply();
         sp.edit().remove(getString(R.string.CLASS_CODE)).apply();
+        sp.edit().remove(getString(R.string.EXP)).apply();
+        sp.edit().remove(getString(R.string.USER_QUIZ_COUNT)).apply();
+
+        if (quizNumAndExpChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(quizNumAndExpChangeListener);
+        if (StatisticFragment.classCodeChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(StatisticFragment.classCodeChangeListener);
 
         HomeActivity parentAct = (HomeActivity) getActivity();
 
@@ -274,5 +302,22 @@ public class ProfileFragment extends Fragment {
                 errorText.setText(R.string.UI_email_invalid_msg);
             }
         });
+    }
+
+    private void updateQuizNumbersAndExpUI(String key) {
+        //TODO: same bug as in StatisticFragment
+        if (getContext() == null)
+            return;
+
+        if (key.equals(getString(R.string.USER_QUIZ_COUNT)) || key.equals(getString(R.string.EXP))) {
+            int newQuizNum = sp.getInt(getString(R.string.USER_QUIZ_COUNT), 0);
+            if (is_instructor)
+                getActivity().runOnUiThread(()->quizNumText.setText(String.format(getString(R.string.UI_quiz_made), newQuizNum)));
+            else
+                getActivity().runOnUiThread(()->quizNumText.setText(String.format(getString(R.string.UI_quiz_taken), newQuizNum)));
+
+            int newEXP = sp.getInt(getString(R.string.EXP), 0);
+            getActivity().runOnUiThread(()->expText.setText(String.format(getString(R.string.UI_total_exp), newEXP)));
+        }
     }
 }

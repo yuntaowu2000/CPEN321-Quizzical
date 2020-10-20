@@ -19,7 +19,7 @@
                 android:gravity="center_horizontal"
                 android:text="@string/UI_finish_quiz_msg"
                 android:textAlignment="center"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/quiz_finished_page_response"
@@ -27,9 +27,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center_horizontal"
-                android:text="You got 3/3 correct! congratulations!"
+                android:text="@string/UI_quiz_finished_full_score_msg"
                 android:textAlignment="center"
-                android:textSize="12dp" />
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/quiz_finished_page_exp_earned"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="@string/UI_quiz_finished_earned_exp_msg"
+                android:textColor="@color/colorGolden"
+                android:textAlignment="center"
+                android:textSize="15sp" />
         </LinearLayout>
 
         <Button

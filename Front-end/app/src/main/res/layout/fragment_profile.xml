@@ -68,6 +68,57 @@
             </TableRow>
         </TableLayout>
 
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/UI_statistics"
+                    android:textSize="20sp"/>
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/UI_course_taken"
+                    android:textSize="15sp"/>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/textview_border"
+                    android:text="Course 1"
+                    android:textSize="15sp"/>
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/textview_border"
+                    android:text="@string/UI_quiz_taken"
+                    android:id="@+id/profile_quiz_num_text"
+                    android:gravity="center"
+                    android:textSize="15sp"
+                    />
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/textview_border"
+                    android:gravity="center"
+                    android:id="@+id/profile_exp_text"
+                    android:text="@string/UI_total_exp"
+                    android:textSize="15sp"/>
+            </TableRow>
+        </TableLayout>
+
 
         <Button
             android:id="@+id/profile_log_out_btn"
