@@ -1,0 +1,7 @@
+{
+  "main": "server.js",
+  "dependencies": {
+    "mongodb": "3.6.2"
+  },
+  "private": true
+}
