@@ -31,7 +31,9 @@ public class QuestionPackage {
         questionList = new ArrayList<>();
     }
 
-    public int getId() {return this.id;}
+    public int getId() {
+        return this.id;
+    }
 
     public List<IQuestion> getQuestionList() {
         return this.questionList;

@@ -20,6 +20,8 @@ import com.cpen321.quizzical.QuizActivities.QuizActivity;
 import com.cpen321.quizzical.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Objects;
+
 public class QuizFragment extends Fragment {
 
     SharedPreferences sp;
@@ -49,7 +51,7 @@ public class QuizFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        sp = getContext().getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
+        sp = Objects.requireNonNull(getContext()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
 
         is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
         class_code = sp.getInt(getString(R.string.CLASS_CODE), 0);
@@ -79,13 +81,16 @@ public class QuizFragment extends Fragment {
         fromBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.from_bottom_anim);
         toBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.to_bottom_anim);
 
-        fab = getView().findViewById(R.id.fab);
-        edit_fab = getView().findViewById(R.id.edit_fab);
-        note_fab = getView().findViewById(R.id.note_fab);
+        fab = Objects.requireNonNull(getView()).findViewById(R.id.fab);
+        edit_fab = Objects.requireNonNull(getView()).findViewById(R.id.edit_fab);
+        note_fab = Objects.requireNonNull(getView()).findViewById(R.id.note_fab);
 
+        assert fab != null;
         fab.setOnClickListener(v -> onAddButtonClicked());
 
         //TODO: implement the actual function for these two buttons
+        assert edit_fab != null;
+        assert note_fab != null;
         edit_fab.hide();
         edit_fab.setOnClickListener(v -> Toast.makeText(this.getContext(), "Add quiz button clicked", Toast.LENGTH_SHORT).show());
         note_fab.hide();

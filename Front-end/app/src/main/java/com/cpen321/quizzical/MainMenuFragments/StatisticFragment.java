@@ -19,20 +19,18 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.Utils.OtherUtils;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;
 
 public class StatisticFragment extends Fragment {
 
-    SharedPreferences sp;
     public static SharedPreferences.OnSharedPreferenceChangeListener classCodeChangeListener;
+    SharedPreferences sp;
     SwipeRefreshLayout swipeRefreshLayout;
     TextView realTimeText;
     String serverLink = "http://193.122.108.23:8080/Time";
 
     Animation rotateOpen, rotateClose, fromBottom, toBottom;
-    FloatingActionButton fab;
 
     boolean is_Instructor;
     int curr_class_code;
@@ -78,19 +76,17 @@ public class StatisticFragment extends Fragment {
         fromBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.from_bottom_anim);
         toBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.to_bottom_anim);
 
-        //shared preference change listener is a bit buggy
-        //sometimes it works after exiting and restarting the app
-        //sometimes it doesn't
-        //we want it working at any time
-        //TODO: find and fix the bug and implement the same thing for the quiz fragment
+
+        //TODO: implement the same thing for the quiz fragment
+        //TODO: load the info from the server
         if (is_Instructor) {
-            TextView debug_text = getView().findViewById(R.id.class_statistic_debug_text);
-            getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
+            TextView debug_text = Objects.requireNonNull(getView()).findViewById(R.id.class_statistic_debug_text);
+            Objects.requireNonNull(getActivity()).runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
             classCodeChangeListener = (sp, key) -> onClassCodeChanged(key, debug_text);
             sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
         } else {
-            TextView debug_text = getView().findViewById(R.id.leader_board_debug_text);
-            getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
+            TextView debug_text = Objects.requireNonNull(getView()).findViewById(R.id.leader_board_debug_text);
+            Objects.requireNonNull(getActivity()).runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
             classCodeChangeListener = (sp, key) -> onClassCodeChanged(key, debug_text);
             sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
         }
@@ -107,7 +103,7 @@ public class StatisticFragment extends Fragment {
             if (class_code != 0) {
                 Log.d("In statistic", "class code changed to " + class_code);
                 curr_class_code = class_code;
-                getActivity().runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
+                Objects.requireNonNull(getActivity()).runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
             }
         }
     }
@@ -123,7 +119,7 @@ public class StatisticFragment extends Fragment {
         }
         final String text = result;
 
-        getActivity().runOnUiThread(() -> realTimeText.setText(text));
+        Objects.requireNonNull(getActivity()).runOnUiThread(() -> realTimeText.setText(text));
     }
 
 }

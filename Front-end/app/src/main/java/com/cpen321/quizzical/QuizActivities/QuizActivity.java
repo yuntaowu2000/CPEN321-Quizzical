@@ -41,8 +41,6 @@ import katex.hourglass.in.mathlib.MathView;
 
 public class QuizActivity extends AppCompatActivity {
 
-    private static int BASIC_EXP = 10;
-
     private static final int totalQuestionNum = 3;
     IButtons selectedChoice;
     IButtons correctChoice;
@@ -141,7 +139,7 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         if (q.hasPic()) {
-            new Thread(()->setUpQuestionPicture(q)).start();
+            new Thread(() -> setUpQuestionPicture(q)).start();
         }
 
         List<IButtons> buttonsList = new ArrayList<>();
@@ -179,7 +177,7 @@ public class QuizActivity extends AppCompatActivity {
     private void setUpQuestionPicture(QuestionsMC q) {
 
         Bitmap pic = OtherUtils.getBitmapFromUrl(q.getPicSrc());
-        runOnUiThread(()-> {
+        runOnUiThread(() -> {
             questionInfoText = new TextView(this);
             if (pic == null) {
                 questionInfoText.setText(R.string.UI_error_loading_pic_msg);
@@ -211,11 +209,12 @@ public class QuizActivity extends AppCompatActivity {
             imageButton.setBackgroundColor(Color.WHITE);
             imageButton.setLayoutParams(layoutParams);
 
-            new Thread(()->
+            new Thread(() ->
             {
                 Bitmap image = OtherUtils.getBitmapFromUrl(choicePair.getStr());
+                assert image != null;
                 Bitmap finalImage = Bitmap.createScaledBitmap(image, 400, 200, true);
-                runOnUiThread(()->imageButton.setImageBitmap(finalImage));
+                runOnUiThread(() -> imageButton.setImageBitmap(finalImage));
             }).start();
 
             button = new ImageButtonWrapper(imageButton);
@@ -331,8 +330,7 @@ public class QuizActivity extends AppCompatActivity {
         intent.putExtra(getString(R.string.correct_num), correctNumber);
         intent.putExtra(getString(R.string.total_num), totalQuestionNum);
 
-        if (!sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false))
-        {
+        if (!sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false)) {
             String uid = sp.getString(getString(R.string.UID), "");
             String type = String.format(getString(R.string.quiz_result), quizId);
 
@@ -344,7 +342,7 @@ public class QuizActivity extends AppCompatActivity {
             intent.putExtra(getString(R.string.EXP_earned_for_quiz), quizNumAndExp[1] - prev_EXP);
 
             String parsedResult = parseQuizResults(quizNumAndExp[0], quizNumAndExp[1]);
-            new Thread(()->OtherUtils.uploadToServer(uid, type, parsedResult)).start();
+            new Thread(() -> OtherUtils.uploadToServer(uid, type, parsedResult)).start();
         }
 
 
@@ -378,9 +376,10 @@ public class QuizActivity extends AppCompatActivity {
         //all student will earn a BASIC_EXP for finishing the quiz, regardless of the score
         //using the formula 3/(1+exp(50 - score)) + 1/(1+exp(67-score)) + 1/(1+exp(90-score) to calculate the bonus exp
         //where score is correctNum/totalNum * 100
-        double score = (double)correctNumber / (double)totalQuestionNum * 100.0;
-        int additional_exp = (int)Math.round(3 / (1 + Math.exp(50.0 - score)) + 1 / (1 + Math.exp(67.0 - score)) + 1 / (1 + Math.exp(90.0 - score)));
+        double score = (double) correctNumber / (double) totalQuestionNum * 100.0;
+        int additional_exp = (int) Math.round(3 / (1 + Math.exp(50.0 - score)) + 1 / (1 + Math.exp(67.0 - score)) + 1 / (1 + Math.exp(90.0 - score)));
 
+        int BASIC_EXP = 10;
         int new_exp = prev_EXP + BASIC_EXP + additional_exp;
 
         sp.edit().putInt(getString(R.string.EXP), new_exp).apply();

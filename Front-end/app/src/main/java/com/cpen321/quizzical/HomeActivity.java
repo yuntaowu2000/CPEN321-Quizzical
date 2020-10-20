@@ -3,9 +3,7 @@ package com.cpen321.quizzical;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -241,7 +239,7 @@ public class HomeActivity extends AppCompatActivity {
 
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle(R.string.UI_creating_class_msg)
                 .setView(layout)
-                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) ->dialogInterface.dismiss()));
+                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> dialogInterface.dismiss()));
 
         final AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
@@ -270,7 +268,7 @@ public class HomeActivity extends AppCompatActivity {
         //and wait for the server to respond with a class code
         //then cache them in the shared preferences
         String parsed_data = parseClassDetails(course_category, grade_level, class_name);
-        new Thread(()->
+        new Thread(() ->
         {
             String response = OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.UI_add_class), parsed_data);
 
@@ -281,7 +279,7 @@ public class HomeActivity extends AppCompatActivity {
             int temp_val = (course_category.hashCode() + grade_level.hashCode() + class_name.hashCode()) % 65536;
             curr_class_code = temp_val < 0 ? -temp_val : temp_val;
 
-            runOnUiThread(()->
+            runOnUiThread(() ->
             {
                 new AlertDialog.Builder(this).setTitle(R.string.UI_create_class_success_title)
                         .setMessage(String.format(getString(R.string.UI_create_class_success_msg), curr_class_code))

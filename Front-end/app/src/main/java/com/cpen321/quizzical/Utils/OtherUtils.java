@@ -134,7 +134,7 @@ public class OtherUtils {
             response = conn.getResponseMessage();
             Log.d("HTTP POST", "response msg: " + response);
         } catch (Exception e) {
-            Log.d("error message", e.getMessage());
+            Log.d("error message", "" + e.getMessage());
         }
         return response;
     }

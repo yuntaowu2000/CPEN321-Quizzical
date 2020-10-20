@@ -30,6 +30,8 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 public class InitActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 420;
@@ -144,7 +146,7 @@ public class InitActivity extends AppCompatActivity {
             //TODO: need to get user name and other stuff from the server here
             if (OtherUtils.stringIsNullOrEmpty(sp.getString(getString(R.string.USERNAME), ""))) {
                 //default is google credential
-                String username = account.getDisplayName().replace(" ", "_");
+                String username = Objects.requireNonNull(account.getDisplayName()).replace(" ", "_");
                 String email = account.getEmail();
                 username_input_OK = OtherUtils.checkUserName(username);
                 email_input_OK = OtherUtils.checkEmail(email);
@@ -309,9 +311,7 @@ public class InitActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter valid username and email", Toast.LENGTH_LONG).show();
         }
     }
-    
-        
-        
+
 
     private String parseUserInfo(String username, String email, boolean is_instructor) {
         JsonObject jsonObject = new JsonObject();

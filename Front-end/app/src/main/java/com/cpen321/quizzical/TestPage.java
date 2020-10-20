@@ -15,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cpen321.quizzical.Data.CourseCategory;
 import com.cpen321.quizzical.Data.Questions.QuestionsMC;
-import com.cpen321.quizzical.InitActivity;
-import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.Utils.ChoicePair;
 import com.cpen321.quizzical.Utils.OtherUtils;
 import com.theartofdev.edmodo.cropper.CropImageView;

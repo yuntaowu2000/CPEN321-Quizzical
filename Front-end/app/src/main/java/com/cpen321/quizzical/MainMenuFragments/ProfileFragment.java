@@ -41,6 +41,7 @@ public class ProfileFragment extends Fragment {
 
     private static final int PICK_IMG = 10;
     private static final int permission_code = 1;
+    public static SharedPreferences.OnSharedPreferenceChangeListener quizNumAndExpChangeListener;
     SharedPreferences sp;
     private Button logoutButton;
     private ImageButton profileImageButton;
@@ -51,10 +52,7 @@ public class ProfileFragment extends Fragment {
     private TextView quizNumText;
     private TextView expText;
     private Uri imageUri;
-
     private boolean is_instructor;
-
-    public static SharedPreferences.OnSharedPreferenceChangeListener quizNumAndExpChangeListener;
 
     public ProfileFragment() {
 
@@ -96,14 +94,14 @@ public class ProfileFragment extends Fragment {
 
         quizNumText = getView().findViewById(R.id.profile_quiz_num_text);
         if (is_instructor)
-            quizNumText.setText(String.format(getString(R.string.UI_quiz_made), 0));
+            quizNumText.setText(String.format(getString(R.string.UI_quiz_made), sp.getInt(getString(R.string.USER_QUIZ_COUNT), 0)));
         else
-            quizNumText.setText(String.format(getString(R.string.UI_quiz_taken),0));
+            quizNumText.setText(String.format(getString(R.string.UI_quiz_taken), sp.getInt(getString(R.string.USER_QUIZ_COUNT), 0)));
 
         expText = getView().findViewById(R.id.profile_exp_text);
         expText.setText(String.format(getString(R.string.UI_total_exp), sp.getInt(getString(R.string.EXP), 0)));
 
-        quizNumAndExpChangeListener = (sp, key)->updateQuizNumbersAndExpUI(key);
+        quizNumAndExpChangeListener = (sp, key) -> updateQuizNumbersAndExpUI(key);
 
         sp.registerOnSharedPreferenceChangeListener(quizNumAndExpChangeListener);
 
@@ -144,7 +142,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private void decideSetUpProfileImage() {
-        new AlertDialog.Builder(this.getContext()).setTitle(R.string.PROFILE_IMG).setMessage(R.string.UI_change_profile_image_msg)
+        new AlertDialog.Builder(Objects.requireNonNull(this.getContext()))
+                .setTitle(R.string.PROFILE_IMG).
+                setMessage(R.string.UI_change_profile_image_msg)
                 .setPositiveButton(R.string.YES, (dialogInterface, i) -> {
                     dialogInterface.dismiss();
                     checkPermissions();
@@ -165,7 +165,7 @@ public class ProfileFragment extends Fragment {
         if (requestCode == PICK_IMG && resultCode == Activity.RESULT_OK) {
             imageUri = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContext().getContentResolver(), imageUri);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(Objects.requireNonNull(this.getContext()).getContentResolver(), imageUri);
 
                 String encoded = OtherUtils.encodeImage(bitmap);
 
@@ -191,7 +191,7 @@ public class ProfileFragment extends Fragment {
 
     private void checkPermissions() {
         //we need read permission to get access to user's images in user's phone storage
-        int readPermission = ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
+        int readPermission = ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()), Manifest.permission.READ_EXTERNAL_STORAGE);
 
         if (!(readPermission == PackageManager.PERMISSION_GRANTED)) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, permission_code);
@@ -201,7 +201,7 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == permission_code) {
             if (grantResults.length > 0) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -214,6 +214,7 @@ public class ProfileFragment extends Fragment {
     private void changeUsername() {
 
         Context thisContext = this.getContext();
+        assert thisContext != null;
         LinearLayout layout = new LinearLayout(thisContext);
         layout.setOrientation(LinearLayout.VERTICAL);
         EditText editText = new EditText(thisContext);
@@ -260,6 +261,7 @@ public class ProfileFragment extends Fragment {
 
     private void changeEmail() {
         Context thisContext = this.getContext();
+        assert thisContext != null;
         LinearLayout layout = new LinearLayout(thisContext);
         layout.setOrientation(LinearLayout.VERTICAL);
         EditText editText = new EditText(thisContext);
@@ -305,19 +307,22 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateQuizNumbersAndExpUI(String key) {
-        //TODO: same bug as in StatisticFragment
         if (getContext() == null)
             return;
 
         if (key.equals(getString(R.string.USER_QUIZ_COUNT)) || key.equals(getString(R.string.EXP))) {
-            int newQuizNum = sp.getInt(getString(R.string.USER_QUIZ_COUNT), 0);
             if (is_instructor)
-                getActivity().runOnUiThread(()->quizNumText.setText(String.format(getString(R.string.UI_quiz_made), newQuizNum)));
+                Objects.requireNonNull(getActivity()).runOnUiThread(
+                        () -> quizNumText.setText(String.format(getString(R.string.UI_quiz_made), sp.getInt(getString(R.string.USER_QUIZ_COUNT), 0)))
+                );
             else
-                getActivity().runOnUiThread(()->quizNumText.setText(String.format(getString(R.string.UI_quiz_taken), newQuizNum)));
+                Objects.requireNonNull(getActivity()).runOnUiThread(
+                        () -> quizNumText.setText(String.format(getString(R.string.UI_quiz_taken), sp.getInt(getString(R.string.USER_QUIZ_COUNT), 0)))
+                );
 
-            int newEXP = sp.getInt(getString(R.string.EXP), 0);
-            getActivity().runOnUiThread(()->expText.setText(String.format(getString(R.string.UI_total_exp), newEXP)));
+            Objects.requireNonNull(getActivity()).runOnUiThread(
+                    () -> expText.setText(String.format(getString(R.string.UI_total_exp), sp.getInt(getString(R.string.EXP), 0)))
+            );
         }
     }
 }
