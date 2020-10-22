@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.MainMenuFragments;
+package com.cpen321.quizzical.mainMenuFragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,26 +16,21 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cpen321.quizzical.R;
-import com.cpen321.quizzical.Utils.OtherUtils;
+import com.cpen321.quizzical.utils.OtherUtils;
 
 import java.util.Objects;
 
 public class StatisticFragment extends Fragment {
 
     public static SharedPreferences.OnSharedPreferenceChangeListener classCodeChangeListener;
-    SharedPreferences sp;
-    SwipeRefreshLayout swipeRefreshLayout;
-    TextView realTimeText;
-    String serverLink = "http://193.122.108.23:8080/Time";
+    private SharedPreferences sp;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView realTimeText;
+    private String serverLink = "http://193.122.108.23:8080/Time";
 
-    Animation rotateOpen, rotateClose, fromBottom, toBottom;
-
-    boolean is_Instructor;
-    int curr_class_code;
-
-    public StatisticFragment() {
-    }
-
+    private boolean is_Instructor;
+    private int curr_class_code;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,12 +63,6 @@ public class StatisticFragment extends Fragment {
         new Thread(this::updateText).start();
 
         swipeRefreshLayout.setOnRefreshListener(() -> new Thread(this::updateText).start());
-
-        rotateOpen = AnimationUtils.loadAnimation(this.getContext(), R.anim.rotate_open_anim);
-        rotateClose = AnimationUtils.loadAnimation(this.getContext(), R.anim.rotate_close_anim);
-        fromBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.from_bottom_anim);
-        toBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.to_bottom_anim);
-
 
         //TODO: implement the same thing for the quiz fragment
         //TODO: load the info from the server

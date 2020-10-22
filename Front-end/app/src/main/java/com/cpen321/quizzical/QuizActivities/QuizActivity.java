@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.QuizActivities;
+package com.cpen321.quizzical.quizActivities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,18 +17,18 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.cpen321.quizzical.Data.CourseCategory;
-import com.cpen321.quizzical.Data.Questions.IQuestion;
-import com.cpen321.quizzical.Data.Questions.QuestionType;
-import com.cpen321.quizzical.Data.Questions.QuestionsMC;
+import com.cpen321.quizzical.data.CourseCategory;
+import com.cpen321.quizzical.data.Questions.IQuestion;
+import com.cpen321.quizzical.data.Questions.QuestionType;
+import com.cpen321.quizzical.data.Questions.QuestionsMC;
 import com.cpen321.quizzical.R;
-import com.cpen321.quizzical.Utils.ButtonWrappers.ButtonTypes;
-import com.cpen321.quizzical.Utils.ButtonWrappers.IButtons;
-import com.cpen321.quizzical.Utils.ButtonWrappers.ImageButtonWrapper;
-import com.cpen321.quizzical.Utils.ButtonWrappers.MathButtonWrapper;
-import com.cpen321.quizzical.Utils.ChoicePair;
-import com.cpen321.quizzical.Utils.OtherUtils;
-import com.cpen321.quizzical.Utils.TestQuestionPackage;
+import com.cpen321.quizzical.utils.ButtonWrappers.ButtonTypes;
+import com.cpen321.quizzical.utils.ButtonWrappers.IButtons;
+import com.cpen321.quizzical.utils.ButtonWrappers.ImageButtonWrapper;
+import com.cpen321.quizzical.utils.ButtonWrappers.MathButtonWrapper;
+import com.cpen321.quizzical.utils.ChoicePair;
+import com.cpen321.quizzical.utils.OtherUtils;
+import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -42,15 +42,15 @@ import katex.hourglass.in.mathlib.MathView;
 public class QuizActivity extends AppCompatActivity {
 
     private static final int totalQuestionNum = 3;
-    IButtons selectedChoice;
-    IButtons correctChoice;
-    TextView infoLabel;
-    Button submitButton;
-    LinearLayout centerStack;
-    LinearLayout questionStack;
-    MathView currQuestion;
-    ImageView currQuestionPic;
-    TextView questionInfoText;
+    private IButtons selectedChoice;
+    private IButtons correctChoice;
+    private TextView infoLabel;
+    private Button submitButton;
+    private LinearLayout centerStack;
+    private LinearLayout questionStack;
+    private MathView currQuestion;
+    private ImageView currQuestionPic;
+    private TextView questionInfoText;
     private int questionNumber;
     private int totalPageNum;
     private List<IQuestion> questions;
@@ -109,9 +109,10 @@ public class QuizActivity extends AppCompatActivity {
                 break;
             case Text:
                 //TODO: may implement this if we have time
-                throw new Exception("Not implemented");
+                throw new IllegalArgumentException("Not implemented");
             default:
                 generateBlankPage();
+                break;
         }
     }
 
@@ -154,12 +155,12 @@ public class QuizActivity extends AppCompatActivity {
         Collections.shuffle(buttonsList);
 
         for (IButtons button : buttonsList) {
-            if (button.GetButtonType().equals(ButtonTypes.Image)) {
+            if (button.getButtonType().equals(ButtonTypes.Image)) {
                 ImageButtonWrapper imageButton = (ImageButtonWrapper) button;
-                centerStack.addView(imageButton.GetButtonAsImageButton());
+                centerStack.addView(imageButton.getButtonAsImageButton());
             } else {
                 MathButtonWrapper mathButton = (MathButtonWrapper) button;
-                centerStack.addView(mathButton.GetButtonAsMathButton());
+                centerStack.addView(mathButton.getButtonAsMathButton());
             }
         }
 
@@ -239,11 +240,11 @@ public class QuizActivity extends AppCompatActivity {
 
     private void onChoiceClicked(IButtons button) {
         if (selectedChoice != null) {
-            selectedChoice.SetBackGroundColor(Color.WHITE);
+            selectedChoice.myButtonSetBackGroundColor(Color.WHITE);
         }
 
         selectedChoice = button;
-        selectedChoice.SetBackGroundColor(getResources().getColor(R.color.colorAqua));
+        selectedChoice.myButtonSetBackGroundColor(getResources().getColor(R.color.colorAqua));
     }
 
     private void updateSubmitButtonInfo() {
@@ -295,7 +296,7 @@ public class QuizActivity extends AppCompatActivity {
         String response = String.format(getString(R.string.UI_in_quiz_correct_msg), correctNumber, totalQuestionNum);
         infoLabel.setText(response);
         infoLabel.setTextColor(getResources().getColor(R.color.colorLawnGreen));
-        selectedChoice.SetBackGroundColor(getResources().getColor(R.color.colorLawnGreen));
+        selectedChoice.myButtonSetBackGroundColor(getResources().getColor(R.color.colorLawnGreen));
         return true;
     }
 
@@ -304,8 +305,8 @@ public class QuizActivity extends AppCompatActivity {
         infoLabel.setText(response);
         infoLabel.setTextColor(getResources().getColor(R.color.colorCrimson));
 
-        selectedChoice.SetBackGroundColor(getResources().getColor(R.color.colorCrimson));
-        correctChoice.SetBackGroundColor(getResources().getColor(R.color.colorLawnGreen));
+        selectedChoice.myButtonSetBackGroundColor(getResources().getColor(R.color.colorCrimson));
+        correctChoice.myButtonSetBackGroundColor(getResources().getColor(R.color.colorLawnGreen));
 
         wrongQuestionIds.add(questions.get(this.questionNumber).getID());
         return true;

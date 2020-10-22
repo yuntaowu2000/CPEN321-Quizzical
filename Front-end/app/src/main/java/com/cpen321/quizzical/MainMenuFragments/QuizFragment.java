@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.MainMenuFragments;
+package com.cpen321.quizzical.mainMenuFragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.cpen321.quizzical.QuizActivities.QuizActivity;
+import com.cpen321.quizzical.quizActivities.QuizActivity;
 import com.cpen321.quizzical.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -24,19 +24,14 @@ import java.util.Objects;
 
 public class QuizFragment extends Fragment {
 
-    SharedPreferences sp;
-    boolean is_Instructor;
-    int class_code;
+    private boolean is_Instructor;
+    private int class_code;
 
-    Animation rotateOpen, rotateClose, fromBottom, toBottom;
-    FloatingActionButton fab, edit_fab, note_fab;
+    private Animation rotateOpen, rotateClose, fromBottom, toBottom;
+    private FloatingActionButton fab, edit_fab, note_fab;
+    private boolean clicked = false;
 
-    boolean clicked = false;
-    Button quizStartButton;
-
-    public QuizFragment() {
-
-    }
+    private Button quizStartButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +46,7 @@ public class QuizFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        sp = Objects.requireNonNull(getContext()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
+        SharedPreferences sp = Objects.requireNonNull(getContext()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
 
         is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
         class_code = sp.getInt(getString(R.string.CLASS_CODE), 0);

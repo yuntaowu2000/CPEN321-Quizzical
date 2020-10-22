@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.Utils.ButtonWrappers;
+package com.cpen321.quizzical.utils.ButtonWrappers;
 
 public interface IButtons {
     /**
@@ -6,9 +6,9 @@ public interface IButtons {
      * So that we can have all kinds of buttons in a single list and shuffle them around.
      */
 
-    ButtonTypes GetButtonType();
+    ButtonTypes getButtonType();
 
-    IButtons GetButton();
+    IButtons getButton();
 
-    void SetBackGroundColor(int color);
+    void myButtonSetBackGroundColor(int color);
 }

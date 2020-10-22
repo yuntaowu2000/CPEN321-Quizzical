@@ -1,8 +1,8 @@
-package com.cpen321.quizzical.Utils;
+package com.cpen321.quizzical.utils;
 
-import com.cpen321.quizzical.Data.CourseCategory;
-import com.cpen321.quizzical.Data.Questions.IQuestion;
-import com.cpen321.quizzical.Data.Questions.QuestionsMC;
+import com.cpen321.quizzical.data.CourseCategory;
+import com.cpen321.quizzical.data.Questions.IQuestion;
+import com.cpen321.quizzical.data.Questions.QuestionsMC;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ public class QuestionPackage {
      * When a student/instructor do a quiz, GetQuestions will be called
      */
 
-    int id;
-    List<IQuestion> questionList;
+    private int id;
+    private List<IQuestion> questionList;
 
     public QuestionPackage() {
         questionList = new ArrayList<>();
@@ -52,25 +52,25 @@ public class QuestionPackage {
         return questions;
     }
 
-    public void AddMCQuestion(CourseCategory category, String question,
+    public void addMCQuestion(CourseCategory category, String question,
                               boolean hasPic, String picSrc,
                               List<ChoicePair> choices, int correctAnsNum) throws Exception {
         if (correctAnsNum < 0 || correctAnsNum >= choices.size())
-            throw new Exception("correct answer does not match any of the answers");
+            throw new IllegalArgumentException("correct answer does not match any of the answers");
         QuestionsMC q = new QuestionsMC(category, question, hasPic, picSrc, choices, correctAnsNum);
         questionList.add(q);
     }
 
-    public void AddMCQuestion(int id, CourseCategory category, String question,
+    public void addMCQuestion(int id, CourseCategory category, String question,
                               boolean hasPic, String picSrc,
                               List<ChoicePair> choices, int correctAnsNum) throws Exception {
         if (correctAnsNum < 0 || correctAnsNum >= choices.size())
-            throw new Exception("correct answer does not match any of the answers");
+            throw new IllegalArgumentException("correct answer does not match any of the answers");
         QuestionsMC q = new QuestionsMC(id, category, question, hasPic, picSrc, choices, correctAnsNum);
         questionList.add(q);
     }
 
-    public void AddMCQuestion(String jsonString) {
+    public void addMCQuestion(String jsonString) {
         Gson gson = new Gson();
         QuestionsMC q = gson.fromJson(jsonString, QuestionsMC.class);
         questionList.add(q);

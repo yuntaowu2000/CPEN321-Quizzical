@@ -1,31 +1,31 @@
-package com.cpen321.quizzical.Utils.ButtonWrappers;
+package com.cpen321.quizzical.utils.ButtonWrappers;
 
 import katex.hourglass.in.mathlib.MathView;
 
 public class MathButtonWrapper implements IButtons {
 
-    MathView view;
+    private MathView view;
 
     public MathButtonWrapper(MathView view) {
         this.view = view;
     }
 
     @Override
-    public ButtonTypes GetButtonType() {
+    public ButtonTypes getButtonType() {
         return ButtonTypes.Math;
     }
 
     @Override
-    public IButtons GetButton() {
+    public IButtons getButton() {
         return this;
     }
 
     @Override
-    public void SetBackGroundColor(int color) {
+    public void myButtonSetBackGroundColor(int color) {
         view.setViewBackgroundColor(color);
     }
 
-    public MathView GetButtonAsMathButton() {
+    public MathView getButtonAsMathButton() {
         return view;
     }
 }

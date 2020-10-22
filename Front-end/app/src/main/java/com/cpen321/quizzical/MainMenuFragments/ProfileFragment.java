@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.MainMenuFragments;
+package com.cpen321.quizzical.mainMenuFragments;
 
 import android.Manifest;
 import android.app.Activity;
@@ -32,7 +32,7 @@ import androidx.fragment.app.Fragment;
 import com.cpen321.quizzical.HomeActivity;
 import com.cpen321.quizzical.InitActivity;
 import com.cpen321.quizzical.R;
-import com.cpen321.quizzical.Utils.OtherUtils;
+import com.cpen321.quizzical.utils.OtherUtils;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -42,21 +42,13 @@ public class ProfileFragment extends Fragment {
     private static final int PICK_IMG = 10;
     private static final int permission_code = 1;
     public static SharedPreferences.OnSharedPreferenceChangeListener quizNumAndExpChangeListener;
-    SharedPreferences sp;
-    private Button logoutButton;
+    private SharedPreferences sp;
     private ImageButton profileImageButton;
-    private ImageButton changeUsernameButton;
-    private ImageButton changeEmailButton;
     private TextView usernameText;
     private TextView emailText;
     private TextView quizNumText;
     private TextView expText;
-    private Uri imageUri;
     private boolean is_instructor;
-
-    public ProfileFragment() {
-
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,16 +62,16 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        logoutButton = Objects.requireNonNull(getView()).findViewById(R.id.profile_log_out_btn);
+        Button logoutButton = Objects.requireNonNull(getView()).findViewById(R.id.profile_log_out_btn);
         logoutButton.setOnClickListener(v -> logOut());
 
         profileImageButton = Objects.requireNonNull(getView()).findViewById(R.id.profile_pic);
         profileImageButton.setOnClickListener(v -> decideSetUpProfileImage());
 
-        changeUsernameButton = Objects.requireNonNull(getView()).findViewById(R.id.profile_username_change_btn);
+        ImageButton changeUsernameButton = Objects.requireNonNull(getView()).findViewById(R.id.profile_username_change_btn);
         changeUsernameButton.setOnClickListener(v -> changeUsername());
 
-        changeEmailButton = Objects.requireNonNull(getView()).findViewById(R.id.profile_email_change_btn);
+        ImageButton changeEmailButton = Objects.requireNonNull(getView()).findViewById(R.id.profile_email_change_btn);
         changeEmailButton.setOnClickListener(v -> changeEmail());
 
         sp = Objects.requireNonNull(getActivity()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
@@ -163,7 +155,7 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMG && resultCode == Activity.RESULT_OK) {
-            imageUri = data.getData();
+            Uri imageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(Objects.requireNonNull(this.getContext()).getContentResolver(), imageUri);
 

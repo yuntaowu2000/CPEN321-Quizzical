@@ -23,9 +23,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.cpen321.quizzical.MainMenuFragments.ProfileFragment;
-import com.cpen321.quizzical.MainMenuFragments.StatisticFragment;
-import com.cpen321.quizzical.Utils.OtherUtils;
+import com.cpen321.quizzical.mainMenuFragments.ProfileFragment;
+import com.cpen321.quizzical.mainMenuFragments.StatisticFragment;
+import com.cpen321.quizzical.utils.OtherUtils;
 import com.cpen321.quizzical.ui.main.MyHomePagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -36,17 +36,17 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    Animation rotateOpen, rotateClose, fromBottom, toBottom;
-    HorizontalScrollView class_scroll_view;
-    List<Button> class_list;
-    List<Integer> class_code_list;
-    LinearLayout class_scroll_content_layout;
-    ImageButton add_class_button;
-    FloatingActionButton class_switch_button;
-    TabLayout tabLayout;
-    boolean is_Instructor;
-    int curr_class_code;
-    SharedPreferences sp;
+    private Animation rotateOpen, rotateClose, fromBottom, toBottom;
+    private List<Button> class_list;
+    private List<Integer> class_code_list;
+    private LinearLayout class_scroll_content_layout;
+    private TabLayout tabLayout;
+    private ImageButton add_class_button;
+    private FloatingActionButton class_switch_button;
+    private HorizontalScrollView class_scroll_view;
+    private boolean is_Instructor;
+    private int curr_class_code;
+    private SharedPreferences sp;
 
     /**
      * This is the class for the main home screen of the APP
@@ -258,7 +258,6 @@ public class HomeActivity extends AppCompatActivity {
                 class_name_error_text.setText(R.string.UI_class_name_invalid_msg);
             }
         });
-
     }
 
     private void setupNewClassCode(String course_category, String grade_level, String class_name) {

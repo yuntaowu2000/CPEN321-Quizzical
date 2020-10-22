@@ -5,13 +5,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.cpen321.quizzical.MainMenuFragments.ProfileFragment;
-import com.cpen321.quizzical.MainMenuFragments.QuizFragment;
-import com.cpen321.quizzical.MainMenuFragments.StatisticFragment;
+import com.cpen321.quizzical.mainMenuFragments.ProfileFragment;
+import com.cpen321.quizzical.mainMenuFragments.QuizFragment;
+import com.cpen321.quizzical.mainMenuFragments.StatisticFragment;
 
 public class MyHomePagerAdapter extends FragmentPagerAdapter {
 
-    int numOfTabs;
+    private int numOfTabs;
 
     public MyHomePagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);

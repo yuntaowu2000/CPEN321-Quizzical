@@ -21,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
-import com.cpen321.quizzical.Utils.OtherUtils;
+import com.cpen321.quizzical.utils.OtherUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -42,9 +42,9 @@ public class InitActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 420;
     protected boolean username_input_OK = false;
     protected boolean email_input_OK = false;
-    SharedPreferences sp;
-    LinearLayout.LayoutParams layoutParams;
+    private SharedPreferences sp;
     private GoogleSignInClient mGoogleSignInClient;
+    private LinearLayout.LayoutParams layoutParams;
     private LinearLayout linearLayout;
     private ConstraintLayout constraintLayout;
     private RelativeLayout relativeLayout;

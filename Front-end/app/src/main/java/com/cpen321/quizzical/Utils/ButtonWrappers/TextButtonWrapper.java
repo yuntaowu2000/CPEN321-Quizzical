@@ -1,8 +1,9 @@
-package com.cpen321.quizzical.Utils.ButtonWrappers;
+package com.cpen321.quizzical.utils.ButtonWrappers;
 
 import android.widget.Button;
 
 public class TextButtonWrapper implements IButtons {
+
     private Button button;
 
     public TextButtonWrapper(Button button) {
@@ -10,21 +11,21 @@ public class TextButtonWrapper implements IButtons {
     }
 
     @Override
-    public ButtonTypes GetButtonType() {
+    public ButtonTypes getButtonType() {
         return ButtonTypes.Text;
     }
 
     @Override
-    public IButtons GetButton() {
+    public IButtons getButton() {
         return this;
     }
 
     @Override
-    public void SetBackGroundColor(int color) {
+    public void myButtonSetBackGroundColor(int color) {
         button.setBackgroundColor(color);
     }
 
-    public Button GetButtonAsTextButton() {
+    public Button getButtonAsTextButton() {
         return this.button;
     }
 }

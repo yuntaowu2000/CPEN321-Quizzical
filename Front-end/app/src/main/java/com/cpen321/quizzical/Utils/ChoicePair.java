@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.Utils;
+package com.cpen321.quizzical.utils;
 
 public class ChoicePair {
 
