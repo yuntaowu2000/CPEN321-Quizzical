@@ -8,6 +8,8 @@ Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao
 
 ## Current progress  
 
+The progress is written in the sequence of implementation.  
+
 ### Front-end  
 1. Login  
 1.1 Google Authentication implemented  
@@ -15,19 +17,19 @@ Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao
 (default set to google username, email)  
 1.3 Checkbox for instructor/teacher  
 1.4 Validate username, email and upload to the server  
+1.5 Firebase push notification skeleton implemented  
 2. Homepage  
-2.1 Basics UI setup  
+2.1 Basics UI setup, used tabbed layour for switching among quiz, leader board/class statistics and user profile.  
 2.2 Profile page image, username, email (change functions included) done  
 2.3 Currently leader board/class statistic page shows time and class code(+ course category)   
-(bug with ```onSharedPreferenceChangeListener```)  
 2.4 Prompt user to setup/join class on first sign in  
-2.5 Multiple classes supported  
+2.5 Multiple classes supported, user can switch between different classes  
 2.6 In the profile fragment, user can see how many classes he/she is enrolled in, how many quizzes he/she has created/done, how many EXP he/she has earned.  
 3. Quiz  
-3.1 A Quiz will load a set of questions (currently on multiple choices are supported)  
-3.2 Choices can be either plain text, latex, html, or image  
-3.3 Once a user click on the choice, it will change the color of the choice  
-3.4 After the user submits a question, they will be informed if they are correct or not. If they are incorrect, correct answer will also be shown.  
+3.1 A Quiz will load a set of questions (currently only multiple choices are supported)  
+3.2 Choices can be either plain text, latex, html formatted, or image  
+3.3 Once a user click on the choice, it will change the color of the choice to highlight the selected choice.  
+3.4 After the user submits a question, they will be informed if they are correct or not. If they are incorrect, correct answer will also be highlighted.  
 3.5 After the user finishes a quiz, they will be shown how they did in the quiz.  
 3.6 The quiz result (including score and wrong question numbers) will be uploaded to the server.  
 4. Complex logic  
@@ -37,6 +39,8 @@ after each quiz is finished
 <img src="pics/score_calculation.png"/>
 
 Most parts are translated in Chinese as well.  
+
+Some code refactored after checking with Codacy.
 
 ### Back-end  
 1. Simple POST GET request handling done.
