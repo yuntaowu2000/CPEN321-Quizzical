@@ -185,7 +185,7 @@ public class ProfileFragment extends Fragment {
         //we need read permission to get access to user's images in user's phone storage
         int readPermission = ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()), Manifest.permission.READ_EXTERNAL_STORAGE);
 
-        if (!(readPermission == PackageManager.PERMISSION_GRANTED)) {
+        if (readPermission != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, permission_code);
         } else {
             setUpProfileImage();
@@ -194,12 +194,8 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == permission_code) {
-            if (grantResults.length > 0) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setUpProfileImage();
-                }
-            }
+        if (requestCode == permission_code && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            setUpProfileImage();
         }
     }
 
