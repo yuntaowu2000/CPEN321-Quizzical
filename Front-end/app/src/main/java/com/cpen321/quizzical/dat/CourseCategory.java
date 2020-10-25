@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.Data;
+package com.cpen321.quizzical.data;
 
 public enum CourseCategory {
     Math,

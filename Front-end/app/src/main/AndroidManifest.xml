@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".QuizActivities.CreateQuizActivity"></activity>
+        <activity android:name=".quizActivities.CreateQuizActivity"></activity>
         <activity
             android:name=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -31,8 +31,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".QuizActivities.QuizActivity" />
-        <activity android:name=".QuizActivities.QuizFinishedActivity" />
+        <activity android:name=".quizActivities.QuizActivity" />
+        <activity android:name=".quizActivities.QuizFinishedActivity" />
         <activity android:name=".TestPage" />
 
         <service

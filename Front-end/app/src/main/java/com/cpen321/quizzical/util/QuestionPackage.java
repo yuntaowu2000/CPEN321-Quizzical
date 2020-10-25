@@ -1,8 +1,8 @@
-package com.cpen321.quizzical.Utils;
+package com.cpen321.quizzical.utils;
 
-import com.cpen321.quizzical.Data.CourseCategory;
-import com.cpen321.quizzical.Data.Questions.IQuestion;
-import com.cpen321.quizzical.Data.Questions.QuestionsMC;
+import com.cpen321.quizzical.data.CourseCategory;
+import com.cpen321.quizzical.data.Questions.IQuestion;
+import com.cpen321.quizzical.data.Questions.QuestionsMC;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;

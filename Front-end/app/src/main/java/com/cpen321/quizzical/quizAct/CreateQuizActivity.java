@@ -1,19 +1,13 @@
-package com.cpen321.quizzical.QuizActivities;
+package com.cpen321.quizzical.quizActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.cpen321.quizzical.R;
-import com.cpen321.quizzical.Utils.QuestionPackage;
-import com.cpen321.quizzical.Data.CourseCategory;
-import com.google.gson.Gson;
 
 import java.util.List;
 

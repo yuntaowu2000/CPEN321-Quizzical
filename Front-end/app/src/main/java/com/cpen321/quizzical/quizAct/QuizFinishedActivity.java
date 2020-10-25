@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.QuizActivities;
+package com.cpen321.quizzical.quizActivities;
 
 import android.content.Intent;
 import android.graphics.Color;

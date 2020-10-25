@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.QuizActivities;
+package com.cpen321.quizzical.quizActivities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,18 +17,18 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.cpen321.quizzical.Data.CourseCategory;
-import com.cpen321.quizzical.Data.Questions.IQuestion;
-import com.cpen321.quizzical.Data.Questions.QuestionType;
-import com.cpen321.quizzical.Data.Questions.QuestionsMC;
+import com.cpen321.quizzical.data.CourseCategory;
+import com.cpen321.quizzical.data.Questions.IQuestion;
+import com.cpen321.quizzical.data.Questions.QuestionType;
+import com.cpen321.quizzical.data.Questions.QuestionsMC;
 import com.cpen321.quizzical.R;
-import com.cpen321.quizzical.Utils.ButtonWrappers.ButtonTypes;
-import com.cpen321.quizzical.Utils.ButtonWrappers.IButtons;
-import com.cpen321.quizzical.Utils.ButtonWrappers.ImageButtonWrapper;
-import com.cpen321.quizzical.Utils.ButtonWrappers.MathButtonWrapper;
-import com.cpen321.quizzical.Utils.ChoicePair;
-import com.cpen321.quizzical.Utils.OtherUtils;
-import com.cpen321.quizzical.Utils.TestQuestionPackage;
+import com.cpen321.quizzical.utils.ButtonWrappers.ButtonTypes;
+import com.cpen321.quizzical.utils.ButtonWrappers.IButtons;
+import com.cpen321.quizzical.utils.ButtonWrappers.ImageButtonWrapper;
+import com.cpen321.quizzical.utils.ButtonWrappers.MathButtonWrapper;
+import com.cpen321.quizzical.utils.ChoicePair;
+import com.cpen321.quizzical.utils.OtherUtils;
+import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 

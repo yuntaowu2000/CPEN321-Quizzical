@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.Utils;
+package com.cpen321.quizzical.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.MainMenuFragments;
+package com.cpen321.quizzical.mainMenuFragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cpen321.quizzical.R;
-import com.cpen321.quizzical.Utils.OtherUtils;
+import com.cpen321.quizzical.utils.OtherUtils;
 
 import java.util.Arrays;
 import java.util.List;

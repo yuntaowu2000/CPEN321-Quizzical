@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.MainMenuFragments;
+package com.cpen321.quizzical.mainMenuFragments;
 
 import android.Manifest;
 import android.app.Activity;
@@ -31,9 +31,8 @@ import androidx.fragment.app.Fragment;
 
 import com.cpen321.quizzical.HomeActivity;
 import com.cpen321.quizzical.InitActivity;
-import com.cpen321.quizzical.MainMenuFragments.StatisticFragment;
 import com.cpen321.quizzical.R;
-import com.cpen321.quizzical.Utils.OtherUtils;
+import com.cpen321.quizzical.utils.OtherUtils;
 
 import java.io.IOException;
 import java.util.Objects;
