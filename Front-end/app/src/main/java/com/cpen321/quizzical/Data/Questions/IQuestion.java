@@ -1,6 +1,6 @@
-package com.cpen321.quizzical.data.questions;
+package com.cpen321.quizzical.Data.Questions;
 
-import com.cpen321.quizzical.data.CourseCategory;
+import com.cpen321.quizzical.Data.CourseCategory;
 
 public interface IQuestion {
 

@@ -1,6 +1,6 @@
-package com.cpen321.quizzical.utils;
+package com.cpen321.quizzical.Utils;
 
-import com.cpen321.quizzical.data.CourseCategory;
+import com.cpen321.quizzical.Data.CourseCategory;
 
 import java.util.ArrayList;
 import java.util.List;

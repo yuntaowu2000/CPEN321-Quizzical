@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cpen321.quizzical.R;
-import com.cpen321.quizzical.utils.OtherUtils;
+import com.cpen321.quizzical.Utils.OtherUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -66,13 +66,6 @@ public class StatisticFragment extends Fragment {
                 new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
 
         swipeRefreshLayout = view.findViewById(R.id.statistic_swipe_layout);
-        statisticsTable = view.findViewById(R.id.statistics_table);
-        studentList = Arrays.asList(view.findViewById(R.id.statistic_entry0), view.findViewById(R.id.statistic_entry1), view.findViewById(R.id.statistic_entry2), view.findViewById(R.id.statistic_entry3), view.findViewById(R.id.statistic_entry4), view.findViewById(R.id.statistic_entry5), view.findViewById(R.id.statistic_entry6), view.findViewById(R.id.statistic_entry7), view.findViewById(R.id.statistic_entry8), view.findViewById(R.id.statistic_entry9));
-        expList = Arrays.asList(view.findViewById(R.id.statistic_entry0r), view.findViewById(R.id.statistic_entry1r), view.findViewById(R.id.statistic_entry2r), view.findViewById(R.id.statistic_entry3r), view.findViewById(R.id.statistic_entry4r), view.findViewById(R.id.statistic_entry5r), view.findViewById(R.id.statistic_entry6r), view.findViewById(R.id.statistic_entry7r), view.findViewById(R.id.statistic_entry8r), view.findViewById(R.id.statistic_entry9r));
-        studentLast = view.findViewById(R.id.statistic_entry10);
-        expLast = view.findViewById(R.id.statistic_entry10r);
-        studentLast.setVisibility(View.INVISIBLE);
-        expLast.setVisibility(View.INVISIBLE);
 
         realTimeText = view.findViewById(R.id.statistic_test_text);
         new Thread(this::updateText).start();
@@ -91,6 +84,14 @@ public class StatisticFragment extends Fragment {
             Objects.requireNonNull(getActivity()).runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
             classCodeChangeListener = (sp, key) -> onClassCodeChanged(key, debug_text);
             sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
+
+            statisticsTable = view.findViewById(R.id.statistics_table);
+            studentList = Arrays.asList(view.findViewById(R.id.statistic_entry0), view.findViewById(R.id.statistic_entry1), view.findViewById(R.id.statistic_entry2), view.findViewById(R.id.statistic_entry3), view.findViewById(R.id.statistic_entry4), view.findViewById(R.id.statistic_entry5), view.findViewById(R.id.statistic_entry6), view.findViewById(R.id.statistic_entry7), view.findViewById(R.id.statistic_entry8), view.findViewById(R.id.statistic_entry9));
+            expList = Arrays.asList(view.findViewById(R.id.statistic_entry0r), view.findViewById(R.id.statistic_entry1r), view.findViewById(R.id.statistic_entry2r), view.findViewById(R.id.statistic_entry3r), view.findViewById(R.id.statistic_entry4r), view.findViewById(R.id.statistic_entry5r), view.findViewById(R.id.statistic_entry6r), view.findViewById(R.id.statistic_entry7r), view.findViewById(R.id.statistic_entry8r), view.findViewById(R.id.statistic_entry9r));
+            studentLast = view.findViewById(R.id.statistic_entry10);
+            expLast = view.findViewById(R.id.statistic_entry10r);
+            studentLast.setVisibility(View.INVISIBLE);
+            expLast.setVisibility(View.INVISIBLE);
         }
     }
 

@@ -5,9 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.cpen321.quizzical.mainMenuFragments.ProfileFragment;
-import com.cpen321.quizzical.mainMenuFragments.QuizFragment;
-import com.cpen321.quizzical.mainMenuFragments.StatisticFragment;
+import com.cpen321.quizzical.MainMenuFragments.ProfileFragment;
+import com.cpen321.quizzical.MainMenuFragments.QuizFragment;
+import com.cpen321.quizzical.MainMenuFragments.StatisticFragment;
 
 public class MyHomePagerAdapter extends FragmentPagerAdapter {
 

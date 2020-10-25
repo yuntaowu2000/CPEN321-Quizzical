@@ -1,7 +1,7 @@
-package com.cpen321.quizzical.data.questions;
+package com.cpen321.quizzical.Data.Questions;
 
-import com.cpen321.quizzical.data.CourseCategory;
-import com.cpen321.quizzical.utils.ChoicePair;
+import com.cpen321.quizzical.Data.CourseCategory;
+import com.cpen321.quizzical.Utils.ChoicePair;
 import com.google.gson.Gson;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.mainMenuFragments;
+package com.cpen321.quizzical.MainMenuFragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.cpen321.quizzical.quizActivities.QuizActivity;
+import com.cpen321.quizzical.QuizActivities.CreateQuizActivity;
+import com.cpen321.quizzical.QuizActivities.QuizActivity;
 import com.cpen321.quizzical.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -42,6 +43,16 @@ public class QuizFragment extends Fragment {
         Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
         startActivity(quizIntent);
     }
+
+    private void setupCreateQuiz() {
+        Intent createQuizIntent = new Intent(getActivity(), CreateQuizActivity.class);
+        startActivity(createQuizIntent);
+    }
+
+    /*private void setupCreateNote() {
+        Intent createNoteIntent = new Intent(getActivity(), CreateNoteActivity.class);
+        startActivity(createNoteIntent);
+    }*/
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,7 +98,7 @@ public class QuizFragment extends Fragment {
         assert edit_fab != null;
         assert note_fab != null;
         edit_fab.hide();
-        edit_fab.setOnClickListener(v -> Toast.makeText(this.getContext(), "Add quiz button clicked", Toast.LENGTH_SHORT).show());
+        edit_fab.setOnClickListener(v -> setupCreateQuiz());
         note_fab.hide();
         note_fab.setOnClickListener(v -> Toast.makeText(this.getContext(), "Note button clicked", Toast.LENGTH_SHORT).show());
 
