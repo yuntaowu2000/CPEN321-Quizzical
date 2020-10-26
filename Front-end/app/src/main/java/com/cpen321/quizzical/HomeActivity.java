@@ -23,8 +23,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.cpen321.quizzical.mainMenuFragments.ProfileFragment;
-import com.cpen321.quizzical.mainMenuFragments.StatisticFragment;
+import com.cpen321.quizzical.mmf.ProfileFragment;
+import com.cpen321.quizzical.mmf.StatisticFragment;
 import com.cpen321.quizzical.utils.OtherUtils;
 import com.cpen321.quizzical.ui.main.MyHomePagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

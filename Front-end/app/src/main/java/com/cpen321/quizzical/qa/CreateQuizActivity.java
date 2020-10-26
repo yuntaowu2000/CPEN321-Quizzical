@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.quizActivities;
+package com.cpen321.quizzical.qa;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.utils.ChoicePair;
-import com.cpen321.quizzical.utils.OtherUtils;
 import com.cpen321.quizzical.utils.QuestionPackage;
 import com.google.gson.JsonObject;
 

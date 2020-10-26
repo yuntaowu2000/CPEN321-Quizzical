@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -185,6 +186,11 @@ public class InitActivity extends AppCompatActivity {
                 //default is google credential
                 String username = Objects.requireNonNull(account.getDisplayName()).replace(" ", "_");
                 String email = account.getEmail();
+                new Thread(()->{
+                    Bitmap bitmap = OtherUtils.getBitmapFromUrl(account.getPhotoUrl().toString());
+                    String encodedBitmap = OtherUtils.encodeImage(bitmap);
+                    sp.edit().putString(getString(R.string.PROFILE_IMG), encodedBitmap).apply();
+                }).start();
                 username_input_OK = OtherUtils.checkUserName(username);
                 email_input_OK = OtherUtils.checkEmail(email);
 
