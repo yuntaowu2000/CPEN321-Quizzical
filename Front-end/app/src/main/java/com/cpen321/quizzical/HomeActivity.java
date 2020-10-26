@@ -36,7 +36,10 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private Animation rotateOpen, rotateClose, fromBottom, toBottom;
+    private Animation rotateOpen;
+    private Animation rotateClose;
+    private Animation fromBottom;
+    private Animation toBottom;
     private List<Button> class_list;
     private List<Integer> class_code_list;
     private LinearLayout class_scroll_content_layout;
@@ -117,23 +120,25 @@ public class HomeActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(tab.getPosition());
                 if (class_scroll_view.getVisibility() == View.VISIBLE) {
                     class_switch_button.setAnimation(rotateClose);
+                    class_scroll_view.setAnimation(toBottom);
                     class_scroll_view.setVisibility(View.INVISIBLE);
                     for (Button b : class_list) {
-                        b.setVisibility(View.INVISIBLE);
-                        b.setClickable(false);
+                        if (b.getVisibility() == View.VISIBLE) {
+                            b.setVisibility(View.INVISIBLE);
+                            b.setClickable(false);
+                        }
                     }
-                    class_scroll_view.setAnimation(toBottom);
                 }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                /* not used*/
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                /* not used*/
             }
         });
 
@@ -362,20 +367,22 @@ public class HomeActivity extends AppCompatActivity {
     private void onClassSwitchButtonClicked() {
         if (class_scroll_view.getVisibility() == View.INVISIBLE) {
             class_switch_button.setAnimation(rotateOpen);
+            class_scroll_view.setAnimation(fromBottom);
             class_scroll_view.setVisibility(View.VISIBLE);
             for (Button b : class_list) {
                 b.setVisibility(View.VISIBLE);
                 b.setClickable(true);
             }
-            class_scroll_view.setAnimation(fromBottom);
         } else {
             class_switch_button.setAnimation(rotateClose);
+            class_scroll_view.setAnimation(toBottom);
             class_scroll_view.setVisibility(View.INVISIBLE);
             for (Button b : class_list) {
-                b.setVisibility(View.INVISIBLE);
-                b.setClickable(false);
+                if (b.getVisibility() == View.VISIBLE) {
+                    b.setVisibility(View.INVISIBLE);
+                    b.setClickable(false);
+                }
             }
-            class_scroll_view.setAnimation(toBottom);
         }
     }
 

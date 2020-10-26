@@ -28,8 +28,13 @@ public class QuizFragment extends Fragment {
     private boolean is_Instructor;
     private int class_code;
 
-    private Animation rotateOpen, rotateClose, fromBottom, toBottom;
-    private FloatingActionButton fab, edit_fab, note_fab;
+    private Animation rotateOpen;
+    private Animation rotateClose;
+    private Animation fromBottom;
+    private Animation toBottom;
+    private FloatingActionButton fab;
+    private FloatingActionButton edit_fab;
+    private FloatingActionButton note_fab;
     private boolean clicked = false;
 
     private Button quizStartButton;
