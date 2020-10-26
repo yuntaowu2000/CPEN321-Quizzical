@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.qa;
+package com.cpen321.quizzical.quizactivities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;

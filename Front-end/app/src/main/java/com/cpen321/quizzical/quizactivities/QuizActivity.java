@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.qa;
+package com.cpen321.quizzical.quizactivities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,10 +22,10 @@ import com.cpen321.quizzical.data.questions.IQuestion;
 import com.cpen321.quizzical.data.questions.QuestionType;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.cpen321.quizzical.R;
-import com.cpen321.quizzical.utils.ButtonTypes;
-import com.cpen321.quizzical.utils.IButtons;
-import com.cpen321.quizzical.utils.ImageButtonWrapper;
-import com.cpen321.quizzical.utils.MathButtonWrapper;
+import com.cpen321.quizzical.utils.buttonwrappers.ButtonTypes;
+import com.cpen321.quizzical.utils.buttonwrappers.IButtons;
+import com.cpen321.quizzical.utils.buttonwrappers.ImageButtonWrapper;
+import com.cpen321.quizzical.utils.buttonwrappers.MathButtonWrapper;
 import com.cpen321.quizzical.utils.ChoicePair;
 import com.cpen321.quizzical.utils.OtherUtils;
 import com.cpen321.quizzical.utils.TestQuestionPackage;

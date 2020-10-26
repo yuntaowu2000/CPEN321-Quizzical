@@ -1,6 +1,9 @@
-package com.cpen321.quizzical.utils;
+package com.cpen321.quizzical.utils.buttonwrappers;
 
 import android.widget.Button;
+
+import com.cpen321.quizzical.utils.buttonwrappers.ButtonTypes;
+import com.cpen321.quizzical.utils.buttonwrappers.IButtons;
 
 public class TextButtonWrapper implements IButtons {
 

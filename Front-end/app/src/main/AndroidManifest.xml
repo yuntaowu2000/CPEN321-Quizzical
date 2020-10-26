@@ -32,9 +32,9 @@
         <activity
             android:name=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".qa.CreateQuizActivity"/>
-        <activity android:name=".qa.QuizActivity" />
-        <activity android:name=".qa.QuizFinishedActivity" />
+        <activity android:name=".quizactivities.CreateQuizActivity"/>
+        <activity android:name=".quizactivities.QuizActivity" />
+        <activity android:name=".quizactivities.QuizFinishedActivity" />
         <activity android:name=".TestPage" />
 
         <service
