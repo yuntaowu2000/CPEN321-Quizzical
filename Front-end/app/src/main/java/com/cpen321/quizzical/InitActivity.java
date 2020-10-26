@@ -1,7 +1,10 @@
 package com.cpen321.quizzical;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -33,13 +37,17 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.util.Objects;
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class InitActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 420;
+    private static final int permission_code = 1;
     protected boolean username_input_OK = false;
     protected boolean email_input_OK = false;
     private SharedPreferences sp;
@@ -166,14 +174,20 @@ public class InitActivity extends AppCompatActivity {
     private void validateAndLogin(GoogleSignInAccount account) {
         if (account != null) {
             //TODO: need to get user name and other stuff from the server here
+            //use google ID as our default id
+            sp.edit().putString(getString(R.string.UID), account.getId()).apply();
+
+            String url = "http://20.40.202.2:3000/" + account.getId();
+            String user_info = OtherUtils.readFromURL(url);
+            getUserInfo(user_info);
+
             if (OtherUtils.stringIsNullOrEmpty(sp.getString(getString(R.string.USERNAME), ""))) {
                 //default is google credential
                 String username = Objects.requireNonNull(account.getDisplayName()).replace(" ", "_");
                 String email = account.getEmail();
                 username_input_OK = OtherUtils.checkUserName(username);
                 email_input_OK = OtherUtils.checkEmail(email);
-                //use google ID as our default id
-                sp.edit().putString(getString(R.string.UID), account.getId()).apply();
+
                 sp.edit().putString(getString(R.string.USERNAME), username).apply();
                 sp.edit().putString(getString(R.string.EMAIL), email).apply();
                 requestUserNameAndEmail();
@@ -183,6 +197,25 @@ public class InitActivity extends AppCompatActivity {
         } else {
             signIn();
         }
+    }
+
+    private void getUserInfo(String userInfoJson) {
+        String username = "";
+        String email = "";
+        boolean is_instructor = false;
+        try {
+            final JsonElement jsonElement = JsonParser.parseString(userInfoJson);
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            username = jsonObject.get(getString(R.string.USERNAME)).getAsString();
+            email = jsonObject.get(getString(R.string.EMAIL)).getAsString();
+            is_instructor = jsonObject.get(getString(R.string.IS_INSTRUCTOR)).getAsBoolean();
+        } catch (Exception e) {
+            Log.d("parse user info", "failed " + e.getMessage());
+        }
+        Log.d("Get server info", "user name: " + username + ", email: " + email);
+        sp.edit().putString(getString(R.string.USERNAME), username).apply();
+        sp.edit().putString(getString(R.string.EMAIL), email).apply();
+        sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), is_instructor).apply();
     }
 
     private void requestUserNameAndEmail() {
