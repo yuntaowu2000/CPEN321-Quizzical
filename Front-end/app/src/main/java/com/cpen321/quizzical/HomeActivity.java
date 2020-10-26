@@ -36,7 +36,10 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private Animation rotateOpen, rotateClose, fromBottom, toBottom;
+    private Animation rotateOpen;
+    private Animation rotateClose;
+    private Animation fromBottom;
+    private Animation toBottom;
     private List<Button> class_list;
     private List<Integer> class_code_list;
     private LinearLayout class_scroll_content_layout;
@@ -130,12 +133,12 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                /* not used*/
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                /* not used*/
             }
         });
 

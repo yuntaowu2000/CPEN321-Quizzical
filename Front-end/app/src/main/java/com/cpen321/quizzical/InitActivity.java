@@ -230,12 +230,12 @@ public class InitActivity extends AppCompatActivity {
         usernameInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                /* not used*/
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                /* not used*/
             }
 
             @Override

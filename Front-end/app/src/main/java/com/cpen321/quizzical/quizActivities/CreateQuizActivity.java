@@ -13,9 +13,9 @@ import java.util.List;
 
 public class CreateQuizActivity extends AppCompatActivity {
 
-    ImageButton addQuestionButton;
-    List<String> questionList;
-    Spinner categoryList;
+    private ImageButton addQuestionButton;
+    private List<String> questionList;
+    private Spinner categoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
