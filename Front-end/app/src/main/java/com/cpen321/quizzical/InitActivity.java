@@ -1,9 +1,7 @@
 package com.cpen321.quizzical;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,7 +46,6 @@ import java.util.Objects;
 public class InitActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 420;
-    private static final int permission_code = 1;
     protected boolean username_input_OK = false;
     protected boolean email_input_OK = false;
     private SharedPreferences sp;
