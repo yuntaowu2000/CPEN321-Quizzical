@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.data.Questions;
+package com.cpen321.quizzical.data.questions;
 
 public enum QuestionType {
     MC,

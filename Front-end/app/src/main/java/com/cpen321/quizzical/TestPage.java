@@ -14,7 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cpen321.quizzical.data.CourseCategory;
-import com.cpen321.quizzical.data.Questions.QuestionsMC;
+import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.cpen321.quizzical.utils.ChoicePair;
 import com.cpen321.quizzical.utils.OtherUtils;
 import com.theartofdev.edmodo.cropper.CropImageView;

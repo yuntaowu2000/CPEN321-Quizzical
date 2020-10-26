@@ -117,12 +117,14 @@ public class HomeActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(tab.getPosition());
                 if (class_scroll_view.getVisibility() == View.VISIBLE) {
                     class_switch_button.setAnimation(rotateClose);
+                    class_scroll_view.setAnimation(toBottom);
                     class_scroll_view.setVisibility(View.INVISIBLE);
                     for (Button b : class_list) {
-                        b.setVisibility(View.INVISIBLE);
-                        b.setClickable(false);
+                        if (b.getVisibility() == View.VISIBLE) {
+                            b.setVisibility(View.INVISIBLE);
+                            b.setClickable(false);
+                        }
                     }
-                    class_scroll_view.setAnimation(toBottom);
                 }
             }
 
@@ -362,20 +364,22 @@ public class HomeActivity extends AppCompatActivity {
     private void onClassSwitchButtonClicked() {
         if (class_scroll_view.getVisibility() == View.INVISIBLE) {
             class_switch_button.setAnimation(rotateOpen);
+            class_scroll_view.setAnimation(fromBottom);
             class_scroll_view.setVisibility(View.VISIBLE);
             for (Button b : class_list) {
                 b.setVisibility(View.VISIBLE);
                 b.setClickable(true);
             }
-            class_scroll_view.setAnimation(fromBottom);
         } else {
             class_switch_button.setAnimation(rotateClose);
+            class_scroll_view.setAnimation(toBottom);
             class_scroll_view.setVisibility(View.INVISIBLE);
             for (Button b : class_list) {
-                b.setVisibility(View.INVISIBLE);
-                b.setClickable(false);
+                if (b.getVisibility() == View.VISIBLE) {
+                    b.setVisibility(View.INVISIBLE);
+                    b.setClickable(false);
+                }
             }
-            class_scroll_view.setAnimation(toBottom);
         }
     }
 
