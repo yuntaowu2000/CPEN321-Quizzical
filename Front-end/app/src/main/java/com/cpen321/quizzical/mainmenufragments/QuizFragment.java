@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.mmf;
+package com.cpen321.quizzical.mainmenufragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,8 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.cpen321.quizzical.qa.CreateQuizActivity;
-import com.cpen321.quizzical.qa.QuizActivity;
+import com.cpen321.quizzical.quizactivities.CreateQuizActivity;
+import com.cpen321.quizzical.quizactivities.QuizActivity;
 import com.cpen321.quizzical.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

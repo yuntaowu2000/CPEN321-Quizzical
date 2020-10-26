@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.mmf;
+package com.cpen321.quizzical.mainmenufragments;
 
 import android.Manifest;
 import android.app.Activity;

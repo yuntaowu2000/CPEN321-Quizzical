@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.utils.bw;
+package com.cpen321.quizzical.utils.buttonwrappers;
 
 import android.widget.ImageButton;
 
