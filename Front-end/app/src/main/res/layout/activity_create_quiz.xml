@@ -12,8 +12,10 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -25,42 +27,71 @@
                 android:orientation="horizontal">
 
                 <TableRow
+                    android:id="@+id/tableRow"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:width="150dp"
-                        android:text="@string/UI_select_course_category_msg" />
+                    android:layout_height="match_parent"
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/textView3"
-                        android:layout_width="200dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:width="200dp"
-                        android:text="@string/UI_select_course_category_msg" />
+                        android:text="@string/UI_select_course_category_msg"
+                        tools:layout_conversion_absoluteHeight="19dp"
+                        tools:layout_conversion_absoluteWidth="200dp" />
+
+                    <Spinner
+                        android:id="@+id/category_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:layout_conversion_absoluteHeight="0dp"
+                        tools:layout_conversion_absoluteWidth="48dp" />
 
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/tableRow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
 
-                    <Spinner
-                        android:id="@+id/category_list"
-                        android:layout_width="200dp"
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_column="0" />
+                        android:width="100dp"
+                        android:text="@string/UI_question"
+                        tools:layout_conversion_absoluteHeight="19dp"
+                        tools:layout_conversion_absoluteWidth="200dp" />
+
+                    <CheckBox
+                        android:id="@+id/question_has_pic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="is pic" />
+
+                    <Button
+                        android:id="@+id/question_input_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Button" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="0dp"
+                    android:layout_height="0dp" />
+
+                <TableRow
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center">
 
                     <ImageButton
                         android:id="@+id/add_question_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_column="1" />
+                        tools:layout_conversion_absoluteHeight="0dp"
+                        tools:layout_conversion_absoluteWidth="24dp" />
                 </TableRow>
 
             </TableLayout>
