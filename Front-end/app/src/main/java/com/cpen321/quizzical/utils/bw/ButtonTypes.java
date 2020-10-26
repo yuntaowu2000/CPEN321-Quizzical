@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.utils.buttonWrappers;
+package com.cpen321.quizzical.utils.bw;
 
 public enum ButtonTypes {
     Text,

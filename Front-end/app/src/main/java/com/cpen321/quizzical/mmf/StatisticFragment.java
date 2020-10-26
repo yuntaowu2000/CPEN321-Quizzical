@@ -1,4 +1,4 @@
-package com.cpen321.quizzical.mainMenuFragments;
+package com.cpen321.quizzical.mmf;
 
 import android.content.Context;
 import android.content.SharedPreferences;
