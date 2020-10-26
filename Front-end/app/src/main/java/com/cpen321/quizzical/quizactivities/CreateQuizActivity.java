@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.data.CourseCategory;
@@ -59,8 +60,22 @@ public class CreateQuizActivity extends AppCompatActivity {
         categoryList.setAdapter(categoryAdapter);
         categoryList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()        {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                currCategory = CourseCategory.Math;
-                String categorySelected = categories[categoryList.getSelectedItemPosition()];
+                int selectedPosition = categoryList.getSelectedItemPosition();
+                switch (selectedPosition) {
+                    case 0:
+                        currCategory = CourseCategory.Math;
+                        break;
+                    case 1:
+                        currCategory = CourseCategory.English;
+                        break;
+                    case 2:
+                        currCategory = CourseCategory.QuantumPhysic;
+                        break;
+                    default:
+                        currCategory = CourseCategory.Math;
+                        break;
+                }
+                Toast.makeText(getBaseContext(), currCategory.toString(), Toast.LENGTH_LONG).show();
             }
             public void onNothingSelected(AdapterView<?> parent) {
             }

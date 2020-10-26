@@ -50,7 +50,7 @@
                 </TableRow>
 
                 <TableRow
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center">
 
@@ -73,7 +73,7 @@
                         android:id="@+id/question_input_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Button" />
+                        android:text="Create" />
 
                 </TableRow>
 
@@ -91,7 +91,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:layout_conversion_absoluteHeight="0dp"
-                        tools:layout_conversion_absoluteWidth="24dp" />
+                        tools:layout_conversion_absoluteWidth="24dp"
+                        android:src="@drawable/ic_baseline_add_24"/>
                 </TableRow>
 
             </TableLayout>
