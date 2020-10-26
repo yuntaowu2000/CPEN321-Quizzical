@@ -91,9 +91,9 @@ public class QuizActivity extends AppCompatActivity {
         questions = new ArrayList<>();
         TestQuestionPackage testPackage = new TestQuestionPackage();
 
-        quizId = testPackage.GetPackage().getId();
+        quizId = testPackage.getPackage().getId();
 
-        questions = testPackage.GetPackage().getQuestionsByCategory(CourseCategory.Math, totalQuestionNum);
+        questions = testPackage.getPackage().getQuestionsByCategory(CourseCategory.Math, totalQuestionNum);
         totalPageNum = questions.size();
 
         correctNumber = 0;

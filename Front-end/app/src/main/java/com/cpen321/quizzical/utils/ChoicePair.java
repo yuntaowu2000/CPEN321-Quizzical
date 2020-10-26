@@ -27,8 +27,8 @@ public class ChoicePair {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChoicePair that = (ChoicePair) o;
-        return isPic == that.isPic &&
-                str.equals(that.str);
+        return isPic() == that.isPic() &&
+                getStr().equals(that.getStr());
     }
 
 }

@@ -314,12 +314,12 @@ public class InitActivity extends AppCompatActivity {
         emailInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                /* not used*/
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                /* not used*/
             }
 
             @Override
@@ -379,6 +379,7 @@ public class InitActivity extends AppCompatActivity {
             jsonObject.addProperty(getString(R.string.IS_INSTRUCTOR), is_instructor);
             jsonObject.addProperty(getString(R.string.USER_QUIZ_COUNT), 0);
             jsonObject.addProperty(getString(R.string.EXP), 0);
+            jsonObject.addProperty(getString(R.string.PROFILE_IMG), sp.getString(getString(R.string.PROFILE_IMG), ""));
         } catch (Exception e) {
             Log.d("parse credential", "failed");
         }

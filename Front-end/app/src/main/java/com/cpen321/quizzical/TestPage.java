@@ -24,8 +24,8 @@ import java.util.List;
 
 public class TestPage extends AppCompatActivity {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    LinearLayout linearLayout;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private LinearLayout linearLayout;
     private Button picButton;
     private Button ContinueButton;
     private Button uploadButton;

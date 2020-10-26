@@ -52,7 +52,7 @@ public class TestQuestionPackage {
 
     }
 
-    public QuestionPackage GetPackage() {
+    public QuestionPackage getPackage() {
         return this.questionPackage;
     }
 }
