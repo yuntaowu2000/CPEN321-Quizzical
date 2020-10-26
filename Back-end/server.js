@@ -45,7 +45,7 @@ app.post("/data", function (req, res) {
   console.log("Type: " + obj.type);
     
   // case for user credential, login
-  if (obj.type == "user credential") {
+  if (obj.type == "user info") {
     var field_Data; // (data field of obj) should have fields: username, Email, IS_INSTRUCTOR.
     try
     {
