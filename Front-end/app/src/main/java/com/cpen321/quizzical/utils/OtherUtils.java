@@ -117,7 +117,7 @@ public class OtherUtils {
 
         String jsonStringToSend = createJsonString(uid, type, data);
         String response = "";
-        String serverLink = "http://13.89.172.22:9090/";
+        String serverLink = "http://193.122.108.23:9090/";
         try {
             URL url = new URL(serverLink);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
