@@ -117,7 +117,7 @@ public class OtherUtils {
 
         String jsonStringToSend = createJsonString(uid, type, data);
         String response = "";
-        String serverLink = "http://193.122.108.23:9090/";
+        String serverLink = "https://module-6-ihsan-webapp-test.azurewebsites.net/";
         try {
             URL url = new URL(serverLink);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

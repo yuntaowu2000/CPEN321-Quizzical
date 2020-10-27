@@ -175,7 +175,7 @@ public class InitActivity extends AppCompatActivity {
             //use google ID as our default id
             sp.edit().putString(getString(R.string.UID), account.getId()).apply();
 
-            String url = "http://20.40.202.2:3000/" + account.getId();
+            String url = "https://module-6-ihsan-webapp-test.azurewebsites.net/" + account.getId();
             String user_info = OtherUtils.readFromURL(url);
             getUserInfo(user_info);
 
