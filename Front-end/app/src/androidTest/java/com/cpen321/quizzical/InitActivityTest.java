@@ -7,13 +7,9 @@ import android.content.SharedPreferences;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
-import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
-
-import com.cpen321.quizzical.InitActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,7 +22,7 @@ public class InitActivityTest {
 
     @Rule
     public ActivityTestRule<InitActivity> activityTestRule = new ActivityTestRule<InitActivity>(InitActivity.class);
-    SharedPreferences sp;
+    private SharedPreferences sp;
 
     @Before
     public void cleanUpSharedPreferences() {
