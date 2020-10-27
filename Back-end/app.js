@@ -44,12 +44,11 @@ MongoClient.connect(
   process.env.MONGODB_URI, 
   { useUnifiedTopology: true },
   (err, client) => {
-  db = client.db("data");
-  var server = app.listen(4000, function() {
-    var port = server.address().port;
-    console.log("Listening at %s", port);
-  });  
-});
+    db = client.db("data");
+    var server = http.createServer().listen(4000)
+    console.log("MongoDB client listening at 4000");
+  }
+);  
 
 
 /*
