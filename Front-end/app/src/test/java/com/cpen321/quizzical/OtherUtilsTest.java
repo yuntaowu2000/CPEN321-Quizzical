@@ -1,12 +1,12 @@
 package com.cpen321.quizzical;
 
-import android.graphics.Bitmap;
+//import android.graphics.Bitmap;
 
 import com.cpen321.quizzical.utils.OtherUtils;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
