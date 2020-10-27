@@ -56,7 +56,7 @@ app.post("/data", function (req, res) {
   db.collection("data").insertOne(
     { uid: req.body.uid, type: req.body.type, data: req.body.data }, 
     (err, request) => {
-      console.log(request);
+      console.log("Error handler in db.collection.insertOne (line 59) reached with request = " + request);
       if (err) return console.log(err); 
       res.send("saved\n"); 
     }
@@ -65,9 +65,9 @@ app.post("/data", function (req, res) {
   //print the values in the console
   //data is in utf-8 format hexadecimals
   //JSON.parse parses the data into human readable strings
-  console.log(req.body.data)
+  console.log("Line 68 reached with req.body.data = " + req.body.data);
   var str = req.body.data.join("");
-  console.log(str);
+  console.log("Line 70 reached with str = " + str);
   var obj;
   try
   {
