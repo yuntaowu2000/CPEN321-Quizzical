@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -21,11 +22,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cpen321.quizzical.R;
+import com.cpen321.quizzical.TestPage;
 import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.utils.ChoicePair;
 import com.cpen321.quizzical.utils.QuestionPackage;
 import com.google.gson.JsonObject;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class CreateQuizActivity extends AppCompatActivity {
@@ -37,6 +40,7 @@ public class CreateQuizActivity extends AppCompatActivity {
     private Button questionInputButton;
     private String[] categories;
 
+    private ImageButton takePictureButton;
     private QuestionPackage questionPackage;
 
     private CourseCategory currCategory;
@@ -72,7 +76,7 @@ public class CreateQuizActivity extends AppCompatActivity {
                         currCategory = CourseCategory.QuantumPhysic;
                         break;
                     default:
-                        currCategory = CourseCategory.Math;
+                        currCategory = CourseCategory.Misc;
                         break;
                 }
                 Toast.makeText(getBaseContext(), currCategory.toString(), Toast.LENGTH_LONG).show();
@@ -86,9 +90,16 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         questionInputButton = findViewById(R.id.question_input_button);
         questionInputButton.setOnClickListener(v -> getQuestionInput());
+
+        takePictureButton = findViewById(R.id.take_picture_button);
+        takePictureButton.setOnClickListener(v -> {
+            Intent takePictureIntent = new Intent(this, TestPage.class);
+            startActivity(takePictureIntent);});
+
     }
 
     private void getQuestionInput() {
+        //Todo: use a certain stackoverflow post to fix this layout.
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(10, 5, 10, 5);
         LinearLayout layout = new LinearLayout(this);
@@ -139,9 +150,12 @@ public class CreateQuizActivity extends AppCompatActivity {
     private void addQuestionToList() {
         JsonObject jsonObject = new JsonObject();
         try {
+            currChoices= Arrays.asList(new ChoicePair(false, "$$2$$"), new ChoicePair(false, "$$3$$"));
+            currCorrectAnsNum = 1;
             questionPackage.addMCQuestion(currCategory, currQuestion, currHasPic, currPicSrc, currChoices, currCorrectAnsNum);
         } catch (Exception e) {
             Log.d("add question failed", "failed");
+            Log.d(e.getMessage(),"except");
         }
     }
 /*
