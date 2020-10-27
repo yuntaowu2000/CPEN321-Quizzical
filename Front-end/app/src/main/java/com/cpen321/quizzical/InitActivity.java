@@ -175,7 +175,8 @@ public class InitActivity extends AppCompatActivity {
             //use google ID as our default id
             sp.edit().putString(getString(R.string.UID), account.getId()).apply();
 
-            String url = "http://20.40.202.2:3000/" + account.getId();
+
+            String url = "http://13.89.172.22:9090/" + account.getId();
             String user_info = OtherUtils.readFromURL(url);
             getUserInfo(user_info);
 
