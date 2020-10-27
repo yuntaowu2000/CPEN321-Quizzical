@@ -57,7 +57,7 @@
     <string name="UI_server_failure_msg">Failed to connect to the server</string>
 
     <!--    for integrating Google login API-->
-    <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
+    <string name="client_id" translatable="false">614503168151-hvg3r35tmfsqldrd32h25a9kb9inmvdv.apps.googleusercontent.com</string>
 
     <!--    used for debugging page, can be deleted later-->
     <string name="test">Test</string>
