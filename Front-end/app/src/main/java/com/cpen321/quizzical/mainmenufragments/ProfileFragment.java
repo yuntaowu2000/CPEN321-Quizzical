@@ -97,12 +97,29 @@ public class ProfileFragment extends Fragment {
 
         sp.registerOnSharedPreferenceChangeListener(quizNumAndExpChangeListener);
 
-        String encodedProfileImg = sp.getString(getString(R.string.PROFILE_IMG), "");
-        if (!OtherUtils.stringIsNullOrEmpty(encodedProfileImg)) {
-            Bitmap profileImg = OtherUtils.decodeImage(encodedProfileImg);
-            profileImg = OtherUtils.scaleImage(profileImg);
-            profileImageButton.setImageBitmap(profileImg);
-        }
+        new Thread(()-> {
+            //try getting the profile image from the server
+            Bitmap profileImg = null;
+            String url = "http://193.122.108.23:7070/" + sp.getString(getString(R.string.UID), "") + "/" + getString(R.string.PROFILE_IMG);
+            String img = OtherUtils.readFromURL(url);
+            if (!OtherUtils.stringIsNullOrEmpty(img)) {
+                sp.edit().putString(getString(R.string.PROFILE_IMG), img).apply();
+                profileImg = OtherUtils.decodeImage(img);
+            } else {
+                //try getting the profile image from local cache
+                String encodedProfileImg = sp.getString(getString(R.string.PROFILE_IMG), "");
+                if (!OtherUtils.stringIsNullOrEmpty(encodedProfileImg)) {
+                    profileImg = OtherUtils.decodeImage(encodedProfileImg);
+                }
+
+            }
+
+            if (profileImg != null) {
+                profileImg = OtherUtils.scaleImage(profileImg);
+                final Bitmap finalBitmap = profileImg;
+                Objects.requireNonNull(getActivity()).runOnUiThread(()->profileImageButton.setImageBitmap(finalBitmap));
+            }
+        }).start();
     }
 
     private void logOut() {
@@ -116,6 +133,7 @@ public class ProfileFragment extends Fragment {
         sp.edit().remove(getString(R.string.CLASS_CODE)).apply();
         sp.edit().remove(getString(R.string.EXP)).apply();
         sp.edit().remove(getString(R.string.USER_QUIZ_COUNT)).apply();
+        sp.edit().clear().apply();
 
         if (quizNumAndExpChangeListener != null)
             sp.unregisterOnSharedPreferenceChangeListener(quizNumAndExpChangeListener);
