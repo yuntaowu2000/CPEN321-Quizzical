@@ -14,7 +14,7 @@
     <string name="UID" translatable="false">user id</string>
     <string name="USERNAME" translatable="false">username</string>
     <string name="EMAIL" translatable="false">Email</string>
-    <string name="PROFILE_IMG" translatable="false">Profile Image</string>
+    <string name="PROFILE_IMG" translatable="false">Profile_Image</string>
     <string name="EXP" translatable="false">EXP</string>
     <string name="USER_QUIZ_COUNT" translatable="false">user quiz count</string>
 
@@ -24,7 +24,7 @@
 
     <string name="IS_INSTRUCTOR" translatable="false">IS_INSTRUCTOR</string>
 
-    <string name="CLASS_CODE" translatable="false">class code</string>
+    <string name="CLASS_CODE" translatable="false">class_code</string>
 
     <string name="COURSE_CATEGORY" translatable="false">course category</string>
 
