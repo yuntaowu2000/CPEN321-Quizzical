@@ -208,6 +208,7 @@ public class InitActivity extends AppCompatActivity {
         boolean is_instructor = false;
         int user_quiz_count = 0;
         int EXP = 0;
+        int curr_class_code = 0;
         try {
             final JsonElement jsonElement = JsonParser.parseString(userInfoJson);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
@@ -216,6 +217,7 @@ public class InitActivity extends AppCompatActivity {
             is_instructor = jsonObject.get(getString(R.string.IS_INSTRUCTOR)).getAsBoolean();
             user_quiz_count = jsonObject.get(getString(R.string.USER_QUIZ_COUNT)).getAsInt();
             EXP = jsonObject.get(getString(R.string.EXP)).getAsInt();
+            curr_class_code = jsonObject.get(getString(R.string.CLASS_CODE)).getAsInt();
         } catch (Exception e) {
             Log.d("parse user info", "failed " + e.getMessage());
         }
@@ -225,6 +227,7 @@ public class InitActivity extends AppCompatActivity {
         sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), is_instructor).apply();
         sp.edit().putInt(getString(R.string.USER_QUIZ_COUNT), user_quiz_count).apply();
         sp.edit().putInt(getString(R.string.EXP), EXP).apply();
+        sp.edit().putInt(getString(R.string.CLASS_CODE), curr_class_code).apply();
     }
 
     private void requestUserNameAndEmail() {
