@@ -86,7 +86,7 @@ app.post("/data", function (req, res) {
  
 app.get("/data", (req, res) => {
   db.collection("data")
-    .find()
+    .find({ uid: { $eq: req.body.uid } )
     .toArray((err, result) => {
       res.send(result);
     });
