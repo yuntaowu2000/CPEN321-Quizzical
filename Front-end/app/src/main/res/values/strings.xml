@@ -78,6 +78,8 @@
 
     <string name="UI_is_instructor_msg">Are you an instructor?</string>
 
+    <string name="UI_require_valid_username_email_msg">Please enter valid username and email</string>
+
     <!--    used for home activity-->
     <string name="UI_quizzes">Quizzes</string>
     <string name="UI_class_statistics">Class Statistics</string>

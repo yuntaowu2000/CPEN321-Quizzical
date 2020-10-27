@@ -366,7 +366,7 @@ public class InitActivity extends AppCompatActivity {
 
             goToHomeActivity();
         } else {
-            Toast.makeText(this, "Please enter valid username and email", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.UI_require_valid_username_email_msg, Toast.LENGTH_LONG).show();
         }
     }
 
