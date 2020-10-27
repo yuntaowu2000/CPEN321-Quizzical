@@ -40,7 +40,7 @@ app.use(function(err, req, res, next) {
 });
 
 MongoClient.connect(
-  "mongodb://localhost:27017", 
+  process.env.MONGODB_URI, 
   { useUnifiedTopology: true },
   (err, client) => {
   db = client.db("data");

@@ -62,3 +62,4 @@ typings/
 
 .deployment
 .vscode/
+config/
