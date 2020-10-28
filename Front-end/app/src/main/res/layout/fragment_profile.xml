@@ -66,6 +66,20 @@
                     android:contentDescription="@string/UI_change_email"
                     android:src="@drawable/ic_baseline_edit_24" />
             </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:text="Push notification"
+                    android:textSize="15sp"
+                    android:layout_gravity="center" />
+
+                <CheckBox
+                    android:layout_height="wrap_content"
+                    android:id="@+id/notification_set" />
+            </TableRow>
         </TableLayout>
 
         <TableLayout
