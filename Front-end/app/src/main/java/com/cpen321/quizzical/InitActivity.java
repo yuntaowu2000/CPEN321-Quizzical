@@ -175,7 +175,7 @@ public class InitActivity extends AppCompatActivity {
             //use google ID as our default id
             sp.edit().putString(getString(R.string.UID), account.getId()).apply();
 
-            String url = "https://module-6-ihsan-webapp-test.azurewebsites.net/" + account.getId();
+            String url = "http://193.122.108.23:7070/" + account.getId();
             String user_info = OtherUtils.readFromURL(url);
             getUserInfo(user_info);
 
@@ -206,12 +206,18 @@ public class InitActivity extends AppCompatActivity {
         String username = "";
         String email = "";
         boolean is_instructor = false;
+        int user_quiz_count = 0;
+        int EXP = 0;
+        int curr_class_code = 0;
         try {
             final JsonElement jsonElement = JsonParser.parseString(userInfoJson);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             username = jsonObject.get(getString(R.string.USERNAME)).getAsString();
             email = jsonObject.get(getString(R.string.EMAIL)).getAsString();
             is_instructor = jsonObject.get(getString(R.string.IS_INSTRUCTOR)).getAsBoolean();
+            user_quiz_count = jsonObject.get(getString(R.string.USER_QUIZ_COUNT)).getAsInt();
+            EXP = jsonObject.get(getString(R.string.EXP)).getAsInt();
+            curr_class_code = jsonObject.get(getString(R.string.CLASS_CODE)).getAsInt();
         } catch (Exception e) {
             Log.d("parse user info", "failed " + e.getMessage());
         }
@@ -219,6 +225,9 @@ public class InitActivity extends AppCompatActivity {
         sp.edit().putString(getString(R.string.USERNAME), username).apply();
         sp.edit().putString(getString(R.string.EMAIL), email).apply();
         sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), is_instructor).apply();
+        sp.edit().putInt(getString(R.string.USER_QUIZ_COUNT), user_quiz_count).apply();
+        sp.edit().putInt(getString(R.string.EXP), EXP).apply();
+        sp.edit().putInt(getString(R.string.CLASS_CODE), curr_class_code).apply();
     }
 
     private void requestUserNameAndEmail() {
@@ -366,7 +375,7 @@ public class InitActivity extends AppCompatActivity {
 
             goToHomeActivity();
         } else {
-            Toast.makeText(this, "Please enter valid username and email", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.UI_require_valid_username_email_msg, Toast.LENGTH_LONG).show();
         }
     }
 

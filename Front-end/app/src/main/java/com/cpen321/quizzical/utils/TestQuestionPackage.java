@@ -29,7 +29,7 @@ public class TestQuestionPackage {
         }
 
         choicePairList = new ArrayList<>();
-        choicePairList.add(new ChoicePair(false, "$$2$$"));
+        choicePairList.add(new ChoicePair(false, "<p align=\"middle\">2</p>"));
         choicePairList.add(new ChoicePair(false, "$$3$$"));
         choicePairList.add(new ChoicePair(false, "<p align=\"middle\">plain text</p>"));
         choicePairList.add(new ChoicePair(false, "<p align=\"middle\">$5$ with some text</p>"));

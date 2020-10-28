@@ -313,7 +313,11 @@ public class HomeActivity extends AppCompatActivity {
         if (OtherUtils.stringIsNullOrEmpty(responseMsg)) {
             return 0;
         }
-        return Integer.parseInt(responseMsg);
+        try {
+            return Integer.parseInt(responseMsg);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     private void appendNewClassToList(int class_code) {
