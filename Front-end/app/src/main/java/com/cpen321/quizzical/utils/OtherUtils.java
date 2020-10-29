@@ -133,9 +133,9 @@ public class OtherUtils {
 
             response = conn.getResponseMessage();
             conn.disconnect();
-            Log.d("HTTP POST", "response msg: " + response);
+            Log.d("HTTP_POST", "response msg: " + response);
         } catch (Exception e) {
-            Log.d("error message", "" + e.getMessage());
+            Log.d("error_message", "" + e.getMessage());
         }
         return response;
     }
@@ -147,7 +147,7 @@ public class OtherUtils {
             jsonObject.addProperty("type", type);
             jsonObject.addProperty("data", data);
         } catch (Exception e) {
-            Log.d("other utils", "create json object failed");
+            Log.d("other_utils", "create json object failed");
         }
         Log.d("other util", "create success: " + jsonObject.toString());
         return jsonObject.toString();
@@ -159,7 +159,6 @@ public class OtherUtils {
      * may also be used for downloading user profile image
      * */
     public static Bitmap getBitmapFromUrl(String urlLink) {
-
         try {
             URL url = new URL(urlLink);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -181,14 +180,14 @@ public class OtherUtils {
      */
     public static String readFromURL(String urlLink) {
         String result = "";
-        Log.d("html get", "trying to get from: " + urlLink);
+        Log.d("html_get", "trying to get from: " + urlLink);
         try {
             URL url = new URL(urlLink);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(1000);
             conn.connect();
-            Log.d("html get", "server connected");
+            Log.d("html_get", "server connected");
             InputStream is = conn.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"));
             StringBuilder stb = new StringBuilder();
@@ -198,10 +197,10 @@ public class OtherUtils {
             }
             result = stb.toString();
             conn.disconnect();
-            Log.d("html get", "result: " + result);
+            Log.d("html_get", "result: " + result);
         } catch (Exception e) {
             String eMessage = e.getMessage() + "";
-            Log.d("html exception", eMessage);
+            Log.d("html_exception", eMessage);
         }
         return result;
     }

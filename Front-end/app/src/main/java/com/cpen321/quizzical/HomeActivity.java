@@ -304,7 +304,7 @@ public class HomeActivity extends AppCompatActivity {
             jsonObject.addProperty(getString(R.string.GRADE_LEVEL), grade_level);
             jsonObject.addProperty(getString(R.string.CLASS_NAME), class_name);
         } catch (Exception e) {
-            Log.d("parse result failed", e.getMessage() + "");
+            Log.d("parse_failed", e.getMessage() + "");
         }
         return jsonObject.toString();
     }

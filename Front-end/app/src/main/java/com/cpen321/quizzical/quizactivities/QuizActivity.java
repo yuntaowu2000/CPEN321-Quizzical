@@ -320,7 +320,7 @@ public class QuizActivity extends AppCompatActivity {
         try {
             generatePage();
         } catch (Exception e) {
-            Log.d("Generate page error", "not implemented");
+            Log.d("Generate_page_error", "not implemented");
         }
     }
 
@@ -364,7 +364,7 @@ public class QuizActivity extends AppCompatActivity {
                 jsonObject.addProperty(getString(R.string.wrong_question_ids), jsonForList);
 
         } catch (Exception e) {
-            Log.d("parse result failed", e.getMessage() + "");
+            Log.d("parse_result_failed", e.getMessage() + "");
         }
         return jsonObject.toString();
     }
