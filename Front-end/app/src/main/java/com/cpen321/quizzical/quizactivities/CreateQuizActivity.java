@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,21 +29,30 @@ import com.cpen321.quizzical.utils.ChoicePair;
 import com.cpen321.quizzical.utils.QuestionPackage;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.cpen321.quizzical.utils.OtherUtils.getBitmapFromUrl;
 
 public class CreateQuizActivity extends AppCompatActivity {
 
     private LinearLayout questionCreateLayout;
-    private ImageButton addQuestionButton;
-    private List<String> questionList;
-    private Spinner categoryList;
-    private CheckBox questionHasPic;
-    private Button answerInputButton;
-    private String[] categories;
 
+    private Spinner categoryList;
+
+    private EditText questionInput;
+
+    private CheckBox questionHasPic;
     private ImageButton takePictureButton;
+
+    private LinearLayout answersLayout;
+
+    private Button answerInputButton;
+
+    private ImageButton addQuestionButton;
+
+    private List<String> questionList;
     private QuestionPackage questionPackage;
 
     private CourseCategory currCategory;
@@ -59,11 +69,8 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         questionCreateLayout = findViewById(R.id.question_create_layout);
 
-        addQuestionButton = findViewById(R.id.add_question_button);
-        addQuestionButton.setOnClickListener(v -> {addQuestionToList();});
-
         categoryList = findViewById(R.id.category_list);
-        categories = getResources().getStringArray(R.array.course_category_array);
+        String[] categories = getResources().getStringArray(R.array.course_category_array);
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, categories);
         categoryList.setAdapter(categoryAdapter);
         categoryList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()        {
@@ -89,29 +96,41 @@ public class CreateQuizActivity extends AppCompatActivity {
             }
         });
 
+        questionInput = findViewById(R.id.question_input);
+        questionInput.setOnClickListener(v -> currQuestion = questionInput.getText().toString());
+
         questionHasPic = findViewById(R.id.question_has_pic);
         questionHasPic.setOnClickListener(v -> currHasPic = questionHasPic.isChecked());
-
-        answerInputButton = findViewById(R.id.answer_input_button);
-        answerInputButton.setOnClickListener(v -> addNewAnswer());
 
         takePictureButton = findViewById(R.id.take_picture_button);
         takePictureButton.setOnClickListener(v -> {
             Intent takePictureIntent = new Intent(this, TestPage.class);
             startActivity(takePictureIntent);});
 
+        answersLayout = findViewById(R.id.answers_layout);
 
+        answerInputButton = findViewById(R.id.answer_input_button);
+        answerInputButton.setOnClickListener(v -> addNewAnswer());
 
+        addQuestionButton = findViewById(R.id.add_question_button);
+        addQuestionButton.setOnClickListener(v -> {addQuestionToList();});
+
+        currCategory = CourseCategory.Misc;
+        currQuestion = "";
+        currHasPic = false;
+        currPicSrc = "";
+        currChoices = new ArrayList<>();
+        currCorrectAnsNum = 0;
     }
 
     private void addNewAnswer() {
         //Todo: use a certain stackoverflow post to fix this layout.
         String answer = "";
-        String pic = "";
+        String pic = "https://raw.githubusercontent.com/yuntaowu2000/testUploadModels/master/006.png"; // some default picture
         final boolean[] isPic = {false};
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(10, 5, 10, 5);
+        final LinearLayout.LayoutParams[] layoutParams = {new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)};
+        layoutParams[0].setMargins(10, 5, 10, 5);
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -119,10 +138,10 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         TextView answerText = new TextView(this);
         answerText.setText("Enter answer");
-        answerText.setLayoutParams(layoutParams);
+        answerText.setLayoutParams(layoutParams[0]);
 
         EditText answerInput = new EditText(this);
-        answerInput.setLayoutParams(layoutParams);
+        answerInput.setLayoutParams(layoutParams[0]);
         answerInput.setHint("What is 1+1");
         answerInput.setInputType(InputType.TYPE_CLASS_TEXT);
         answerInput.setText(answer);
@@ -130,18 +149,18 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         ImageButton answerPic = new ImageButton(this);
         answerPic.setImageResource(android.R.drawable.ic_menu_camera);
+        answerPic.setVisibility(View.GONE);
         answerPic.setOnClickListener(v -> {
             Intent takePictureIntent = new Intent(this, TestPage.class);
             startActivity(takePictureIntent);});
 
-        CheckBox checkBox = findViewById(R.id.question_has_pic);
-        checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isPic[0] = checkBox.isChecked();
-                answerPic.setVisibility(checkBox.isChecked()?View.GONE:View.VISIBLE);
-                answerInput.setVisibility(checkBox.isChecked()?View.VISIBLE:View.GONE);
-            }
+        CheckBox checkBox = new CheckBox(this);
+        checkBox.setChecked(false);
+        checkBox.setText("Picture ");
+        checkBox.setOnClickListener(v -> {
+            isPic[0] = checkBox.isChecked();
+            answerInput.setVisibility(checkBox.isChecked()?View.GONE:View.VISIBLE);
+            answerPic.setVisibility(checkBox.isChecked()?View.VISIBLE:View.GONE);
         });
 
         layout.addView(answerText);
@@ -149,16 +168,58 @@ public class CreateQuizActivity extends AppCompatActivity {
         layout.addView(answerInput);
         layout.addView(answerPic);
 
+        //answersLayout.addView(layout);
+
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle("Question input")
                 .setView(layout)
                 .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> dialogInterface.dismiss()));
+        // add cancel
+
+        ChoicePair newAnswer = new ChoicePair(isPic[0], isPic[0]?pic:answer);
 
         final AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
 
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v ->
-        {
-            currQuestion = answerInput.getText().toString();
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
+            Log.d("Hi_op", ""+newAnswer.isPic());
+            currChoices.add(newAnswer);
+
+            layoutParams[0] = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            LinearLayout row = new LinearLayout(this);
+            row.setLayoutParams(layoutParams[0]);
+            // I want a (index num textview?), checkbox for correct, textview or imageview, edit button, delete
+            //edit opens dialog box, everything filled in
+            CheckBox isCorrect = new CheckBox(this);
+            isCorrect.setLayoutParams(layoutParams[0]);
+            isCorrect.setChecked(currChoices.indexOf(newAnswer) == currCorrectAnsNum);
+            isCorrect.setEnabled(currChoices.indexOf(newAnswer) != currCorrectAnsNum);
+            // if checked, uncheck all other checkbox, else do nothing.
+            isCorrect.setOnClickListener(u -> {
+                if (isCorrect.isChecked()) {
+                    ArrayList<View> focusableViews = answersLayout.getFocusables(View.FOCUS_FORWARD);
+                    for (View actualView : focusableViews) {
+                        if (actualView instanceof LinearLayout) {
+                            ArrayList<View> innerFocusableViews = actualView.getFocusables(View.FOCUS_FORWARD);
+                            for (View innerActualView : innerFocusableViews) {
+                                if (innerActualView instanceof CheckBox) {
+                                    ((CheckBox) innerActualView).setChecked(false);
+                                }
+                            }
+                        }
+                    }
+                    isCorrect.setChecked(true);
+                }
+            });
+
+            View answerContent;
+            if (isPic[0]) {
+                answerContent = new ImageView(this);
+                ((ImageView) answerContent).setImageBitmap(getBitmapFromUrl(pic));
+            } else {
+                answerContent = new TextView(this);
+                ((TextView) answerContent).setText(answer);
+            }
             alertDialog.dismiss();
         });
         // create new row here
