@@ -1,5 +1,5 @@
 {
-  "name": "back-end",
+  "name": "quizzicalserver",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -9,10 +9,10 @@
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
-    "http": "0.0.1-security",
-    "http-errors": "^1.6.3",
+    "fs": "0.0.1-security",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
     "mongodb": "^3.6.2",
-    "morgan": "~1.9.1",
-    "pug": "2.0.0-beta11"
+    "morgan": "~1.9.1"
   }
 }
