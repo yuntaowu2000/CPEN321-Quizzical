@@ -1,5 +1,7 @@
 <resources>
     <!--    general usage-->
+    <string name="GET_URL" translatable="false">http://193.122.108.23:7070/</string>
+
     <string name="app_name" translatable="false">quizzical</string>
     <string name="YES">yes</string>
     <string name="NO">no</string>
@@ -17,6 +19,8 @@
     <string name="PROFILE_IMG" translatable="false">Profile_Image</string>
     <string name="EXP" translatable="false">EXP</string>
     <string name="USER_QUIZ_COUNT" translatable="false">user quiz count</string>
+    <string name="FIREBASE_TOKEN" translatable="false">Firebase_token</string>
+    <string name="NOTIFICATION_FREQ" translatable="false">notification_frequency</string>
 
     <string name="TRUE" translatable="false">True</string>
     <string name="FALSE" translatable="false">False</string>
@@ -57,7 +61,7 @@
     <string name="UI_server_failure_msg">Failed to connect to the server</string>
 
     <!--    for integrating Google login API-->
-    <string name="client_id" translatable="false">614503168151-hvg3r35tmfsqldrd32h25a9kb9inmvdv.apps.googleusercontent.com</string>
+    <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
 
     <!--    used for debugging page, can be deleted later-->
     <string name="test">Test</string>
@@ -127,6 +131,14 @@
     <string name="UI_course_taken">Course taken:</string>
     <string name="UI_course_created">Course created:</string>
     <string name="UI_log_out">Log out</string>
+    <string name="UI_push_notification">Push notification</string>
+
+    <string-array name="notification_frequency">
+        <item>Never</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
 
     <!--    used in quiz activity-->
     <string name="UI_error_generating_quiz_page_msg">An error occurred, press next to continue</string>
@@ -163,5 +175,6 @@
     <string name="UI_crop">Crop</string>
     <string name="UI_rotate">Rotate 90</string>
     <string name="image" translatable="false">Image</string>
+
 
 </resources>
