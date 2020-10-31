@@ -17,43 +17,33 @@ MongoClient.connect(
   }
 );
 
+router.use(express.json());
+
 router.post('/', (req, res, next) => {
-  let data = [];
-  req.on('data', chunk => {
-    data.push(chunk);
-    console.log('Pushed this chunk: ' + chunk);
-  });
-  req.on('end', () => {
-    let str = data.join('');
-    let obj;
-    try {
-      obj = JSON.parse(str);
-    } catch (ex) {
-      obj = JSON.parse(str.replace(' ', ''));
+  console.log('Data: ' + req.body);
+  console.log('UID: ' + req.body.uid);
+  console.log('Type: ' + req.body.type);
+
+  db.collection('testCollection').insertOne(req.body, (err, res) => {
+    if (err) {
+      console.log(err);
     }
-
-    console.log('UID: ' + obj.uid);
-    console.log('Type: ' + obj.type);
-
-    db.collection('testCollection').insertOne(obj, (err, res) => {
-      if (err) {
-	console.log(err);
-      }
-    });
-
-    db.collection('testCollection').find().toArray((err, items) => {});
-
-    if (obj.type === 'Profile Image') {
-      fs.writeFileSync(obj.uid + '_profile_img.jpg', obj.data, {encoding: 'base64'});
-      console.log(obj.type);
-    } else {
-      fs.writeFileSync(obj.uid + '_' + obj.type + '.txt', obj.data);
-      console.log(obj.type);
-    }
-
-    res.statusCode = 200;
-    res.end();
   });
+
+  db.collection('testCollection').find().toArray((err, items) => {});
+
+  if (req.body.type == 'Profile_Image') {
+    fs.writeFileSync(req.body.uid + '_profile_img.jpg', req.body.data, {encoding: 'base64'});
+  } else {
+    fs.writeFileSync(req.body.uid + '_' + req.body.type + '.txt', req.body.data);
+  }
+
+  res.statusCode = 200;
+  res.end();
+});
+
+router.get('/', (req, res, next) => {
+  res.send('Upload page');
 });
 
 module.exports = router;
