@@ -35,6 +35,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import katex.hourglass.in.mathlib.MathView;
 
@@ -153,6 +154,14 @@ public class QuizActivity extends AppCompatActivity {
 
         correctChoice = buttonsList.get(q.getCorrectAnsNum() - 1);
         correctChoice.setButtonId(-100);
+
+        //set a random wrong answer for testing use
+        Random random = new Random();
+        int buttonNum = 0;
+        while (q.getCorrectAnsNum() - 1 == buttonNum) {
+            buttonNum = random.nextInt(choices.size());
+        }
+        buttonsList.get(buttonNum).setButtonId(-98);
 
         Collections.shuffle(buttonsList);
 

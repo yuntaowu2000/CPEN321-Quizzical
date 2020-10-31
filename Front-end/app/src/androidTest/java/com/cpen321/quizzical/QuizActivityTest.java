@@ -39,7 +39,7 @@ public class QuizActivityTest {
         Espresso.onView(ViewMatchers.withText("Please answer the question before submission."))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
-    
+
     @Test
     public void testResponseAllCorrect() {
 
@@ -61,5 +61,32 @@ public class QuizActivityTest {
         if (!is_instructor)
             Espresso.onView(ViewMatchers.withId(R.id.quiz_finished_page_exp_earned))
                     .check(ViewAssertions.matches(ViewMatchers.withText("You got 15 EXP!")));
+    }
+
+    @Test
+    public void testResponseOneWrong() {
+
+        //first question wrong answer
+        Espresso.onView(ViewMatchers.withId(-98)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withText(R.string.UI_submit)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withText("You are wrong. You got 0/3 correct."))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withText(R.string.UI_next)).perform(ViewActions.click());
+
+        for (int i = 0; i < 2; i++) {
+            Espresso.onView(ViewMatchers.withId(-100)).perform(ViewActions.click());
+            Espresso.onView(ViewMatchers.withText(R.string.UI_submit)).perform(ViewActions.click());
+            Espresso.onView(ViewMatchers.withText(String.format("You are correct. You got %d/%d correct.", i + 1, 3)))
+                    .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+            if (i != 1) {
+                Espresso.onView(ViewMatchers.withText(R.string.UI_next)).perform(ViewActions.click());
+            } else {
+                Espresso.onView(ViewMatchers.withText(R.string.UI_finish)).perform(ViewActions.click());
+            }
+        }
+
+        Espresso.onView(ViewMatchers.withId(R.id.quiz_finished_page_response))
+                .check(ViewAssertions.matches(ViewMatchers.withText("You got 2/3 correct. Great work!")));
+
     }
 }
