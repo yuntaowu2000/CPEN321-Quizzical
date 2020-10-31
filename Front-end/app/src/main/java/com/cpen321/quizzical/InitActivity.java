@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -68,6 +69,8 @@ public class InitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
 
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+
         layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 120);
         layoutParams.setMargins(30, 10, 30, 0);
 
@@ -113,6 +116,7 @@ public class InitActivity extends AppCompatActivity {
                 }
                 String token = task.getResult();
                 Log.d("Token", token);
+                sp.edit().putString(getString(R.string.FIREBASE_TOKEN), token).apply();
                 Toast.makeText(InitActivity.this, "Fire base token: " + token, Toast.LENGTH_LONG).show();
             }
         });
@@ -175,7 +179,7 @@ public class InitActivity extends AppCompatActivity {
             //use google ID as our default id
             sp.edit().putString(getString(R.string.UID), account.getId()).apply();
 
-            String url = "http://193.122.108.23:7070/" + account.getId();
+            String url = getString(R.string.GET_URL) + "users?" + getString(R.string.UID) + "=" + account.getId();
             String user_info = OtherUtils.readFromURL(url);
             getUserInfo(user_info);
 
@@ -219,9 +223,9 @@ public class InitActivity extends AppCompatActivity {
             EXP = jsonObject.get(getString(R.string.EXP)).getAsInt();
             curr_class_code = jsonObject.get(getString(R.string.CLASS_CODE)).getAsInt();
         } catch (Exception e) {
-            Log.d("parse user info", "failed " + e.getMessage());
+            Log.d("parse_user_info", "failed " + e.getMessage());
         }
-        Log.d("Get server info", "user name: " + username + ", email: " + email);
+        Log.d("Get_server_info", "user name: " + username + ", email: " + email);
         sp.edit().putString(getString(R.string.USERNAME), username).apply();
         sp.edit().putString(getString(R.string.EMAIL), email).apply();
         sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), is_instructor).apply();
@@ -389,8 +393,9 @@ public class InitActivity extends AppCompatActivity {
             jsonObject.addProperty(getString(R.string.USER_QUIZ_COUNT), 0);
             jsonObject.addProperty(getString(R.string.EXP), 0);
             jsonObject.addProperty(getString(R.string.PROFILE_IMG), sp.getString(getString(R.string.PROFILE_IMG), ""));
+            jsonObject.addProperty(getString(R.string.FIREBASE_TOKEN), sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
         } catch (Exception e) {
-            Log.d("parse credential", "failed");
+            Log.d("parse_credential", "failed");
         }
         return jsonObject.toString();
     }

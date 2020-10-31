@@ -255,7 +255,7 @@ public class CreateQuizActivity extends AppCompatActivity {
             currCorrectAnsNum = 1;
             questionPackage.addMCQuestion(currCategory, currQuestion, currHasPic, currPicSrc, currChoices, currCorrectAnsNum);
         } catch (Exception e) {
-            Log.d("add question failed", "failed");
+            Log.d("add_question_failed", "failed");
             Log.d(e.getMessage(),"except");
         }
     }

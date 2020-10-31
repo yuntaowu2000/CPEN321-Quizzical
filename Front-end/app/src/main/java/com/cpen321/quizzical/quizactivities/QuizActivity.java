@@ -70,9 +70,10 @@ public class QuizActivity extends AppCompatActivity {
         centerStack = findViewById(R.id.center_stack);
         questionStack = findViewById(R.id.question_stack);
 
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskWrites().detectNetwork().penaltyLog().build());
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         StrictMode.setVmPolicy(
                 new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
+
         if (this.questionNumber == 0) {
             setUp();
             while (questions == null || questions.size() == 0) {
@@ -320,7 +321,7 @@ public class QuizActivity extends AppCompatActivity {
         try {
             generatePage();
         } catch (Exception e) {
-            Log.d("Generate page error", "not implemented");
+            Log.d("Generate_page_error", "not implemented");
         }
     }
 
@@ -364,7 +365,7 @@ public class QuizActivity extends AppCompatActivity {
                 jsonObject.addProperty(getString(R.string.wrong_question_ids), jsonForList);
 
         } catch (Exception e) {
-            Log.d("parse result failed", e.getMessage() + "");
+            Log.d("parse_result_failed", e.getMessage() + "");
         }
         return jsonObject.toString();
     }

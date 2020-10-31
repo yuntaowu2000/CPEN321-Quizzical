@@ -78,4 +78,12 @@
     <string name="UI_course_created">您的课程：</string>
     <string name="UI_quiz_finished_earned_exp_msg">您获得了%dEXP！</string>
     <string name="UI_require_valid_username_email_msg">请输入有效用户名及邮箱</string>
+    <string name="UI_push_notification">通知提醒</string>
+
+    <string-array name="notification_frequency">
+        <item>从不</item>
+        <item>每日</item>
+        <item>每周</item>
+        <item>每月</item>
+    </string-array>
 </resources>

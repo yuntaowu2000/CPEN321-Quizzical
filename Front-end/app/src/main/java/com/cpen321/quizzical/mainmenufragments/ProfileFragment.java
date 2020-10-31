@@ -16,10 +16,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +36,7 @@ import com.cpen321.quizzical.HomeActivity;
 import com.cpen321.quizzical.InitActivity;
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.utils.OtherUtils;
+import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -48,6 +52,7 @@ public class ProfileFragment extends Fragment {
     private TextView emailText;
     private TextView quizNumText;
     private TextView expText;
+    private Spinner pushNotificationSpinner;
     private boolean is_instructor;
 
     @Override
@@ -78,11 +83,32 @@ public class ProfileFragment extends Fragment {
 
         is_instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
 
-        usernameText = getView().findViewById(R.id.profile_username);
+        usernameText = Objects.requireNonNull(getView()).findViewById(R.id.profile_username);
         usernameText.setText(sp.getString(getString(R.string.USERNAME), getString(R.string.UI_username)));
 
-        emailText = getView().findViewById(R.id.profile_email);
+        emailText = Objects.requireNonNull(getView()).findViewById(R.id.profile_email);
         emailText.setText(sp.getString(getString(R.string.EMAIL), getString(R.string.UI_example_email)));
+
+        pushNotificationSpinner = Objects.requireNonNull(getView()).findViewById(R.id.notification_settings);
+        String[] notification_frequency = getResources().getStringArray(R.array.notification_frequency);
+        ArrayAdapter<String> pushNotificationArrayAdapter = new ArrayAdapter<>(
+                getActivity().getApplicationContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                notification_frequency);
+        pushNotificationSpinner.setAdapter(pushNotificationArrayAdapter);
+        getNotificationFrequency();
+
+        pushNotificationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                setNotificationFrequency(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                getNotificationFrequency();
+            }
+        });
 
         quizNumText = getView().findViewById(R.id.profile_quiz_num_text);
         if (is_instructor)
@@ -100,7 +126,8 @@ public class ProfileFragment extends Fragment {
         new Thread(()-> {
             //try getting the profile image from the server
             Bitmap profileImg = null;
-            String url = "http://193.122.108.23:7070/" + sp.getString(getString(R.string.UID), "") + "/" + getString(R.string.PROFILE_IMG);
+            String url = getString(R.string.GET_URL)  + "users?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                    + "&" + getString(R.string.TYPE) + getString(R.string.PROFILE_IMG);
             String img = OtherUtils.readFromURL(url);
             if (!OtherUtils.stringIsNullOrEmpty(img)) {
                 sp.edit().putString(getString(R.string.PROFILE_IMG), img).apply();
@@ -120,6 +147,50 @@ public class ProfileFragment extends Fragment {
                 Objects.requireNonNull(getActivity()).runOnUiThread(()->profileImageButton.setImageBitmap(finalBitmap));
             }
         }).start();
+    }
+
+    private String parseNotificationInfo(int freq, String firebase_token) {
+        JsonObject jsonObject = new JsonObject();
+        try {
+            jsonObject.addProperty(getString(R.string.NOTIFICATION_FREQ), freq);
+            jsonObject.addProperty(getString(R.string.FIREBASE_TOKEN), firebase_token);
+        } catch (Exception e) {
+            Log.d("parse_notification_info", "failed");
+        }
+        return jsonObject.toString();
+    }
+
+    private void setNotificationFrequency(int i) {
+        sp.edit().putInt(getString(R.string.NOTIFICATION_FREQ), i).apply();
+        String jsonRepresentation = parseNotificationInfo(i, sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
+        new Thread(()-> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                getString(R.string.NOTIFICATION_FREQ), jsonRepresentation)).start();
+    }
+
+    private void getNotificationFrequency() {
+        //set to default weekly notification or previously set frequency
+        int default_notification_freq = sp.getInt(getString(R.string.NOTIFICATION_FREQ), 2);
+        if (default_notification_freq == 2) {
+            //try get the value from the sever, if none, still keep it 2
+            new Thread(()->{
+                String url = getString(R.string.GET_URL)  + "users?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                        + "&" + getString(R.string.TYPE) + getString(R.string.NOTIFICATION_FREQ);
+                String server_response = OtherUtils.readFromURL(url);
+                try {
+                    int new_freq = Integer.parseInt(server_response);
+                    Objects.requireNonNull(getActivity()).runOnUiThread(()->pushNotificationSpinner.setSelection(new_freq));
+                } catch (NumberFormatException e) {
+                    Objects.requireNonNull(getActivity()).runOnUiThread(()->pushNotificationSpinner.setSelection(2));
+                    String jsonRepresentation = parseNotificationInfo(default_notification_freq,
+                            sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
+                    OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                            getString(R.string.NOTIFICATION_FREQ),
+                            jsonRepresentation);
+                }
+            }).start();
+        } else {
+            pushNotificationSpinner.setSelection(default_notification_freq);
+        }
     }
 
     private void logOut() {
@@ -194,7 +265,7 @@ public class ProfileFragment extends Fragment {
 
 
             } catch (IOException e) {
-                Log.d("Image error", "bit map conversion error");
+                Log.d("Image_error", "bit map conversion error");
             }
         }
     }

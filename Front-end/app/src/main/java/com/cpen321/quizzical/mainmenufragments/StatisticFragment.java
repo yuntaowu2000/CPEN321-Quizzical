@@ -61,9 +61,7 @@ public class StatisticFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         // may need to separate for teacher and students
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskWrites().detectNetwork().penaltyLog().build());
-        StrictMode.setVmPolicy(
-                new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 
         swipeRefreshLayout = view.findViewById(R.id.statistic_swipe_layout);
 
@@ -100,11 +98,11 @@ public class StatisticFragment extends Fragment {
             return;
         }
         String class_code_string = getContext().getString(R.string.CLASS_CODE);
-        Log.d("In statistic", "on class code changed called");
+        Log.d("In_statistic", "on class code changed called");
         if (key.equals(class_code_string)) {
             int class_code = sp.getInt(class_code_string, 0);
             if (class_code != 0) {
-                Log.d("In statistic", "class code changed to " + class_code);
+                Log.d("In_statistic", "class code changed to " + class_code);
                 curr_class_code = class_code;
                 Objects.requireNonNull(getActivity()).runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
             }
