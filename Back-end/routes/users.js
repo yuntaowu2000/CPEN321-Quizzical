@@ -6,15 +6,18 @@ let db;
 
 /* GET users listing. */
 router.get('/', (req, res, next) => {
-  res.writeHead(200, {'Content-Type': 'text/html'});
-  let value = "{\"username\":\"yuntao_wu\",\"Email\":\"yuntaowu2000@gmail.com\",\"IS_INSTRUCTOR\":true,\"user quiz count\":1,\"EXP\":13, \"class_code\":10234}";
-  res.end(value);
-});
-
-router.get('/Profile_Image', (req, res, next) => {
-  let bitmap = fs.readFileSync('105960354998423944600_profile_img.jpg');
-  let string = Buffer(bitmap).toString('base64');
-  res.end(string);
+  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
+  let uid = url.searchParams.get('user_id');
+  let type = url.searchParams.get('type');
+  if (type === 'notification_frequency') {
+    res.send('3');
+  } else if (type === 'Profile_Image') {
+    let bitmap = fs.readFileSync('/home/site/wwwroot/images/105960354998423944600_profile_img.jpg');
+    let string = Buffer(bitmap).toString('base64');
+    res.end(string);
+  } else if (type === null) {
+    res.send("{\"username\":\"yuntao_wu\",\"Email\":\"yuntaowu2000@gmail.com\",\"IS_INSTRUCTOR\":true,\"user quiz count\":1,\"EXP\":13, \"class_code\":10234}");
+  }
 });
 
 module.exports = router;
