@@ -16,21 +16,22 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.quizactivities.CreateQuizActivity;
 import com.cpen321.quizzical.quizactivities.QuizActivity;
-import com.cpen321.quizzical.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;
 
 public class QuizFragment extends Fragment {
 
+    public static SharedPreferences.OnSharedPreferenceChangeListener quizFramentClassCodeChangeListener;
+    private SharedPreferences sp;
+
     private boolean is_Instructor;
-    private int class_code;
 
     private Animation rotateOpen;
     private Animation rotateClose;
@@ -68,10 +69,9 @@ public class QuizFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        SharedPreferences sp = Objects.requireNonNull(getContext()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
+        sp = Objects.requireNonNull(getContext()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
 
         is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
-        class_code = sp.getInt(getString(R.string.CLASS_CODE), 0);
 
         if (is_Instructor) {
             return inflater.inflate(R.layout.fragment_quiz_teacher, container, false);
@@ -89,6 +89,9 @@ public class QuizFragment extends Fragment {
 
         swipeRefreshLayout = view.findViewById(R.id.quiz_page_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(() -> new Thread(this::updateQuizList).start());
+
+        quizFramentClassCodeChangeListener = (sp, key) -> updateQuizOnSPKeyChanged(key);
+        sp.registerOnSharedPreferenceChangeListener(quizFramentClassCodeChangeListener);
 
         quizLinearLayout = view.findViewById(R.id.quiz_list_layout);
 
@@ -153,11 +156,11 @@ public class QuizFragment extends Fragment {
     }
 
     private void updateQuizList() {
-        Objects.requireNonNull(getActivity()).runOnUiThread(()->{
+        Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
             View layout = getLayoutInflater().inflate(R.layout.quiz_module_layout, quizLinearLayout, false);
             quizLinearLayout.addView(layout);
             Button quizButton = layout.findViewById(R.id.go_to_quiz);
-            quizButton.setOnClickListener(v->setupQuiz());
+            quizButton.setOnClickListener(v -> setupQuiz());
         });
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
@@ -166,5 +169,11 @@ public class QuizFragment extends Fragment {
         int childCount = quizLinearLayout.getChildCount();
 
         Log.d("update_quiz_list", "child count: " + childCount);
+    }
+
+    private void updateQuizOnSPKeyChanged(String key) {
+        if (key.equals(getString(R.string.CLASS_CODE))) {
+            updateQuizList();
+        }
     }
 }

@@ -2,9 +2,6 @@ package com.cpen321.quizzical.utils.buttonwrappers;
 
 import android.widget.ImageButton;
 
-import com.cpen321.quizzical.utils.buttonwrappers.ButtonTypes;
-import com.cpen321.quizzical.utils.buttonwrappers.IButtons;
-
 public class ImageButtonWrapper implements IButtons {
 
     private ImageButton imageButton;

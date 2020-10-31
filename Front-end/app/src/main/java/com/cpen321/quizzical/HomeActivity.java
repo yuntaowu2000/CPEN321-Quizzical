@@ -24,9 +24,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.cpen321.quizzical.mainmenufragments.ProfileFragment;
+import com.cpen321.quizzical.mainmenufragments.QuizFragment;
 import com.cpen321.quizzical.mainmenufragments.StatisticFragment;
-import com.cpen321.quizzical.utils.OtherUtils;
 import com.cpen321.quizzical.ui.main.MyHomePagerAdapter;
+import com.cpen321.quizzical.utils.OtherUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.JsonObject;
@@ -397,6 +398,8 @@ public class HomeActivity extends AppCompatActivity {
             sp.unregisterOnSharedPreferenceChangeListener(ProfileFragment.quizNumAndExpChangeListener);
         if (StatisticFragment.classCodeChangeListener != null)
             sp.unregisterOnSharedPreferenceChangeListener(StatisticFragment.classCodeChangeListener);
+        if (QuizFragment.quizFramentClassCodeChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(QuizFragment.quizFramentClassCodeChangeListener);
     }
 
     @Override
@@ -406,6 +409,8 @@ public class HomeActivity extends AppCompatActivity {
             sp.registerOnSharedPreferenceChangeListener(ProfileFragment.quizNumAndExpChangeListener);
         if (StatisticFragment.classCodeChangeListener != null)
             sp.registerOnSharedPreferenceChangeListener(StatisticFragment.classCodeChangeListener);
+        if (QuizFragment.quizFramentClassCodeChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(QuizFragment.quizFramentClassCodeChangeListener);
     }
 
     @Override
@@ -415,5 +420,7 @@ public class HomeActivity extends AppCompatActivity {
             sp.unregisterOnSharedPreferenceChangeListener(ProfileFragment.quizNumAndExpChangeListener);
         if (StatisticFragment.classCodeChangeListener != null)
             sp.unregisterOnSharedPreferenceChangeListener(StatisticFragment.classCodeChangeListener);
+        if (QuizFragment.quizFramentClassCodeChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(QuizFragment.quizFramentClassCodeChangeListener);
     }
 }

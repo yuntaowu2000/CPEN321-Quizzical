@@ -31,11 +31,7 @@ public class OtherUtils {
     public static boolean checkUserName(String username) {
         //check if the username is valid or not
         //TODO: need to check if this username is registered on server or not
-        if (!Pattern.matches("^[aA-zZ0-9_-]{3,15}$", username)) {
-            return false;
-        }
-
-        return true;
+        return Pattern.matches("^[aA-zZ0-9_-]{3,15}$", username);
     }
 
     public static boolean checkEmail(String email) {
@@ -45,22 +41,14 @@ public class OtherUtils {
 
         String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
 
-        if (!Pattern.matches(regex, email)) {
-            //the email entered is not a valid format
-            return false;
-        }
-
-        return true;
+        //the email entered is not a valid format
+        return Pattern.matches(regex, email);
     }
 
     public static boolean checkClassName(String class_name) {
         //check if the username is valid or not
         //TODO: need to check if this class name is registered on server or not
-        if (!Pattern.matches("^[aA-zZ0-9_-]{3,15}$", class_name)) {
-            return false;
-        }
-
-        return true;
+        return Pattern.matches("^[aA-zZ0-9_-]{3,15}$", class_name);
     }
 
     public static boolean checkClassCode(int class_code) {

@@ -87,7 +87,7 @@ public class StatisticFragment extends Fragment {
             teacher_in_statistic = true;
 
             teachers_leaderboard_btn = view.findViewById(R.id.teacher_leader_board_btn);
-            teachers_leaderboard_btn.setOnClickListener(v->switchTeacherLeaderboard());
+            teachers_leaderboard_btn.setOnClickListener(v -> switchTeacherLeaderboard());
 
         } else {
             TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.leader_board_debug_text);
@@ -171,7 +171,7 @@ public class StatisticFragment extends Fragment {
         TextView textView = new TextView(this.getContext());
 
         TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                TableRow.LayoutParams.MATCH_PARENT,1.0f);
+                TableRow.LayoutParams.MATCH_PARENT, 1.0f);
         textViewParam.setMargins(10, 10, 10, 10);
 
         textView.setLayoutParams(textViewParam);

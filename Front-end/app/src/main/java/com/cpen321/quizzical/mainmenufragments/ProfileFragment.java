@@ -123,10 +123,10 @@ public class ProfileFragment extends Fragment {
 
         sp.registerOnSharedPreferenceChangeListener(quizNumAndExpChangeListener);
 
-        new Thread(()-> {
+        new Thread(() -> {
             //try getting the profile image from the server
             Bitmap profileImg = null;
-            String url = getString(R.string.GET_URL)  + "users?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+            String url = getString(R.string.GET_URL) + "users?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
                     + "&" + getString(R.string.TYPE) + getString(R.string.PROFILE_IMG);
             String img = OtherUtils.readFromURL(url);
             if (!OtherUtils.stringIsNullOrEmpty(img)) {
@@ -144,7 +144,7 @@ public class ProfileFragment extends Fragment {
             if (profileImg != null) {
                 profileImg = OtherUtils.scaleImage(profileImg);
                 final Bitmap finalBitmap = profileImg;
-                Objects.requireNonNull(getActivity()).runOnUiThread(()->profileImageButton.setImageBitmap(finalBitmap));
+                Objects.requireNonNull(getActivity()).runOnUiThread(() -> profileImageButton.setImageBitmap(finalBitmap));
             }
         }).start();
     }
@@ -163,7 +163,7 @@ public class ProfileFragment extends Fragment {
     private void setNotificationFrequency(int i) {
         sp.edit().putInt(getString(R.string.NOTIFICATION_FREQ), i).apply();
         String jsonRepresentation = parseNotificationInfo(i, sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
-        new Thread(()-> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+        new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
                 getString(R.string.NOTIFICATION_FREQ), jsonRepresentation)).start();
     }
 
@@ -172,15 +172,15 @@ public class ProfileFragment extends Fragment {
         int default_notification_freq = sp.getInt(getString(R.string.NOTIFICATION_FREQ), 2);
         if (default_notification_freq == 2) {
             //try get the value from the sever, if none, still keep it 2
-            new Thread(()->{
-                String url = getString(R.string.GET_URL)  + "users?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+            new Thread(() -> {
+                String url = getString(R.string.GET_URL) + "users?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
                         + "&" + getString(R.string.TYPE) + getString(R.string.NOTIFICATION_FREQ);
                 String server_response = OtherUtils.readFromURL(url);
                 try {
                     int new_freq = Integer.parseInt(server_response);
-                    Objects.requireNonNull(getActivity()).runOnUiThread(()->pushNotificationSpinner.setSelection(new_freq));
+                    Objects.requireNonNull(getActivity()).runOnUiThread(() -> pushNotificationSpinner.setSelection(new_freq));
                 } catch (NumberFormatException e) {
-                    Objects.requireNonNull(getActivity()).runOnUiThread(()->pushNotificationSpinner.setSelection(2));
+                    Objects.requireNonNull(getActivity()).runOnUiThread(() -> pushNotificationSpinner.setSelection(2));
                     String jsonRepresentation = parseNotificationInfo(default_notification_freq,
                             sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
                     OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),

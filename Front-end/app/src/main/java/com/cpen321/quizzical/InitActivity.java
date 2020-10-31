@@ -187,7 +187,7 @@ public class InitActivity extends AppCompatActivity {
                 //default is google credential
                 String username = Objects.requireNonNull(account.getDisplayName()).replace(" ", "_");
                 String email = account.getEmail();
-                new Thread(()->{
+                new Thread(() -> {
                     Bitmap bitmap = OtherUtils.getBitmapFromUrl(account.getPhotoUrl().toString());
                     String encodedBitmap = OtherUtils.encodeImage(bitmap);
                     sp.edit().putString(getString(R.string.PROFILE_IMG), encodedBitmap).apply();

@@ -1,8 +1,5 @@
 package com.cpen321.quizzical.quizactivities;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.TestPage;
@@ -74,7 +74,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         String[] categories = getResources().getStringArray(R.array.course_category_array);
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, categories);
         categoryList.setAdapter(categoryAdapter);
-        categoryList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()        {
+        categoryList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 int selectedPosition = categoryList.getSelectedItemPosition();
                 switch (selectedPosition) {
@@ -93,6 +93,7 @@ public class CreateQuizActivity extends AppCompatActivity {
                 }
                 Toast.makeText(getBaseContext(), currCategory.toString(), Toast.LENGTH_LONG).show();
             }
+
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
@@ -106,7 +107,8 @@ public class CreateQuizActivity extends AppCompatActivity {
         takePictureButton = findViewById(R.id.take_picture_button);
         takePictureButton.setOnClickListener(v -> {
             Intent takePictureIntent = new Intent(this, TestPage.class);
-            startActivity(takePictureIntent);});
+            startActivity(takePictureIntent);
+        });
 
         answersLayout = findViewById(R.id.answers_layout);
         answerRows = new ArrayList<>();
@@ -115,7 +117,9 @@ public class CreateQuizActivity extends AppCompatActivity {
         answerInputButton.setOnClickListener(v -> addNewAnswer());
 
         addQuestionButton = findViewById(R.id.add_question_button);
-        addQuestionButton.setOnClickListener(v -> {addQuestionToList();});
+        addQuestionButton.setOnClickListener(v -> {
+            addQuestionToList();
+        });
 
         currCategory = CourseCategory.Misc;
         currQuestion = "";
@@ -154,15 +158,16 @@ public class CreateQuizActivity extends AppCompatActivity {
         answerPic.setVisibility(View.GONE);
         answerPic.setOnClickListener(v -> {
             Intent takePictureIntent = new Intent(this, TestPage.class);
-            startActivity(takePictureIntent);});
+            startActivity(takePictureIntent);
+        });
 
         CheckBox checkBox = new CheckBox(this);
         checkBox.setChecked(false);
         checkBox.setText("Picture ");
         checkBox.setOnClickListener(v -> {
             isPic[0] = checkBox.isChecked();
-            answerInput.setVisibility(checkBox.isChecked()?View.GONE:View.VISIBLE);
-            answerPic.setVisibility(checkBox.isChecked()?View.VISIBLE:View.GONE);
+            answerInput.setVisibility(checkBox.isChecked() ? View.GONE : View.VISIBLE);
+            answerPic.setVisibility(checkBox.isChecked() ? View.VISIBLE : View.GONE);
         });
 
         layout.addView(answerText);
@@ -183,9 +188,9 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
             answer[0] = answerInput.getText().toString();
-            ChoicePair newAnswer = new ChoicePair(isPic[0], isPic[0]?pic: answer[0]);
+            ChoicePair newAnswer = new ChoicePair(isPic[0], isPic[0] ? pic : answer[0]);
 
-            Log.d("Hi_op", ""+newAnswer.isPic()+" "+ answer[0]);
+            Log.d("Hi_op", "" + newAnswer.isPic() + " " + answer[0]);
             currChoices.add(newAnswer);
 
             layoutParams[0] = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -210,7 +215,7 @@ public class CreateQuizActivity extends AppCompatActivity {
                                 if (rowChild instanceof CheckBox) {
                                     Log.d("Hi_op", "   yay2");
                                     ((CheckBox) rowChild).setChecked(false);
-                                    ((CheckBox) rowChild).setEnabled(true);
+                                    rowChild.setEnabled(true);
                                     // to do:  I need to reason how to change the correct ans num, maybe by check i j values after deletion
                                     // so lets add delete button first
                                     // then after these we can do edit based on same ideas
@@ -238,7 +243,7 @@ public class CreateQuizActivity extends AppCompatActivity {
             });
 
             row.addView(isCorrect);
-            row.addView(isPic[0]?answerImage:answerContent);
+            row.addView(isPic[0] ? answerImage : answerContent);
             row.addView(editButton);
             answerRows.add(row);
 
@@ -251,12 +256,12 @@ public class CreateQuizActivity extends AppCompatActivity {
     private void addQuestionToList() {
         JsonObject jsonObject = new JsonObject();
         try {
-            currChoices= Arrays.asList(new ChoicePair(false, "$$2$$"), new ChoicePair(false, "$$3$$"));
+            currChoices = Arrays.asList(new ChoicePair(false, "$$2$$"), new ChoicePair(false, "$$3$$"));
             currCorrectAnsNum = 1;
             questionPackage.addMCQuestion(currCategory, currQuestion, currHasPic, currPicSrc, currChoices, currCorrectAnsNum);
         } catch (Exception e) {
             Log.d("add_question_failed", "failed");
-            Log.d(e.getMessage(),"except");
+            Log.d(e.getMessage(), "except");
         }
     }
 /*

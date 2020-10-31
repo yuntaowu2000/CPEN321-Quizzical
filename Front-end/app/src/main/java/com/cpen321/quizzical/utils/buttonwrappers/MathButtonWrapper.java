@@ -1,8 +1,5 @@
 package com.cpen321.quizzical.utils.buttonwrappers;
 
-import com.cpen321.quizzical.utils.buttonwrappers.ButtonTypes;
-import com.cpen321.quizzical.utils.buttonwrappers.IButtons;
-
 import katex.hourglass.in.mathlib.MathView;
 
 public class MathButtonWrapper implements IButtons {
