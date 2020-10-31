@@ -47,6 +47,7 @@ public class CreateQuizActivity extends AppCompatActivity {
     private ImageButton takePictureButton;
 
     private LinearLayout answersLayout;
+    private List<LinearLayout> answerRows;
 
     private Button answerInputButton;
 
@@ -108,6 +109,7 @@ public class CreateQuizActivity extends AppCompatActivity {
             startActivity(takePictureIntent);});
 
         answersLayout = findViewById(R.id.answers_layout);
+        answerRows = new ArrayList<>();
 
         answerInputButton = findViewById(R.id.answer_input_button);
         answerInputButton.setOnClickListener(v -> addNewAnswer());
@@ -125,7 +127,7 @@ public class CreateQuizActivity extends AppCompatActivity {
 
     private void addNewAnswer() {
         //Todo: use a certain stackoverflow post to fix this layout.
-        String answer = "";
+        final String[] answer = {""};
         String pic = "https://raw.githubusercontent.com/yuntaowu2000/testUploadModels/master/006.png"; // some default picture
         final boolean[] isPic = {false};
 
@@ -144,7 +146,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         answerInput.setLayoutParams(layoutParams[0]);
         answerInput.setHint("What is 1+1");
         answerInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        answerInput.setText(answer);
+        answerInput.setText(answer[0]);
         answerInput.setMaxLines(1);
 
         ImageButton answerPic = new ImageButton(this);
@@ -175,13 +177,15 @@ public class CreateQuizActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> dialogInterface.dismiss()));
         // add cancel
 
-        ChoicePair newAnswer = new ChoicePair(isPic[0], isPic[0]?pic:answer);
 
         final AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
 
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
-            Log.d("Hi_op", ""+newAnswer.isPic());
+            answer[0] = answerInput.getText().toString();
+            ChoicePair newAnswer = new ChoicePair(isPic[0], isPic[0]?pic: answer[0]);
+
+            Log.d("Hi_op", ""+newAnswer.isPic()+" "+ answer[0]);
             currChoices.add(newAnswer);
 
             layoutParams[0] = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -196,34 +200,53 @@ public class CreateQuizActivity extends AppCompatActivity {
             isCorrect.setEnabled(currChoices.indexOf(newAnswer) != currCorrectAnsNum);
             // if checked, uncheck all other checkbox, else do nothing.
             isCorrect.setOnClickListener(u -> {
+                Log.d("Hi_op", "checked");
                 if (isCorrect.isChecked()) {
-                    ArrayList<View> focusableViews = answersLayout.getFocusables(View.FOCUS_FORWARD);
-                    for (View actualView : focusableViews) {
-                        if (actualView instanceof LinearLayout) {
-                            ArrayList<View> innerFocusableViews = actualView.getFocusables(View.FOCUS_FORWARD);
-                            for (View innerActualView : innerFocusableViews) {
-                                if (innerActualView instanceof CheckBox) {
-                                    ((CheckBox) innerActualView).setChecked(false);
+                    for (int i = 0; i < answersLayout.getChildCount(); i++) {
+                        View child = answersLayout.getChildAt(i);
+                        if (child instanceof LinearLayout) {
+                            for (int j = 0; j < ((LinearLayout) child).getChildCount(); j++) {
+                                View rowChild = ((LinearLayout) child).getChildAt(j);
+                                if (rowChild instanceof CheckBox) {
+                                    Log.d("Hi_op", "   yay2");
+                                    ((CheckBox) rowChild).setChecked(false);
+                                    ((CheckBox) rowChild).setEnabled(true);
+                                    // to do:  I need to reason how to change the correct ans num, maybe by check i j values after deletion
+                                    // so lets add delete button first
+                                    // then after these we can do edit based on same ideas
                                 }
                             }
                         }
                     }
+                    isCorrect.setEnabled(false);
                     isCorrect.setChecked(true);
                 }
             });
 
-            View answerContent;
-            if (isPic[0]) {
-                answerContent = new ImageView(this);
-                ((ImageView) answerContent).setImageBitmap(getBitmapFromUrl(pic));
-            } else {
-                answerContent = new TextView(this);
-                ((TextView) answerContent).setText(answer);
-            }
+            TextView answerContent = new TextView(this);
+            answerContent.setText(answer[0]);
+            answerContent.setLayoutParams(layoutParams[0]);
+
+            ImageView answerImage = new ImageView(this);
+            answerImage.setImageBitmap(getBitmapFromUrl(pic));
+            answerImage.setLayoutParams(layoutParams[0]);
+
+            Button editButton = new Button(this);
+            editButton.setLayoutParams(layoutParams[0]);
+            editButton.setText("Edit");
+            editButton.setOnClickListener(w -> {
+            });
+
+            row.addView(isCorrect);
+            row.addView(isPic[0]?answerImage:answerContent);
+            row.addView(editButton);
+            answerRows.add(row);
+
+            answersLayout.addView(row);
             alertDialog.dismiss();
         });
-        // create new row here
     }
+
 
     private void addQuestionToList() {
         JsonObject jsonObject = new JsonObject();
