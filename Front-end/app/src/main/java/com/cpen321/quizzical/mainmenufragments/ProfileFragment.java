@@ -126,7 +126,8 @@ public class ProfileFragment extends Fragment {
         new Thread(()-> {
             //try getting the profile image from the server
             Bitmap profileImg = null;
-            String url = "http://193.122.108.23:7070/" + sp.getString(getString(R.string.UID), "") + "/" + getString(R.string.PROFILE_IMG);
+            String url = getString(R.string.GET_URL)  + "users?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                    + "&" + getString(R.string.TYPE) + getString(R.string.PROFILE_IMG);
             String img = OtherUtils.readFromURL(url);
             if (!OtherUtils.stringIsNullOrEmpty(img)) {
                 sp.edit().putString(getString(R.string.PROFILE_IMG), img).apply();
@@ -172,9 +173,8 @@ public class ProfileFragment extends Fragment {
         if (default_notification_freq == 2) {
             //try get the value from the sever, if none, still keep it 2
             new Thread(()->{
-                String url = getString(R.string.GET_URL)
-                        + sp.getString(getString(R.string.UID), "")
-                        + "/" + getString(R.string.NOTIFICATION_FREQ);
+                String url = getString(R.string.GET_URL)  + "users?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                        + "&" + getString(R.string.TYPE) + getString(R.string.NOTIFICATION_FREQ);
                 String server_response = OtherUtils.readFromURL(url);
                 try {
                     int new_freq = Integer.parseInt(server_response);

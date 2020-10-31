@@ -1,6 +1,8 @@
 <resources>
     <!--    general usage-->
-    <string name="GET_URL" translatable="false">http://193.122.108.23:7070/</string>
+    <string name="BACKUP_GET_URL" translatable="false">http://193.122.108.23:7070/</string>
+    <string name="GET_URL" translatable="false">http://module-6-ihsan-webapp-test.azurewebsites.net/</string>
+    <string name="TYPE" translatable="false">type=</string>
 
     <string name="app_name" translatable="false">quizzical</string>
     <string name="YES">yes</string>
@@ -12,8 +14,8 @@
     <string name="Continue_text">Continue</string>
 
     <!--    set an untranslatable version of username for server communication-->
-    <string name="USER_INFO" translatable="false">user info</string>
-    <string name="UID" translatable="false">user id</string>
+    <string name="USER_INFO" translatable="false">user_info</string>
+    <string name="UID" translatable="false">user_id</string>
     <string name="USERNAME" translatable="false">username</string>
     <string name="EMAIL" translatable="false">Email</string>
     <string name="PROFILE_IMG" translatable="false">Profile_Image</string>

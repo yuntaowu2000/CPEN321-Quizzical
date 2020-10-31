@@ -75,7 +75,7 @@ public class OtherUtils {
      * */
     public static String encodeImage(Bitmap image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        image.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] b = baos.toByteArray();
 
         return Base64.encodeToString(b, Base64.DEFAULT);
@@ -117,7 +117,7 @@ public class OtherUtils {
 
         String jsonStringToSend = createJsonString(uid, type, data);
         String response = "";
-        String serverLink = "http://193.122.108.23:9090/";
+        String serverLink = "http://module-6-ihsan-webapp-test.azurewebsites.net/upload";
         try {
             URL url = new URL(serverLink);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -187,7 +187,6 @@ public class OtherUtils {
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(1000);
             conn.connect();
-            Log.d("html_get", "server connected");
             InputStream is = conn.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"));
             StringBuilder stb = new StringBuilder();

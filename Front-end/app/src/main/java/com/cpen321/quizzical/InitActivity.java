@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -67,6 +68,9 @@ public class InitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 120);
         layoutParams.setMargins(30, 10, 30, 0);
@@ -176,7 +180,7 @@ public class InitActivity extends AppCompatActivity {
             //use google ID as our default id
             sp.edit().putString(getString(R.string.UID), account.getId()).apply();
 
-            String url = getString(R.string.GET_URL) + account.getId();
+            String url = getString(R.string.GET_URL) + "users?" + getString(R.string.UID) + "=" + account.getId();
             String user_info = OtherUtils.readFromURL(url);
             getUserInfo(user_info);
 
