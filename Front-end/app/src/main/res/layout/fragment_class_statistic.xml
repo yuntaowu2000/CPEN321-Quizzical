@@ -15,16 +15,79 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/class_statistic_debug_text"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/teacher_leader_board_btn"
+                android:layout_width="200sp"
                 android:layout_height="wrap_content"
-                android:text="@string/class_statistic_page_text1" />
+                android:layout_margin="20sp"
+                android:layout_gravity="center"
+                android:text="@string/UI_teachers_leaderboard"
+                android:textAllCaps="false"
+                android:background="@drawable/round_corner_button"/>
 
             <TextView
-                android:id="@+id/statistic_test_text"
+                android:id="@id/statistic_time_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/statistic_class_name_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="350dp"
+                android:layout_marginTop="20sp"
+                android:layout_gravity="center">
+
+                <TableLayout
+                    android:id="@+id/class_statistic_board"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20sp"
+                    android:background="@drawable/textview_rect_border">
+
+                    <TableRow tools:ignore="UselessParent">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_column="0"
+                            android:layout_gravity="center"
+                            android:text="@string/UI_leaderboard_number"
+                            android:textSize="15sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_column="1"
+                            android:layout_gravity="center"
+                            android:text="@string/USERNAME"
+                            android:textSize="15sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_column="2"
+                            android:layout_gravity="center"
+                            android:text="@string/UI_leaderboard_score"
+                            android:textSize="15sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_column="3"
+                            android:layout_gravity="center"
+                            android:text="@string/EXP"
+                            android:textSize="15sp"/>
+                    </TableRow>
+
+                </TableLayout>
+            </ScrollView>
 
 
         </LinearLayout>

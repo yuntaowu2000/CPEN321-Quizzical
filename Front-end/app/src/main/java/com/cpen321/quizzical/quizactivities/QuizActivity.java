@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.data.questions.IQuestion;
@@ -207,7 +208,7 @@ public class QuizActivity extends AppCompatActivity {
         final IButtons button;
         if (choicePair.isPic()) {
             ImageButton imageButton = new ImageButton(this);
-
+            
             imageButton.setBackgroundColor(Color.WHITE);
             imageButton.setLayoutParams(layoutParams);
 

@@ -86,4 +86,6 @@
         <item>每周</item>
         <item>每月</item>
     </string-array>
+    <string name="UI_teachers_leaderboard">教师排行榜</string>
+    <string name="UI_leaderboard_score">分数</string>
 </resources>

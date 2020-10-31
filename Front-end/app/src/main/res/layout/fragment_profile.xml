@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
-            android:background="@drawable/round_button"
+            android:background="@drawable/profile_image_shape"
             android:contentDescription="@string/PROFILE_IMG" />
 
         <TableLayout
@@ -106,7 +106,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/textview_border"
+                    android:background="@drawable/textview_rect_border"
+                    android:gravity="center"
                     android:text="Course 1"
                     android:textSize="15sp"/>
             </TableRow>
@@ -116,7 +117,7 @@
                     android:layout_width="150dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/textview_border"
+                    android:background="@drawable/textview_rect_border"
                     android:text="@string/UI_quiz_taken"
                     android:id="@+id/profile_quiz_num_text"
                     android:gravity="center"
@@ -126,7 +127,7 @@
                     android:layout_width="150dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/textview_border"
+                    android:background="@drawable/textview_rect_border"
                     android:gravity="center"
                     android:id="@+id/profile_exp_text"
                     android:text="@string/UI_total_exp"
@@ -140,6 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@drawable/round_corner_button"
             android:text="@string/UI_log_out" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

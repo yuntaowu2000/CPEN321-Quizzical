@@ -121,6 +121,9 @@
     <!--    used in leader board fragment (for students)-->
     <!--    need update later-->
     <string name="leader_board_page_text1" translatable="false">This is the leaderBoard page</string>
+    <string name="UI_teachers_leaderboard">Teacher\'s leaderboard</string>
+    <string name="UI_leaderboard_number" translatable="false">#</string>
+    <string name="UI_leaderboard_score">Score</string>
 
     <!--    used in profile fragment-->
     <string name="UI_change_profile_image_msg">Do you want to change the profile image?</string>
@@ -177,6 +180,5 @@
     <string name="UI_crop">Crop</string>
     <string name="UI_rotate">Rotate 90</string>
     <string name="image" translatable="false">Image</string>
-
 
 </resources>

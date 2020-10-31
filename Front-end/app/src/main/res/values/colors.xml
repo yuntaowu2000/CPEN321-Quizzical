@@ -8,4 +8,5 @@
     <color name="colorOrangeRed">#FF4500</color>
     <color name="colorAqua">#00FFFF</color>
     <color name="colorGolden">#FFCC00</color>
+    <color name="COLOR_GREY">#D4D4D4</color>
 </resources>

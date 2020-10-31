@@ -25,6 +25,7 @@ The progress is written in the sequence of implementation.
 2.4 Prompt user to setup/join class on first sign in  
 2.5 Multiple classes supported, user can switch between different classes  
 2.6 In the profile fragment, user can see how many classes he/she is enrolled in, how many quizzes he/she has created/done, how many EXP he/she has earned.  
+2.7 teacher class statistic board set up finished.  
 3. Quiz  
 3.1 A Quiz will load a set of questions (currently only multiple choices are supported)  
 3.2 Choices can be either plain text, latex, html formatted, or image  
@@ -36,15 +37,14 @@ The progress is written in the sequence of implementation.
 4.1 A user is ranked by his/her overall EXP in a semester  
 4.2 The EXP for the student is calculated as follows:  
 after each quiz is finished  
-<img src="pics/score_calculation.png"/>
+<img src="pics/score_calculation.png"/>  
 
 Most parts are translated in Chinese as well.  
 
-Some code refactored after checking with Codacy.
+Some code refactored after checking with Codacy.  
 
 ### Back-end  
-1. Simple POST GET request handling done.
-
+1. Simple POST GET request handling done.  
 
 ## TODO list
 1. UI set up for home activity  
