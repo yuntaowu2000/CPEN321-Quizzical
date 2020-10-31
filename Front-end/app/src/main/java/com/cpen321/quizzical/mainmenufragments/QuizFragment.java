@@ -4,17 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cpen321.quizzical.quizactivities.CreateQuizActivity;
 import com.cpen321.quizzical.quizactivities.QuizActivity;
@@ -38,6 +42,8 @@ public class QuizFragment extends Fragment {
     private boolean clicked = false;
 
     private Button quizStartButton;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private LinearLayout quizLinearLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +86,11 @@ public class QuizFragment extends Fragment {
         //TODO: follow what is done in statistic fragment and get values from the server to setup the fragment
         quizStartButton = view.findViewById(R.id.quiz_fragment_go_to_quiz_button);
         quizStartButton.setOnClickListener(v -> setupQuiz());
+
+        swipeRefreshLayout = view.findViewById(R.id.quiz_page_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(() -> new Thread(this::updateQuizList).start());
+
+        quizLinearLayout = view.findViewById(R.id.quiz_list_layout);
 
         if (is_Instructor) {
             onTeacherViewCreated();
@@ -139,5 +150,21 @@ public class QuizFragment extends Fragment {
             note_fab.startAnimation(toBottom);
             fab.startAnimation(rotateClose);
         }
+    }
+
+    private void updateQuizList() {
+        Objects.requireNonNull(getActivity()).runOnUiThread(()->{
+            View layout = getLayoutInflater().inflate(R.layout.quiz_module_layout, quizLinearLayout, false);
+            quizLinearLayout.addView(layout);
+            Button quizButton = layout.findViewById(R.id.go_to_quiz);
+            quizButton.setOnClickListener(v->setupQuiz());
+        });
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
+        int childCount = quizLinearLayout.getChildCount();
+
+        Log.d("update_quiz_list", "child count: " + childCount);
     }
 }

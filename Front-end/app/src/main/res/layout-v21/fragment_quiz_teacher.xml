@@ -6,23 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".mainmenufragments.QuizFragment">
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
+        android:layout_height="500dp"
+        android:id="@+id/quiz_page_refresh_layout">
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/teacher_quiz_fragment_debug_text" />
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/quiz_list_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <Button
-            android:id="@+id/quiz_fragment_go_to_quiz_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/go_to_quiz"
-            android:textAllCaps="false" />
-    </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/quiz_fragment_debug_text" />
+
+                <Button
+                    android:id="@+id/quiz_fragment_go_to_quiz_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/go_to_quiz"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

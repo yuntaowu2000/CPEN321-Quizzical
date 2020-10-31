@@ -88,4 +88,6 @@
     </string-array>
     <string name="UI_teachers_leaderboard">教师排行榜</string>
     <string name="UI_leaderboard_score">分数</string>
+    <string name="UI_back_to_statistics">返回班级数据</string>
+    <string name="UI_default_module_text">第一单元</string>
 </resources>

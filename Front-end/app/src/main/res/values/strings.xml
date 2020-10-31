@@ -113,6 +113,7 @@
     <string name="go_to_quiz">Go to Quiz</string>
     <string name="quiz_fragment_debug_text" translatable="false">This is the quiz page</string>
     <string name="teacher_quiz_fragment_debug_text" translatable="false">This is the quiz page for teachers</string>
+    <string name="UI_default_module_text">module 1</string>
 
     <!--    used in class statistic fragment (for teachers)-->
     <!--    need update later-->
@@ -124,6 +125,7 @@
     <string name="UI_teachers_leaderboard">Teacher\'s leaderboard</string>
     <string name="UI_leaderboard_number" translatable="false">#</string>
     <string name="UI_leaderboard_score">Score</string>
+    <string name="UI_back_to_statistics">Back to statistics</string>
 
     <!--    used in profile fragment-->
     <string name="UI_change_profile_image_msg">Do you want to change the profile image?</string>

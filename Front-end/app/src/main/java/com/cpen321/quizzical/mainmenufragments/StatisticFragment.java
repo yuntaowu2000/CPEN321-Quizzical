@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -40,6 +41,8 @@ public class StatisticFragment extends Fragment {
     private TextView studentLast;
     private TextView expLast;
     private TableLayout boardLayout;
+    private Button teachers_leaderboard_btn;
+    private boolean teacher_in_statistic;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,10 @@ public class StatisticFragment extends Fragment {
             sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
 
             boardLayout = view.findViewById(R.id.class_statistic_board);
+            teacher_in_statistic = true;
+
+            teachers_leaderboard_btn = view.findViewById(R.id.teacher_leader_board_btn);
+            teachers_leaderboard_btn.setOnClickListener(v->switchTeacherLeaderboard());
 
         } else {
             TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.leader_board_debug_text);
@@ -111,6 +118,10 @@ public class StatisticFragment extends Fragment {
                 curr_class_code = class_code;
                 Objects.requireNonNull(getActivity()).runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
                 updateText();
+                //should generate statistic table here as well
+                if (is_Instructor) {
+                    generateClassStatisticTableRows(true);
+                }
             }
         }
     }
@@ -130,16 +141,19 @@ public class StatisticFragment extends Fragment {
         Objects.requireNonNull(getActivity()).runOnUiThread(() ->
         {
             realTimeText.setText(text);
-            if (is_Instructor) {
-                generateTableRows();
+            if (is_Instructor && teacher_in_statistic) {
+                generateClassStatisticTableRows(false);
+            } else if (is_Instructor) {
+                //change that to else later
+                generateLeaderboardRows();
             }
         });
     }
 
-    private void generateTableRows() {
+    private void generateClassStatisticTableRows(boolean cleanup) {
         int count = boardLayout.getChildCount();
-        if (count > 5) {
-            boardLayout.removeViews(1, 5);
+        if (count > 5 || cleanup) {
+            boardLayout.removeViews(1, count - 1);
         }
         TableRow newRow = new TableRow(this.getContext());
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
@@ -163,7 +177,56 @@ public class StatisticFragment extends Fragment {
         textView.setLayoutParams(textViewParam);
         textView.setGravity(Gravity.CENTER);
         textView.setText(text);
+        textView.setTextSize(15);
         return textView;
+    }
+
+    private void switchTeacherLeaderboard() {
+        boardLayout.removeAllViews();
+
+        TableRow newRow = new TableRow(this.getContext());
+        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+        newRow.setLayoutParams(lp);
+
+        if (teacher_in_statistic) {
+            teacher_in_statistic = false;
+            teachers_leaderboard_btn.setText(R.string.UI_back_to_statistics);
+
+            newRow.addView(generateTableElement(getString(R.string.UI_leaderboard_number)), 0);
+            newRow.addView(generateTableElement(getString(R.string.UI_username)), 1);
+            newRow.addView(generateTableElement(getString(R.string.EXP)), 2);
+
+            boardLayout.addView(newRow);
+            generateLeaderboardRows();
+
+        } else {
+            teacher_in_statistic = true;
+            teachers_leaderboard_btn.setText(R.string.UI_teachers_leaderboard);
+
+            newRow.addView(generateTableElement(getString(R.string.UI_leaderboard_number)), 0);
+            newRow.addView(generateTableElement(getString(R.string.UI_username)), 1);
+            newRow.addView(generateTableElement(getString(R.string.UI_leaderboard_score)), 2);
+            newRow.addView(generateTableElement(getString(R.string.EXP)), 3);
+
+            boardLayout.addView(newRow);
+            generateClassStatisticTableRows(true);
+        }
+    }
+
+    private void generateLeaderboardRows() {
+        int count = boardLayout.getChildCount();
+        if (count > 5) {
+            boardLayout.removeViews(1, 5);
+        }
+        TableRow newRow = new TableRow(this.getContext());
+        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+        newRow.setLayoutParams(lp);
+
+        newRow.addView(generateTableElement("1"), 0);
+        newRow.addView(generateTableElement("test student"), 1);
+        newRow.addView(generateTableElement("100"), 2);
+
+        boardLayout.addView(newRow, 1);
     }
 
     /* We somehow get class statistics from server, maybe we changed class or maybe its pushed */
