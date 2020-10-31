@@ -152,6 +152,7 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         correctChoice = buttonsList.get(q.getCorrectAnsNum() - 1);
+        correctChoice.setButtonId(-100);
 
         Collections.shuffle(buttonsList);
 

@@ -25,6 +25,11 @@ public class ImageButtonWrapper implements IButtons {
         imageButton.setBackgroundColor(color);
     }
 
+    @Override
+    public void setButtonId(int id) {
+        imageButton.setId(id);
+    }
+
     public ImageButton getButtonAsImageButton() {
         return imageButton;
     }

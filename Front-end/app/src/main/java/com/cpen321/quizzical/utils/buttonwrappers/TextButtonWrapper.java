@@ -25,6 +25,11 @@ public class TextButtonWrapper implements IButtons {
         button.setBackgroundColor(color);
     }
 
+    @Override
+    public void setButtonId(int id) {
+        button.setId(id);
+    }
+
     public Button getButtonAsTextButton() {
         return this.button;
     }

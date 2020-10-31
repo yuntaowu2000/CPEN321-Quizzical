@@ -25,6 +25,11 @@ public class MathButtonWrapper implements IButtons {
         view.setViewBackgroundColor(color);
     }
 
+    @Override
+    public void setButtonId(int id) {
+        view.setId(id);
+    }
+
     public MathView getButtonAsMathButton() {
         return view;
     }

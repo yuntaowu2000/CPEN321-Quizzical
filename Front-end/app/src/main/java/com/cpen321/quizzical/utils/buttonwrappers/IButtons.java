@@ -11,4 +11,6 @@ public interface IButtons {
     IButtons getButton();
 
     void myButtonSetBackGroundColor(int color);
+
+    void setButtonId(int id);
 }
