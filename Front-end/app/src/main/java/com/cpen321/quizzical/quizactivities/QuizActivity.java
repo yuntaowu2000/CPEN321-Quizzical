@@ -70,9 +70,10 @@ public class QuizActivity extends AppCompatActivity {
         centerStack = findViewById(R.id.center_stack);
         questionStack = findViewById(R.id.question_stack);
 
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskWrites().detectNetwork().penaltyLog().build());
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         StrictMode.setVmPolicy(
                 new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
+
         if (this.questionNumber == 0) {
             setUp();
             while (questions == null || questions.size() == 0) {
