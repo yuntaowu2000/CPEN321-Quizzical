@@ -16,9 +16,12 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/leader_board_debug_text"
+                android:id="@+id/leader_board_class_code_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:gravity="center"
+                android:textAlignment="center"
                 android:text="@string/leader_board_page_text1" />
 
             <TextView
@@ -27,273 +30,40 @@
                 android:layout_height="wrap_content" />
 
             <TableLayout
-                android:id="@+id/statistics_table"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <TableRow>
+                android:id="@+id/student_leaderboard_table"
+                android:layout_width="300dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/textview_rect_border">
+
+                <TableRow tools:ignore="UselessParent">
                     <TextView
-                        android:id="@+id/statistic_top"
-                        android:layout_width="200dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
                         android:layout_column="0"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="Col1"
-                        android:textSize="20sp" />
+                        android:text="@string/UI_leaderboard_number"
+                        android:textSize="15sp"/>
+
                     <TextView
-                        android:id="@+id/statistic_topr"
-                        android:layout_width="200dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
                         android:layout_column="1"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="Col2"
-                        android:textSize="20sp" />
-                </TableRow>
-                <TableRow>
+                        android:text="@string/USERNAME"
+                        android:textSize="15sp"/>
+
                     <TextView
-                        android:id="@+id/statistic_entry0"
-                        android:layout_width="200dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_column="0"
+                        android:layout_margin="10dp"
+                        android:layout_column="2"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="entry"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/statistic_entry0r"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="value"
-                        android:textSize="20sp" />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:id="@+id/statistic_entry1"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="0"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="entry"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/statistic_entry1r"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="value"
-                        android:textSize="20sp" />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:id="@+id/statistic_entry2"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="0"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="entry"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/statistic_entry2r"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="value"
-                        android:textSize="20sp" />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:id="@+id/statistic_entry3"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="0"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="entry"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/statistic_entry3r"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="value"
-                        android:textSize="20sp" />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:id="@+id/statistic_entry4"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="0"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="entry"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/statistic_entry4r"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="value"
-                        android:textSize="20sp" />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:id="@+id/statistic_entry5"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="0"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="entry"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/statistic_entry5r"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="value"
-                        android:textSize="20sp" />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:id="@+id/statistic_entry6"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="0"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="entry"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/statistic_entry6r"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="value"
-                        android:textSize="20sp" />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:id="@+id/statistic_entry7"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="0"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="entry"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/statistic_entry7r"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="value"
-                        android:textSize="20sp" />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:id="@+id/statistic_entry8"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="0"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="entry"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/statistic_entry8r"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="value"
-                        android:textSize="20sp" />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:id="@+id/statistic_entry9"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="0"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="entry"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/statistic_entry9r"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="value"
-                        android:textSize="20sp" />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:id="@+id/statistic_entry10"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="0"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="entry"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/statistic_entry10r"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="value"
-                        android:textSize="20sp" />
+                        android:text="@string/EXP"
+                        android:textSize="15sp"/>
                 </TableRow>
 
             </TableLayout>

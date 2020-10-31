@@ -35,11 +35,6 @@ public class StatisticFragment extends Fragment {
 
     private boolean is_Instructor;
     private int curr_class_code;
-    private TableLayout statisticsTable;
-    private List<TextView> studentList;
-    private List<TextView> expList;
-    private TextView studentLast;
-    private TextView expLast;
     private TableLayout boardLayout;
     private Button teachers_leaderboard_btn;
     private boolean teacher_in_statistic;
@@ -90,18 +85,12 @@ public class StatisticFragment extends Fragment {
             teachers_leaderboard_btn.setOnClickListener(v -> switchTeacherLeaderboard());
 
         } else {
-            TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.leader_board_debug_text);
+            TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.leader_board_class_code_text);
             Objects.requireNonNull(getActivity()).runOnUiThread(() -> class_name_text.setText("Current class code " + curr_class_code));
             classCodeChangeListener = (sp, key) -> onClassCodeChanged(key, class_name_text);
             sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
 
-            statisticsTable = view.findViewById(R.id.statistics_table);
-            studentList = Arrays.asList(view.findViewById(R.id.statistic_entry0), view.findViewById(R.id.statistic_entry1), view.findViewById(R.id.statistic_entry2), view.findViewById(R.id.statistic_entry3), view.findViewById(R.id.statistic_entry4), view.findViewById(R.id.statistic_entry5), view.findViewById(R.id.statistic_entry6), view.findViewById(R.id.statistic_entry7), view.findViewById(R.id.statistic_entry8), view.findViewById(R.id.statistic_entry9));
-            expList = Arrays.asList(view.findViewById(R.id.statistic_entry0r), view.findViewById(R.id.statistic_entry1r), view.findViewById(R.id.statistic_entry2r), view.findViewById(R.id.statistic_entry3r), view.findViewById(R.id.statistic_entry4r), view.findViewById(R.id.statistic_entry5r), view.findViewById(R.id.statistic_entry6r), view.findViewById(R.id.statistic_entry7r), view.findViewById(R.id.statistic_entry8r), view.findViewById(R.id.statistic_entry9r));
-            studentLast = view.findViewById(R.id.statistic_entry10);
-            expLast = view.findViewById(R.id.statistic_entry10r);
-            studentLast.setVisibility(View.INVISIBLE);
-            expLast.setVisibility(View.INVISIBLE);
+            boardLayout = view.findViewById(R.id.student_leaderboard_table);
         }
     }
 
@@ -121,6 +110,8 @@ public class StatisticFragment extends Fragment {
                 //should generate statistic table here as well
                 if (is_Instructor) {
                     generateClassStatisticTableRows(true);
+                } else {
+                    generateLeaderboardRows();
                 }
             }
         }
@@ -143,8 +134,7 @@ public class StatisticFragment extends Fragment {
             realTimeText.setText(text);
             if (is_Instructor && teacher_in_statistic) {
                 generateClassStatisticTableRows(false);
-            } else if (is_Instructor) {
-                //change that to else later
+            } else {
                 generateLeaderboardRows();
             }
         });
@@ -227,30 +217,5 @@ public class StatisticFragment extends Fragment {
         newRow.addView(generateTableElement("100"), 2);
 
         boardLayout.addView(newRow, 1);
-    }
-
-    /* We somehow get class statistics from server, maybe we changed class or maybe its pushed */
-    private void updateClassStatistics() {
-        List<String> topTenStudent = null;
-        //TODO: get the top ten student using current class
-        List<String> topTenExp = null;
-        //TODO: get the top ten exp using current class
-        for (TextView v : studentList) {
-            v.setText("student text goes here");
-        }
-        for (TextView v : expList) {
-            v.setText("exp text goes here");
-        }
-        //TODO: somehow put this in a thread?
-        if (!topTenStudent.contains(sp.getString(getString(R.string.USERNAME), ""))) {
-            studentLast.setVisibility(View.VISIBLE);
-            studentLast.setText(sp.getString(getString(R.string.USERNAME), ""));
-            expLast.setVisibility(View.VISIBLE);
-            expLast.setText(sp.getInt(getString(R.string.EXP), 0));
-        } else {
-            studentLast.setVisibility(View.INVISIBLE);
-            expLast.setVisibility(View.INVISIBLE);
-        }
-
     }
 }

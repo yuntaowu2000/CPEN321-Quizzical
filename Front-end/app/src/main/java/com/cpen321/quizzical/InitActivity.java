@@ -257,6 +257,7 @@ public class InitActivity extends AppCompatActivity {
         finishButton.setText(R.string.UI_finish);
         finishButton.setAllCaps(false);
         finishButton.setLayoutParams(relativeLayoutParam);
+        finishButton.setBackgroundResource(R.drawable.round_corner_button);
 
         finishButton.setOnClickListener(view -> onFinishClicked());
         relativeLayout.addView(finishButton);

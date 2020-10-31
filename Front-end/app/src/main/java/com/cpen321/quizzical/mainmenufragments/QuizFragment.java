@@ -171,6 +171,10 @@ public class QuizFragment extends Fragment {
     }
 
     private void updateQuizOnSPKeyChanged(String key) {
+        if (getContext() == null) {
+            return;
+        }
+
         if (key.equals(getString(R.string.CLASS_CODE))) {
             updateQuizList();
         }

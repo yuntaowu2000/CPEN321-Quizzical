@@ -15,8 +15,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"/>
 
     <Button
         android:id="@+id/go_to_quiz"

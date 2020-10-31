@@ -62,6 +62,9 @@ public class OtherUtils {
      * Encoding and decoding images for storing in shared preferences and send to server
      * */
     public static String encodeImage(Bitmap image) {
+        if (image == null) {
+            return "";
+        }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] b = baos.toByteArray();
