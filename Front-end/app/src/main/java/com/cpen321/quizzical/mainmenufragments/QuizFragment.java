@@ -42,7 +42,6 @@ public class QuizFragment extends Fragment {
     private FloatingActionButton note_fab;
     private boolean clicked = false;
 
-    private Button quizStartButton;
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout quizLinearLayout;
 
@@ -84,7 +83,7 @@ public class QuizFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //TODO: may need to separate for teacher and students
         //TODO: follow what is done in statistic fragment and get values from the server to setup the fragment
-        quizStartButton = view.findViewById(R.id.quiz_fragment_go_to_quiz_button);
+        Button quizStartButton = view.findViewById(R.id.quiz_fragment_go_to_quiz_button);
         quizStartButton.setOnClickListener(v -> setupQuiz());
 
         swipeRefreshLayout = view.findViewById(R.id.quiz_page_refresh_layout);
