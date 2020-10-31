@@ -21,15 +21,7 @@ public class M7demoTest {
     @Test
     public void testValidUsernameChange() {
         String new_userName = "Valhalla";
-        Espresso.onView(ViewMatchers.withText(R.string.UI_profile)).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withId(R.id.profile_username_change_btn)).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withHint(R.string.UI_example_username))
-                .inRoot(RootMatchers.isDialog())
-                .perform(ViewActions.typeText(new_userName));
-
-        Espresso.onView(ViewMatchers.withText(R.string.UI_submit))
-                .inRoot(RootMatchers.isDialog())
-                .perform(ViewActions.click());
+        performChange(new_userName, R.id.profile_username_change_btn, R.string.UI_example_username);
 
         Espresso.onView(ViewMatchers.withId(R.id.profile_username))
                 .check(ViewAssertions.matches(ViewMatchers.withText(new_userName)));
@@ -38,15 +30,7 @@ public class M7demoTest {
     @Test
     public void testInvalidUsernameChange() {
         String new_userName = "Va+";
-        Espresso.onView(ViewMatchers.withText(R.string.UI_profile)).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withId(R.id.profile_username_change_btn)).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withHint(R.string.UI_example_username))
-                .inRoot(RootMatchers.isDialog())
-                .perform(ViewActions.typeText(new_userName));
-
-        Espresso.onView(ViewMatchers.withText(R.string.UI_submit))
-                .inRoot(RootMatchers.isDialog())
-                .perform(ViewActions.click());
+        performChange(new_userName, R.id.profile_username_change_btn, R.string.UI_example_username);
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_username_invalid_msg))
                 .inRoot(RootMatchers.isDialog())
@@ -56,15 +40,7 @@ public class M7demoTest {
     @Test
     public void testValidEmailChange() {
         String new_email = "Valhalla@hotmail.com";
-        Espresso.onView(ViewMatchers.withText(R.string.UI_profile)).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withId(R.id.profile_email_change_btn)).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withHint(R.string.UI_example_email))
-                .inRoot(RootMatchers.isDialog())
-                .perform(ViewActions.typeText(new_email));
-
-        Espresso.onView(ViewMatchers.withText(R.string.UI_submit))
-                .inRoot(RootMatchers.isDialog())
-                .perform(ViewActions.click());
+        performChange(new_email, R.id.profile_email_change_btn, R.string.UI_example_email);
 
         Espresso.onView(ViewMatchers.withId(R.id.profile_email))
                 .check(ViewAssertions.matches(ViewMatchers.withText(new_email)));
@@ -73,18 +49,22 @@ public class M7demoTest {
     @Test
     public void testInvalidEmailChange() {
         String new_email = "Va+";
+        performChange(new_email, R.id.profile_email_change_btn, R.string.UI_example_email);
+
+        Espresso.onView(ViewMatchers.withText(R.string.UI_email_invalid_msg))
+                .inRoot(RootMatchers.isDialog())
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    private void performChange(String new_email, int buttonId, int textId) {
         Espresso.onView(ViewMatchers.withText(R.string.UI_profile)).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withId(R.id.profile_email_change_btn)).perform(ViewActions.click());
-        Espresso.onView(ViewMatchers.withHint(R.string.UI_example_email))
+        Espresso.onView(ViewMatchers.withId(buttonId)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withHint(textId))
                 .inRoot(RootMatchers.isDialog())
                 .perform(ViewActions.typeText(new_email));
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_submit))
                 .inRoot(RootMatchers.isDialog())
                 .perform(ViewActions.click());
-
-        Espresso.onView(ViewMatchers.withText(R.string.UI_email_invalid_msg))
-                .inRoot(RootMatchers.isDialog())
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 }
