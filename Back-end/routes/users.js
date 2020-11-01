@@ -18,6 +18,24 @@ router.get('/', (req, res, next) => {
   } else if (type === full) {
     res.send(db.collection.find({ uid: { $eq: uid } }));
   }
+  else if (type === username) {
+    res.send(db.collection.find({ uid: { $eq: uid } }).username);
+  }
+  else if (type === Email) {
+    res.send(db.collection.find({ uid: { $eq: uid } }).Email);
+  }
+  else if (type === IS_INSTRUCTOR) {
+    res.send(db.collection.find({ uid: { $eq: uid } }).IS_INSTRUCTOR);
+  }
+  else if (type === user_quiz_count) {
+    res.send(db.collection.find({ uid: { $eq: uid } }).user_quiz_count);
+  }
+  else if (type === EXP) {
+    res.send(db.collection.find({ uid: { $eq: uid } }).EXP);
+  }
+  else if (type === class_code) {
+    res.send(db.collection.find({ uid: { $eq: uid } }).class_code);
+  }
 });
 
 module.exports = router;
