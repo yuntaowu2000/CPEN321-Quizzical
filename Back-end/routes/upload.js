@@ -24,6 +24,11 @@ MongoClient.connect(
 	console.log(err);
       }
     });
+    db.createCollection("quizzes", (err, res) => {
+      if (err) {
+	console.log(err);
+      }
+    });
   }
 );
 
@@ -55,7 +60,12 @@ router.post("/", (req, res, next) => {
 	  console.log(err);
 	}
       });
-    }
+    } else if (req.body.type === "quiz") {
+      db.collection("quizzes").insertOne(Object.assign({}, req.body.data, {uid: req.body.uid}), (err, res) => {
+	if (err) {
+	  console.log(err);
+	}
+      });
   }
 
   res.statusCode = 200;
