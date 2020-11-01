@@ -67,5 +67,6 @@ after each quiz is finished
 5. Complex logic  
 5.1 The EXP for the teacher is calculated as follows:  
 After each quiz is created  
-EXP = BASIC_EXP  
+EXP = BASIC_EXP 
+(BASIC_EXP = 10)
 When a student/another teacher liked the quiz, EXP += BONUS_EXP  
