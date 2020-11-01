@@ -19,7 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -34,7 +33,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonElement;
@@ -107,18 +105,14 @@ public class InitActivity extends AppCompatActivity {
             ActivityCompat.finishAffinity(this);
         });
 
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if (!task.isSuccessful()) {
-                    Log.d("Firebase", "Fetching token failed");
-                    return;
-                }
-                String token = task.getResult();
-                Log.d("Token", token);
-                sp.edit().putString(getString(R.string.FIREBASE_TOKEN), token).apply();
-                Toast.makeText(InitActivity.this, "Fire base token: " + token, Toast.LENGTH_LONG).show();
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.d("Firebase", "Fetching token failed");
+                return;
             }
+            String token = task.getResult();
+            Log.d("Token", token);
+            sp.edit().putString(getString(R.string.FIREBASE_TOKEN), token).apply();
         });
 
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) != ConnectionResult.SUCCESS) {

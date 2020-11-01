@@ -194,16 +194,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void logOut() {
-        sp.edit().putBoolean(getString(R.string.LOGGED), false).apply();
 
-        //TODO: need to use server to get these info
-        sp.edit().remove(getString(R.string.PROFILE_IMG)).apply();
-        sp.edit().remove(getString(R.string.IS_INSTRUCTOR)).apply();
-        sp.edit().remove(getString(R.string.USERNAME)).apply();
-        sp.edit().remove(getString(R.string.EMAIL)).apply();
-        sp.edit().remove(getString(R.string.CLASS_CODE)).apply();
-        sp.edit().remove(getString(R.string.EXP)).apply();
-        sp.edit().remove(getString(R.string.USER_QUIZ_COUNT)).apply();
         sp.edit().clear().apply();
 
         if (quizNumAndExpChangeListener != null)

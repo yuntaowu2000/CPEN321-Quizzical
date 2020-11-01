@@ -410,7 +410,7 @@ public class HomeActivity extends AppCompatActivity {
         if (StatisticFragment.classCodeChangeListener != null)
             sp.registerOnSharedPreferenceChangeListener(StatisticFragment.classCodeChangeListener);
         if (QuizFragment.quizFramentClassCodeChangeListener != null)
-            sp.unregisterOnSharedPreferenceChangeListener(QuizFragment.quizFramentClassCodeChangeListener);
+            sp.registerOnSharedPreferenceChangeListener(QuizFragment.quizFramentClassCodeChangeListener);
     }
 
     @Override
