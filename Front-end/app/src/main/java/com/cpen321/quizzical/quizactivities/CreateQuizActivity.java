@@ -46,6 +46,7 @@ public class CreateQuizActivity extends AppCompatActivity {
     private CheckBox questionHasPic;
     private ImageButton takePictureButton;
 
+    private List<String> answerPics;
     private LinearLayout answersLayout;
     private List<LinearLayout> answerRows;
 
@@ -110,6 +111,7 @@ public class CreateQuizActivity extends AppCompatActivity {
             startActivity(takePictureIntent);
         });
 
+        answerPics = new ArrayList<>();
         answersLayout = findViewById(R.id.answers_layout);
         answerRows = new ArrayList<>();
 
@@ -130,17 +132,16 @@ public class CreateQuizActivity extends AppCompatActivity {
     }
 
     private void addNewAnswer() {
-        //Todo: use a certain stackoverflow post to fix this layout.
         final String[] answer = {""};
-        String pic = "https://raw.githubusercontent.com/yuntaowu2000/testUploadModels/master/006.png"; // some default picture
+        String pic = ""; // some default picture
         final boolean[] isPic = {false};
+        boolean isAnsValid= false;
 
         final LinearLayout.LayoutParams[] layoutParams = {new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)};
         layoutParams[0].setMargins(10, 5, 10, 5);
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-
 
         TextView answerText = new TextView(this);
         answerText.setText("Enter answer");
@@ -177,11 +178,9 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         //answersLayout.addView(layout);
 
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle("Question input")
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle("Answer Input")
                 .setView(layout)
-                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> dialogInterface.dismiss()));
-        // add cancel
-
+                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> {if (isAnsValid) {dialogInterface.dismiss();}}));
 
         final AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
@@ -214,8 +213,8 @@ public class CreateQuizActivity extends AppCompatActivity {
                                 View rowChild = ((LinearLayout) child).getChildAt(j);
                                 if (rowChild instanceof CheckBox) {
                                     Log.d("Hi_op", "   yay2");
-                                    ((CheckBox) rowChild).setChecked(false);
-                                    rowChild.setEnabled(true);
+                                    ((CheckBox) rowChild).setChecked(rowChild.equals(isCorrect));
+                                    rowChild.setEnabled(!rowChild.equals(isCorrect));
                                     // to do:  I need to reason how to change the correct ans num, maybe by check i j values after deletion
                                     // so lets add delete button first
                                     // then after these we can do edit based on same ideas
@@ -223,8 +222,6 @@ public class CreateQuizActivity extends AppCompatActivity {
                             }
                         }
                     }
-                    isCorrect.setEnabled(false);
-                    isCorrect.setChecked(true);
                 }
             });
 
@@ -233,23 +230,187 @@ public class CreateQuizActivity extends AppCompatActivity {
             answerContent.setLayoutParams(layoutParams[0]);
 
             ImageView answerImage = new ImageView(this);
-            answerImage.setImageBitmap(getBitmapFromUrl(pic));
+            try {
+                if (pic != "") {
+                    answerImage.setImageBitmap(getBitmapFromUrl(pic));
+                } else {
+                    answerImage.setImageResource(android.R.drawable.ic_menu_gallery);
+                }
+            } catch (Exception e) {
+                answerImage.setImageResource(android.R.drawable.ic_menu_gallery);
+            }
+            answerImage.setMaxHeight(200);
             answerImage.setLayoutParams(layoutParams[0]);
+            answerImage.setOnClickListener(x -> {
+                final LinearLayout.LayoutParams[] ansImgLayoutParams = {new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)};
+
+                LinearLayout ansImgLayout = new LinearLayout(this);
+                ansImgLayout.setOrientation(LinearLayout.VERTICAL);
+
+                ImageView ansImg = new ImageView(this);
+                ansImg.setMaxWidth(350);
+                ansImg.setMaxHeight(750);
+                ansImg.setLayoutParams(ansImgLayoutParams[0]);
+                try {
+                    if (pic != "") {
+                        ansImg.setImageBitmap(getBitmapFromUrl(pic));
+                    } else {
+                        ansImg.setImageResource(android.R.drawable.ic_menu_gallery);
+                    }
+                } catch (Exception e) {
+                    ansImg.setImageResource(android.R.drawable.ic_menu_gallery);
+                }
+                ansImgLayout.addView(ansImg);
+
+                AlertDialog.Builder ansImgAlertBuilder = new AlertDialog.Builder(this).setTitle("Preview")
+                        .setView(ansImgLayout)
+                        .setNeutralButton("Close", ((dialogInterface, i) -> dialogInterface.dismiss()));
+
+                final AlertDialog ansImgAlertDialog = ansImgAlertBuilder.create();
+                ansImgAlertDialog.show();
+            });
 
             Button editButton = new Button(this);
             editButton.setLayoutParams(layoutParams[0]);
             editButton.setText("Edit");
             editButton.setOnClickListener(w -> {
+                Log.d("Hi_op", "click");
+                for (int i = 0; i < answersLayout.getChildCount(); i++) {
+                    View child = answersLayout.getChildAt(i);
+                    if (child instanceof LinearLayout) {
+                        for (int j = 0; j < ((LinearLayout) child).getChildCount(); j++) {
+                            View rowChild = ((LinearLayout) child).getChildAt(j);
+                            try {
+                                ((TextView) rowChild).setText(""+i+j);
+                            } catch (java.lang.ClassCastException e) {
+
+                            }
+                        }
+                    }
+                }
             });
 
+            ImageButton deleteButton = new ImageButton(this);
+            deleteButton.setLayoutParams(layoutParams[0]);
+            deleteButton.setImageResource(android.R.drawable.ic_delete);
+            deleteButton.setOnClickListener(w -> {
+                final LinearLayout.LayoutParams[] delLayoutParams = {new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)};
+                delLayoutParams[0].setMargins(10, 5, 10, 5);
+
+                LinearLayout delLayout = new LinearLayout(this);
+                delLayout.setOrientation(LinearLayout.VERTICAL);
+
+                TextView sureText = new TextView(this);
+                sureText.setText("Are you sure you want to delete?");
+                sureText.setLayoutParams(delLayoutParams[0]);
+
+                delLayout.addView(sureText);
+
+                AlertDialog.Builder delAlertBuilder = new AlertDialog.Builder(this).setTitle("Delete Answer Choice?")
+                        .setView(delLayout)
+                        .setPositiveButton("Delete", ((dialogInterface, i) -> dialogInterface.dismiss()))
+                        .setNegativeButton("Cancel", ((dialogInterface, i) -> dialogInterface.dismiss()));
+
+                final AlertDialog delAlertDialog = delAlertBuilder.create();
+                delAlertDialog.show();
+
+                delAlertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(y -> {
+                    for (int j = 0; j < answersLayout.getChildCount(); j++) {
+                        View child = answersLayout.getChildAt(j);
+                        Log.d("hi_op","schiesse "+child+" "+row);
+                        if (child.equals(row)) {
+                            answersLayout.removeView(row);
+                            currChoices.remove(j);
+                            break;
+                        }
+                    }
+                });
+            });
+
+            if (isPic[0]) {
+                answerImage.setVisibility(View.VISIBLE);
+                answerText.setVisibility(View.GONE);
+            } else {
+                answerImage.setVisibility(View.GONE);
+                answerText.setVisibility(View.VISIBLE);
+            }
+            ChoicePair ansChoice = new ChoicePair(isPic[0], isPic[0]?pic:answer[0]);
+            answerPics.add(pic);
+            currChoices.add(ansChoice);
+
             row.addView(isCorrect);
-            row.addView(isPic[0] ? answerImage : answerContent);
+            row.addView(answerImage);
+            row.addView(answerContent);
             row.addView(editButton);
+            row.addView(deleteButton);
             answerRows.add(row);
 
             answersLayout.addView(row);
             alertDialog.dismiss();
         });
+    }
+
+    private void editExistingQuestion(LinearLayout row) {
+
+//        final String[] answer = {""};                                 working on this
+//        String pic = ""; // some default picture
+//        final boolean[] isPic = {false};
+//
+//        for (int i = 0; i < answersLayout.getChildCount(); i++) {
+//            if (answersLayout.getChildAt(i).equals(row)) {
+//
+//            }
+//        }
+//
+//        final LinearLayout.LayoutParams[] layoutParams = {new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)};
+//        layoutParams[0].setMargins(10, 5, 10, 5);
+//
+//        LinearLayout layout = new LinearLayout(this);
+//        layout.setOrientation(LinearLayout.VERTICAL);
+//
+//        TextView answerText = new TextView(this);
+//        answerText.setText("Enter answer");
+//        answerText.setLayoutParams(layoutParams[0]);
+//
+//        EditText answerInput = new EditText(this);
+//        answerInput.setLayoutParams(layoutParams[0]);
+//        answerInput.setHint("What is 1+1");
+//        answerInput.setInputType(InputType.TYPE_CLASS_TEXT);
+//        answerInput.setText(answer[0]);
+//        answerInput.setMaxLines(1);
+//
+//        ImageButton answerPic = new ImageButton(this);
+//        answerPic.setImageResource(android.R.drawable.ic_menu_camera);
+//        answerPic.setVisibility(View.GONE);
+//        answerPic.setOnClickListener(v -> {
+//            Intent takePictureIntent = new Intent(this, TestPage.class);
+//            startActivity(takePictureIntent);
+//        });
+//
+//        CheckBox checkBox = new CheckBox(this);
+//        checkBox.setChecked(false);
+//        checkBox.setText("Picture ");
+//        checkBox.setOnClickListener(v -> {
+//            isPic[0] = checkBox.isChecked();
+//            answerInput.setVisibility(checkBox.isChecked() ? View.GONE : View.VISIBLE);
+//            answerPic.setVisibility(checkBox.isChecked() ? View.VISIBLE : View.GONE);
+//        });
+//
+//        layout.addView(answerText);
+//        layout.addView(checkBox);
+//        layout.addView(answerInput);
+//        layout.addView(answerPic);
+//
+//        //answersLayout.addView(layout);
+//
+//        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle("Answer Input")
+//                .setView(layout)
+//                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> dialogInterface.dismiss()));
+//
+//        final AlertDialog alertDialog = alertBuilder.create();
+//        alertDialog.show();
+//
+//        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
     }
 
 
