@@ -33,6 +33,7 @@ router.post("/", (req, res, next) => {
   console.log("UID: " + req.body.uid);
   console.log("Type: " + req.body.type);
   console.log("Data: %j", req.body);
+  console.log(Object.entries(req.body));
 
   if (req.body.type === "Profile_Image") {
     let path = "images/" + req.body.uid;
@@ -43,13 +44,13 @@ router.post("/", (req, res, next) => {
     fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
   } else {
     if (req.body.type === "user info" || req.body.type === "notification_frequency") {
-      db.collection(req.body.type).insertOne(Object.assign({}, req.body.data, {uid: req.body.uid}), (err, res) => {
+      db.collection(req.body.type).insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
 	if (err) {
 	  console.log(err);
 	}
       });
     } else if (req.body.type === "Add class") {
-      db.collection("class info").insertOne(Object.assign({}, req.body.data, {uid: req.body.uid}), (err, res) => {
+      db.collection("class info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
 	if (err) {
 	  console.log(err);
 	}

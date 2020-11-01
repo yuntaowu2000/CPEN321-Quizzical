@@ -76,7 +76,7 @@ router.get("/", (req, res, next) => {
     });
   }
   else if (type === "class_code") {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({class_code:1, _id:0}).toArray((err, classCode) => {
+    db.collection("class info").find({ uid: { $eq: uid }}).project({class_code:1, _id:0}).toArray((err, classCode) => {
       if (err) {
 	throw err;
       } else {
