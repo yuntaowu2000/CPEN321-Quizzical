@@ -31,7 +31,8 @@
 
             <TableLayout
                 android:id="@+id/student_leaderboard_table"
-                android:layout_width="300dp"
+                android:layout_width="225dp"
+                android:layout_margin="20sp"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
