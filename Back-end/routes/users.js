@@ -15,8 +15,8 @@ router.get('/', (req, res, next) => {
     let bitmap = fs.readFileSync('/home/site/wwwroot/images/105960354998423944600_profile_img.jpg');
     let string = Buffer(bitmap).toString('base64');
     res.end(string);
-  } else if (type === null) {
-    res.send("{\"username\":\"yuntao_wu\",\"Email\":\"yuntaowu2000@gmail.com\",\"IS_INSTRUCTOR\":true,\"user quiz count\":1,\"EXP\":13, \"class_code\":10234}");
+  } else if (type === full) {
+    res.send(db.collection.find({ uid: { $eq: uid } }));
   }
 });
 
