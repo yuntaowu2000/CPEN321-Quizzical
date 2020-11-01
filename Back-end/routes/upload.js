@@ -42,20 +42,26 @@ router.post("/", (req, res, next) => {
     }
     let filename = path + "/profile_img.jpg";
     fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
-  } else {
-    if (req.body.type === "user info" || req.body.type === "notification_frequency") {
-      db.collection(req.body.type).insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
-	if (err) {
-	  console.log(err);
-	}
-      });
-    } else if (req.body.type === "Add class") {
-      db.collection("class info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
-	if (err) {
-	  console.log(err);
-	}
-      });
-    }
+  }
+  else if (req.body.type === "user_info") {
+    db.collection("user info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
+      if (err) {
+	console.log(err);
+      }
+    });
+  }
+  else if (req.body.type === "notification_frequency") {
+    db.collection(req.body.type).insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
+      if (err) {
+	console.log(err);
+      }
+    });
+  } else if (req.body.type === "Add class") {
+    db.collection("class info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
+      if (err) {
+	console.log(err);
+      }
+    });
   }
 
   res.statusCode = 200;
