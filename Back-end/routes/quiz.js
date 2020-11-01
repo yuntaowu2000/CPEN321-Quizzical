@@ -36,4 +36,25 @@ router.post("/", (req, res, next) => {
   res.end();
 });
 
+/* GET quiz listing. */
+router.get("/", (req, res, next) => {
+  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
+  let uid = url.searchParams.get("user_id");
+  let type = url.searchParams.get("type");
+  
+  
+  if (type === "quiz") {
+    db.collection("quizzes").find({ $and: [ {"uid": uid}, {"data.id": quiz_code} ] }).toArray((err, frequency) => {
+      if (err) {
+	throw err;
+      } else {
+	res.send(frequency);
+      }
+    });
+  }
+});
+
 module.exports = router;
+
+
+
