@@ -23,8 +23,8 @@ router.get("/", (req, res, next) => {
     let bitmap = fs.readFileSync(filepath);
     let string = Buffer(bitmap).toString("base64");
     res.send(string);
-  } else if (type === "user_info") {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({_id:0}).toArray((err,data) => {
+  } else if (type === null) {
+    db.collection("user info").find({ uid: { $eq: uid }}).project({Profile_Image:0, _id:0}).toArray((err,data) => {
       if (err) {
 	throw err;
       }
