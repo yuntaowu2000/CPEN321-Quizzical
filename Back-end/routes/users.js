@@ -24,28 +24,76 @@ router.get("/", (req, res, next) => {
     let string = Buffer(bitmap).toString("base64");
     res.send(string);
   } else if (type === "user_info") {
-    res.send(db.collection.find({ uid: { $eq: uid } }));
+    db.collection("testCollection").find({ uid: { $eq: uid } }).toArray((err, data) => {
+      if (err) {
+	throw err;
+      } else {
+	res.send(data);
+      }
+    });
   }
   else if (type === "username") {
-    res.send(db.collection.find({ uid: { $eq: uid } }, {username:1, _id:0}));
+    db.collection("testCollection").find({ uid: { $eq: uid } }, {username:1, _id:0}).toArray((err, username) => {
+      if (err) {
+	throw err;
+      } else {
+	res.send(username);
+      }
+    });
   }
   else if (type === "Email") {
-    res.send(db.collection.find({ uid: { $eq: uid } }, {Email:1, _id:0}));
+    db.collection("testCollection").find({ uid: { $eq: uid } }, {Email:1, _id:0}).toArray((err, email) => {
+      if (err) {
+	throw err;
+      } else {
+	res.send(email);
+      }
+    });
   }
   else if (type === "IS_INSTRUCTOR") {
-    res.send(db.collection.find({ uid: { $eq: uid } }, {IS_INSTRUCTOR:1, _id:0}));
+    db.collection("testCollection").find({ uid: { $eq: uid } }, {IS_INSTRUCTOR:1, _id:0}).toArray((err, isInstructor) => {
+      if (err) {
+	throw err;
+      } else {
+	res.send(isInstructor);
+      }
+    });
   }
   else if (type === "user_quiz_count") {
-    res.send(db.collection.find({ uid: { $eq: uid } }, {user_quiz_count:1, _id:0}));
+    db.collection("testCollection").find({ uid: { $eq: uid } }, {user_quiz_count:1, _id:0}).toArray((err, quizCount) => {
+      if (err) {
+	throw err;
+      } else {
+	res.send(quizCount);
+      }
+    });
   }
   else if (type === "EXP") {
-    res.send(db.collection.find({ uid: { $eq: uid } }, {EXP:1, _id:0}));
+    db.collection("testCollection").find({ uid: { $eq: uid } }, {EXP:1, _id:0}).toArray((err, exp) => {
+      if (err) {
+	throw err;
+      } else {
+	res.send(exp);
+      }
+    });
   }
   else if (type === "class_code") {
-    res.send(db.collection.find({ uid: { $eq: uid } }, {class_code:1, _id:0}));
+    db.collection("testCollection").find({ uid: { $eq: uid } }, {class_code:1, _id:0}).toArray((err, classCode) => {
+      if (err) {
+	throw err;
+      } else {
+	res.send(classCode);
+      }
+    });
   }
   else if (type === "notification_frequency") {
-    res.send(db.collection.find({ uid: { $eq: uid } }, {notification_frequency:1, _id:0}));
+    db.collection("testCollection").find({ uid: { $eq: uid } }, {notification_frequency:1, _id:0}).toArray((err, frequency) => {
+      if (err) {
+	throw err;
+      } else {
+	res.send(frequency);
+      }
+    });
   }
 });
 
