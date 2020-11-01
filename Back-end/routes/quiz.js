@@ -25,11 +25,21 @@ router.post("/", (req, res, next) => {
   console.log("Data: %j", req.body);
 
   if (req.body.type === "quiz") {
-      db.collection("quizzes").insertOne(Object.assign({}, req.body.data, {uid: req.body.uid}), (err, res) => {
+      if (req.body.data.id === null){
+	db.collection("quizzes").insertOne(Object.assign({}, req.body.data, {uid: req.body.uid}, {quiz_code: db.collection("quizzes").count() }, {class_code: req.body.data.class_code}), (err, res) => {
 	      if (err) {
 	        console.log(err);
 	      }
-      });
+      	});      
+      }
+      else {
+	db.collection("quizzes").insertOne(Object.assign({}, req.body.data, {uid: req.body.uid}, {quiz_code: req.body.data.id}, {class_code: req.body.data.class_code}), (err, res) => {
+	      if (err) {
+	        console.log(err);
+	      }
+      	});	  
+      }
+      
   }
 
   res.statusCode = 200;
