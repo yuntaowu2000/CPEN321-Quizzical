@@ -51,7 +51,7 @@ router.post("/", (req, res, next) => {
     });
   }
   else if (req.body.type === "notification_frequency") {
-    db.collection(req.body.type).insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
+    db.collection(req.body.type).insertOne(req.body, (err, res) => {
       if (err) {
 	console.log(err);
       }
