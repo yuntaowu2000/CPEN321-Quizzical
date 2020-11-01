@@ -19,22 +19,22 @@ router.get('/', (req, res, next) => {
     res.send(db.collection.find({ uid: { $eq: uid } }));
   }
   else if (type === username) {
-    res.send(db.collection.find({ uid: { $eq: uid } }).username);
+    res.send(db.collection.find({ uid: { $eq: uid } }, {username:1, _id:0}));
   }
   else if (type === Email) {
-    res.send(db.collection.find({ uid: { $eq: uid } }).Email);
+    res.send(db.collection.find({ uid: { $eq: uid } }, {Email:1, _id:0}));
   }
   else if (type === IS_INSTRUCTOR) {
-    res.send(db.collection.find({ uid: { $eq: uid } }).IS_INSTRUCTOR);
+    res.send(db.collection.find({ uid: { $eq: uid } }, {IS_INSTRUCTOR:1, _id:0}));
   }
   else if (type === user_quiz_count) {
-    res.send(db.collection.find({ uid: { $eq: uid } }).user_quiz_count);
+    res.send(db.collection.find({ uid: { $eq: uid } }, {user_quiz_count:1, _id:0}));
   }
   else if (type === EXP) {
-    res.send(db.collection.find({ uid: { $eq: uid } }).EXP);
+    res.send(db.collection.find({ uid: { $eq: uid } }, {EXP:1, _id:0}));
   }
   else if (type === class_code) {
-    res.send(db.collection.find({ uid: { $eq: uid } }).class_code);
+    res.send(db.collection.find({ uid: { $eq: uid } }, {class_code:1, _id:0}));
   }
 });
 
