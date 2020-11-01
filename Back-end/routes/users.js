@@ -19,7 +19,7 @@ router.get("/", (req, res, next) => {
   let type = url.searchParams.get("type");
   
   if (type === "Profile_Image") {
-    let filepath = "/home/site/wwwroot/images/" + uid + + "/profile_img.jpg";
+    let filepath = "images/" + uid + + "/profile_img.jpg";
     let bitmap = fs.readFileSync(filepath);
     let string = Buffer(bitmap).toString("base64");
     res.send(string);

@@ -11,7 +11,7 @@ MongoClient.connect(
     db = client.db("data");
     db.createCollection("testCollection", (err, res) => {
       if (err) {
-	      console.log(err);
+	console.log(err);
       }
     });
   }
@@ -22,10 +22,9 @@ router.use(express.json());
 router.post("/", (req, res, next) => {
   console.log("UID: " + req.body.uid);
   console.log("Type: " + req.body.type);
-  console.log("Data: " + req.body);
 
   if (req.body.type === "Profile_Image") {
-    let path = "/home/site/wwwroot/images/" + req.body.uid;
+    let path = "images/" + req.body.uid;
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path);
     }
@@ -37,18 +36,10 @@ router.post("/", (req, res, next) => {
         console.log(err);
       }
     });
-  
-    db.collection("testCollection").find().toArray((err, items) => {
-      console.log(items);
-    });  
   }
 
   res.statusCode = 200;
   res.end();
-});
-
-router.get("/", (req, res, next) => {
-  res.send("Upload page");
 });
 
 module.exports = router;
