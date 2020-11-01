@@ -17,6 +17,7 @@ import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.cpen321.quizzical.utils.ChoicePair;
 import com.cpen321.quizzical.utils.OtherUtils;
+import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
@@ -112,17 +113,9 @@ public class TestPage extends AppCompatActivity {
     }
 
     private void testUpload() {
-        List<ChoicePair> choicePairList = new ArrayList<>();
-
-        choicePairList.add(new ChoicePair(false, "<p align=\"middle\">2</p>"));
-        choicePairList.add(new ChoicePair(true, "https://raw.githubusercontent.com/yuntaowu2000/testUploadModels/master/006.png"));
-        choicePairList.add(new ChoicePair(false, "<p>https://raw.githubusercontent.com/yuntaowu2000/testUploadModels/master/006.png</p>"));
-        choicePairList.add(new ChoicePair(false, "$$ c = \\sqrt{a^2 + b^2} $$"));
-
-        QuestionsMC testQ = new QuestionsMC(CourseCategory.Math, "calculate: $$1+1=$$", false, "", choicePairList, 1);
-        String q = testQ.toJsonString();
-        Log.d("question", q);
-
-        new Thread(() -> OtherUtils.uploadToServer(getString(R.string.UI_username), getString(R.string.QUESTION), q)).start();
+        TestQuestionPackage testQuestionPackage = new TestQuestionPackage();
+        String json = testQuestionPackage.getPackage().toJson();
+        Log.d("Json_version", json);
+        OtherUtils.uploadToServer(getString(R.string.UID), getString(R.string.QUIZ), json);
     }
 }

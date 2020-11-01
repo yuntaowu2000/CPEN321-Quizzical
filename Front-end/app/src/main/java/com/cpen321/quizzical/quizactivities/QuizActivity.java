@@ -104,6 +104,7 @@ public class QuizActivity extends AppCompatActivity {
             TestQuestionPackage testPackage = new TestQuestionPackage();
             questions = testPackage.getPackage().getQuestionsByCategory(CourseCategory.Math, totalQuestionNum);
             quizId = testPackage.getPackage().getId();
+            Log.d("Json_version", testPackage.getPackage().toJson());
         } else {
             quizId = questionPackage.getId();
             totalQuestionNum = questions.size();

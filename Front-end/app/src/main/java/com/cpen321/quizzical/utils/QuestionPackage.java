@@ -25,6 +25,7 @@ public class QuestionPackage {
      */
 
     private int id;
+    private int class_code;
     private List<IQuestion> questionList;
 
     public QuestionPackage() {
@@ -32,20 +33,22 @@ public class QuestionPackage {
     }
 
     public QuestionPackage(String quizJson) {
-        questionList = new ArrayList<>();
         try {
-            JSONArray jsonArray = new JSONArray(quizJson);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                String question = jsonArray.getJSONObject(i).toString();
-                this.addMCQuestion(question);
-            }
-        } catch (JSONException e) {
-            Log.d("parse_quiz", "parsing failed");
+            Gson g = new Gson();
+            QuestionPackage q = g.fromJson(quizJson, QuestionPackage.class);
+            this.id = q.id;
+            this.class_code = q.class_code;
+            this.questionList = q.questionList;
+        } catch (Exception e) {
+            this.id = 0;
+            this.class_code = 0;
+            this.questionList = new ArrayList<>();
         }
     }
 
-    public QuestionPackage(int id) {
+    public QuestionPackage(int id, int class_code) {
         this.id = id;
+        this.class_code = class_code;
         questionList = new ArrayList<>();
     }
 
@@ -94,5 +97,9 @@ public class QuestionPackage {
         questionList.add(q);
     }
 
+    public String toJson() {
+        Gson g = new Gson();
+        return g.toJson(this);
+    }
 
 }
