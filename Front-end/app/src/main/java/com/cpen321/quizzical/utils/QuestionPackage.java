@@ -1,9 +1,14 @@
 package com.cpen321.quizzical.utils;
 
+import android.util.Log;
+
 import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.data.questions.IQuestion;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +29,19 @@ public class QuestionPackage {
 
     public QuestionPackage() {
         questionList = new ArrayList<>();
+    }
+
+    public QuestionPackage(String quizJson) {
+        questionList = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(quizJson);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                String question = jsonArray.getJSONObject(i).toString();
+                this.addMCQuestion(question);
+            }
+        } catch (JSONException e) {
+            Log.d("parse_quiz", "parsing failed");
+        }
     }
 
     public QuestionPackage(int id) {

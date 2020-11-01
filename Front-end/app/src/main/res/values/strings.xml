@@ -31,6 +31,9 @@
     <string name="IS_INSTRUCTOR" translatable="false">IS_INSTRUCTOR</string>
 
     <string name="CLASS_CODE" translatable="false">class_code</string>
+    <string name="QUIZ_CODE" translatable="false">quiz_code</string>
+    <string name="QUESTION_NUM" translatable="false">question_num</string>
+    <string name="QUIZ_URL" translatable="false">QUIZ_URL</string>
 
     <string name="COURSE_CATEGORY" translatable="false">course category</string>
 
