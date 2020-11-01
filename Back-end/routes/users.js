@@ -93,6 +93,15 @@ router.get("/", (req, res, next) => {
       }
     });
   }
+  else if (type === "quiz") {
+    db.collection("quizzes").find({ $and: [ {"uid": uid}, {"data.id": quiz_code} ] }).toArray((err, frequency) => {
+      if (err) {
+	throw err;
+      } else {
+	res.send(frequency);
+      }
+    });
+  }
 });
 
 module.exports = router;
