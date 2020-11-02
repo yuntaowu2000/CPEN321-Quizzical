@@ -19,7 +19,7 @@ router.get("/", (req, res, next) => {
   let type = url.searchParams.get("type");
   
   if (type === "Profile_Image") {
-    let filepath = "images/" + uid + + "/profile_img.jpg";
+    let filepath = "/home/site/wwwroot/images/" + uid + + "/profile_img.jpg";
     let bitmap = fs.readFileSync(filepath);
     let string = Buffer(bitmap).toString("base64");
     res.send(string);
@@ -49,7 +49,7 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	username = Object.values(username)[0]
+	username = Object.values(username[0])
 	res.send(username);
       }
     });
@@ -59,7 +59,7 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	email = Object.values(email)[0]
+	email = Object.values(email[0])
 	res.send(email);
       }
     });
@@ -69,7 +69,7 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	isInstructor = Object.values(isInstructor)[0]
+	isInstructor = Object.values(isInstructor[0])
 	res.send(isInstructor);
       }
     });
@@ -79,7 +79,7 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	quizCount = Object.values(quizCount)[0]
+	quizCount = Object.values(quizCount[0])
 	res.send(quizCount);
       }
     });
