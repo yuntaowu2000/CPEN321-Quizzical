@@ -9,7 +9,17 @@ MongoClient.connect(
   {useUnifiedTopology: true},
   (err, client) => {
     db = client.db("data");
-    db.createCollection("testCollection", (err, res) => {
+    db.createCollection("class info", (err, res) => {
+      if (err) {
+	console.log(err);
+      }
+    });
+    db.createCollection("user info", (err, res) => {
+      if (err) {
+	console.log(err);
+      }
+    });
+    db.createCollection("notification_frequency", (err, res) => {
       if (err) {
 	console.log(err);
       }
@@ -22,6 +32,8 @@ router.use(express.json());
 router.post("/", (req, res, next) => {
   console.log("UID: " + req.body.uid);
   console.log("Type: " + req.body.type);
+  console.log("Data: %j", req.body);
+  console.log(Object.entries(req.body));
 
   if (req.body.type === "Profile_Image") {
     let path = "images/" + req.body.uid;
@@ -30,10 +42,24 @@ router.post("/", (req, res, next) => {
     }
     let filename = path + "/profile_img.jpg";
     fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
-  } else {
-    db.collection("testCollection").insertOne(req.body, (err, res) => {
+  }
+  else if (req.body.type === "user_info") {
+    db.collection("user info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
       if (err) {
-        console.log(err);
+	console.log(err);
+      }
+    });
+  }
+  else if (req.body.type === "notification_frequency") {
+    db.collection(req.body.type).insertOne(req.body, (err, res) => {
+      if (err) {
+	console.log(err);
+      }
+    });
+  } else if (req.body.type === "Add class") {
+    db.collection("class info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
+      if (err) {
+	console.log(err);
       }
     });
   }

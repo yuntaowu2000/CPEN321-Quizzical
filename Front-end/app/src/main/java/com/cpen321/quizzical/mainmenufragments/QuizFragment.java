@@ -45,13 +45,16 @@ public class QuizFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout quizLinearLayout;
 
+    private String default_url = "http://module-6-ihsan-webapp-test.azurewebsites.net/quiz?class_code=0&quiz_code=0";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    private void setupQuiz() {
+    private void setupQuiz(String quizUrl) {
         Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
+        quizIntent.putExtra(getString(R.string.QUIZ_URL), quizUrl);
         startActivity(quizIntent);
     }
 
@@ -84,7 +87,7 @@ public class QuizFragment extends Fragment {
         //TODO: may need to separate for teacher and students
         //TODO: follow what is done in statistic fragment and get values from the server to setup the fragment
         Button quizStartButton = view.findViewById(R.id.quiz_fragment_go_to_quiz_button);
-        quizStartButton.setOnClickListener(v -> setupQuiz());
+        quizStartButton.setOnClickListener(v -> setupQuiz(default_url));
 
         swipeRefreshLayout = view.findViewById(R.id.quiz_page_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(() -> new Thread(this::updateQuizList).start());
@@ -159,7 +162,7 @@ public class QuizFragment extends Fragment {
             View layout = getLayoutInflater().inflate(R.layout.quiz_module_layout, quizLinearLayout, false);
             quizLinearLayout.addView(layout);
             Button quizButton = layout.findViewById(R.id.go_to_quiz);
-            quizButton.setOnClickListener(v -> setupQuiz());
+            quizButton.setOnClickListener(v -> setupQuiz(default_url));
         });
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);

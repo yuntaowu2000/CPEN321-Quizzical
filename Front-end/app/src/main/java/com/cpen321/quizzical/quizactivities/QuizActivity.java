@@ -24,6 +24,7 @@ import com.cpen321.quizzical.data.questions.QuestionType;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.cpen321.quizzical.utils.ChoicePair;
 import com.cpen321.quizzical.utils.OtherUtils;
+import com.cpen321.quizzical.utils.QuestionPackage;
 import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.cpen321.quizzical.utils.buttonwrappers.ButtonTypes;
 import com.cpen321.quizzical.utils.buttonwrappers.IButtons;
@@ -42,7 +43,7 @@ import katex.hourglass.in.mathlib.MathView;
 
 public class QuizActivity extends AppCompatActivity {
 
-    private static final int totalQuestionNum = 3;
+    private int totalQuestionNum = 3;
     private IButtons selectedChoice;
     private IButtons correctChoice;
     private TextView infoLabel;
@@ -64,6 +65,8 @@ public class QuizActivity extends AppCompatActivity {
         //set up page
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        String quizUrl = getIntent().getExtras().getString(getString(R.string.QUIZ_URL));
         this.questionNumber = 0;
 
         infoLabel = findViewById(R.id.quiz_page_info_label);
@@ -76,9 +79,9 @@ public class QuizActivity extends AppCompatActivity {
                 new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
 
         if (this.questionNumber == 0) {
-            setUp();
+            setUp(quizUrl);
             while (questions == null || questions.size() == 0) {
-                setUp();
+                setUp(quizUrl);
             }
 
         }
@@ -89,13 +92,24 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    private void setUp() {
+    private void setUp(String quizUrl) {
         questions = new ArrayList<>();
-        TestQuestionPackage testPackage = new TestQuestionPackage();
 
-        quizId = testPackage.getPackage().getId();
+        String quizJson = OtherUtils.readFromURL(quizUrl);
+        QuestionPackage questionPackage = new QuestionPackage(quizJson);
 
-        questions = testPackage.getPackage().getQuestionsByCategory(CourseCategory.Math, totalQuestionNum);
+        questions = questionPackage.getQuestionList();
+
+        if (questions.size() == 0) {
+            TestQuestionPackage testPackage = new TestQuestionPackage();
+            questions = testPackage.getPackage().getQuestionsByCategory(CourseCategory.Math, totalQuestionNum);
+            quizId = testPackage.getPackage().getId();
+            Log.d("Json_version", testPackage.getPackage().toJson());
+        } else {
+            quizId = questionPackage.getId();
+            totalQuestionNum = questions.size();
+        }
+
         totalPageNum = questions.size();
 
         correctNumber = 0;

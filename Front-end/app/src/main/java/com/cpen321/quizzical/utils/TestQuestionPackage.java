@@ -13,7 +13,7 @@ public class TestQuestionPackage {
     private QuestionPackage questionPackage;
 
     public TestQuestionPackage() {
-        questionPackage = new QuestionPackage(111);
+        questionPackage = new QuestionPackage(0, 0);
 
         List<ChoicePair> choicePairList = new ArrayList<>();
 

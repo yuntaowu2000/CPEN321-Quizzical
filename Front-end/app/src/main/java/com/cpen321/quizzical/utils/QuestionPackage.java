@@ -1,9 +1,14 @@
 package com.cpen321.quizzical.utils;
 
+import android.util.Log;
+
 import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.data.questions.IQuestion;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,14 +25,30 @@ public class QuestionPackage {
      */
 
     private int id;
+    private int class_code;
     private List<IQuestion> questionList;
 
     public QuestionPackage() {
         questionList = new ArrayList<>();
     }
 
-    public QuestionPackage(int id) {
+    public QuestionPackage(String quizJson) {
+        try {
+            Gson g = new Gson();
+            QuestionPackage q = g.fromJson(quizJson, QuestionPackage.class);
+            this.id = q.id;
+            this.class_code = q.class_code;
+            this.questionList = q.questionList;
+        } catch (Exception e) {
+            this.id = 0;
+            this.class_code = 0;
+            this.questionList = new ArrayList<>();
+        }
+    }
+
+    public QuestionPackage(int id, int class_code) {
         this.id = id;
+        this.class_code = class_code;
         questionList = new ArrayList<>();
     }
 
@@ -76,5 +97,9 @@ public class QuestionPackage {
         questionList.add(q);
     }
 
+    public String toJson() {
+        Gson g = new Gson();
+        return g.toJson(this);
+    }
 
 }
