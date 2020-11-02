@@ -39,6 +39,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
@@ -206,26 +209,25 @@ public class InitActivity extends AppCompatActivity {
         boolean is_instructor = false;
         int user_quiz_count = 0;
         int EXP = 0;
-        int curr_class_code = 0;
+        String class_codes = "";
         try {
-            final JsonElement jsonElement = JsonParser.parseString(userInfoJson);
-            JsonObject jsonObject = jsonElement.getAsJsonObject();
-            username = jsonObject.get(getString(R.string.USERNAME)).getAsString();
-            email = jsonObject.get(getString(R.string.EMAIL)).getAsString();
-            is_instructor = jsonObject.get(getString(R.string.IS_INSTRUCTOR)).getAsBoolean();
-            user_quiz_count = jsonObject.get(getString(R.string.USER_QUIZ_COUNT)).getAsInt();
-            EXP = jsonObject.get(getString(R.string.EXP)).getAsInt();
-            curr_class_code = jsonObject.get(getString(R.string.CLASS_CODE)).getAsInt();
+            JSONArray jsonArray = new JSONArray(userInfoJson);
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            username = jsonObject.getString(getString(R.string.USERNAME));
+            email = jsonObject.getString(getString(R.string.EMAIL));
+            is_instructor = jsonObject.getBoolean(getString(R.string.IS_INSTRUCTOR));
+            user_quiz_count = jsonObject.getInt(getString(R.string.USER_QUIZ_COUNT));
+            EXP = jsonObject.getInt(getString(R.string.EXP));
+            class_codes = jsonObject.getString(getString(R.string.CLASS_CODE));
         } catch (Exception e) {
             Log.d("parse_user_info", "failed " + e.getMessage());
         }
-        Log.d("Get_server_info", "user name: " + username + ", email: " + email);
         sp.edit().putString(getString(R.string.USERNAME), username).apply();
         sp.edit().putString(getString(R.string.EMAIL), email).apply();
         sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), is_instructor).apply();
         sp.edit().putInt(getString(R.string.USER_QUIZ_COUNT), user_quiz_count).apply();
         sp.edit().putInt(getString(R.string.EXP), EXP).apply();
-        sp.edit().putInt(getString(R.string.CLASS_CODE), curr_class_code).apply();
+        sp.edit().putString(getString(R.string.CLASS_CODE), class_codes).apply();
     }
 
     private void requestUserNameAndEmail() {
@@ -372,6 +374,10 @@ public class InitActivity extends AppCompatActivity {
 
             new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USER_INFO), user_info)).start();
 
+            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                    getString(R.string.PROFILE_IMG),
+                    sp.getString(getString(R.string.PROFILE_IMG), ""))).start();
+
             goToHomeActivity();
         } else {
             Toast.makeText(this, R.string.UI_require_valid_username_email_msg, Toast.LENGTH_LONG).show();
@@ -387,7 +393,6 @@ public class InitActivity extends AppCompatActivity {
             jsonObject.addProperty(getString(R.string.IS_INSTRUCTOR), is_instructor);
             jsonObject.addProperty(getString(R.string.USER_QUIZ_COUNT), 0);
             jsonObject.addProperty(getString(R.string.EXP), 0);
-            jsonObject.addProperty(getString(R.string.PROFILE_IMG), sp.getString(getString(R.string.PROFILE_IMG), ""));
             jsonObject.addProperty(getString(R.string.FIREBASE_TOKEN), sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
         } catch (Exception e) {
             Log.d("parse_credential", "failed");

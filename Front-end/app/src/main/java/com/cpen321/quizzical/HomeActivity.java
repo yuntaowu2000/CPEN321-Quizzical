@@ -3,6 +3,7 @@ package com.cpen321.quizzical;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.cpen321.quizzical.data.Classes;
+import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.mainmenufragments.ProfileFragment;
 import com.cpen321.quizzical.mainmenufragments.QuizFragment;
 import com.cpen321.quizzical.mainmenufragments.StatisticFragment;
@@ -30,10 +33,12 @@ import com.cpen321.quizzical.ui.main.MyHomePagerAdapter;
 import com.cpen321.quizzical.utils.OtherUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -41,15 +46,15 @@ public class HomeActivity extends AppCompatActivity {
     private Animation rotateClose;
     private Animation fromBottom;
     private Animation toBottom;
-    private List<Button> class_list;
-    private List<Integer> class_code_list;
+    private ArrayList<Button> class_button_list;
+    private ArrayList<Classes> class_list;
+    private Classes curr_class;
     private LinearLayout class_scroll_content_layout;
     private TabLayout tabLayout;
     private ImageButton add_class_button;
     private FloatingActionButton class_switch_button;
     private HorizontalScrollView class_scroll_view;
     private boolean is_Instructor;
-    private int curr_class_code;
     private SharedPreferences sp;
 
     /**
@@ -62,6 +67,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 
         rotateOpen = AnimationUtils.loadAnimation(this, R.anim.rotate_open_anim);
         rotateClose = AnimationUtils.loadAnimation(this, R.anim.rotate_close_anim);
@@ -86,22 +93,18 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         //we need to initialize the list based on server info
-        class_list = new ArrayList<>(0);
-        class_code_list = new ArrayList<>(0);
+        class_button_list = new ArrayList<>(0);
+        parseClassListFromString();
 
-        //if class code is 0, we need to prompt the user to
-        // create a class if instructor
-        // join a class if student
-        // this will be default class code
-        // we can have multiple class code stored on server and use a floating action button to switch class
-        // for each class code, we need a teacher, a class stats, a set of notes/quizzes
-        curr_class_code = sp.getInt(getString(R.string.CLASS_CODE), 0);
-
-        if (curr_class_code == 0) {
+        if (class_list.size() == 0) {
             promptForClassCode();
         } else {
             //set up the class list and default class
-            appendNewClassToList(curr_class_code);
+            generateUIClassListOnCreate();
+            String curr_class_string = sp.getString(getString(R.string.CURR_CLASS), "");
+            if (!OtherUtils.stringIsNullOrEmpty(curr_class_string)) {
+                curr_class = new Classes(curr_class_string);
+            }
         }
 
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -123,7 +126,7 @@ public class HomeActivity extends AppCompatActivity {
                     class_switch_button.setAnimation(rotateClose);
                     class_scroll_view.setAnimation(toBottom);
                     class_scroll_view.setVisibility(View.INVISIBLE);
-                    for (Button b : class_list) {
+                    for (Button b : class_button_list) {
                         if (b.getVisibility() == View.VISIBLE) {
                             b.setVisibility(View.INVISIBLE);
                             b.setClickable(false);
@@ -143,6 +146,41 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void parseClassListFromString() {
+        class_list = new ArrayList<>();
+        String classListString = sp.getString(getString(R.string.CLASS_LIST), "");
+        if (OtherUtils.stringIsNullOrEmpty(classListString)) {
+            String url = getString(R.string.GET_URL) + "/users&"
+                    + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                    + "&type=" + getString(R.string.CLASS_LIST);
+            classListString = OtherUtils.readFromURL(url);
+        }
+
+        if (OtherUtils.stringIsNullOrEmpty(classListString)) {
+            return;
+        }
+
+        try {
+            String[] classes = classListString.split(";");
+            for (String c : classes) {
+                class_list.add(new Classes(c));
+            }
+        } catch (Exception e) {
+            Log.d("parse", "cannot parse class list");
+        }
+    }
+
+    private String parseClassListToString() {
+        StringBuilder strb = new StringBuilder();
+        for (Classes c : class_list) {
+            strb.append(c.toJson()).append(";");
+        }
+        strb.deleteCharAt(strb.length() - 1);
+
+        Log.d("parse_class_list", strb.toString());
+        return strb.toString();
     }
 
     private void promptForClassCode() {
@@ -183,14 +221,38 @@ public class HomeActivity extends AppCompatActivity {
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v ->
         {
             int class_code = Integer.parseInt(editText.getText().toString());
-            if (OtherUtils.checkClassCode(class_code)) {
-                appendNewClassToList(class_code);
+            Classes newClass = parseClassInfoForStudents(class_code);
+            if (newClass != null) {
+                appendNewClassToList(newClass);
                 alertDialog.dismiss();
             } else {
                 errorText.setText(R.string.UI_invalid_class_code_msg);
             }
         });
 
+    }
+
+    private Classes parseClassInfoForStudents(int class_code) {
+        // when a student join a class by class code, get the general class info from the server
+
+        new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                getString(R.string.JOIN_CLASS),
+                String.valueOf(class_code)
+        )).start();
+
+        String classInfoLink = getString(R.string.GET_URL) + "/classes&" + getString(R.string.CLASS_CODE) + "=" + class_code;
+        String classInfoString = OtherUtils.readFromURL(classInfoLink);
+
+        try {
+            JSONArray jsonArray = new JSONArray(classInfoString);
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            return new Classes(jsonObject.toString());
+
+        } catch (JSONException e) {
+            Log.d("parse_json", "parse class info failed");
+        }
+        //TODO: need to change to return null here after the server is working
+        return null;
     }
 
     private void createClass() {
@@ -254,7 +316,7 @@ public class HomeActivity extends AppCompatActivity {
         {
             String class_name = class_name_input.getText().toString();
             if (OtherUtils.checkClassName(class_name)) {
-                setupNewClassCode(
+                createNewClassCode(
                         course_categories[course_category_list.getSelectedItemPosition()],
                         grade_levels[grade_list.getSelectedItemPosition()],
                         class_name_input.getText().toString()
@@ -266,91 +328,110 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void setupNewClassCode(String course_category, String grade_level, String class_name) {
-        //TODO: this value should be generated by the server and sent to user's email as well.
-        //TODO: we should first send a POST request to the server
-        //content should be something like: username=xxx;course_category=xxx
-        //and wait for the server to respond with a class code
-        //then cache them in the shared preferences
-        String parsed_data = parseClassDetails(course_category, grade_level, class_name);
-        new Thread(() ->
-        {
-            String response = OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.UI_add_class), parsed_data);
-
-            //use this for new class code
-            int new_class_code = parseResponseMsgForClassCode(response);
-
-            //may change uploadToServer to return string for this.
-            int temp_val = (course_category.hashCode() + grade_level.hashCode() + class_name.hashCode()) % 65536;
-            curr_class_code = temp_val < 0 ? -temp_val : temp_val;
-
-            runOnUiThread(() ->
-            {
-                new AlertDialog.Builder(this).setTitle(R.string.UI_create_class_success_title)
-                        .setMessage(String.format(getString(R.string.UI_create_class_success_msg), curr_class_code))
-                        .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
-                        .show();
-                appendNewClassToList(curr_class_code);
-            });
-
-        }).start();
-
-
-    }
-
-    private String parseClassDetails(String course_category, String grade_level, String class_name) {
-        JsonObject jsonObject = new JsonObject();
-        try {
-            jsonObject.addProperty(getString(R.string.COURSE_CATEGORY), course_category);
-            jsonObject.addProperty(getString(R.string.GRADE_LEVEL), grade_level);
-            jsonObject.addProperty(getString(R.string.CLASS_NAME), class_name);
-        } catch (Exception e) {
-            Log.d("parse_failed", e.getMessage() + "");
-        }
-        return jsonObject.toString();
-    }
-
-    private int parseResponseMsgForClassCode(String responseMsg) {
-        if (OtherUtils.stringIsNullOrEmpty(responseMsg)) {
-            return 0;
-        }
-        try {
-            return Integer.parseInt(responseMsg);
-        } catch (NumberFormatException e) {
-            return 0;
+    private CourseCategory convertCategoryStringToEnum(String course_category) {
+        String[] courseCategories = getResources().getStringArray(R.array.course_category_array);
+        if (course_category.equals(courseCategories[0])) {
+            return CourseCategory.Math;
+        } else if (course_category.equals(courseCategories[1])) {
+            return CourseCategory.English;
+        } else if (course_category.equals(courseCategories[2])) {
+            return CourseCategory.QuantumPhysic;
+        } else {
+            return CourseCategory.DontCare;
         }
     }
 
-    private void appendNewClassToList(int class_code) {
-        //TODO change class_code to class name later
-        if (class_code_list.contains(class_code)) {
-            Toast.makeText(this, R.string.UI_class_joined_already_msg, Toast.LENGTH_SHORT).show();
-            return;
+    private void createNewClassCode(String course_category, String grade_level, String class_name) {
+
+        int curr_class_code = (course_category.hashCode() + grade_level.hashCode() + class_name.hashCode()) % 65536;
+        CourseCategory courseCategory = convertCategoryStringToEnum(course_category);
+
+        Classes mClass = new Classes(sp.getString(getString(R.string.UID), ""),
+                curr_class_code,
+                class_name,
+                courseCategory);
+
+        new AlertDialog.Builder(this).setTitle(R.string.UI_create_class_success_title)
+                .setMessage(String.format(getString(R.string.UI_create_class_success_msg), curr_class_code))
+                .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
+                .show();
+        appendNewClassToList(mClass);
+
+
+        new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.CREATE_CLASS), mClass.toJson())).start();
+    }
+
+    private void generateUIClassListOnCreate() {
+        for (Classes c : class_list) {
+            Button newClassButton = new Button(this);
+            String class_name = c.getClassName();
+
+            if (OtherUtils.stringIsNullOrEmpty(class_name)) {
+                class_name = String.valueOf(c.getClassCode());
+            }
+
+            newClassButton.setText(class_name);
+            newClassButton.setAllCaps(false);
+            newClassButton.setOnClickListener(v -> switchClass(c));
+            class_button_list.add(newClassButton);
         }
-        class_code_list.add(class_code);
-        Button newClassButton = new Button(this);
-
-        //After the set up is fully implemented, change this to class name
-        String class_name = String.valueOf(class_code);
-        newClassButton.setText(class_name);
-        newClassButton.setOnClickListener(v -> switchClass(class_code));
-
-        class_list.add(newClassButton);
 
         class_scroll_content_layout.removeAllViews();
 
-        for (Button b : class_list) {
+        for (Button b : class_button_list) {
             class_scroll_content_layout.addView(b);
         }
 
         class_scroll_content_layout.addView(add_class_button);
 
-        switchClass(class_code);
+        switchClass(class_list.get(0));
     }
 
-    private void switchClass(int class_code) {
-        sp.edit().putInt(getString(R.string.CLASS_CODE), class_code).apply();
-        Log.d("home activity", "curr selected class code " + class_code);
+    private void appendNewClassToList(Classes mClass) {
+        if (class_list.contains(mClass)) {
+            Toast.makeText(this, R.string.UI_class_joined_already_msg, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        class_list.add(mClass);
+        String class_list_string = parseClassListToString();
+        sp.edit().putString(getString(R.string.CLASS_LIST), class_list_string).apply();
+
+        new Thread(() -> OtherUtils.uploadToServer(
+                sp.getString(getString(R.string.UID), ""),
+                getString(R.string.CLASS_LIST),
+                class_list_string
+        )).start();
+
+        Button newClassButton = new Button(this);
+
+        String class_name = "";
+        if (OtherUtils.stringIsNullOrEmpty(mClass.getClassName())) {
+            class_name = String.valueOf(mClass.getClassCode());
+        } else {
+            class_name = mClass.getClassName();
+        }
+
+        newClassButton.setText(class_name);
+        newClassButton.setAllCaps(false);
+        newClassButton.setOnClickListener(v -> switchClass(mClass));
+
+        class_button_list.add(newClassButton);
+
+        class_scroll_content_layout.removeAllViews();
+
+        for (Button b : class_button_list) {
+            class_scroll_content_layout.addView(b);
+        }
+
+        class_scroll_content_layout.addView(add_class_button);
+
+        switchClass(mClass);
+    }
+
+    private void switchClass(Classes mClass) {
+        sp.edit().putString(getString(R.string.CURR_CLASS), mClass.toJson()).apply();
+        Log.d("home activity", "curr selected class code " + mClass.getClassCode());
     }
 
     private void setupTab(String tabText) {
@@ -374,7 +455,7 @@ public class HomeActivity extends AppCompatActivity {
             class_switch_button.setAnimation(rotateOpen);
             class_scroll_view.setAnimation(fromBottom);
             class_scroll_view.setVisibility(View.VISIBLE);
-            for (Button b : class_list) {
+            for (Button b : class_button_list) {
                 b.setVisibility(View.VISIBLE);
                 b.setClickable(true);
             }
@@ -382,7 +463,7 @@ public class HomeActivity extends AppCompatActivity {
             class_switch_button.setAnimation(rotateClose);
             class_scroll_view.setAnimation(toBottom);
             class_scroll_view.setVisibility(View.INVISIBLE);
-            for (Button b : class_list) {
+            for (Button b : class_button_list) {
                 if (b.getVisibility() == View.VISIBLE) {
                     b.setVisibility(View.INVISIBLE);
                     b.setClickable(false);

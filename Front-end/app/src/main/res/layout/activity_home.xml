@@ -63,7 +63,7 @@
                 android:id="@+id/add_class_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/UI_add_class"
+                android:contentDescription="@string/CREATE_CLASS"
                 android:src="@drawable/ic_baseline_add_24" />
 
         </LinearLayout>

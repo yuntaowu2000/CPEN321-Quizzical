@@ -51,13 +51,6 @@ public class OtherUtils {
         return Pattern.matches("^[aA-zZ0-9_-]{3,15}$", class_name);
     }
 
-    public static boolean checkClassCode(int class_code) {
-        //TODO: we need to check that the code is valid on the server
-        //TODO: use POST request with content: username=xxx;class_code=xxx
-        //TODO: change to return string as class name later
-        return class_code != 111;
-    }
-
     /*
      * Encoding and decoding images for storing in shared preferences and send to server
      * */
@@ -109,6 +102,7 @@ public class OtherUtils {
         String jsonStringToSend = createJsonString(uid, type, data);
         String response = "";
         String serverLink = "http://module-6-ihsan-webapp-test.azurewebsites.net/upload";
+        Log.d("upload", "uploading: " + jsonStringToSend);
         try {
             URL url = new URL(serverLink);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

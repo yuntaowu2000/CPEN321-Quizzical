@@ -30,13 +30,21 @@
 
     <string name="IS_INSTRUCTOR" translatable="false">IS_INSTRUCTOR</string>
 
+    <string name="CREATE_CLASS" translatable="false">create_class</string>
+    <string name="JOIN_CLASS" translatable="false">join_class</string>
     <string name="CLASS_CODE" translatable="false">class_code</string>
+    <string name="CLASS_NAME" translatable="false">class_name</string>
+    <string name="CLASS_LIST" translatable="false">class_list</string>
+    <string name="CLASS_INFO" translatable="false">class_info</string>
+    <string name="CURR_CLASS_CODE" translatable="false">curr_class_code</string>
+    <string name="CURR_CLASS" translatable="false">curr_class</string>
+
     <string name="QUIZ" translatable="false">quiz</string>
     <string name="QUIZ_CODE" translatable="false">quiz_code</string>
     <string name="QUESTION_NUM" translatable="false">question_num</string>
     <string name="QUIZ_URL" translatable="false">QUIZ_URL</string>
 
-    <string name="COURSE_CATEGORY" translatable="false">course category</string>
+    <string name="COURSE_CATEGORY" translatable="false">course_category</string>
 
     <string name="MATH">Math</string>
     <string name="ENGLISH">English</string>
@@ -48,7 +56,7 @@
         <item>QuantumPhysic</item>
     </string-array>
 
-    <string name="GRADE_LEVEL" translatable="false">grade level</string>
+    <string name="GRADE_LEVEL" translatable="false">grade_level</string>
 
     <string-array name="grades_array">
         <item>Grade 9</item>
@@ -57,8 +65,6 @@
         <item>Grade 12</item>
         <item>University</item>
     </string-array>
-
-    <string name="CLASS_NAME" translatable="false">class name</string>
 
     <!--    use this version for server communication of quiz questions-->
     <string name="QUESTION" translatable="false">question</string>
@@ -98,8 +104,6 @@
     <string name="UI_leader_board">LeaderBoard</string>
     <string name="UI_profile">Profile</string>
 
-    <string name="UI_add_class" translatable="false">Add class</string>
-
     <string name="UI_example_course_code" translatable="false">E.g. 123456</string>
     <string name="UI_invalid_class_code_msg">Invalid class code</string>
     <string name="UI_enter_class_code_msg">Please enter your class code</string>
@@ -132,6 +136,7 @@
     <string name="UI_leaderboard_number" translatable="false">#</string>
     <string name="UI_leaderboard_score">Score</string>
     <string name="UI_back_to_statistics">Back to statistics</string>
+    <string name="UI_current_class_name">Current class name: %s</string>
 
     <!--    used in profile fragment-->
     <string name="UI_change_profile_image_msg">Do you want to change the profile image?</string>
