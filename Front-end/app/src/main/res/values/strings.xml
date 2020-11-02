@@ -33,7 +33,12 @@
     <string name="CREATE_CLASS" translatable="false">create_class</string>
     <string name="JOIN_CLASS" translatable="false">join_class</string>
     <string name="CLASS_CODE" translatable="false">class_code</string>
+    <string name="CLASS_NAME" translatable="false">class_name</string>
+    <string name="CLASS_LIST" translatable="false">class_list</string>
+    <string name="CLASS_INFO" translatable="false">class_info</string>
     <string name="CURR_CLASS_CODE" translatable="false">curr_class_code</string>
+    <string name="CURR_CLASS" translatable="false">curr_class</string>
+
     <string name="QUIZ" translatable="false">quiz</string>
     <string name="QUIZ_CODE" translatable="false">quiz_code</string>
     <string name="QUESTION_NUM" translatable="false">question_num</string>
@@ -60,9 +65,6 @@
         <item>Grade 12</item>
         <item>University</item>
     </string-array>
-
-    <string name="CLASS_NAME" translatable="false">class_name</string>
-    <string name="CLASS_INFO" translatable="false">class_info</string>
 
     <!--    use this version for server communication of quiz questions-->
     <string name="QUESTION" translatable="false">question</string>

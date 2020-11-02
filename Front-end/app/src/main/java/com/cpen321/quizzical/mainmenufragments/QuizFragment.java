@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cpen321.quizzical.R;
+import com.cpen321.quizzical.data.Classes;
 import com.cpen321.quizzical.quizactivities.CreateQuizActivity;
 import com.cpen321.quizzical.quizactivities.QuizActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -46,6 +48,7 @@ public class QuizFragment extends Fragment {
     private LinearLayout quizLinearLayout;
 
     private String default_url = "http://module-6-ihsan-webapp-test.azurewebsites.net/quiz?class_code=0&quiz_code=0";
+    private Classes currClass;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,6 +91,10 @@ public class QuizFragment extends Fragment {
         //TODO: follow what is done in statistic fragment and get values from the server to setup the fragment
         Button quizStartButton = view.findViewById(R.id.quiz_fragment_go_to_quiz_button);
         quizStartButton.setOnClickListener(v -> setupQuiz(default_url));
+
+        currClass = new Classes(sp.getString(getString(R.string.CURR_CLASS), ""));
+        TextView textView = view.findViewById(R.id.quiz_page_class_info_text);
+        textView.setText(String.format(getString(R.string.UI_current_class_name), currClass.getClassName()));
 
         swipeRefreshLayout = view.findViewById(R.id.quiz_page_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(() -> new Thread(this::updateQuizList).start());
@@ -178,8 +185,17 @@ public class QuizFragment extends Fragment {
             return;
         }
 
-        if (key.equals(getString(R.string.CURR_CLASS_CODE))) {
-            updateQuizList();
+        if (key.equals(getString(R.string.CURR_CLASS))) {
+            updateClassText();
+        }
+    }
+
+    private void updateClassText() {
+        String class_info_string = sp.getString(getString(R.string.CURR_CLASS), "");
+        currClass = new Classes(class_info_string);
+        if (getView() != null) {
+            TextView textView = getView().findViewById(R.id.quiz_page_class_info_text);
+            textView.setText(String.format(getString(R.string.UI_current_class_name), currClass.getClassName()));
         }
     }
 }
