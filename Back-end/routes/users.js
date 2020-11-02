@@ -20,8 +20,11 @@ router.get("/", (req, res, next) => {
   
   if (type === "Profile_Image") {
     let filepath = "/home/site/wwwroot/images/" + uid + + "/profile_img.jpg";
-    let bitmap = fs.readFileSync(filepath);
-    let string = Buffer(bitmap).toString("base64");
+    let string = '';
+    if (fs.existsSync(filepath)) {
+      let bitmap = fs.readFileSync(filepath);
+      string = Buffer(bitmap).toString("base64");
+    }
     res.send(string);
   }
   else if (type === null) {
