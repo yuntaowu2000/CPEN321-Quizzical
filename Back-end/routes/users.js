@@ -51,8 +51,8 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	username = Object.values(username[0])
-	res.send(username);
+	username = Object.values(username[0])[0];
+	res.send(''+username);
       }
     });
   }
@@ -61,8 +61,8 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	email = Object.values(email[0])
-	res.send(email);
+	email = Object.values(email[0])[0];
+	res.send(''+email);
       }
     });
   }
@@ -71,8 +71,8 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	isInstructor = Object.values(isInstructor[0])
-	res.send(isInstructor);
+	isInstructor = Object.values(isInstructor[0])[0];
+	res.send(''+isInstructor);
       }
     });
   }
@@ -81,8 +81,8 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	quizCount = Object.values(quizCount[0])
-	res.send(quizCount);
+	quizCount = Object.values(quizCount[0])[0];
+	res.send(''+quizCount);
       }
     });
   }
@@ -91,8 +91,8 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	exp = Object.values(exp)[0]
-	res.send(exp);
+	exp = Object.values(exp[0])[0]
+	res.send(''+exp);
       }
     });
   }
@@ -101,18 +101,18 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	classCode = Object.values(classCode)[0]
-	res.send(classCode);
+	classCode = Object.values(classCode[0])[0];
+	res.send(''+classCode);
       }
     });
   }
   else if (type === "notification_frequency") {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({notification_frequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
+    db.collection("notification_frequency").find({ uid: { $eq: uid }}).project({notification_frequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
       if (err) {
 	throw err;
       } else {
-	frequency = Object.values(frequency)[0]
-	res.send(frequency);
+	frequency = Object.values(frequency[0])[0];
+	res.send(''+frequency);
       }
     });
   }
