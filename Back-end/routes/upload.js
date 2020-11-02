@@ -51,11 +51,19 @@ router.post("/", (req, res, next) => {
     });
   }
   else if (req.body.type === "notification_frequency") {
-    db.collection(req.body.type).insertOne(req.body, (err, res) => {
-      if (err) {
-	console.error(err);
-      }
-    });
+    try {
+      db.collection(req.body.type).insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
+	if (err) {
+	  console.error(err);
+	}
+      });
+    } catch (ex) {
+      db.collection(req.body.type).insertOne(req.body, (err, res) => {
+	if (err) {
+	  console.error(err);
+	}
+      });
+    }
   } else if (req.body.type === "Add class") {
     db.collection("class info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
       if (err) {
