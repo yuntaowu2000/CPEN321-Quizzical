@@ -23,9 +23,20 @@ router.get("/", (req, res, next) => {
     let bitmap = fs.readFileSync(filepath);
     let string = Buffer(bitmap).toString("base64");
     res.send(string);
-  } else if (type === null) {
+  }
+  else if (type === null) {
     let timeout = 2000
     db.collection("user info").find({ uid: { $eq: uid }}).project({Profile_Image:0, _id:0}).maxTimeMS(timeout).toArray((err,data) => {
+      if (err) {
+	throw err;
+      } else {
+	res.send(data);
+      }
+    });
+  }
+  else if (type === "user_info") {
+    let timeout = 2000
+    db.collection("user info").find({ uid: { $eq: uid }}).project({_id:0}).maxTimeMS(timeout).toArray((err,data) => {
       if (err) {
 	throw err;
       } else {
