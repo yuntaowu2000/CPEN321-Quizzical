@@ -23,7 +23,6 @@ import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.data.Classes;
 import com.cpen321.quizzical.utils.OtherUtils;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class StatisticFragment extends Fragment {

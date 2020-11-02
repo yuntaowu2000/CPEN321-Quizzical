@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.cpen321.quizzical.R;
+import com.cpen321.quizzical.data.Classes;
 import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.data.questions.IQuestion;
 import com.cpen321.quizzical.data.questions.QuestionType;
@@ -36,6 +37,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import katex.hourglass.in.mathlib.MathView;
@@ -66,7 +68,7 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        String quizUrl = getIntent().getExtras().getString(getString(R.string.QUIZ_URL));
+        String quizUrl = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.QUIZ_URL));
         this.questionNumber = 0;
 
         infoLabel = findViewById(R.id.quiz_page_info_label);
@@ -117,7 +119,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
 
-    private void generatePage() throws Exception {
+    private void generatePage() {
         IQuestion question = questions.get(this.questionNumber);
         switch (question.getQuestionType()) {
             case MC:
@@ -125,7 +127,9 @@ public class QuizActivity extends AppCompatActivity {
                 break;
             case Text:
                 //TODO: may implement this if we have time
-                throw new IllegalArgumentException("Not implemented");
+                generateBlankPage();
+                Log.d("quiz page", "text questions not implemented");
+                break;
             default:
                 generateBlankPage();
                 break;
@@ -367,7 +371,9 @@ public class QuizActivity extends AppCompatActivity {
 
             intent.putExtra(getString(R.string.EXP_earned_for_quiz), quizNumAndExp[1] - prev_EXP);
 
-            String parsedResult = parseQuizResults(quizNumAndExp[0], quizNumAndExp[1]);
+            Classes mClass = new Classes(sp.getString(getString(R.string.CURR_CLASS), ""));
+
+            String parsedResult = parseQuizResults(quizNumAndExp[0], quizNumAndExp[1], mClass.getClassCode());
             new Thread(() -> OtherUtils.uploadToServer(uid, type, parsedResult)).start();
         }
 
@@ -376,7 +382,7 @@ public class QuizActivity extends AppCompatActivity {
         ActivityCompat.finishAffinity(this);
     }
 
-    private String parseQuizResults(int quizNum, int exp) {
+    private String parseQuizResults(int quizNum, int exp, int classCode) {
         Collections.sort(wrongQuestionIds);
         Gson gson = new Gson();
         String jsonForList = gson.toJson(wrongQuestionIds);
@@ -385,6 +391,7 @@ public class QuizActivity extends AppCompatActivity {
             jsonObject.addProperty(getString(R.string.USER_QUIZ_COUNT), quizNum);
             jsonObject.addProperty(getString(R.string.EXP), exp);
             jsonObject.addProperty(getString(R.string.correct_num), correctNumber);
+            jsonObject.addProperty(getString(R.string.CLASS_CODE), classCode);
             if (correctNumber != totalQuestionNum)
                 jsonObject.addProperty(getString(R.string.wrong_question_ids), jsonForList);
 

@@ -48,7 +48,6 @@ public class HomeActivity extends AppCompatActivity {
     private Animation toBottom;
     private ArrayList<Button> class_button_list;
     private ArrayList<Classes> class_list;
-    private Classes curr_class;
     private LinearLayout class_scroll_content_layout;
     private TabLayout tabLayout;
     private ImageButton add_class_button;
@@ -101,10 +100,6 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             //set up the class list and default class
             generateUIClassListOnCreate();
-            String curr_class_string = sp.getString(getString(R.string.CURR_CLASS), "");
-            if (!OtherUtils.stringIsNullOrEmpty(curr_class_string)) {
-                curr_class = new Classes(curr_class_string);
-            }
         }
 
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -151,12 +146,12 @@ public class HomeActivity extends AppCompatActivity {
     private void parseClassListFromString() {
         class_list = new ArrayList<>();
         String classListString = sp.getString(getString(R.string.CLASS_LIST), "");
-        if (OtherUtils.stringIsNullOrEmpty(classListString)) {
-            String url = getString(R.string.GET_URL) + "/users&"
-                    + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
-                    + "&type=" + getString(R.string.CLASS_LIST);
-            classListString = OtherUtils.readFromURL(url);
-        }
+//        if (OtherUtils.stringIsNullOrEmpty(classListString)) {
+//            String url = getString(R.string.GET_URL) + "/users?"
+//                    + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+//                    + "&type=" + getString(R.string.CLASS_LIST);
+//            classListString = OtherUtils.readFromURL(url);
+//        }
 
         if (OtherUtils.stringIsNullOrEmpty(classListString)) {
             return;
@@ -240,7 +235,7 @@ public class HomeActivity extends AppCompatActivity {
                 String.valueOf(class_code)
         )).start();
 
-        String classInfoLink = getString(R.string.GET_URL) + "/classes&" + getString(R.string.CLASS_CODE) + "=" + class_code;
+        String classInfoLink = getString(R.string.GET_URL) + "/classes?" + getString(R.string.CLASS_CODE) + "=" + class_code;
         String classInfoString = OtherUtils.readFromURL(classInfoLink);
 
         try {
@@ -405,7 +400,7 @@ public class HomeActivity extends AppCompatActivity {
 
         Button newClassButton = new Button(this);
 
-        String class_name = "";
+        String class_name;
         if (OtherUtils.stringIsNullOrEmpty(mClass.getClassName())) {
             class_name = String.valueOf(mClass.getClassCode());
         } else {
