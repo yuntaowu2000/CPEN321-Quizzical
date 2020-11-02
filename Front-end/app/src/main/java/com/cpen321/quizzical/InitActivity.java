@@ -374,6 +374,10 @@ public class InitActivity extends AppCompatActivity {
 
             new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USER_INFO), user_info)).start();
 
+            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                    getString(R.string.PROFILE_IMG),
+                    sp.getString(getString(R.string.PROFILE_IMG), ""))).start();
+
             goToHomeActivity();
         } else {
             Toast.makeText(this, R.string.UI_require_valid_username_email_msg, Toast.LENGTH_LONG).show();
@@ -389,7 +393,6 @@ public class InitActivity extends AppCompatActivity {
             jsonObject.addProperty(getString(R.string.IS_INSTRUCTOR), is_instructor);
             jsonObject.addProperty(getString(R.string.USER_QUIZ_COUNT), 0);
             jsonObject.addProperty(getString(R.string.EXP), 0);
-            jsonObject.addProperty(getString(R.string.PROFILE_IMG), sp.getString(getString(R.string.PROFILE_IMG), ""));
             jsonObject.addProperty(getString(R.string.FIREBASE_TOKEN), sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
         } catch (Exception e) {
             Log.d("parse_credential", "failed");

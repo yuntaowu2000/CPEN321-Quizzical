@@ -158,6 +158,10 @@ public class HomeActivity extends AppCompatActivity {
             classListString = OtherUtils.readFromURL(url);
         }
 
+        if (OtherUtils.stringIsNullOrEmpty(classListString)) {
+            return;
+        }
+
         try {
             String[] classes = classListString.split(";");
             for (String c : classes) {
@@ -248,7 +252,7 @@ public class HomeActivity extends AppCompatActivity {
             Log.d("parse_json", "parse class info failed");
         }
         //TODO: need to change to return null here after the server is working
-        return new Classes(sp.getString(getString(R.string.UID), "") ,class_code, "", CourseCategory.DontCare);
+        return null;
     }
 
     private void createClass() {
