@@ -22,6 +22,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.utils.OtherUtils;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class StatisticFragment extends Fragment {
@@ -36,6 +37,7 @@ public class StatisticFragment extends Fragment {
     private TableLayout boardLayout;
     private Button teachers_leaderboard_btn;
     private boolean teacher_in_statistic;
+    private HashMap<Integer, String> class_name_map;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class StatisticFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sp = Objects.requireNonNull(getContext()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
         is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
-        curr_class_code = sp.getInt(getString(R.string.CLASS_CODE), 0);
+        curr_class_code = sp.getInt(getString(R.string.CURR_CLASS_CODE), 0);
 
         if (is_Instructor) {
             return inflater.inflate(R.layout.fragment_class_statistic, container, false);
@@ -61,6 +63,9 @@ public class StatisticFragment extends Fragment {
         // may need to separate for teacher and students
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 
+        class_name_map = new HashMap<>();
+        parseClassNameFromString();
+
         swipeRefreshLayout = view.findViewById(R.id.statistic_swipe_layout);
 
         realTimeText = view.findViewById(R.id.statistic_time_text);
@@ -72,7 +77,17 @@ public class StatisticFragment extends Fragment {
         //TODO: load the info from the server
         if (is_Instructor) {
             TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.statistic_class_name_text);
-            Objects.requireNonNull(getActivity()).runOnUiThread(() -> class_name_text.setText("Current class code " + curr_class_code));
+
+            String class_name = String.valueOf(curr_class_code);
+
+            if (!OtherUtils.stringIsNullOrEmpty(class_name_map.get(curr_class_code))) {
+                class_name = class_name_map.get(curr_class_code);
+            }
+
+            String finalClass_name = class_name;
+            Objects.requireNonNull(getActivity()).runOnUiThread(() ->
+                    class_name_text.setText(String.format(getString(R.string.UI_current_class_name), finalClass_name))
+            );
             classCodeChangeListener = (sp, key) -> onClassCodeChanged(key, class_name_text);
             sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
 
@@ -84,7 +99,16 @@ public class StatisticFragment extends Fragment {
 
         } else {
             TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.leader_board_class_code_text);
-            Objects.requireNonNull(getActivity()).runOnUiThread(() -> class_name_text.setText("Current class code " + curr_class_code));
+            String class_name = String.valueOf(curr_class_code);
+
+            if (!OtherUtils.stringIsNullOrEmpty(class_name_map.get(curr_class_code))) {
+                class_name = class_name_map.get(curr_class_code);
+            }
+
+            String finalClass_name = class_name;
+            Objects.requireNonNull(getActivity()).runOnUiThread(() ->
+                    class_name_text.setText(String.format(getString(R.string.UI_current_class_name), finalClass_name))
+            );
             classCodeChangeListener = (sp, key) -> onClassCodeChanged(key, class_name_text);
             sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
 
@@ -92,18 +116,27 @@ public class StatisticFragment extends Fragment {
         }
     }
 
-    private void onClassCodeChanged(String key, TextView debug_text) {
+    private void onClassCodeChanged(String key, TextView class_name_text) {
         if (getContext() == null) {
             return;
         }
-        String class_code_string = getContext().getString(R.string.CLASS_CODE);
+        String class_code_string = getContext().getString(R.string.CURR_CLASS_CODE);
         Log.d("In_statistic", "on class code changed called");
         if (key.equals(class_code_string)) {
             int class_code = sp.getInt(class_code_string, 0);
             if (class_code != 0) {
                 Log.d("In_statistic", "class code changed to " + class_code);
                 curr_class_code = class_code;
-                Objects.requireNonNull(getActivity()).runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
+                String class_name = String.valueOf(class_code);
+
+                if (!OtherUtils.stringIsNullOrEmpty(class_name_map.get(curr_class_code))) {
+                    class_name = class_name_map.get(curr_class_code);
+                }
+
+                String finalClass_name = class_name;
+                Objects.requireNonNull(getActivity()).runOnUiThread(() ->
+                        class_name_text.setText(String.format(getString(R.string.UI_current_class_name), finalClass_name))
+                );
                 updateText();
                 //should generate statistic table here as well
                 if (is_Instructor) {
@@ -215,5 +248,20 @@ public class StatisticFragment extends Fragment {
         newRow.addView(generateTableElement("100"), 2);
 
         boardLayout.addView(newRow, 1);
+    }
+
+    private void parseClassNameFromString() {
+        String classNameMapString = sp.getString(getString(R.string.CLASS_NAME), "");
+        if (OtherUtils.stringIsNullOrEmpty(classNameMapString)) {
+            return;
+        }
+        String[] parts = classNameMapString.substring(1, classNameMapString.length() - 1).split(",");
+
+        for (String part : parts) {
+            String[] data = part.split("=");
+            String class_code = data[0].trim();
+            String class_name = data[1].trim();
+            class_name_map.put(Integer.valueOf(class_code), class_name);
+        }
     }
 }

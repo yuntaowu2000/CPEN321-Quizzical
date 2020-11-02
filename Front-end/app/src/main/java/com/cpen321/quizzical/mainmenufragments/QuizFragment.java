@@ -178,7 +178,7 @@ public class QuizFragment extends Fragment {
             return;
         }
 
-        if (key.equals(getString(R.string.CLASS_CODE))) {
+        if (key.equals(getString(R.string.CURR_CLASS_CODE))) {
             updateQuizList();
         }
     }
