@@ -18,6 +18,7 @@ router.get("/", (req, res, next) => {
   let uid = url.searchParams.get("user_id");
   let type = url.searchParams.get("type");
   
+  let timeout = 2000
   if (type === "Profile_Image") {
     let filepath = "/home/site/wwwroot/images/" + uid + "/profile_img.jpg";
     let string = '';
@@ -28,7 +29,6 @@ router.get("/", (req, res, next) => {
     res.send(string);
   }
   else if (type === null) {
-    let timeout = 2000
     db.collection("user info").find({ uid: { $eq: uid }}).project({Profile_Image:0, _id:0}).maxTimeMS(timeout).toArray((err,data) => {
       if (err) {
 	throw err;
@@ -38,7 +38,6 @@ router.get("/", (req, res, next) => {
     });
   }
   else if (type === "user_info") {
-    let timeout = 2000
     db.collection("user info").find({ uid: { $eq: uid }}).project({_id:0}).maxTimeMS(timeout).toArray((err,data) => {
       if (err) {
 	throw err;
