@@ -11,17 +11,17 @@ MongoClient.connect(
     db = client.db("data");
     db.createCollection("class info", (err, res) => {
       if (err) {
-	console.log(err);
+	console.error(err);
       }
     });
     db.createCollection("user info", (err, res) => {
       if (err) {
-	console.log(err);
+	console.error(err);
       }
     });
     db.createCollection("notification_frequency", (err, res) => {
       if (err) {
-	console.log(err);
+	console.error(err);
       }
     });
   }
@@ -30,10 +30,10 @@ MongoClient.connect(
 router.use(express.json());
 
 router.post("/", (req, res, next) => {
-  console.log("UID: " + req.body.uid);
-  console.log("Type: " + req.body.type);
-  console.log("Data: %j", req.body);
-  console.log(Object.entries(req.body));
+  console.error("UID: " + req.body.uid);
+  console.error("Type: " + req.body.type);
+  console.error("Data: %j", req.body);
+  console.error(Object.entries(req.body));
 
   if (req.body.type === "Profile_Image") {
     let path = "images/" + req.body.uid;
@@ -46,20 +46,20 @@ router.post("/", (req, res, next) => {
   else if (req.body.type === "user_info") {
     db.collection("user info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
       if (err) {
-	console.log(err);
+	console.error(err);
       }
     });
   }
   else if (req.body.type === "notification_frequency") {
     db.collection(req.body.type).insertOne(req.body, (err, res) => {
       if (err) {
-	console.log(err);
+	console.error(err);
       }
     });
   } else if (req.body.type === "Add class") {
     db.collection("class info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
       if (err) {
-	console.log(err);
+	console.error(err);
       }
     });
   }
