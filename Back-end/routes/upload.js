@@ -44,7 +44,7 @@ router.post("/", (req, res, next) => {
     fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
   }
   else if (req.body.type === "user_info") {
-    db.collection("user info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
+    db.collection("user info").updateOne({uid: req.body.uid}, Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), {upsert: true}, (err, res) => {
       if (err) {
 	console.error(err);
       }
@@ -52,20 +52,20 @@ router.post("/", (req, res, next) => {
   }
   else if (req.body.type === "notification_frequency") {
     try {
-      db.collection(req.body.type).insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
+      db.collection(req.body.type).updateOne({uid: req.body.uid}, Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), {upsert: true}, (err, res) => {
 	if (err) {
 	  console.error(err);
 	}
       });
     } catch (ex) {
-      db.collection(req.body.type).insertOne(req.body, (err, res) => {
+      db.collection(req.body.type).updateOne({uid: req.body.uid}, req.body, {upsert: true}, (err, res) => {
 	if (err) {
 	  console.error(err);
 	}
       });
     }
   } else if (req.body.type === "Add class") {
-    db.collection("class info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
+    db.collection("class info").updateOne({uid: req.body.uid}, Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), {upsert: true}, (err, res) => {
       if (err) {
 	console.error(err);
       }
