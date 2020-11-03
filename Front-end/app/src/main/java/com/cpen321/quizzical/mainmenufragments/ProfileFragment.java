@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,17 +36,19 @@ import androidx.fragment.app.Fragment;
 import com.cpen321.quizzical.HomeActivity;
 import com.cpen321.quizzical.InitActivity;
 import com.cpen321.quizzical.R;
+import com.cpen321.quizzical.data.Classes;
 import com.cpen321.quizzical.utils.OtherUtils;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 
     private static final int PICK_IMG = 10;
     private static final int permission_code = 1;
-    public static SharedPreferences.OnSharedPreferenceChangeListener quizNumAndExpChangeListener;
+    public static SharedPreferences.OnSharedPreferenceChangeListener profileFragmentOnSPChangeListener;
     private SharedPreferences sp;
     private ImageButton profileImageButton;
     private TextView usernameText;
@@ -53,6 +56,8 @@ public class ProfileFragment extends Fragment {
     private TextView quizNumText;
     private TextView expText;
     private Spinner pushNotificationSpinner;
+    private ArrayList<Classes> class_list;
+    private LinearLayout profileClassLayout;
     private boolean is_instructor;
 
     @Override
@@ -110,6 +115,10 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        profileClassLayout = getView().findViewById(R.id.profile_class_layout);
+        parseClassListFromString();
+        setupClassLayout();
+
         quizNumText = getView().findViewById(R.id.profile_quiz_num_text);
         if (is_instructor)
             quizNumText.setText(String.format(getString(R.string.UI_quiz_made), sp.getInt(getString(R.string.USER_QUIZ_COUNT), 0)));
@@ -119,9 +128,9 @@ public class ProfileFragment extends Fragment {
         expText = getView().findViewById(R.id.profile_exp_text);
         expText.setText(String.format(getString(R.string.UI_total_exp), sp.getInt(getString(R.string.EXP), 0)));
 
-        quizNumAndExpChangeListener = (sp, key) -> updateQuizNumbersAndExpUI(key);
+        profileFragmentOnSPChangeListener = (sp, key) -> onProfileFragmentSPChange(key);
 
-        sp.registerOnSharedPreferenceChangeListener(quizNumAndExpChangeListener);
+        sp.registerOnSharedPreferenceChangeListener(profileFragmentOnSPChangeListener);
 
         new Thread(() -> {
             //try getting the profile image from the server
@@ -199,10 +208,10 @@ public class ProfileFragment extends Fragment {
 
         sp.edit().clear().apply();
 
-        if (quizNumAndExpChangeListener != null)
-            sp.unregisterOnSharedPreferenceChangeListener(quizNumAndExpChangeListener);
-        if (StatisticFragment.classCodeChangeListener != null)
-            sp.unregisterOnSharedPreferenceChangeListener(StatisticFragment.classCodeChangeListener);
+        if (profileFragmentOnSPChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(profileFragmentOnSPChangeListener);
+        if (StatisticFragment.statisticFragmentOnSPChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(StatisticFragment.statisticFragmentOnSPChangeListener);
 
         HomeActivity parentAct = (HomeActivity) getActivity();
 
@@ -376,7 +385,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void updateQuizNumbersAndExpUI(String key) {
+    private void onProfileFragmentSPChange(String key) {
         if (getContext() == null)
             return;
 
@@ -393,6 +402,46 @@ public class ProfileFragment extends Fragment {
             Objects.requireNonNull(getActivity()).runOnUiThread(
                     () -> expText.setText(String.format(getString(R.string.UI_total_exp), sp.getInt(getString(R.string.EXP), 0)))
             );
+        } else if (key.equals(getString(R.string.CLASS_LIST))) {
+            parseClassListFromString();
+            setupClassLayout();
+        }
+    }
+
+    private void parseClassListFromString() {
+        class_list = new ArrayList<>();
+        String classListString = sp.getString(getString(R.string.CLASS_LIST), "");
+
+        if (OtherUtils.stringIsNullOrEmpty(classListString)) {
+            return;
+        }
+
+        try {
+            String[] classes = classListString.split(";");
+            for (String c : classes) {
+                class_list.add(new Classes(c));
+            }
+        } catch (Exception e) {
+            Log.d("parse", "cannot parse class list");
+        }
+    }
+
+    private void setupClassLayout() {
+        Context thisContext = this.getContext();
+        assert thisContext != null;
+
+        profileClassLayout.removeAllViews();
+
+        for (Classes c : class_list) {
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(150, ViewGroup.LayoutParams.MATCH_PARENT);
+            layoutParams.setMargins(10, 10, 10, 10);
+            TextView textView = new TextView(thisContext);
+            textView.setText(c.getClassName());
+            textView.setBackground(getResources().getDrawable(R.drawable.textview_rect_border));
+            textView.setGravity(Gravity.CENTER);
+            textView.setLayoutParams(layoutParams);
+
+            profileClassLayout.addView(textView);
         }
     }
 }

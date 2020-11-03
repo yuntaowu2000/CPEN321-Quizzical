@@ -91,4 +91,14 @@
     <string name="UI_back_to_statistics">返回班级数据</string>
     <string name="UI_default_module_text">第一单元</string>
     <string name="UI_current_class_name">当前班级：%s</string>
+    <string name="UI_warning">警告</string>
+    <string name="UI_teacher_delete_course">您的课程将会同时在所有学生处删除，是否继续？</string>
+    <string name="UI_student_delete_course">您希望退出这门课吗？</string>
+    <string name="UI_wrong_questions">错题集</string>
+    <string name="UI_stats">班级数据</string>
+    <string name="UI_notes">笔记</string>
+    <string name="UI_stats_string">平均：%.2f，最高分：%.2f，您的分数：%.2f</string>
+    <string name="UI_enter_module_name">请输入单元名称</string>
+    <string name="UI_create_new_module">创建一个新的单元</string>
+    <string name="UI_invalid_module_name">单元名无效</string>
 </resources>

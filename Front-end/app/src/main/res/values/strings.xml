@@ -41,6 +41,7 @@
 
     <string name="QUIZ" translatable="false">quiz</string>
     <string name="QUIZ_CODE" translatable="false">quiz_code</string>
+    <string name="QUIZ_MODULES" translatable="false">quiz_modules</string>
     <string name="QUESTION_NUM" translatable="false">question_num</string>
     <string name="QUIZ_URL" translatable="false">QUIZ_URL</string>
 
@@ -118,12 +119,31 @@
     <string name="UI_create_class_success_title">You just created a new class</string>
     <string name="UI_create_class_success_msg">Your new class code is %d. You will also get an email containing the code. Please share it with your students.</string>
 
+
+    <string name="UI_warning">Warning</string>
+    <string name="UI_teacher_delete_course">Do you want to delete this course for everyone?</string>
+    <string name="UI_student_delete_course">Do you want to quit this course?</string>
+
     <!--    used in quiz fragment-->
     <!--    need update later-->
     <string name="go_to_quiz">Go to Quiz</string>
     <string name="quiz_fragment_debug_text" translatable="false">This is the quiz page</string>
     <string name="teacher_quiz_fragment_debug_text" translatable="false">This is the quiz page for teachers</string>
     <string name="UI_default_module_text">module 1</string>
+    <string name="UI_wrong_questions">Wrong Questions</string>
+    <string name="UI_stats">stats</string>
+    <string name="UI_notes">notes</string>
+    <string name="UI_stats_string">Avg: %.2f, highest: %.2f, your score: %.2f</string>
+
+    <string name="UI_create_new_module">Create new module</string>
+    <string name="UI_enter_module_name">Please enter module name</string>
+    <string name="UI_example_module_name" translatable="false">E.g module 1</string>
+    <string name="UI_invalid_module_name">Invalid module name</string>
+
+    <string name="AVERAGE" translatable="false">Average</string>
+    <string name="HIGHEST" translatable="false">Highest</string>
+    <string name="SCORE" translatable="false">Score</string>
+
 
     <!--    used in class statistic fragment (for teachers)-->
     <!--    need update later-->
