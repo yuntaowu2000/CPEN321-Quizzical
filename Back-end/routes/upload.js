@@ -64,7 +64,22 @@ router.post("/", (req, res, next) => {
 	}
       });
     }
-  } else if (req.body.type === "Add class") {
+  }
+  else if (req.body.type === "Email") {
+    db.collection("class info").updateOne({uid: req.body.uid}, {$set: {Email: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
+      if (err) {
+	console.error(err);
+      }
+    });
+  }
+  else if (req.body.type === "username") {
+    db.collection("class info").updateOne({uid: req.body.uid}, {$set: {username: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
+      if (err) {
+	console.error(err);
+      }
+    });
+  }
+  else if (req.body.type === "Add class") {
     db.collection("class info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
 	console.error(err);
