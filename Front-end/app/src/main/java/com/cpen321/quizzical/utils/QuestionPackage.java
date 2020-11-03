@@ -1,14 +1,9 @@
 package com.cpen321.quizzical.utils;
 
-import android.util.Log;
-
 import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.data.questions.IQuestion;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Collections;

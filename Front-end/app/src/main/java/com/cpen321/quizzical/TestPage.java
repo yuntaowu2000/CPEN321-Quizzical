@@ -13,15 +13,9 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.cpen321.quizzical.data.CourseCategory;
-import com.cpen321.quizzical.data.questions.QuestionsMC;
-import com.cpen321.quizzical.utils.ChoicePair;
 import com.cpen321.quizzical.utils.OtherUtils;
 import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TestPage extends AppCompatActivity {
 

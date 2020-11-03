@@ -54,7 +54,7 @@ router.post("/", (req, res, next) => {
     try {
       db.collection(req.body.type).updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
 	if (err) {
-	  console.error(err);
+      console.error(err);
 	}
       });
     } catch (ex) {
