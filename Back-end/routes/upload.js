@@ -11,17 +11,17 @@ MongoClient.connect(
     db = client.db("data");
     db.createCollection("class info", (err, res) => {
       if (err) {
-	console.log(err);
+	console.error(err);
       }
     });
     db.createCollection("user info", (err, res) => {
       if (err) {
-	console.log(err);
+	console.error(err);
       }
     });
     db.createCollection("notification_frequency", (err, res) => {
       if (err) {
-	console.log(err);
+	console.error(err);
       }
     });
   }
@@ -30,13 +30,13 @@ MongoClient.connect(
 router.use(express.json());
 
 router.post("/", (req, res, next) => {
-  console.log("UID: " + req.body.uid);
-  console.log("Type: " + req.body.type);
-  console.log("Data: %j", req.body);
-  console.log(Object.entries(req.body));
+  console.error("UID: " + req.body.uid);
+  console.error("Type: " + req.body.type);
+  console.error("Data: %j", req.body);
+  console.error(Object.entries(req.body));
 
   if (req.body.type === "Profile_Image") {
-    let path = "images/" + req.body.uid;
+    let path = "/home/site/wwwroot/images/" + req.body.uid;
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path);
     }
@@ -44,22 +44,45 @@ router.post("/", (req, res, next) => {
     fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
   }
   else if (req.body.type === "user_info") {
-    db.collection("user info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
+    db.collection("user info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
-	console.log(err);
+	console.error(err);
       }
     });
   }
   else if (req.body.type === "notification_frequency") {
-    db.collection(req.body.type).insertOne(req.body, (err, res) => {
+    try {
+      db.collection(req.body.type).updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
+	if (err) {
+      console.error(err);
+	}
+      });
+    } catch (ex) {
+      db.collection(req.body.type).updateOne({uid: req.body.uid}, {$set: req.body}, {upsert: true}, (err, res) => {
+	if (err) {
+	  console.error(err);
+	}
+      });
+    }
+  }
+  else if (req.body.type === "Email") {
+    db.collection("user info").updateOne({uid: req.body.uid}, {$set: {Email: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
-	console.log(err);
+	console.error(err);
       }
     });
-  } else if (req.body.type === "Add class") {
-    db.collection("class info").insertOne(Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}), (err, res) => {
+  }
+  else if (req.body.type === "username") {
+    db.collection("user info").updateOne({uid: req.body.uid}, {$set: {username: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
-	console.log(err);
+	console.error(err);
+      }
+    });
+  }
+  else if (req.body.type === "Add class") {
+    db.collection("class info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
+      if (err) {
+	console.error(err);
       }
     });
   }

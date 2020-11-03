@@ -47,6 +47,7 @@ after each quiz is finished
 
 ### Back-end  
 1. Simple POST GET request handling done.  
+2. user info (username, email, profile image, is_instructor, class taken, class statistics) mostly done  
 
 ## TODO list
 1. UI set up for home activity  
@@ -57,7 +58,6 @@ after each quiz is finished
 2. UI and logic set up for teacher creating quiz  
 **Note:** most picture reading, processing related stuff are in OtherUtils, testActivity
 3. Front-Back end communication  
-3.1 user info (username, email, profile image, is_instructor, class taken, class statistics)  
 3.2 class info (class statistics)  
 3.3 quiz info (created quiz parsed and sent onto the server; retrive quiz from the server)  
 4. Push notification  

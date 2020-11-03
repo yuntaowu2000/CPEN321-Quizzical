@@ -129,6 +129,7 @@ public class ProfileFragment extends Fragment {
             String url = getString(R.string.GET_URL) + "users?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
                     + "&" + getString(R.string.TYPE) + getString(R.string.PROFILE_IMG);
             String img = OtherUtils.readFromURL(url);
+            Log.d("server_response", "img: " + img);
             if (!OtherUtils.stringIsNullOrEmpty(img)) {
                 sp.edit().putString(getString(R.string.PROFILE_IMG), img).apply();
                 profileImg = OtherUtils.decodeImage(img);
@@ -176,6 +177,7 @@ public class ProfileFragment extends Fragment {
                 String url = getString(R.string.GET_URL) + "users?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
                         + "&" + getString(R.string.TYPE) + getString(R.string.NOTIFICATION_FREQ);
                 String server_response = OtherUtils.readFromURL(url);
+                Log.d("server_response", "notification freq: " + server_response);
                 try {
                     int new_freq = Integer.parseInt(server_response);
                     Objects.requireNonNull(getActivity()).runOnUiThread(() -> pushNotificationSpinner.setSelection(new_freq));

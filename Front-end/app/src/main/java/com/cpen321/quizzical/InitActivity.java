@@ -35,9 +35,10 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -111,7 +112,7 @@ public class InitActivity extends AppCompatActivity {
                 return;
             }
             String token = task.getResult();
-            Log.d("Token", token);
+            Log.d("Token", token + "");
             sp.edit().putString(getString(R.string.FIREBASE_TOKEN), token).apply();
         });
 
@@ -182,7 +183,7 @@ public class InitActivity extends AppCompatActivity {
                 String username = Objects.requireNonNull(account.getDisplayName()).replace(" ", "_");
                 String email = account.getEmail();
                 new Thread(() -> {
-                    Bitmap bitmap = OtherUtils.getBitmapFromUrl(account.getPhotoUrl().toString());
+                    Bitmap bitmap = OtherUtils.getBitmapFromUrl(Objects.requireNonNull(account.getPhotoUrl()).toString());
                     String encodedBitmap = OtherUtils.encodeImage(bitmap);
                     sp.edit().putString(getString(R.string.PROFILE_IMG), encodedBitmap).apply();
                 }).start();
@@ -206,26 +207,25 @@ public class InitActivity extends AppCompatActivity {
         boolean is_instructor = false;
         int user_quiz_count = 0;
         int EXP = 0;
-        int curr_class_code = 0;
+        String class_codes = "";
         try {
-            final JsonElement jsonElement = JsonParser.parseString(userInfoJson);
-            JsonObject jsonObject = jsonElement.getAsJsonObject();
-            username = jsonObject.get(getString(R.string.USERNAME)).getAsString();
-            email = jsonObject.get(getString(R.string.EMAIL)).getAsString();
-            is_instructor = jsonObject.get(getString(R.string.IS_INSTRUCTOR)).getAsBoolean();
-            user_quiz_count = jsonObject.get(getString(R.string.USER_QUIZ_COUNT)).getAsInt();
-            EXP = jsonObject.get(getString(R.string.EXP)).getAsInt();
-            curr_class_code = jsonObject.get(getString(R.string.CLASS_CODE)).getAsInt();
+            JSONArray jsonArray = new JSONArray(userInfoJson);
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            username = jsonObject.getString(getString(R.string.USERNAME));
+            email = jsonObject.getString(getString(R.string.EMAIL));
+            is_instructor = jsonObject.getBoolean(getString(R.string.IS_INSTRUCTOR));
+            user_quiz_count = jsonObject.getInt(getString(R.string.USER_QUIZ_COUNT));
+            EXP = jsonObject.getInt(getString(R.string.EXP));
+            class_codes = jsonObject.getString(getString(R.string.CLASS_CODE));
         } catch (Exception e) {
             Log.d("parse_user_info", "failed " + e.getMessage());
         }
-        Log.d("Get_server_info", "user name: " + username + ", email: " + email);
         sp.edit().putString(getString(R.string.USERNAME), username).apply();
         sp.edit().putString(getString(R.string.EMAIL), email).apply();
         sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), is_instructor).apply();
         sp.edit().putInt(getString(R.string.USER_QUIZ_COUNT), user_quiz_count).apply();
         sp.edit().putInt(getString(R.string.EXP), EXP).apply();
-        sp.edit().putInt(getString(R.string.CLASS_CODE), curr_class_code).apply();
+        sp.edit().putString(getString(R.string.CLASS_CODE), class_codes).apply();
     }
 
     private void requestUserNameAndEmail() {
@@ -370,7 +370,14 @@ public class InitActivity extends AppCompatActivity {
                     sp.getString(getString(R.string.EMAIL), ""),
                     is_instructor);
 
-            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USER_INFO), user_info)).start();
+            new Thread(() ->
+            {
+                OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USER_INFO), user_info);
+                OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                        getString(R.string.PROFILE_IMG),
+                        sp.getString(getString(R.string.PROFILE_IMG), ""));
+            }).start();
+
 
             goToHomeActivity();
         } else {
@@ -387,8 +394,6 @@ public class InitActivity extends AppCompatActivity {
             jsonObject.addProperty(getString(R.string.IS_INSTRUCTOR), is_instructor);
             jsonObject.addProperty(getString(R.string.USER_QUIZ_COUNT), 0);
             jsonObject.addProperty(getString(R.string.EXP), 0);
-            jsonObject.addProperty(getString(R.string.PROFILE_IMG), sp.getString(getString(R.string.PROFILE_IMG), ""));
-            jsonObject.addProperty(getString(R.string.FIREBASE_TOKEN), sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
         } catch (Exception e) {
             Log.d("parse_credential", "failed");
         }

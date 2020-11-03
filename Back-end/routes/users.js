@@ -18,14 +18,27 @@ router.get("/", (req, res, next) => {
   let uid = url.searchParams.get("user_id");
   let type = url.searchParams.get("type");
   
+  let timeout = 2000
   if (type === "Profile_Image") {
-    let filepath = "images/" + uid + + "/profile_img.jpg";
-    let bitmap = fs.readFileSync(filepath);
-    let string = Buffer(bitmap).toString("base64");
+    let filepath = "/home/site/wwwroot/images/" + uid + "/profile_img.jpg";
+    let string = '';
+    if (fs.existsSync(filepath)) {
+      let bitmap = fs.readFileSync(filepath);
+      string = Buffer(bitmap).toString("base64");
+    }
     res.send(string);
-  } else if (type === null) {
-    let timeout = 2000
+  }
+  else if (type === null) {
     db.collection("user info").find({ uid: { $eq: uid }}).project({Profile_Image:0, _id:0}).maxTimeMS(timeout).toArray((err,data) => {
+      if (err) {
+	throw err;
+      } else {
+	res.send(data);
+      }
+    });
+  }
+  else if (type === "user_info") {
+    db.collection("user info").find({ uid: { $eq: uid }}).project({_id:0}).maxTimeMS(timeout).toArray((err,data) => {
       if (err) {
 	throw err;
       } else {
@@ -38,7 +51,8 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	res.send(username);
+	username = Object.values(username[0])[0];
+	res.send(''+username);
       }
     });
   }
@@ -47,7 +61,8 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	res.send(email);
+	email = Object.values(email[0])[0];
+	res.send(''+email);
       }
     });
   }
@@ -56,7 +71,8 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	res.send(isInstructor);
+	isInstructor = Object.values(isInstructor[0])[0];
+	res.send(''+isInstructor);
       }
     });
   }
@@ -65,7 +81,8 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	res.send(quizCount);
+	quizCount = Object.values(quizCount[0])[0];
+	res.send(''+quizCount);
       }
     });
   }
@@ -74,7 +91,8 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	res.send(exp);
+	exp = Object.values(exp[0])[0]
+	res.send(''+exp);
       }
     });
   }
@@ -83,16 +101,18 @@ router.get("/", (req, res, next) => {
       if (err) {
 	throw err;
       } else {
-	res.send(classCode);
+	classCode = Object.values(classCode[0])[0];
+	res.send(''+classCode);
       }
     });
   }
   else if (type === "notification_frequency") {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({notification_frequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
+    db.collection("notification_frequency").find({ uid: { $eq: uid }}).project({notification_frequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
       if (err) {
 	throw err;
       } else {
-	res.send(frequency);
+	frequency = Object.values(frequency[0])[0];
+	res.send(''+frequency);
       }
     });
   }

@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cpen321.quizzical.R;
+import com.cpen321.quizzical.data.Classes;
 import com.cpen321.quizzical.utils.OtherUtils;
 
 import java.util.Objects;
@@ -32,10 +33,10 @@ public class StatisticFragment extends Fragment {
     private TextView realTimeText;
 
     private boolean is_Instructor;
-    private int curr_class_code;
     private TableLayout boardLayout;
     private Button teachers_leaderboard_btn;
     private boolean teacher_in_statistic;
+    private Classes currClass;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,6 @@ public class StatisticFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sp = Objects.requireNonNull(getContext()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
         is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
-        curr_class_code = sp.getInt(getString(R.string.CLASS_CODE), 0);
 
         if (is_Instructor) {
             return inflater.inflate(R.layout.fragment_class_statistic, container, false);
@@ -61,6 +61,8 @@ public class StatisticFragment extends Fragment {
         // may need to separate for teacher and students
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 
+        currClass = new Classes(sp.getString(getString(R.string.CURR_CLASS), ""));
+
         swipeRefreshLayout = view.findViewById(R.id.statistic_swipe_layout);
 
         realTimeText = view.findViewById(R.id.statistic_time_text);
@@ -72,8 +74,11 @@ public class StatisticFragment extends Fragment {
         //TODO: load the info from the server
         if (is_Instructor) {
             TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.statistic_class_name_text);
-            Objects.requireNonNull(getActivity()).runOnUiThread(() -> class_name_text.setText("Current class code " + curr_class_code));
-            classCodeChangeListener = (sp, key) -> onClassCodeChanged(key, class_name_text);
+
+            Objects.requireNonNull(getActivity()).runOnUiThread(() ->
+                    class_name_text.setText(String.format(getString(R.string.UI_current_class_name), currClass.getClassName()))
+            );
+            classCodeChangeListener = (sp, key) -> onClassChanged(key, class_name_text);
             sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
 
             boardLayout = view.findViewById(R.id.class_statistic_board);
@@ -84,26 +89,34 @@ public class StatisticFragment extends Fragment {
 
         } else {
             TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.leader_board_class_code_text);
-            Objects.requireNonNull(getActivity()).runOnUiThread(() -> class_name_text.setText("Current class code " + curr_class_code));
-            classCodeChangeListener = (sp, key) -> onClassCodeChanged(key, class_name_text);
+
+            Objects.requireNonNull(getActivity()).runOnUiThread(() ->
+                    class_name_text.setText(String.format(getString(R.string.UI_current_class_name), currClass.getClassName()))
+            );
+            classCodeChangeListener = (sp, key) -> onClassChanged(key, class_name_text);
             sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
 
             boardLayout = view.findViewById(R.id.student_leaderboard_table);
         }
     }
 
-    private void onClassCodeChanged(String key, TextView debug_text) {
+    private void onClassChanged(String key, TextView class_name_text) {
         if (getContext() == null) {
             return;
         }
-        String class_code_string = getContext().getString(R.string.CLASS_CODE);
-        Log.d("In_statistic", "on class code changed called");
-        if (key.equals(class_code_string)) {
-            int class_code = sp.getInt(class_code_string, 0);
-            if (class_code != 0) {
-                Log.d("In_statistic", "class code changed to " + class_code);
-                curr_class_code = class_code;
-                Objects.requireNonNull(getActivity()).runOnUiThread(() -> debug_text.setText("Current class code " + curr_class_code));
+        if (key.equals(getContext().getString(R.string.CURR_CLASS))) {
+
+            String class_info = sp.getString(getContext().getString(R.string.CURR_CLASS), "");
+
+            if (!OtherUtils.stringIsNullOrEmpty(class_info)) {
+
+                currClass = new Classes(class_info);
+                Log.d("In_statistic", "class code changed to " + currClass.getClassCode());
+
+
+                Objects.requireNonNull(getActivity()).runOnUiThread(() ->
+                        class_name_text.setText(String.format(getString(R.string.UI_current_class_name), currClass.getClassName()))
+                );
                 updateText();
                 //should generate statistic table here as well
                 if (is_Instructor) {
@@ -216,4 +229,5 @@ public class StatisticFragment extends Fragment {
 
         boardLayout.addView(newRow, 1);
     }
+
 }
