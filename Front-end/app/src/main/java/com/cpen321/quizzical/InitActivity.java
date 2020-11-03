@@ -394,7 +394,6 @@ public class InitActivity extends AppCompatActivity {
             jsonObject.addProperty(getString(R.string.IS_INSTRUCTOR), is_instructor);
             jsonObject.addProperty(getString(R.string.USER_QUIZ_COUNT), 0);
             jsonObject.addProperty(getString(R.string.EXP), 0);
-            jsonObject.addProperty(getString(R.string.FIREBASE_TOKEN), sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
         } catch (Exception e) {
             Log.d("parse_credential", "failed");
         }
