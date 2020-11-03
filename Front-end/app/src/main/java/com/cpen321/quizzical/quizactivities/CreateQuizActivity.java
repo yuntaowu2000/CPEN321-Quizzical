@@ -359,7 +359,7 @@ public class CreateQuizActivity extends AppCompatActivity {
             if (child instanceof LinearLayout) {
                 for (int j = 0; j < ((LinearLayout) child).getChildCount(); j++) {
                     View rowChild = ((LinearLayout) child).getChildAt(j);
-                    if (rowChild instanceof TextView) {
+                    if (rowChild instanceof TextView && !(rowChild instanceof Button)) {
                         answer[0] = ((TextView) rowChild).getText().toString();
                     }
                 }
@@ -412,23 +412,43 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle("Edit Answer")
                 .setView(layout)
-                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> dialogInterface.dismiss()));
+                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> dialogInterface.dismiss()))
+                .setNeutralButton("positive button won't close", ((dialogInterface, i) -> dialogInterface.dismiss()));
 
         final AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
 
 
+        String finalPic = pic;
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
+            answer[0] = answerInput.getText().toString();
             Log.d("hi_op","");
             View row = answersLayout.getChildAt(index);
             if (row instanceof LinearLayout) {
+                Log.d("hi_op", ""+((LinearLayout) row).getChildCount());
                 for (int i = 0; i < ((LinearLayout) row).getChildCount(); i++) {
-                    Log.d("hi_op",""+((LinearLayout) row).getChildAt(i));
-                    if (((LinearLayout) row).getChildAt(i) instanceof TextView) {//how to make this not count check box
-                        ((TextView) ((LinearLayout) row).getChildAt(i)).setText(answer[0]);
-                        Log.d("hi_op",""+((TextView) ((LinearLayout) row).getChildAt(i)).getText());
+                    View rowChild = ((LinearLayout) row).getChildAt(i);
+//                    Log.d("hi_op",""+rowChild+" "+(rowChild instanceof TextView) + " "+ (rowChild instanceof ImageView)+ " "+(rowChild instanceof Button));
+//                    Log.d("hi_op",""+rowChild+"text "+(rowChild instanceof TextView && !(rowChild instanceof Button)));
+                    if (isPic[0]) {
+                        if (rowChild instanceof ImageView && !(rowChild instanceof ImageButton)) {
+                            try {
+                                if (!finalPic.equals("")) {
+                                    ((ImageView) rowChild).setImageBitmap(getBitmapFromUrl(finalPic));
+                                } else {
+                                    ((ImageView) rowChild).setImageResource(android.R.drawable.ic_menu_gallery);
+                                }
+                            } catch (Exception e) {
+                                ((ImageView) rowChild).setImageResource(android.R.drawable.ic_menu_gallery);
+                            }
+                        }
+                    } else {
+                        if (rowChild instanceof TextView && !(rowChild instanceof Button)) {
+                            Log.d("hi_op", "old "+((TextView) rowChild).getText());
+                            ((TextView) rowChild).setText(answerInput.getText());
+                            Log.d("hi_op", "new "+((TextView) rowChild).getText());
+                        }
                     }
-                    break;
                 }
             }
         });
