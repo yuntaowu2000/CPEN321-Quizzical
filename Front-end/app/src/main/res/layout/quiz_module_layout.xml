@@ -4,19 +4,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/textview_rect_border">
 
     <TextView
         android:id="@+id/quiz_module_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="56dp"
         android:text="@string/UI_default_module_text"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/go_to_quiz"
@@ -29,6 +30,45 @@
         android:layout_marginTop="10dp"
         android:text="@string/go_to_quiz"
         android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/notes_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/UI_notes"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toRightOf="@id/quiz_module_name"
+        app:layout_constraintTop_toBottomOf="@+id/go_to_quiz" />
+
+    <Button
+        android:id="@+id/stats_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/UI_stats"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toRightOf="@id/go_to_quiz"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/wrong_question_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/UI_wrong_questions"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@+id/stats_button"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintLeft_toRightOf="@id/notes_button"
+        tools:layout_editor_absoluteX="73dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
