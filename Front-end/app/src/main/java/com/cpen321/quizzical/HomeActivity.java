@@ -515,33 +515,33 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        if (ProfileFragment.quizNumAndExpChangeListener != null)
-            sp.unregisterOnSharedPreferenceChangeListener(ProfileFragment.quizNumAndExpChangeListener);
-        if (StatisticFragment.classCodeChangeListener != null)
-            sp.unregisterOnSharedPreferenceChangeListener(StatisticFragment.classCodeChangeListener);
-        if (QuizFragment.quizFramentClassCodeChangeListener != null)
-            sp.unregisterOnSharedPreferenceChangeListener(QuizFragment.quizFramentClassCodeChangeListener);
+        if (ProfileFragment.profileFragmentOnSPChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(ProfileFragment.profileFragmentOnSPChangeListener);
+        if (StatisticFragment.statisticFragmentOnSPChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(StatisticFragment.statisticFragmentOnSPChangeListener);
+        if (QuizFragment.quizFragmentSPChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(QuizFragment.quizFragmentSPChangeListener);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (ProfileFragment.quizNumAndExpChangeListener != null)
-            sp.registerOnSharedPreferenceChangeListener(ProfileFragment.quizNumAndExpChangeListener);
-        if (StatisticFragment.classCodeChangeListener != null)
-            sp.registerOnSharedPreferenceChangeListener(StatisticFragment.classCodeChangeListener);
-        if (QuizFragment.quizFramentClassCodeChangeListener != null)
-            sp.registerOnSharedPreferenceChangeListener(QuizFragment.quizFramentClassCodeChangeListener);
+        if (ProfileFragment.profileFragmentOnSPChangeListener != null)
+            sp.registerOnSharedPreferenceChangeListener(ProfileFragment.profileFragmentOnSPChangeListener);
+        if (StatisticFragment.statisticFragmentOnSPChangeListener != null)
+            sp.registerOnSharedPreferenceChangeListener(StatisticFragment.statisticFragmentOnSPChangeListener);
+        if (QuizFragment.quizFragmentSPChangeListener != null)
+            sp.registerOnSharedPreferenceChangeListener(QuizFragment.quizFragmentSPChangeListener);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (ProfileFragment.quizNumAndExpChangeListener != null)
-            sp.unregisterOnSharedPreferenceChangeListener(ProfileFragment.quizNumAndExpChangeListener);
-        if (StatisticFragment.classCodeChangeListener != null)
-            sp.unregisterOnSharedPreferenceChangeListener(StatisticFragment.classCodeChangeListener);
-        if (QuizFragment.quizFramentClassCodeChangeListener != null)
-            sp.unregisterOnSharedPreferenceChangeListener(QuizFragment.quizFramentClassCodeChangeListener);
+        if (ProfileFragment.profileFragmentOnSPChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(ProfileFragment.profileFragmentOnSPChangeListener);
+        if (StatisticFragment.statisticFragmentOnSPChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(StatisticFragment.statisticFragmentOnSPChangeListener);
+        if (QuizFragment.quizFragmentSPChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(QuizFragment.quizFragmentSPChangeListener);
     }
 }

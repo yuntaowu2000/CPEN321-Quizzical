@@ -27,7 +27,7 @@ import java.util.Objects;
 
 public class StatisticFragment extends Fragment {
 
-    public static SharedPreferences.OnSharedPreferenceChangeListener classCodeChangeListener;
+    public static SharedPreferences.OnSharedPreferenceChangeListener statisticFragmentOnSPChangeListener;
     private SharedPreferences sp;
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView realTimeText;
@@ -78,8 +78,8 @@ public class StatisticFragment extends Fragment {
             Objects.requireNonNull(getActivity()).runOnUiThread(() ->
                     class_name_text.setText(String.format(getString(R.string.UI_current_class_name), currClass.getClassName()))
             );
-            classCodeChangeListener = (sp, key) -> onClassChanged(key, class_name_text);
-            sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
+            statisticFragmentOnSPChangeListener = (sp, key) -> onStatsFragmentSPChanged(key, class_name_text);
+            sp.registerOnSharedPreferenceChangeListener(statisticFragmentOnSPChangeListener);
 
             boardLayout = view.findViewById(R.id.class_statistic_board);
             teacher_in_statistic = true;
@@ -93,14 +93,14 @@ public class StatisticFragment extends Fragment {
             Objects.requireNonNull(getActivity()).runOnUiThread(() ->
                     class_name_text.setText(String.format(getString(R.string.UI_current_class_name), currClass.getClassName()))
             );
-            classCodeChangeListener = (sp, key) -> onClassChanged(key, class_name_text);
-            sp.registerOnSharedPreferenceChangeListener(classCodeChangeListener);
+            statisticFragmentOnSPChangeListener = (sp, key) -> onStatsFragmentSPChanged(key, class_name_text);
+            sp.registerOnSharedPreferenceChangeListener(statisticFragmentOnSPChangeListener);
 
             boardLayout = view.findViewById(R.id.student_leaderboard_table);
         }
     }
 
-    private void onClassChanged(String key, TextView class_name_text) {
+    private void onStatsFragmentSPChanged(String key, TextView class_name_text) {
         if (getContext() == null) {
             return;
         }

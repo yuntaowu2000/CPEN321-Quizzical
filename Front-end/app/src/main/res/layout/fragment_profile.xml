@@ -102,15 +102,23 @@
                     android:text="@string/UI_course_taken"
                     android:textSize="15sp"/>
             </TableRow>
-            <TableRow>
-                <TextView
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/textview_rect_border"
-                    android:gravity="center"
-                    android:text="Course 1"
-                    android:textSize="15sp"/>
-            </TableRow>
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:id="@+id/profile_class_layout">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/textview_rect_border"
+                        android:gravity="center"
+                        android:text="@string/UI_current_class_name"
+                        android:textSize="15sp"/>
+                </LinearLayout>
+            </HorizontalScrollView>
 
             <TableRow>
                 <TextView

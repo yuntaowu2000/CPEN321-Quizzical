@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,7 +51,7 @@ import katex.hourglass.in.mathlib.MathView;
 
 public class QuizFragment extends Fragment {
 
-    public static SharedPreferences.OnSharedPreferenceChangeListener quizFramentClassCodeChangeListener;
+    public static SharedPreferences.OnSharedPreferenceChangeListener quizFragmentSPChangeListener;
     private SharedPreferences sp;
 
     private boolean is_Instructor;
@@ -141,8 +140,8 @@ public class QuizFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.quiz_page_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(() -> new Thread(this::updateQuizList).start());
 
-        quizFramentClassCodeChangeListener = (sp, key) -> updateQuizOnSPKeyChanged(key);
-        sp.registerOnSharedPreferenceChangeListener(quizFramentClassCodeChangeListener);
+        quizFragmentSPChangeListener = (sp, key) -> onQuizFragmentSPChanged(key);
+        sp.registerOnSharedPreferenceChangeListener(quizFragmentSPChangeListener);
 
 
 
@@ -364,7 +363,7 @@ public class QuizFragment extends Fragment {
         }
     }
 
-    private void updateQuizOnSPKeyChanged(String key) {
+    private void onQuizFragmentSPChanged(String key) {
         if (getContext() == null) {
             return;
         }
