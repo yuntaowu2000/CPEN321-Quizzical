@@ -118,6 +118,11 @@
     <string name="UI_create_class_success_title">You just created a new class</string>
     <string name="UI_create_class_success_msg">Your new class code is %d. You will also get an email containing the code. Please share it with your students.</string>
 
+
+    <string name="UI_warning">Warning</string>
+    <string name="UI_teacher_delete_course">Do you want to delete this course for everyone?</string>
+    <string name="UI_student_delete_course">Do you want to quit this course?</string>
+
     <!--    used in quiz fragment-->
     <!--    need update later-->
     <string name="go_to_quiz">Go to Quiz</string>

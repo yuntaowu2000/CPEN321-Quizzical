@@ -172,7 +172,9 @@ public class HomeActivity extends AppCompatActivity {
         for (Classes c : class_list) {
             strb.append(c.toJson()).append(";");
         }
-        strb.deleteCharAt(strb.length() - 1);
+        if (strb.length() > 0) {
+            strb.deleteCharAt(strb.length() - 1);
+        }
 
         Log.d("parse_class_list", strb.toString());
         return strb.toString();
@@ -356,28 +358,37 @@ public class HomeActivity extends AppCompatActivity {
         new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.CREATE_CLASS), mClass.toJson())).start();
     }
 
-    private void generateUIClassListOnCreate() {
-        for (Classes c : class_list) {
-            Button newClassButton = new Button(this);
-            String class_name = c.getClassName();
+    private void generateNewClassButton(Classes c) {
+        Button newClassButton = new Button(this);
+        String class_name = c.getClassName();
 
-            if (OtherUtils.stringIsNullOrEmpty(class_name)) {
-                class_name = String.valueOf(c.getClassCode());
-            }
-
-            newClassButton.setText(class_name);
-            newClassButton.setAllCaps(false);
-            newClassButton.setOnClickListener(v -> switchClass(c));
-            class_button_list.add(newClassButton);
+        if (OtherUtils.stringIsNullOrEmpty(class_name)) {
+            class_name = String.valueOf(c.getClassCode());
         }
 
-        class_scroll_content_layout.removeAllViews();
+        newClassButton.setText(class_name);
+        newClassButton.setAllCaps(false);
+        newClassButton.setOnClickListener(v -> switchClass(c));
+        newClassButton.setOnLongClickListener(v -> requestDeleteClass(c));
+        class_button_list.add(newClassButton);
+    }
 
+    private void generateClassButtonLayout() {
         for (Button b : class_button_list) {
             class_scroll_content_layout.addView(b);
         }
 
         class_scroll_content_layout.addView(add_class_button);
+    }
+
+    private void generateUIClassListOnCreate() {
+        for (Classes c : class_list) {
+            generateNewClassButton(c);
+        }
+
+        class_scroll_content_layout.removeAllViews();
+
+        generateClassButtonLayout();
 
         switchClass(class_list.get(0));
     }
@@ -398,30 +409,64 @@ public class HomeActivity extends AppCompatActivity {
                 class_list_string
         )).start();
 
-        Button newClassButton = new Button(this);
-
-        String class_name;
-        if (OtherUtils.stringIsNullOrEmpty(mClass.getClassName())) {
-            class_name = String.valueOf(mClass.getClassCode());
-        } else {
-            class_name = mClass.getClassName();
-        }
-
-        newClassButton.setText(class_name);
-        newClassButton.setAllCaps(false);
-        newClassButton.setOnClickListener(v -> switchClass(mClass));
-
-        class_button_list.add(newClassButton);
+        generateNewClassButton(mClass);
 
         class_scroll_content_layout.removeAllViews();
 
-        for (Button b : class_button_list) {
-            class_scroll_content_layout.addView(b);
-        }
-
-        class_scroll_content_layout.addView(add_class_button);
+        generateClassButtonLayout();
 
         switchClass(mClass);
+    }
+
+    private boolean requestDeleteClass(Classes mClass) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle(R.string.UI_warning);
+
+        if (is_Instructor) {
+            alertDialogBuilder.setMessage(R.string.UI_teacher_delete_course);
+        } else {
+            alertDialogBuilder.setMessage(R.string.UI_student_delete_course);
+        }
+
+        alertDialogBuilder.setPositiveButton(R.string.YES, ((dialogInterface, i) -> deleteClass(mClass)));
+        alertDialogBuilder.setNegativeButton(R.string.NO, ((dialogInterface, i) -> dialogInterface.dismiss()));
+
+        alertDialogBuilder.show();
+
+        return true;
+    }
+
+    private void deleteClass(Classes mClass) {
+        class_list.remove(mClass);
+
+        String class_list_string = parseClassListToString();
+        sp.edit().putString(getString(R.string.CLASS_LIST), class_list_string).apply();
+
+        new Thread(() -> OtherUtils.uploadToServer(
+                sp.getString(getString(R.string.UID), ""),
+                getString(R.string.CLASS_LIST),
+                class_list_string
+        )).start();
+
+        for (Button b : class_button_list) {
+            if (b.getText().equals(mClass.getClassName())) {
+                class_button_list.remove(b);
+                break;
+            }
+        }
+
+        class_scroll_content_layout.removeAllViews();
+        generateClassButtonLayout();
+
+        if (class_list.size() == 0) {
+            if (is_Instructor) {
+                createClass();
+            } else {
+                joinClass();
+            }
+        } else {
+            switchClass(class_list.get(0));
+        }
     }
 
     private void switchClass(Classes mClass) {
