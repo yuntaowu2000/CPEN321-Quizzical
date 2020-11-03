@@ -56,7 +56,11 @@ router.get("/", (req, res, next) => {
     if (err) {
       throw err;
     } else {
-      frequency = Object.values(frequency[0])[0];
+      try {
+        frequency = Object.values(frequency[0])[0];
+      } catch (ex) {
+        frequency = "";
+      }
       res.send(frequency+"");
     }
   });
