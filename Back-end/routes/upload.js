@@ -11,17 +11,17 @@ MongoClient.connect(
     db = client.db("data");
     db.createCollection("class info", (err, res) => {
       if (err) {
-	console.error(err);
+        console.error(err);
       }
     });
     db.createCollection("user info", (err, res) => {
       if (err) {
-	console.error(err);
+        console.error(err);
       }
     });
     db.createCollection("notification_frequency", (err, res) => {
       if (err) {
-	console.error(err);
+        console.error(err);
       }
     });
   }
@@ -46,43 +46,43 @@ router.post("/", (req, res, next) => {
   else if (req.body.type === "user_info") {
     db.collection("user info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
-	console.error(err);
+        console.error(err);
       }
     });
   }
   else if (req.body.type === "notification_frequency") {
     try {
       db.collection(req.body.type).updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
-	if (err) {
-      console.error(err);
-	}
+        if (err) {
+          console.error(err);
+        }
       });
     } catch (ex) {
       db.collection(req.body.type).updateOne({uid: req.body.uid}, {$set: req.body}, {upsert: true}, (err, res) => {
-	if (err) {
-	  console.error(err);
-	}
+        if (err) {
+          console.error(err);
+        }
       });
     }
   }
   else if (req.body.type === "Email") {
     db.collection("user info").updateOne({uid: req.body.uid}, {$set: {Email: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
-	console.error(err);
+        console.error(err);
       }
     });
   }
   else if (req.body.type === "username") {
     db.collection("user info").updateOne({uid: req.body.uid}, {$set: {username: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
-	console.error(err);
+        console.error(err);
       }
     });
   }
   else if (req.body.type === "Add class") {
     db.collection("class info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
-	console.error(err);
+        console.error(err);
       }
     });
   }

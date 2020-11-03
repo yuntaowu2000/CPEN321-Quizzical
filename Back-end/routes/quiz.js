@@ -11,7 +11,7 @@ MongoClient.connect(
     db = client.db("data");
     db.createCollection("quizzes", (err, res) => {
       if (err) {
-	console.log(err);
+        console.log(err);
       }
     });
   }
@@ -25,21 +25,20 @@ router.post("/", (req, res, next) => {
   console.log("Data: %j", req.body);
 
   if (req.body.type === "quiz") {
-      if (req.body.data.id === null){
-	db.collection("quizzes").insertOne(Object.assign({}, req.body.data, {uid: req.body.uid}, {quiz_code: db.collection("quizzes").count() }, {class_code: req.body.data.class_code}), (err, res) => {
-	      if (err) {
-	        console.log(err);
-	      }
-      	});      
-      }
-      else {
-	db.collection("quizzes").insertOne(Object.assign({}, req.body.data, {uid: req.body.uid}, {quiz_code: req.body.data.id}, {class_code: req.body.data.class_code}), (err, res) => {
-	      if (err) {
-	        console.log(err);
-	      }
-      	});	  
-      }
-      
+    if (req.body.data.id === null){
+      db.collection("quizzes").insertOne(Object.assign({}, req.body.data, {uid: req.body.uid}, {quiz_code: db.collection("quizzes").count() }, {class_code: req.body.data.class_code}), (err, res) => {
+        if (err) {
+          console.log(err);
+        }
+      });      
+    }
+    else {
+      db.collection("quizzes").insertOne(Object.assign({}, req.body.data, {uid: req.body.uid}, {quiz_code: req.body.data.id}, {class_code: req.body.data.class_code}), (err, res) => {
+        if (err) {
+          console.log(err);
+        }
+      });          
+    }
   }
 
   res.statusCode = 200;
@@ -49,22 +48,18 @@ router.post("/", (req, res, next) => {
 /* GET quiz listing. */
 router.get("/", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
-  let uid = url.searchParams.get("user_id");
-  let type = url.searchParams.get("type");
+  let class_code = url.searchParams.get("class_code");
+  let quiz_code = url.searchParams.get("quiz_code");
+  let timeout = 2000;
   
-  
-  if (type === "quiz") {
-    db.collection("quizzes").find({ $and: [ {"uid": uid}, {"data.id": quiz_code} ] }).toArray((err, frequency) => {
-      if (err) {
-	throw err;
-      } else {
-	res.send(frequency);
-      }
-    });
-  }
+  db.collection("quizzes").find({ $and: [ {"class_code": class_code}, {"quiz_code": quiz_code} ] }).maxTimeMS(timeout).toArray((err, frequency) => {
+    if (err) {
+      throw err;
+    } else {
+      frequency = Object.values(frequency[0])[0];
+      res.send(frequency+"");
+    }
+  });
 });
 
 module.exports = router;
-
-
-

@@ -31,88 +31,88 @@ router.get("/", (req, res, next) => {
   else if (type === null) {
     db.collection("user info").find({ uid: { $eq: uid }}).project({Profile_Image:0, _id:0}).maxTimeMS(timeout).toArray((err,data) => {
       if (err) {
-	throw err;
+        throw err;
       } else {
-	res.send(data);
+        res.send(data);
       }
     });
   }
   else if (type === "user_info") {
     db.collection("user info").find({ uid: { $eq: uid }}).project({_id:0}).maxTimeMS(timeout).toArray((err,data) => {
       if (err) {
-	throw err;
+        throw err;
       } else {
-	res.send(data);
+        res.send(data);
       }
     });
   }
   else if (type === "username") {
     db.collection("user info").find({ uid: { $eq: uid }}).project({username:1, _id:0}).maxTimeMS(timeout).toArray((err, username) => {
       if (err) {
-	throw err;
+        throw err;
       } else {
-	username = Object.values(username[0])[0];
-	res.send(''+username);
+        username = Object.values(username[0])[0];
+        res.send(''+username);
       }
     });
   }
   else if (type === "Email") {
     db.collection("user info").find({ uid: { $eq: uid }}).project({Email:1, _id:0}).maxTimeMS(timeout).toArray((err, email) => {
       if (err) {
-	throw err;
+        throw err;
       } else {
-	email = Object.values(email[0])[0];
-	res.send(''+email);
+        email = Object.values(email[0])[0];
+        res.send(''+email);
       }
     });
   }
   else if (type === "IS_INSTRUCTOR") {
     db.collection("user info").find({ uid: { $eq: uid }}).project({IS_INSTRUCTOR:1, _id:0}).maxTimeMS(timeout).toArray((err, isInstructor) => {
       if (err) {
-	throw err;
+        throw err;
       } else {
-	isInstructor = Object.values(isInstructor[0])[0];
-	res.send(''+isInstructor);
+        isInstructor = Object.values(isInstructor[0])[0];
+        res.send(''+isInstructor);
       }
     });
   }
   else if (type === "user_quiz_count") {
     db.collection("user info").find({ uid: { $eq: uid }}).project({user_quiz_count:1, _id:0}).maxTimeMS(timeout).toArray((err, quizCount) => {
       if (err) {
-	throw err;
+        throw err;
       } else {
-	quizCount = Object.values(quizCount[0])[0];
-	res.send(''+quizCount);
+        quizCount = Object.values(quizCount[0])[0];
+        res.send(''+quizCount);
       }
     });
   }
   else if (type === "EXP") {
     db.collection("user info").find({ uid: { $eq: uid }}).project({EXP:1, _id:0}).maxTimeMS(timeout).toArray((err, exp) => {
       if (err) {
-	throw err;
+        throw err;
       } else {
-	exp = Object.values(exp[0])[0]
-	res.send(''+exp);
+        exp = Object.values(exp[0])[0]
+        res.send(''+exp);
       }
     });
   }
   else if (type === "class_code") {
     db.collection("class info").find({ uid: { $eq: uid }}).project({class_code:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
       if (err) {
-	throw err;
+        throw err;
       } else {
-	classCode = Object.values(classCode[0])[0];
-	res.send(''+classCode);
+        classCode = Object.values(classCode[0])[0];
+        res.send(''+classCode);
       }
     });
   }
   else if (type === "notification_frequency") {
     db.collection("notification_frequency").find({ uid: { $eq: uid }}).project({notification_frequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
       if (err) {
-	throw err;
+        throw err;
       } else {
-	frequency = Object.values(frequency[0])[0];
-	res.send(''+frequency);
+        frequency = Object.values(frequency[0])[0];
+        res.send(''+frequency);
       }
     });
   }
