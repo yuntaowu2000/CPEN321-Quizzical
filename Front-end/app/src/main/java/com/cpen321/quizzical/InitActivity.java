@@ -35,9 +35,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -114,7 +112,7 @@ public class InitActivity extends AppCompatActivity {
                 return;
             }
             String token = task.getResult();
-            Log.d("Token", token);
+            Log.d("Token", token + "");
             sp.edit().putString(getString(R.string.FIREBASE_TOKEN), token).apply();
         });
 
@@ -185,7 +183,7 @@ public class InitActivity extends AppCompatActivity {
                 String username = Objects.requireNonNull(account.getDisplayName()).replace(" ", "_");
                 String email = account.getEmail();
                 new Thread(() -> {
-                    Bitmap bitmap = OtherUtils.getBitmapFromUrl(account.getPhotoUrl().toString());
+                    Bitmap bitmap = OtherUtils.getBitmapFromUrl(Objects.requireNonNull(account.getPhotoUrl()).toString());
                     String encodedBitmap = OtherUtils.encodeImage(bitmap);
                     sp.edit().putString(getString(R.string.PROFILE_IMG), encodedBitmap).apply();
                 }).start();
@@ -372,11 +370,14 @@ public class InitActivity extends AppCompatActivity {
                     sp.getString(getString(R.string.EMAIL), ""),
                     is_instructor);
 
-            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USER_INFO), user_info)).start();
+            new Thread(() ->
+            {
+                OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""), getString(R.string.USER_INFO), user_info);
+                OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                        getString(R.string.PROFILE_IMG),
+                        sp.getString(getString(R.string.PROFILE_IMG), ""));
+            }).start();
 
-            new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
-                    getString(R.string.PROFILE_IMG),
-                    sp.getString(getString(R.string.PROFILE_IMG), ""))).start();
 
             goToHomeActivity();
         } else {
