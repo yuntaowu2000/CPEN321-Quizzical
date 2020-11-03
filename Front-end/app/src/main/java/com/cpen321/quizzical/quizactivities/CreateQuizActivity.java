@@ -119,9 +119,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         answerInputButton.setOnClickListener(v -> addNewAnswer());
 
         addQuestionButton = findViewById(R.id.add_question_button);
-        addQuestionButton.setOnClickListener(v -> {
-            addQuestionToList();
-        });
+        addQuestionButton.setOnClickListener(v -> addQuestionToList());
 
         currCategory = CourseCategory.Misc;
         currQuestion = "";
@@ -189,20 +187,18 @@ public class CreateQuizActivity extends AppCompatActivity {
             if (isAnsValid[0]) {
                 for (int i = 0; i < answersLayout.getChildCount(); i++) {
                     View child = answersLayout.getChildAt(i);
-                    if (child instanceof LinearLayout) {
-                        for (int j = 0; j < ((LinearLayout) child).getChildCount(); j++) {
-                            View rowChild = ((LinearLayout) child).getChildAt(j);
-                            if (rowChild instanceof TextView && !(rowChild instanceof Button)) {
-                                if (answer[0].equals(((TextView) rowChild).getText().toString())) {
-                                    isAnsValid[0] = false;
-                                    Log.d("hi_op","notvalid "+ ((TextView) rowChild).getText().toString());
-                                    break;
-                                }
+                    for (int j = 0; j < ((LinearLayout) child).getChildCount(); j++) {
+                        View rowChild = ((LinearLayout) child).getChildAt(j);
+                        if (rowChild instanceof TextView && !(rowChild instanceof Button)) {
+                            if (answer[0].equals(((TextView) rowChild).getText().toString())) {
+                                isAnsValid[0] = false;
+                                Log.d("hi_op","notvalid "+ ((TextView) rowChild).getText().toString());
+                                break;
                             }
                         }
-                        if (!isAnsValid[0]) {
-                            break;
-                        }
+                    }
+                    if (!isAnsValid[0]) {
+                        break;
                     }
                 }
             }
@@ -222,24 +218,22 @@ public class CreateQuizActivity extends AppCompatActivity {
                 //edit opens dialog box, everything filled in
                 CheckBox isCorrect = new CheckBox(this);
                 isCorrect.setLayoutParams(layoutParams[0]);
-                isCorrect.setChecked(currChoices.indexOf(newAnswer) == currCorrectAnsNum);
-                isCorrect.setEnabled(currChoices.indexOf(newAnswer) != currCorrectAnsNum);
+                isCorrect.setChecked(currCorrectAnsNum == answersLayout.getChildCount());
+                isCorrect.setEnabled(currCorrectAnsNum != answersLayout.getChildCount());
                 // if checked, uncheck all other checkbox, else do nothing.
                 isCorrect.setOnClickListener(u -> {
                     Log.d("Hi_op", "checked");
                     if (isCorrect.isChecked()) {
                         for (int i = 0; i < answersLayout.getChildCount(); i++) {
                             View child = answersLayout.getChildAt(i);
-                            if (child instanceof LinearLayout) {
-                                for (int j = 0; j < ((LinearLayout) child).getChildCount(); j++) {
-                                    View rowChild = ((LinearLayout) child).getChildAt(j);
-                                    if (rowChild instanceof CheckBox) {
-                                        Log.d("Hi_op", "   yay2");
-                                        ((CheckBox) rowChild).setChecked(rowChild.equals(isCorrect));
-                                        rowChild.setEnabled(!rowChild.equals(isCorrect));
-                                        if (rowChild.equals(isCorrect)) {
-                                            currCorrectAnsNum = j;
-                                        }
+                            for (int j = 0; j < ((LinearLayout) child).getChildCount(); j++) {
+                                View rowChild = ((LinearLayout) child).getChildAt(j);
+                                if (rowChild instanceof CheckBox) {
+                                    Log.d("Hi_op", "   yay2");
+                                    ((CheckBox) rowChild).setChecked(rowChild.equals(isCorrect));
+                                    rowChild.setEnabled(!rowChild.equals(isCorrect));
+                                    if (rowChild.equals(isCorrect)) {
+                                        currCorrectAnsNum = i;
                                     }
                                 }
                             }
@@ -325,16 +319,31 @@ public class CreateQuizActivity extends AppCompatActivity {
                     delAlertDialog.show();
 
                     delAlertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(y -> {
+                        Log.d("Hi_op", "curans " + currCorrectAnsNum);
                         for (int j = 0; j < answersLayout.getChildCount(); j++) {
                             View child = answersLayout.getChildAt(j);
-                            Log.d("hi_op","schiesse "+child+" "+row);
-                            if (j == answersLayout.getChildCount()-1) {
-                                currCorrectAnsNum = 0;
-                            }
                             if (child.equals(row)) {
                                 answersLayout.removeView(row);
                                 currChoices.remove(j);
+
+                                if (j == answersLayout.getChildCount()) {
+                                    currCorrectAnsNum = 0;
+                                } else if (j < currCorrectAnsNum) {
+                                    currCorrectAnsNum--;
+                                }
                                 break;
+                            }
+                        }
+                        for (int j = 0; j < answersLayout.getChildCount(); j++) {
+                            View child = answersLayout.getChildAt(j);
+                            Log.d("hi_op", "schiesse " + child + " " + row);
+                            for (int k = 0; k < ((LinearLayout) child).getChildCount(); k++) {
+                                View rowChild = ((LinearLayout) child).getChildAt(k);
+                                if (rowChild instanceof CheckBox) {
+                                    Log.d("Hi_op", " " + currCorrectAnsNum + " " + j);
+                                    ((CheckBox) rowChild).setChecked(currCorrectAnsNum == j);
+                                    rowChild.setEnabled(!(currCorrectAnsNum == j));
+                                }
                             }
                         }
                         Log.d("hi_op","dismoo");
@@ -350,9 +359,7 @@ public class CreateQuizActivity extends AppCompatActivity {
                     answerImage.setVisibility(View.GONE);
                     answerText.setVisibility(View.VISIBLE);
                 }
-                ChoicePair ansChoice = new ChoicePair(isPic[0], isPic[0]?pic:answer[0]);
                 answerPics.add(pic);
-                currChoices.add(ansChoice);
 
                 row.addView(isCorrect);
                 row.addView(answerImage);
