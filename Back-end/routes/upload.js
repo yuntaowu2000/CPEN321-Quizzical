@@ -36,7 +36,7 @@ router.post("/", (req, res, next) => {
   console.error(Object.entries(req.body));
 
   if (req.body.type === "Profile_Image") {
-    let path = "/home/site/wwwroot/images/" + req.body.uid;
+    let path = "images/" + req.body.uid;
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path);
     }
