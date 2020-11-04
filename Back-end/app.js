@@ -7,6 +7,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var uploadRouter = require("./routes/upload");
 var quizRouter = require("./routes/quiz");
+var classRouter = require("./routes/class");
 
 var app = express();
 
