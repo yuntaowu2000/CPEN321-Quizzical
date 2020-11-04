@@ -18,6 +18,10 @@ public class PictureActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int RETURN_CODE = 2;
+    private static final int CHOICE_RETURN_CODE = 3;
+    private int curr_request_num;
+    private int questionNum;
+    private int choiceNum;
     private LinearLayout linearLayout;
     private Button picButton;
     private Button ContinueButton;
@@ -38,6 +42,16 @@ public class PictureActivity extends AppCompatActivity {
         ContinueButton = findViewById(R.id.test_page_continue);
         ContinueButton.setOnClickListener(view -> onContinueClicked());
 
+        questionNum = getIntent().getIntExtra(getString(R.string.QUESTION_NUM), 0);
+        imageBitmap = (Bitmap) getIntent().getExtras().get(getString(R.string.ORIGINAL_IMG));
+        if (imageBitmap != null) {
+            askForModification();
+        }
+
+        curr_request_num = getIntent().getIntExtra(getString(R.string.REQUEST_CODE), RETURN_CODE);
+        if (curr_request_num == CHOICE_RETURN_CODE) {
+            choiceNum = getIntent().getIntExtra(getString(R.string.CHOICE_NUM), 0);
+        }
     }
 
     private void takePic() {
@@ -56,17 +70,21 @@ public class PictureActivity extends AppCompatActivity {
             assert extras != null;
 
             imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);
-
-            new AlertDialog.Builder(this).setTitle(R.string.UI_modify_image_title).setMessage(R.string.UI_modify_image_msg)
-                    .setPositiveButton(R.string.YES, (dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                        cropSetup();
-                    })
-                    .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
+            askForModification();
         }
+    }
+
+    private void askForModification() {
+        imageView.setImageBitmap(imageBitmap);
+
+        new AlertDialog.Builder(this).setTitle(R.string.UI_modify_image_title).setMessage(R.string.UI_modify_image_msg)
+                .setPositiveButton(R.string.YES, (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    cropSetup();
+                })
+                .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void cropSetup() {
@@ -97,11 +115,20 @@ public class PictureActivity extends AppCompatActivity {
     private void onContinueClicked() {
         Intent i = new Intent();
         if (croppedBitmap != null) {
-            i.putExtra(getString(R.string.image), croppedBitmap);
+            i.putExtra(getString(R.string.MODIFIED_IMG), croppedBitmap);
         } else {
-            i.putExtra(getString(R.string.image), imageBitmap);
+            i.putExtra(getString(R.string.MODIFIED_IMG), imageBitmap);
         }
-        setResult(RETURN_CODE, i);
+        i.putExtra(getString(R.string.ORIGINAL_IMG), imageBitmap);
+        i.putExtra(getString(R.string.QUESTION_NUM), questionNum);
+
+        if (curr_request_num == RETURN_CODE) {
+            setResult(RETURN_CODE, i);
+        } else {
+            i.putExtra(getString(R.string.CHOICE_NUM), choiceNum);
+            setResult(CHOICE_RETURN_CODE, i);
+        }
+
         finish();
     }
 }

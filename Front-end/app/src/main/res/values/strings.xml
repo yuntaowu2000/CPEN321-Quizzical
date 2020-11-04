@@ -1,7 +1,7 @@
 <resources>
     <!--    general usage-->
     <string name="BACKUP_GET_URL" translatable="false">http://193.122.108.23:7070/</string>
-    <string name="GET_URL" translatable="false">http://module-6-ihsan-webapp-test.azurewebsites.net/</string>
+    <string name="GET_URL" translatable="false">http://quizzical.canadacentral.cloudapp.azure.com/</string>
     <string name="TYPE" translatable="false">type=</string>
 
     <string name="app_name" translatable="false">quizzical</string>
@@ -43,7 +43,10 @@
     <string name="QUIZ_CODE" translatable="false">quiz_code</string>
     <string name="QUIZ_MODULES" translatable="false">quiz_modules</string>
     <string name="QUESTION_NUM" translatable="false">question_num</string>
+    <string name="CHOICE_NUM" translatable="false">choice_num</string>
+    <string name="REQUEST_CODE" translatable="false">request_code</string>
     <string name="QUIZ_URL" translatable="false">QUIZ_URL</string>
+    <string name="CREATE_QUIZ" translatable="false">create_quiz</string>
 
     <string name="COURSE_CATEGORY" translatable="false">course_category</string>
 
@@ -144,6 +147,8 @@
     <string name="HIGHEST" translatable="false">Highest</string>
     <string name="SCORE" translatable="false">Score</string>
 
+    <string name="UI_correct_answer">correct answer</string>
+
 
     <!--    used in class statistic fragment (for teachers)-->
     <!--    need update later-->
@@ -212,6 +217,7 @@
     <string name="UI_modify_image_msg">Do you want to crop or rotate the image?</string>
     <string name="UI_crop">Crop</string>
     <string name="UI_rotate">Rotate 90</string>
-    <string name="image" translatable="false">Image</string>
+    <string name="MODIFIED_IMG" translatable="false">modified_image</string>
+    <string name="ORIGINAL_IMG" translatable="false">original_image</string>
 
 </resources>

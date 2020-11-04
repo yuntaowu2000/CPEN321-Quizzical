@@ -101,4 +101,5 @@
     <string name="UI_enter_module_name">请输入单元名称</string>
     <string name="UI_create_new_module">创建一个新的单元</string>
     <string name="UI_invalid_module_name">单元名无效</string>
+    <string name="UI_correct_answer">正确答案</string>
 </resources>

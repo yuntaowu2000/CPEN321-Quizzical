@@ -61,11 +61,10 @@
         <ImageView
             android:id="@+id/pic_preview"
             android:layout_width="wrap_content"
-            android:layout_height="125dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:verticalScrollbarPosition="left"
-            app:srcCompat="@drawable/math"
-            android:contentDescription="@string/image" />
+            android:contentDescription="@string/MODIFIED_IMG" />
 
         <LinearLayout
             android:id="@+id/answers_layout"
@@ -74,17 +73,11 @@
             android:orientation="vertical"
             tools:visibility="visible" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/answer_input_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:visibility="visible">
-
-            <Button
-                android:id="@+id/answer_input_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Create answer" />
-        </LinearLayout>
+            android:layout_gravity="center"
+            android:text="Create answer" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
