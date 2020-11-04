@@ -20,7 +20,7 @@ router.get("/", (req, res, next) => {
   
   let timeout = 2000;
   if (type === "Profile_Image") {
-    let filepath = "/home/site/wwwroot/images/" + uid + "/profile_img.jpg";
+    let filepath = "images/" + uid + "/profile_img.jpg";
     let string = "";
     if (fs.existsSync(filepath)) {
       let bitmap = fs.readFileSync(filepath);
