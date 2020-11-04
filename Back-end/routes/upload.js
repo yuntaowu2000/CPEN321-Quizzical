@@ -38,7 +38,7 @@ router.post("/", (req, res, next) => {
   if (req.body.type === "Profile_Image") {
     let path = "images/" + req.body.uid;
     if (!fs.existsSync(path)) {
-      fs.mkdirSync(path);
+      fs.mkdirSync(path, {recursive:true});
     }
     let filename = path + "/profile_img.jpg";
     fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
