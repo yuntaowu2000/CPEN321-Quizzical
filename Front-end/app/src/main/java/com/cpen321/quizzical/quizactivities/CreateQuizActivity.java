@@ -4,8 +4,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,41 +34,34 @@ import com.cpen321.quizzical.PictureActivity;
 import com.cpen321.quizzical.data.Classes;
 import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.data.QuizModules;
+import com.cpen321.quizzical.data.questions.IQuestion;
+import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.cpen321.quizzical.utils.ChoicePair;
 import com.cpen321.quizzical.utils.OtherUtils;
 import com.cpen321.quizzical.utils.QuizPackage;
-import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import static com.cpen321.quizzical.utils.OtherUtils.getBitmapFromUrl;
 
 public class CreateQuizActivity extends AppCompatActivity {
 
     private SharedPreferences sp;
-    private static int PICTURE_CAPTURE_CODE = 2;
+    private static int QUESTION_PICTURE_CAPTURE_CODE = 2;
+    private static int CHOICE_PICTURE_CAPTURE_CODE = 3;
 
     private LinearLayout questionCreateLayout;
 
     private Spinner moduleList;
 
-    private ImageButton addQuestionButton;
-
-    private List<String> questionList;
-    private QuizPackage quizPackage;
-
-    private String currQuestion;
-    private Boolean currHasPic;
-    private String currPicSrc;
-    private List<ChoicePair> currChoices;
-    private int currCorrectAnsNum;
-
-    private ImageView picPreview;
+    private List<ImageView> picPreview;
+    private List<List<ImageView>> choicesPicPreview;
 
     private String currModule;
     private Classes currClass;
+    private List<IQuestion> questionList;
+    private List<Bitmap> imageList;
+    private List<List<Bitmap>> choicesImageList;
+    private List<List<CheckBox>> correctAnsCheckBoxes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,14 +109,15 @@ public class CreateQuizActivity extends AppCompatActivity {
             }
         });
 
-        addQuestionButton = findViewById(R.id.add_question_button);
+        ImageButton addQuestionButton = findViewById(R.id.add_question_button);
         addQuestionButton.setOnClickListener(v -> addNewQuestion());
 
-        currQuestion = "";
-        currHasPic = false;
-        currPicSrc = "";
-        currChoices = new ArrayList<>();
-        currCorrectAnsNum = 0;
+        questionList = new ArrayList<>();
+        imageList = new ArrayList<>();
+        picPreview = new ArrayList<>();
+        choicesPicPreview = new ArrayList<>();
+        choicesImageList = new ArrayList<>();
+        correctAnsCheckBoxes = new ArrayList<>();
 
         Button finishButton = findViewById(R.id.quiz_create_finish);
         finishButton.setOnClickListener(v -> onFinishClicked());
@@ -129,10 +128,21 @@ public class CreateQuizActivity extends AppCompatActivity {
     {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
-        if(requestCode == PICTURE_CAPTURE_CODE)
+        if(requestCode == QUESTION_PICTURE_CAPTURE_CODE)
         {
-            Bitmap pic = (Bitmap) data.getExtras().get(getString(R.string.image));
-            picPreview.setImageBitmap(pic);
+            Bitmap orignalPic = (Bitmap) data.getExtras().get(getString(R.string.ORIGINAL_IMG));
+            Bitmap pic = (Bitmap) data.getExtras().get(getString(R.string.MODIFIED_IMG));
+            int questionNum = data.getIntExtra(getString(R.string.QUESTION_NUM), 0);
+
+            imageList.set(questionNum, orignalPic);
+            picPreview.get(questionNum).setImageBitmap(pic);
+        } else if (requestCode == CHOICE_PICTURE_CAPTURE_CODE) {
+            Bitmap pic = (Bitmap) data.getExtras().get(getString(R.string.MODIFIED_IMG));
+            int questionNum = data.getIntExtra(getString(R.string.QUESTION_NUM), 0);
+            int choiceNum = data.getIntExtra(getString(R.string.CHOICE_NUM), 0);
+
+            choicesImageList.get(questionNum).set(choiceNum, pic);
+            choicesPicPreview.get(questionNum).get(choiceNum).setImageBitmap(pic);
         }
     }
 
@@ -141,27 +151,41 @@ public class CreateQuizActivity extends AppCompatActivity {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(10, 10, 10, 10);
 
+        QuestionsMC q = new QuestionsMC();
+
+        questionList.add(q);
+        imageList.add(null); //make sure they are aligned
+        choicesImageList.add(new ArrayList<>());
+        choicesPicPreview.add(new ArrayList<>());
+        correctAnsCheckBoxes.add(new ArrayList<>());
+
+        ImageView preview = newQuestionView.findViewById(R.id.pic_preview);
+        picPreview.add(preview);
+
+        int curr_question_num = questionList.size() - 1;
+
         int childCount = questionCreateLayout.getChildCount();
         questionCreateLayout.addView(newQuestionView, childCount - 1, params);
 
         EditText questionInput = newQuestionView.findViewById(R.id.question_input);
-        questionInput.setOnClickListener(v -> currQuestion = questionInput.getText().toString());
+        questionInput.setOnClickListener(v -> q.setQuestion(questionInput.getText().toString()));
 
         CheckBox questionHasPic = newQuestionView.findViewById(R.id.question_has_pic);
-        questionHasPic.setOnClickListener(v -> currHasPic = questionHasPic.isChecked());
+        questionHasPic.setOnClickListener(v -> q.setHasPic(questionHasPic.isChecked()));
 
         ImageButton takePictureButton = newQuestionView.findViewById(R.id.take_picture_button);
         takePictureButton.setOnClickListener(v -> {
             Intent takePictureIntent = new Intent(this, PictureActivity.class);
-            startActivityForResult(takePictureIntent, PICTURE_CAPTURE_CODE);
+            takePictureIntent.putExtra(getString(R.string.QUESTION_NUM), curr_question_num);
+            takePictureIntent.putExtra(getString(R.string.ORIGINAL_IMG), imageList.get(curr_question_num));
+            takePictureIntent.putExtra(getString(R.string.REQUEST_CODE), QUESTION_PICTURE_CAPTURE_CODE);
+            startActivityForResult(takePictureIntent, QUESTION_PICTURE_CAPTURE_CODE);
         });
-
-        picPreview = newQuestionView.findViewById(R.id.pic_preview);
 
         LinearLayout answersLayout = newQuestionView.findViewById(R.id.answers_layout);
 
         Button answerInputButton = newQuestionView.findViewById(R.id.answer_input_button);
-        answerInputButton.setOnClickListener(v -> Toast.makeText(this, "add answer clicked", Toast.LENGTH_LONG));
+        answerInputButton.setOnClickListener(v -> addNewAnswer(answersLayout, curr_question_num));
     }
 
     private void onFinishClicked() {
@@ -169,388 +193,197 @@ public class CreateQuizActivity extends AppCompatActivity {
         CourseCategory category = currClass.getCategory();
         String instructorUID = sp.getString(getString(R.string.UID), "");
 
-        quizPackage = new QuizPackage(classCode, category, instructorUID, currModule, new ArrayList<>());
+        QuizPackage quizPackage = new QuizPackage(classCode, category, instructorUID, currModule, questionList);
         String quizPackJson = quizPackage.toJson();
+
+        new Thread(() -> {
+            OtherUtils.uploadToServer(instructorUID, getString(R.string.CREATE_QUIZ), quizPackJson);
+        }).start();
         Log.d("Quiz_create", quizPackJson);
 
-        finish();
+        new AlertDialog.Builder(this).setMessage("Congratulations! You have just created a quiz")
+                .setPositiveButton(R.string.OK, ((dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    finish();
+                }))
+                .show();
+
     }
 
-//    private void addNewAnswer() {
-//        final String[] answer = {""};
-//        String pic = ""; // some default picture
-//        final boolean[] isPic = {false};
-//        final boolean[] isAnsValid = {true};
-//
-//        final LinearLayout.LayoutParams[] layoutParams = {new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)};
-//        layoutParams[0].setMargins(10, 5, 10, 5);
-//
-//        LinearLayout layout = new LinearLayout(this);
-//        layout.setOrientation(LinearLayout.VERTICAL);
-//
-//        TextView answerText = new TextView(this);
-//        answerText.setText("Enter answer");
-//        answerText.setLayoutParams(layoutParams[0]);
-//
-//        EditText answerInput = new EditText(this);
-//        answerInput.setLayoutParams(layoutParams[0]);
-//        answerInput.setHint("What is 1+1");
-//        answerInput.setInputType(InputType.TYPE_CLASS_TEXT);
-//        answerInput.setText(answer[0]);
-//        answerInput.setMaxLines(1);
-//
-//        ImageButton answerPic = new ImageButton(this);
-//        answerPic.setImageResource(android.R.drawable.ic_menu_camera);
-//        answerPic.setVisibility(View.GONE);
-//        answerPic.setOnClickListener(v -> {
-//            Intent takePictureIntent = new Intent(this, PictureActivity.class);
-//            startActivity(takePictureIntent);
-//        });
-//
-//        CheckBox checkBox = new CheckBox(this);
-//        checkBox.setChecked(false);
-//        checkBox.setText("Picture ");
-//        checkBox.setOnClickListener(v -> {
-//            isPic[0] = checkBox.isChecked();
-//            answerInput.setVisibility(checkBox.isChecked() ? View.GONE : View.VISIBLE);
-//            answerPic.setVisibility(checkBox.isChecked() ? View.VISIBLE : View.GONE);
-//        });
-//
-//        layout.addView(answerText);
-//        layout.addView(checkBox);
-//        layout.addView(answerInput);
-//        layout.addView(answerPic);
-//
-//        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle("Answer Input")
-//                .setView(layout)
-//                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> {}));
-//
-//        final AlertDialog alertDialog = alertBuilder.create();
-//        alertDialog.show();
-//
-//        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
-//            answer[0] = answerInput.getText().toString();
-//            isAnsValid[0] = !answer[0].equals("");
-//            if (isAnsValid[0]) {
-//                for (int i = 0; i < answersLayout.getChildCount(); i++) {
-//                    View child = answersLayout.getChildAt(i);
-//                    for (int j = 0; j < ((LinearLayout) child).getChildCount(); j++) {
-//                        View rowChild = ((LinearLayout) child).getChildAt(j);
-//                        if (rowChild instanceof TextView && !(rowChild instanceof Button)) {
-//                            if (answer[0].equals(((TextView) rowChild).getText().toString())) {
-//                                isAnsValid[0] = false;
-//                                Log.d("hi_op","notvalid "+ ((TextView) rowChild).getText().toString());
-//                                break;
-//                            }
-//                        }
-//                    }
-//                    if (!isAnsValid[0]) {
-//                        break;
-//                    }
-//                }
-//            }
-//            Log.d("hi_op","valid? "+ isAnsValid[0]);
-//
-//            if (isAnsValid[0]) {
-//                ChoicePair newAnswer = new ChoicePair(isPic[0], isPic[0] ? pic : answer[0]);
-//
-//                Log.d("Hi_op", "" + newAnswer.isPic() + " " + answer[0]);
-//                currChoices.add(newAnswer);
-//
-//                layoutParams[0] = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//
-//                LinearLayout row = new LinearLayout(this);
-//                row.setLayoutParams(layoutParams[0]);
-//                // I want a (index num textview?), checkbox for correct, textview or imageview, edit button, delete
-//                //edit opens dialog box, everything filled in
-//                CheckBox isCorrect = new CheckBox(this);
-//                isCorrect.setLayoutParams(layoutParams[0]);
-//                isCorrect.setChecked(currCorrectAnsNum == answersLayout.getChildCount());
-//                isCorrect.setEnabled(currCorrectAnsNum != answersLayout.getChildCount());
-//                // if checked, uncheck all other checkbox, else do nothing.
-//                isCorrect.setOnClickListener(u -> {
-//                    Log.d("Hi_op", "checked");
-//                    if (isCorrect.isChecked()) {
-//                        for (int i = 0; i < answersLayout.getChildCount(); i++) {
-//                            View child = answersLayout.getChildAt(i);
-//                            for (int j = 0; j < ((LinearLayout) child).getChildCount(); j++) {
-//                                View rowChild = ((LinearLayout) child).getChildAt(j);
-//                                if (rowChild instanceof CheckBox) {
-//                                    Log.d("Hi_op", "   yay2");
-//                                    ((CheckBox) rowChild).setChecked(rowChild.equals(isCorrect));
-//                                    rowChild.setEnabled(!rowChild.equals(isCorrect));
-//                                    if (rowChild.equals(isCorrect)) {
-//                                        currCorrectAnsNum = i;
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                });
-//
-//                TextView answerContent = new TextView(this);
-//                answerContent.setText(answer[0]);
-//                answerContent.setLayoutParams(layoutParams[0]);
-//
-//                ImageView answerImage = new ImageView(this);
-//                try {
-//                    if (!pic.equals("")) {
-//                        answerImage.setImageBitmap(getBitmapFromUrl(pic));
-//                    } else {
-//                        answerImage.setImageResource(android.R.drawable.ic_menu_gallery);
-//                    }
-//                } catch (Exception e) {
-//                    answerImage.setImageResource(android.R.drawable.ic_menu_gallery);
-//                }
-//                answerImage.setMaxHeight(200);
-//                answerImage.setLayoutParams(layoutParams[0]);
-//                answerImage.setOnClickListener(x -> {
-//                    final LinearLayout.LayoutParams[] ansImgLayoutParams = {new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)};
-//
-//                    LinearLayout ansImgLayout = new LinearLayout(this);
-//                    ansImgLayout.setOrientation(LinearLayout.VERTICAL);
-//
-//                    ImageView ansImg = new ImageView(this);
-//                    ansImg.setMaxWidth(350);
-//                    ansImg.setMaxHeight(750);
-//                    ansImg.setLayoutParams(ansImgLayoutParams[0]);
-//                    try {
-//                        if (!pic.equals("")) {
-//                            ansImg.setImageBitmap(getBitmapFromUrl(pic));
-//                        } else {
-//                            ansImg.setImageResource(android.R.drawable.ic_menu_gallery);
-//                        }
-//                    } catch (Exception e) {
-//                        ansImg.setImageResource(android.R.drawable.ic_menu_gallery);
-//                    }
-//                    ansImgLayout.addView(ansImg);
-//
-//                    AlertDialog.Builder ansImgAlertBuilder = new AlertDialog.Builder(this).setTitle("Preview")
-//                            .setView(ansImgLayout)
-//                            .setNeutralButton("Close", ((dialogInterface, i) -> dialogInterface.dismiss()));
-//
-//                    final AlertDialog ansImgAlertDialog = ansImgAlertBuilder.create();
-//                    ansImgAlertDialog.show();
-//                });
-//
-//                Button editButton = new Button(this);
-//                editButton.setLayoutParams(layoutParams[0]);
-//                editButton.setText("Edit");
-//                editButton.setOnClickListener(w -> {
-//                    Log.d("Hi_op", "click");
-//                    editExistingQuestion(answersLayout.getChildCount()-1);
-//                });
-//
-//                ImageButton deleteButton = new ImageButton(this);
-//                deleteButton.setLayoutParams(layoutParams[0]);
-//                deleteButton.setImageResource(android.R.drawable.ic_delete);
-//                deleteButton.setOnClickListener(w -> {
-//                    final LinearLayout.LayoutParams[] delLayoutParams = {new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)};
-//                    delLayoutParams[0].setMargins(10, 5, 10, 5);
-//
-//                    LinearLayout delLayout = new LinearLayout(this);
-//                    delLayout.setOrientation(LinearLayout.VERTICAL);
-//
-//                    TextView sureText = new TextView(this);
-//                    sureText.setText("Are you sure you want to delete?");
-//                    sureText.setLayoutParams(delLayoutParams[0]);
-//
-//                    delLayout.addView(sureText);
-//
-//                    AlertDialog.Builder delAlertBuilder = new AlertDialog.Builder(this).setTitle("Delete Answer Choice?")
-//                            .setView(delLayout)
-//                            .setPositiveButton("Delete", ((dialogInterface, i) -> {}))
-//                            .setNegativeButton("Cancel", ((dialogInterface, i) -> dialogInterface.dismiss()));
-//
-//                    final AlertDialog delAlertDialog = delAlertBuilder.create();
-//                    delAlertDialog.show();
-//
-//                    delAlertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(y -> {
-//                        Log.d("Hi_op", "curans " + currCorrectAnsNum);
-//                        for (int j = 0; j < answersLayout.getChildCount(); j++) {
-//                            View child = answersLayout.getChildAt(j);
-//                            if (child.equals(row)) {
-//                                answersLayout.removeView(row);
-//                                currChoices.remove(j);
-//
-//                                if (j == answersLayout.getChildCount()) {
-//                                    currCorrectAnsNum = 0;
-//                                } else if (j < currCorrectAnsNum) {
-//                                    currCorrectAnsNum--;
-//                                }
-//                                break;
-//                            }
-//                        }
-//                        for (int j = 0; j < answersLayout.getChildCount(); j++) {
-//                            View child = answersLayout.getChildAt(j);
-//                            Log.d("hi_op", "schiesse " + child + " " + row);
-//                            for (int k = 0; k < ((LinearLayout) child).getChildCount(); k++) {
-//                                View rowChild = ((LinearLayout) child).getChildAt(k);
-//                                if (rowChild instanceof CheckBox) {
-//                                    Log.d("Hi_op", " " + currCorrectAnsNum + " " + j);
-//                                    ((CheckBox) rowChild).setChecked(currCorrectAnsNum == j);
-//                                    rowChild.setEnabled(!(currCorrectAnsNum == j));
-//                                }
-//                            }
-//                        }
-//                        Log.d("hi_op","dismoo");
-//                        alertDialog.dismiss();
-//                        Log.d("hi_op","dismoo");
-//                    });
-//                });
-//
-//                if (isPic[0]) {
-//                    answerImage.setVisibility(View.VISIBLE);
-//                    answerText.setVisibility(View.GONE);
-//                } else {
-//                    answerImage.setVisibility(View.GONE);
-//                    answerText.setVisibility(View.VISIBLE);
-//                }
-//                answerPics.add(pic);
-//
-//                row.addView(isCorrect);
-//                row.addView(answerImage);
-//                row.addView(answerContent);
-//                row.addView(editButton);
-//                row.addView(deleteButton);
-//                answerRows.add(row);
-//
-//                answersLayout.addView(row);
-//                Log.d("hi_op","dismoo");
-//                alertDialog.dismiss();
-//                Log.d("hi_op","dismoo");
-//            }
-//        });
-//    }
-//
-//    private void editExistingQuestion(int index) {
-//
-//        final String[] answer = {""};
-//        String pic = ""; // some default picture
-//        final boolean[] isPic = {false};
-//
-//        LinearLayout realRow = null;
-//
-//
-//        isPic[0] = currChoices.get(index).isPic();
-//        if (isPic[0]) {
-//            pic = answerPics.get(index);
-//        }
-//
-//
-//        if (!isPic[0]) {
-//            View child = answersLayout.getChildAt(index);
-//            if (child instanceof LinearLayout) {
-//                for (int j = 0; j < ((LinearLayout) child).getChildCount(); j++) {
-//                    View rowChild = ((LinearLayout) child).getChildAt(j);
-//                    if (rowChild instanceof TextView && !(rowChild instanceof Button)) {
-//                        answer[0] = ((TextView) rowChild).getText().toString();
-//                    }
-//                }
-//            } else {
-//                Log.d("hi_op","nopebadindxx"+index);
-//            }
-//        }
-//
-//        final LinearLayout.LayoutParams[] layoutParams = {new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)};
-//        layoutParams[0].setMargins(10, 5, 10, 5);
-//
-//        LinearLayout layout = new LinearLayout(this);
-//        layout.setOrientation(LinearLayout.VERTICAL);
-//
-//        TextView answerText = new TextView(this);
-//        answerText.setText("Enter answer");
-//        answerText.setLayoutParams(layoutParams[0]);
-//
-//        EditText answerInput = new EditText(this);
-//        answerInput.setLayoutParams(layoutParams[0]);
-//        answerInput.setHint("What is 1+1");
-//        answerInput.setInputType(InputType.TYPE_CLASS_TEXT);
-//        answerInput.setText(answer[0]);
-//        answerInput.setMaxLines(1);
-//
-//        ImageButton answerPic = new ImageButton(this);
-//        answerPic.setImageResource(android.R.drawable.ic_menu_camera);
-//        answerPic.setVisibility(View.GONE);
-//        answerPic.setOnClickListener(v -> {
-//            Intent takePictureIntent = new Intent(this, PictureActivity.class);
-//            startActivity(takePictureIntent);
-//        });
-//
-//        CheckBox checkBox = new CheckBox(this);
-//        checkBox.setChecked(false);
-//        checkBox.setText("Picture ");
-//        checkBox.setOnClickListener(v -> {
-//            isPic[0] = checkBox.isChecked();
-//            answerInput.setVisibility(checkBox.isChecked() ? View.GONE : View.VISIBLE);
-//            answerPic.setVisibility(checkBox.isChecked() ? View.VISIBLE : View.GONE);
-//        });
-//
-//        layout.addView(answerText);
-//        layout.addView(checkBox);
-//        layout.addView(answerInput);
-//        layout.addView(answerPic);
-//
-//        //answersLayout.addView(layout);
-//
-//        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle("Edit Answer")
-//                .setView(layout)
-//                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> {}));
-//
-//        final AlertDialog alertDialog = alertBuilder.create();
-//        alertDialog.show();
-//
-//
-//        String finalPic = pic;
-//        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
-//            answer[0] = answerInput.getText().toString();
-//            Log.d("hi_op","");
-//            View row = answersLayout.getChildAt(index);
-//            if (row instanceof LinearLayout) {
-//                Log.d("hi_op", ""+((LinearLayout) row).getChildCount());
-//                for (int i = 0; i < ((LinearLayout) row).getChildCount(); i++) {
-//                    View rowChild = ((LinearLayout) row).getChildAt(i);
-////                    Log.d("hi_op",""+rowChild+" "+(rowChild instanceof TextView) + " "+ (rowChild instanceof ImageView)+ " "+(rowChild instanceof Button));
-////                    Log.d("hi_op",""+rowChild+"text "+(rowChild instanceof TextView && !(rowChild instanceof Button)));
-//                    if (isPic[0]) {
-//                        if (rowChild instanceof ImageView && !(rowChild instanceof ImageButton)) {
-//                            try {
-//                                if (!finalPic.equals("")) {
-//                                    ((ImageView) rowChild).setImageBitmap(getBitmapFromUrl(finalPic));
-//                                } else {
-//                                    ((ImageView) rowChild).setImageResource(android.R.drawable.ic_menu_gallery);
-//                                }
-//                            } catch (Exception e) {
-//                                ((ImageView) rowChild).setImageResource(android.R.drawable.ic_menu_gallery);
-//                            }
-//                            rowChild.setVisibility(View.VISIBLE);
-//                        } else
-//                        if (rowChild instanceof TextView && !(rowChild instanceof Button)) {
-//                            rowChild.setVisibility(View.GONE);
-//                        }
-//                    } else {
-//                        if (rowChild instanceof TextView && !(rowChild instanceof Button)) {
-//                            Log.d("hi_op", "old "+((TextView) rowChild).getText());
-//                            ((TextView) rowChild).setText(answerInput.getText());
-//                            rowChild.setVisibility(View.VISIBLE);
-//                            Log.d("hi_op", "new "+((TextView) rowChild).getText());
-//                        } else if (rowChild instanceof ImageView && !(rowChild instanceof ImageButton)) {
-//                            rowChild.setVisibility(View.GONE);
-//                        }
-//                    }
-//                }
-//            }
-//            Log.d("hi_op","dismoo");
-//            alertDialog.dismiss();
-//            Log.d("hi_op","dismoo");
-//        });
-//    }
+    private void addNewAnswer(LinearLayout answersLayout, int questionNum) {
 
-/*
-    private void createQuiz() {
-        QuestionPackage Quiz = new QuestionPackage();
-        addMCQuestion(CourseCategory category, String question,
-        boolean hasPic, String picSrc,
-                List<ChoicePair> choices, int correctAnsNum)
-    }*/
+        int choiceNum = choicesImageList.get(questionNum).size();
+
+        ImageView choicePicPreview = new ImageView(this);
+        choicesPicPreview.get(questionNum).add(choicePicPreview);
+
+        choicesImageList.get(questionNum).add(null);
+
+        boolean[] isPic = {false};
+        String[] ans = {""};
+
+        final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(10, 5, 10, 5);
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        TextView answerText = new TextView(this);
+        answerText.setText("Enter answer");
+        answerText.setLayoutParams(layoutParams);
+
+        EditText answerInput = new EditText(this);
+        answerInput.setLayoutParams(layoutParams);
+        answerInput.setHint("What is 1+1");
+        answerInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        answerInput.setMaxLines(1);
+        answerInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                /*not used*/
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                /*not used*/
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                ans[0] = editable.toString();
+            }
+        });
+
+        Bitmap imageToPassIn = imageList.get(questionNum);
+        if (imageToPassIn == null) {
+            List<Bitmap> choicesImages = choicesImageList.get(questionNum);
+            for (Bitmap b : choicesImages) {
+                if (b != null) {
+                    imageToPassIn = b;
+                    break;
+                }
+            }
+        }
+
+        final Bitmap finalImageToPassIn = imageToPassIn;
+
+        ImageButton answerPic = new ImageButton(this);
+        answerPic.setImageResource(android.R.drawable.ic_menu_camera);
+        answerPic.setVisibility(View.GONE);
+        answerPic.setOnClickListener(v -> {
+            Intent takePictureIntent = new Intent(this, PictureActivity.class);
+            takePictureIntent.putExtra(getString(R.string.QUESTION_NUM), questionNum);
+            takePictureIntent.putExtra(getString(R.string.CHOICE_NUM), choiceNum);
+            takePictureIntent.putExtra(getString(R.string.ORIGINAL_IMG), finalImageToPassIn);
+            takePictureIntent.putExtra(getString(R.string.REQUEST_CODE), CHOICE_PICTURE_CAPTURE_CODE);
+            startActivityForResult(takePictureIntent, CHOICE_PICTURE_CAPTURE_CODE);
+        });
+
+        CheckBox checkBox = new CheckBox(this);
+        checkBox.setChecked(false);
+        checkBox.setText("Picture ");
+        checkBox.setOnClickListener(v -> {
+            isPic[0] = checkBox.isChecked();
+            answerInput.setVisibility(checkBox.isChecked() ? View.GONE : View.VISIBLE);
+            answerPic.setVisibility(checkBox.isChecked() ? View.VISIBLE : View.GONE);
+        });
+
+        layout.addView(answerText);
+        layout.addView(checkBox);
+        layout.addView(answerInput);
+        layout.addView(answerPic);
+        layout.addView(choicePicPreview);
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle("Answer Input")
+                .setView(layout)
+                .setPositiveButton(R.string.UI_submit, ((dialogInterface, i) -> {}));
+
+        final AlertDialog alertDialog = alertBuilder.create();
+        alertDialog.show();
+
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
+                generateAnswerRow(answersLayout, questionNum, isPic[0], ans[0], choicesImageList.get(questionNum).get(choiceNum));
+                alertDialog.dismiss();
+        });
+    }
+
+    private void generateAnswerRow(LinearLayout answersLayout, int curr_question_num, boolean isPic, String ans, Bitmap ansBitmap) {
+
+        QuestionsMC currQuestion = (QuestionsMC)questionList.get(curr_question_num);
+
+        String choiceString = ans;
+        if (isPic) {
+            choiceString = OtherUtils.encodeImage(ansBitmap);
+        }
+
+        ChoicePair choicePair = new ChoicePair(isPic, choiceString);
+
+        currQuestion.addChoice(choicePair);
+
+        int curr_choice_num = answersLayout.getChildCount();
+
+        HorizontalScrollView scrollView = new HorizontalScrollView(this);
+
+        LinearLayout layout = new LinearLayout(this);
+
+        final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(10, 5, 10, 5);
+        layout.setLayoutParams(layoutParams);
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+
+        CheckBox isCorrectAnsCheck = new CheckBox(this);
+        isCorrectAnsCheck.setText(R.string.UI_correct_answer);
+        isCorrectAnsCheck.setLayoutParams(layoutParams);
+        List<CheckBox> currQuestionCheckBoxs = correctAnsCheckBoxes.get(curr_question_num);
+        currQuestionCheckBoxs.add(isCorrectAnsCheck);
+
+        isCorrectAnsCheck.setOnClickListener(v -> {
+            for (CheckBox checkBox : currQuestionCheckBoxs) {
+                if (checkBox != isCorrectAnsCheck)
+                    checkBox.setChecked(false);
+            }
+            currQuestion.setCorrectAnsNum(curr_choice_num);
+        });
+
+        layout.addView(isCorrectAnsCheck);
+
+        if (isPic) {
+            ImageView imageView = new ImageView(this);
+            imageView.setLayoutParams(layoutParams);
+            imageView.setImageBitmap(ansBitmap);
+            layout.addView(imageView);
+        } else {
+            TextView textView = new TextView(this);
+            textView.setLayoutParams(layoutParams);
+            textView.setText(ans);
+            layout.addView(textView);
+        }
+
+        ImageButton deleteButton = new ImageButton(this);
+        deleteButton.setBackgroundResource(R.drawable.ic_baseline_delete_24);
+        deleteButton.setLayoutParams(layoutParams);
+        deleteButton.setOnClickListener(v -> deleteChoice(answersLayout, curr_question_num, choicePair));
+        layout.addView(deleteButton);
+
+        scrollView.addView(layout);
+        answersLayout.addView(scrollView);
+    }
+
+    private void deleteChoice(LinearLayout answersLayout, int questionNum, ChoicePair choicePair) {
+        QuestionsMC q = (QuestionsMC) questionList.get(questionNum);
+        int choiceNum = q.getChoiceIndex(choicePair);
+
+        choicesImageList.get(questionNum).remove(choiceNum);
+        choicesPicPreview.get(questionNum).remove(choiceNum);
+
+        q.deleteChoice(choiceNum);
+
+        answersLayout.removeViewAt(choiceNum);
+
+        if (q.getCorrectAnsNum() == choiceNum) {
+            q.setCorrectAnsNum(0);
+        }
+    }
+
+
 }

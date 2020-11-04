@@ -101,7 +101,7 @@ public class OtherUtils {
 
         String jsonStringToSend = createJsonString(uid, type, data);
         String response = "";
-        String serverLink = "http://module-6-ihsan-webapp-test.azurewebsites.net/upload";
+        String serverLink = "http://quizzical.canadacentral.cloudapp.azure.com/upload";
         Log.d("upload", "uploading: " + jsonStringToSend);
         try {
             URL url = new URL(serverLink);
@@ -170,7 +170,7 @@ public class OtherUtils {
             URL url = new URL(urlLink);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            conn.setConnectTimeout(1000);
+            conn.setConnectTimeout(3000);
             conn.connect();
             InputStream is = conn.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"));
