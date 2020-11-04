@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -21,7 +20,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +40,7 @@ import com.cpen321.quizzical.utils.QuizPackage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CreateQuizActivity extends AppCompatActivity {
 
@@ -75,7 +74,10 @@ public class CreateQuizActivity extends AppCompatActivity {
         ArrayList<QuizModules> quizModuleList = new ArrayList<>();
         String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
         String moduleListString = sp.getString(moduleId, "");
-        assert !OtherUtils.stringIsNullOrEmpty(moduleListString);
+
+        if (OtherUtils.stringIsNullOrEmpty(moduleListString)) {
+            Log.d("failed", "modulelist is none");
+        }
 
         try {
             String[] modules = moduleListString.split(";");
@@ -130,14 +132,14 @@ public class CreateQuizActivity extends AppCompatActivity {
         // check if the request code is same as what is passed  here it is 2
         if(requestCode == QUESTION_PICTURE_CAPTURE_CODE)
         {
-            Bitmap orignalPic = (Bitmap) data.getExtras().get(getString(R.string.ORIGINAL_IMG));
+            Bitmap orignalPic = (Bitmap) Objects.requireNonNull(data.getExtras()).get(getString(R.string.ORIGINAL_IMG));
             Bitmap pic = (Bitmap) data.getExtras().get(getString(R.string.MODIFIED_IMG));
             int questionNum = data.getIntExtra(getString(R.string.QUESTION_NUM), 0);
 
             imageList.set(questionNum, orignalPic);
             picPreview.get(questionNum).setImageBitmap(pic);
         } else if (requestCode == CHOICE_PICTURE_CAPTURE_CODE) {
-            Bitmap pic = (Bitmap) data.getExtras().get(getString(R.string.MODIFIED_IMG));
+            Bitmap pic = (Bitmap) Objects.requireNonNull(data.getExtras()).get(getString(R.string.MODIFIED_IMG));
             int questionNum = data.getIntExtra(getString(R.string.QUESTION_NUM), 0);
             int choiceNum = data.getIntExtra(getString(R.string.CHOICE_NUM), 0);
 
@@ -152,6 +154,8 @@ public class CreateQuizActivity extends AppCompatActivity {
         params.setMargins(10, 10, 10, 10);
 
         QuestionsMC q = new QuestionsMC();
+        q.setCategory(currClass.getCategory());
+        q.setCorrectAnsNum(-1);
 
         questionList.add(q);
         imageList.add(null); //make sure they are aligned
@@ -188,10 +192,42 @@ public class CreateQuizActivity extends AppCompatActivity {
         answerInputButton.setOnClickListener(v -> addNewAnswer(answersLayout, curr_question_num));
     }
 
+    private void formatImages() {
+        if (questionList.size() != imageList.size()) {
+            Log.d("create_quiz", "bug in list length alignment!");
+            return;
+        }
+        for (int i = 0 ; i < questionList.size(); i++) {
+            if (imageList.get(i) != null) {
+                String encodedImage = OtherUtils.encodeImage(imageList.get(i));
+                questionList.get(i).setHasPic(true);
+                questionList.get(i).setPicSrc(encodedImage);
+            }
+        }
+    }
+
     private void onFinishClicked() {
         int classCode = currClass.getClassCode();
         CourseCategory category = currClass.getCategory();
         String instructorUID = sp.getString(getString(R.string.UID), "");
+
+        for (int i = 0; i < questionList.size(); i++) {
+            QuestionsMC mc = (QuestionsMC)questionList.get(i);
+
+            if (mc.getCorrectAnsNum() == -1) {
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.UI_warning))
+                        .setMessage(String.format(getString(R.string.UI_no_correct_answer), i))
+                        .setPositiveButton(R.string.OK, ((dialogInterface, j) -> {
+                            dialogInterface.dismiss();
+                            finish();
+                        }))
+                        .show();
+                return;
+            }
+        }
+
+        formatImages();
 
         QuizPackage quizPackage = new QuizPackage(classCode, category, instructorUID, currModule, questionList);
         String quizPackJson = quizPackage.toJson();
@@ -201,7 +237,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         }).start();
         Log.d("Quiz_create", quizPackJson);
 
-        new AlertDialog.Builder(this).setMessage("Congratulations! You have just created a quiz")
+        new AlertDialog.Builder(this).setMessage(R.string.UI_create_quiz_success_msg)
                 .setPositiveButton(R.string.OK, ((dialogInterface, i) -> {
                     dialogInterface.dismiss();
                     finish();
@@ -229,12 +265,12 @@ public class CreateQuizActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
 
         TextView answerText = new TextView(this);
-        answerText.setText("Enter answer");
+        answerText.setText(R.string.UI_enter_answer);
         answerText.setLayoutParams(layoutParams);
 
         EditText answerInput = new EditText(this);
         answerInput.setLayoutParams(layoutParams);
-        answerInput.setHint("What is 1+1");
+        answerInput.setHint(R.string.UI_example_answer);
         answerInput.setInputType(InputType.TYPE_CLASS_TEXT);
         answerInput.setMaxLines(1);
         answerInput.addTextChangedListener(new TextWatcher() {
@@ -281,7 +317,7 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         CheckBox checkBox = new CheckBox(this);
         checkBox.setChecked(false);
-        checkBox.setText("Picture ");
+        checkBox.setText(R.string.UI_picture);
         checkBox.setOnClickListener(v -> {
             isPic[0] = checkBox.isChecked();
             answerInput.setVisibility(checkBox.isChecked() ? View.GONE : View.VISIBLE);
@@ -342,7 +378,7 @@ public class CreateQuizActivity extends AppCompatActivity {
                 if (checkBox != isCorrectAnsCheck)
                     checkBox.setChecked(false);
             }
-            currQuestion.setCorrectAnsNum(curr_choice_num);
+            currQuestion.setCorrectAnsNum(curr_choice_num + 1);
         });
 
         layout.addView(isCorrectAnsCheck);
