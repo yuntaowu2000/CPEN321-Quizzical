@@ -5,7 +5,7 @@ let MongoClient = require("mongodb").MongoClient;
 let db;
 
 MongoClient.connect(
-  "mongodb://module6quizzical:uLBSjjivRdyY5sa3C1CQa6EsirCm2MNSQFa7oilEzad11rPNoO4zE8xKMEhibcvHiiw3xahYI4FiQs43U1WBgg==@module6quizzical.documents.azure.com:10250/mean?ssl=true",
+  "mongodb://localhost:27017",
   {useUnifiedTopology: true},
   (err, client) => {
     db = client.db("data");

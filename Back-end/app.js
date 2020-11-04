@@ -24,6 +24,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/upload", uploadRouter);
 app.use("/quiz", quizRouter);
+app.use("/classes", classRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
