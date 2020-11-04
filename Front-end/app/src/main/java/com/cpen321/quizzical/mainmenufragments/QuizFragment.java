@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -94,8 +95,13 @@ public class QuizFragment extends Fragment {
     }
 
     private void setupCreateQuiz() {
-        Intent createQuizIntent = new Intent(getActivity(), CreateQuizActivity.class);
-        startActivity(createQuizIntent);
+        if (modulesList.size() > 0) {
+            Intent createQuizIntent = new Intent(getActivity(), CreateQuizActivity.class);
+            startActivity(createQuizIntent);
+        } else {
+            Toast.makeText(this.getContext(), R.string.UI_create_module_notification, Toast.LENGTH_LONG).show();
+            promptForAddingModule();
+        }
     }
 
     /*private void setupCreateNote() {
