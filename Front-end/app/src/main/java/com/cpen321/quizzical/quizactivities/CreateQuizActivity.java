@@ -2,6 +2,8 @@ package com.cpen321.quizzical.quizactivities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -23,10 +25,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cpen321.quizzical.R;
-import com.cpen321.quizzical.TestPage;
-import com.cpen321.quizzical.data.CourseCategory;
+import com.cpen321.quizzical.PictureActivity;
+import com.cpen321.quizzical.data.Classes;
+import com.cpen321.quizzical.data.QuizModules;
 import com.cpen321.quizzical.utils.ChoicePair;
-import com.cpen321.quizzical.utils.QuestionPackage;
+import com.cpen321.quizzical.utils.OtherUtils;
+import com.cpen321.quizzical.utils.QuizPackage;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -37,9 +41,11 @@ import static com.cpen321.quizzical.utils.OtherUtils.getBitmapFromUrl;
 
 public class CreateQuizActivity extends AppCompatActivity {
 
+    private static int PICTURE_CAPTURE_CODE = 2;
+
     private LinearLayout questionCreateLayout;
 
-    private Spinner categoryList;
+    private Spinner moduleList;
 
     private EditText questionInput;
 
@@ -55,44 +61,59 @@ public class CreateQuizActivity extends AppCompatActivity {
     private ImageButton addQuestionButton;
 
     private List<String> questionList;
-    private QuestionPackage questionPackage;
+    private QuizPackage quizPackage;
 
-    private CourseCategory currCategory;
     private String currQuestion;
     private Boolean currHasPic;
     private String currPicSrc;
     private List<ChoicePair> currChoices;
     private int currCorrectAnsNum;
 
+    private ImageView picPreview;
+
+    private String currModule;
+    private Classes currClass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_quiz);
 
+        SharedPreferences sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
+
+        currClass = new Classes(sp.getString(getString(R.string.CURR_CLASS), ""));
+
+        ArrayList<QuizModules> quizModuleList = new ArrayList<>();
+        String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
+        String moduleListString = sp.getString(moduleId, "");
+        assert !OtherUtils.stringIsNullOrEmpty(moduleListString);
+
+        try {
+            String[] modules = moduleListString.split(";");
+            for (String m : modules) {
+                quizModuleList.add(new QuizModules(m));
+            }
+        } catch (Exception e) {
+            Log.d("parse", "cannot parse class list");
+        }
+
         questionCreateLayout = findViewById(R.id.question_create_layout);
 
-        categoryList = findViewById(R.id.category_list);
-        String[] categories = getResources().getStringArray(R.array.course_category_array);
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, categories);
-        categoryList.setAdapter(categoryAdapter);
-        categoryList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        moduleList = findViewById(R.id.module_list);
+
+        String[] moduleNames = new String[quizModuleList.size()];
+
+        for (int i = 0; i < quizModuleList.size(); i++) {
+            moduleNames[i] = quizModuleList.get(i).getModuleName();
+        }
+
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, moduleNames);
+        moduleList.setAdapter(categoryAdapter);
+        moduleList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                int selectedPosition = categoryList.getSelectedItemPosition();
-                switch (selectedPosition) {
-                    case 0:
-                        currCategory = CourseCategory.Math;
-                        break;
-                    case 1:
-                        currCategory = CourseCategory.English;
-                        break;
-                    case 2:
-                        currCategory = CourseCategory.QuantumPhysic;
-                        break;
-                    default:
-                        currCategory = CourseCategory.Misc;
-                        break;
-                }
-                Toast.makeText(getBaseContext(), currCategory.toString(), Toast.LENGTH_LONG).show();
+                int selectedPosition = moduleList.getSelectedItemPosition();
+                currModule = moduleNames[selectedPosition];
+                Toast.makeText(getBaseContext(), currModule, Toast.LENGTH_LONG).show();
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -107,9 +128,11 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         takePictureButton = findViewById(R.id.take_picture_button);
         takePictureButton.setOnClickListener(v -> {
-            Intent takePictureIntent = new Intent(this, TestPage.class);
-            startActivity(takePictureIntent);
+            Intent takePictureIntent = new Intent(this, PictureActivity.class);
+            startActivityForResult(takePictureIntent, PICTURE_CAPTURE_CODE);
         });
+
+        picPreview = findViewById(R.id.pic_preview);
 
         answerPics = new ArrayList<>();
         answersLayout = findViewById(R.id.answers_layout);
@@ -121,12 +144,23 @@ public class CreateQuizActivity extends AppCompatActivity {
         addQuestionButton = findViewById(R.id.add_question_button);
         addQuestionButton.setOnClickListener(v -> addQuestionToList());
 
-        currCategory = CourseCategory.Misc;
         currQuestion = "";
         currHasPic = false;
         currPicSrc = "";
         currChoices = new ArrayList<>();
         currCorrectAnsNum = 0;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode == PICTURE_CAPTURE_CODE)
+        {
+            Bitmap pic = (Bitmap) data.getExtras().get(getString(R.string.image));
+            picPreview.setImageBitmap(pic);
+        }
     }
 
     private void addNewAnswer() {
@@ -156,7 +190,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         answerPic.setImageResource(android.R.drawable.ic_menu_camera);
         answerPic.setVisibility(View.GONE);
         answerPic.setOnClickListener(v -> {
-            Intent takePictureIntent = new Intent(this, TestPage.class);
+            Intent takePictureIntent = new Intent(this, PictureActivity.class);
             startActivity(takePictureIntent);
         });
 
@@ -426,7 +460,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         answerPic.setImageResource(android.R.drawable.ic_menu_camera);
         answerPic.setVisibility(View.GONE);
         answerPic.setOnClickListener(v -> {
-            Intent takePictureIntent = new Intent(this, TestPage.class);
+            Intent takePictureIntent = new Intent(this, PictureActivity.class);
             startActivity(takePictureIntent);
         });
 
@@ -505,7 +539,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         try {
             currChoices = Arrays.asList(new ChoicePair(false, "$$2$$"), new ChoicePair(false, "$$3$$"));
             currCorrectAnsNum = 1;
-            questionPackage.addMCQuestion(currCategory, currQuestion, currHasPic, currPicSrc, currChoices, currCorrectAnsNum);
+            quizPackage.addMCQuestion(currClass.getCategory(), currQuestion, currHasPic, currPicSrc, currChoices, currCorrectAnsNum);
         } catch (Exception e) {
             Log.d("add_question_failed", "failed");
             Log.d(e.getMessage(), "except");

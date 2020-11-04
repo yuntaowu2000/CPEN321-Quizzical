@@ -77,9 +77,6 @@ public class InitActivity extends AppCompatActivity {
         constraintLayout = findViewById(R.id.init_constraint_layout);
         relativeLayout = findViewById(R.id.init_relative_layout);
 
-        //need to delete this afterwards
-        Button testButton = findViewById(R.id.test_page_button);
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.client_id))
                 .requestEmail().build();
@@ -97,14 +94,6 @@ public class InitActivity extends AppCompatActivity {
         //may need to separate shared preference for different users
         //or we can just completely depend on the server to do the job
         sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
-
-        //used for test and debug only
-        testButton.setOnClickListener(view -> {
-            Intent intent = new Intent(InitActivity.this, TestPage.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            ActivityCompat.finishAffinity(this);
-        });
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {

@@ -34,11 +34,6 @@
             android:layout_height="wrap_content"
             android:text="@string/Continue_text" />
 
-        <Button
-            android:id="@+id/test_upload_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="upload" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

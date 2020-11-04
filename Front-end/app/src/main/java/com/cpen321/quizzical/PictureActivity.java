@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,17 +12,15 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.cpen321.quizzical.utils.OtherUtils;
-import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-public class TestPage extends AppCompatActivity {
+public class PictureActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int RETURN_CODE = 2;
     private LinearLayout linearLayout;
     private Button picButton;
     private Button ContinueButton;
-    private Button uploadButton;
     private ImageView imageView;
     private Bitmap imageBitmap;
     private Bitmap croppedBitmap;
@@ -31,7 +28,7 @@ public class TestPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_debug_test);
+        setContentView(R.layout.activity_picture);
 
         picButton = findViewById(R.id.test_page_take_photo_button);
         imageView = findViewById(R.id.test_image);
@@ -40,9 +37,6 @@ public class TestPage extends AppCompatActivity {
 
         ContinueButton = findViewById(R.id.test_page_continue);
         ContinueButton.setOnClickListener(view -> onContinueClicked());
-
-        uploadButton = findViewById(R.id.test_upload_button);
-        uploadButton.setOnClickListener(view -> testUpload());
 
     }
 
@@ -79,7 +73,7 @@ public class TestPage extends AppCompatActivity {
         final CropImageView cropImageView = new CropImageView(this);
         cropImageView.setImageBitmap(imageBitmap);
         linearLayout.addView(cropImageView);
-        cropImageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600));
+        cropImageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 800));
 
         final Button cropButton = new Button(this);
         cropButton.setText(R.string.UI_crop);
@@ -91,25 +85,23 @@ public class TestPage extends AppCompatActivity {
 
         final Button rotateButton = new Button(this);
         rotateButton.setText(R.string.UI_rotate);
-        rotateButton.setOnClickListener(view -> cropImageView.rotateImage(90));
+        rotateButton.setOnClickListener(view -> {
+            cropImageView.rotateImage(90);
+            croppedBitmap = cropImageView.getCroppedImage();
+            imageView.setImageBitmap(croppedBitmap);
+        });
         linearLayout.addView(rotateButton);
 
     }
 
     private void onContinueClicked() {
-        Intent i = new Intent(this, InitActivity.class);
+        Intent i = new Intent();
         if (croppedBitmap != null) {
             i.putExtra(getString(R.string.image), croppedBitmap);
         } else {
             i.putExtra(getString(R.string.image), imageBitmap);
         }
-        startActivity(i);
-    }
-
-    private void testUpload() {
-        TestQuestionPackage testQuestionPackage = new TestQuestionPackage();
-        String json = testQuestionPackage.getPackage().toJson();
-        Log.d("Json_version", json);
-        OtherUtils.uploadToServer(getString(R.string.UID), getString(R.string.QUIZ), json);
+        setResult(RETURN_CODE, i);
+        finish();
     }
 }

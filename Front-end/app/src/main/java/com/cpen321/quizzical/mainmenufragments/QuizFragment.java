@@ -36,7 +36,7 @@ import com.cpen321.quizzical.data.questions.IQuestion;
 import com.cpen321.quizzical.quizactivities.CreateQuizActivity;
 import com.cpen321.quizzical.quizactivities.QuizActivity;
 import com.cpen321.quizzical.utils.OtherUtils;
-import com.cpen321.quizzical.utils.QuestionPackage;
+import com.cpen321.quizzical.utils.QuizPackage;
 import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -280,7 +280,7 @@ public class QuizFragment extends Fragment {
         return layout;
     }
 
-    private View setUpWrongQuestionView(QuestionPackage qp) {
+    private View setUpWrongQuestionView(QuizPackage qp) {
         Context thisContext = this.getContext();
         assert thisContext != null;
 
@@ -312,7 +312,7 @@ public class QuizFragment extends Fragment {
             alertDialogBuilder.setView(setUpWrongQuestionView(new TestQuestionPackage().getPackage()));
         } else {
             String val = OtherUtils.readFromURL(wrongQuestionLink);
-            QuestionPackage qp = new QuestionPackage(val);
+            QuizPackage qp = new QuizPackage(val);
             alertDialogBuilder.setView(setUpWrongQuestionView(qp));
         }
         alertDialogBuilder.show();

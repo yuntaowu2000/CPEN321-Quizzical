@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class QuestionPackage {
+public class QuizPackage {
 
     private static Random rng = new Random();
     /**
@@ -21,18 +21,29 @@ public class QuestionPackage {
 
     private int id;
     private int class_code;
+    private CourseCategory courseCategory;
+    private String instructorUID;
+    private String moduleName;
     private List<IQuestion> questionList;
 
-    public QuestionPackage() {
+    public QuizPackage() {
+        this.id = 0;
+        this.class_code = 0;
+        this.courseCategory = CourseCategory.DontCare;
+        this.instructorUID = "";
+        this.moduleName = "";
         questionList = new ArrayList<>();
     }
 
-    public QuestionPackage(String quizJson) {
+    public QuizPackage(String quizJson) {
         try {
             Gson g = new Gson();
-            QuestionPackage q = g.fromJson(quizJson, QuestionPackage.class);
+            QuizPackage q = g.fromJson(quizJson, QuizPackage.class);
             this.id = q.id;
             this.class_code = q.class_code;
+            this.courseCategory = q.courseCategory;
+            this.instructorUID = q.instructorUID;
+            this.moduleName = q.moduleName;
             this.questionList = q.questionList;
         } catch (Exception e) {
             this.id = 0;
@@ -41,10 +52,21 @@ public class QuestionPackage {
         }
     }
 
-    public QuestionPackage(int id, int class_code) {
+    public QuizPackage(int id, int class_code) {
         this.id = id;
         this.class_code = class_code;
+        this.moduleName = "";
+        this.instructorUID = "";
         questionList = new ArrayList<>();
+    }
+
+    public QuizPackage(int class_code, CourseCategory courseCategory, String instructorUID, String moduleName, List<IQuestion> questions) {
+        this.id = 0;
+        this.class_code = class_code;
+        this.courseCategory = courseCategory;
+        this.instructorUID = instructorUID;
+        this.moduleName = moduleName;
+        this.questionList = questions;
     }
 
     public int getId() {
@@ -66,6 +88,10 @@ public class QuestionPackage {
         }
 
         return questions;
+    }
+
+    public void addQuestion(IQuestion question) {
+        questionList.add(question);
     }
 
     public void addMCQuestion(CourseCategory category, String question,

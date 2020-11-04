@@ -35,7 +35,7 @@
         <activity android:name=".quizactivities.CreateQuizActivity"/>
         <activity android:name=".quizactivities.QuizActivity" />
         <activity android:name=".quizactivities.QuizFinishedActivity" />
-        <activity android:name=".TestPage" />
+        <activity android:name=".PictureActivity" />
 
         <service
             android:name=".MyFirebaseMessagingService"

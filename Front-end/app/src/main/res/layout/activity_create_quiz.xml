@@ -1,117 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/question_create_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".quizactivities.CreateQuizActivity">
 
-    <LinearLayout
+    <ScrollView
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="600dp">
+        <LinearLayout
+            android:id="@+id/question_create_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/UI_enter_module_name"
+                    tools:layout_conversion_absoluteHeight="19dp"
+                    tools:layout_conversion_absoluteWidth="200dp" />
+
+                <Spinner
+                    android:id="@+id/module_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:layout_conversion_absoluteHeight="0dp"
+                    tools:layout_conversion_absoluteWidth="48dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:width="100dp"
+                    android:text="@string/UI_question"
+                    tools:layout_conversion_absoluteHeight="19dp"
+                    tools:layout_conversion_absoluteWidth="200dp" />
+
+                <EditText
+                    android:id="@+id/question_input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/take_picture_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:visibility="visible">
+
+                <CheckBox
+                    android:id="@+id/question_has_pic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="is pic" />
+
+                <ImageButton
+                    android:id="@+id/take_picture_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_camera"
+                    tools:layout_conversion_absoluteHeight="0dp"
+                    tools:layout_conversion_absoluteWidth="24dp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/pic_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="125dp"
+                android:layout_weight="0"
+                android:verticalScrollbarPosition="left"
+                app:srcCompat="@drawable/math" />
+
+            <LinearLayout
+                android:id="@+id/answers_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:visibility="visible">
+
+                <Button
+                    android:id="@+id/answer_input_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Create answer" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/add_question_button"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_baseline_add_24"
+                tools:layout_conversion_absoluteHeight="0dp"
+                tools:layout_conversion_absoluteWidth="24dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:visibility="visible">
+        android:text="@string/UI_finish"
+        android:textAllCaps="false"
+        android:id="@+id/quiz_create_finish" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="@string/UI_select_course_category_msg"
-            tools:layout_conversion_absoluteHeight="19dp"
-            tools:layout_conversion_absoluteWidth="200dp" />
-
-        <Spinner
-            android:id="@+id/category_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:layout_conversion_absoluteHeight="0dp"
-            tools:layout_conversion_absoluteWidth="48dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:visibility="visible">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:width="100dp"
-            android:text="@string/UI_question"
-            tools:layout_conversion_absoluteHeight="19dp"
-            tools:layout_conversion_absoluteWidth="200dp" />
-
-        <EditText
-            android:id="@+id/question_input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="text" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/take_picture_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:visibility="visible">
-
-        <CheckBox
-            android:id="@+id/question_has_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="is pic" />
-
-        <ImageButton
-            android:id="@+id/take_picture_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_camera"
-            tools:layout_conversion_absoluteHeight="0dp"
-            tools:layout_conversion_absoluteWidth="24dp" />
-
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/pic_preview"
-        android:layout_width="wrap_content"
-        android:layout_height="125dp"
-        android:layout_weight="0"
-        android:verticalScrollbarPosition="left"
-        app:srcCompat="@drawable/math" />
-
-    <LinearLayout
-        android:id="@+id/answers_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:visibility="visible" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:visibility="visible">
-
-        <Button
-            android:id="@+id/answer_input_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Create answer" />
-    </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/add_question_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_add_24"
-        tools:layout_conversion_absoluteHeight="0dp"
-        tools:layout_conversion_absoluteWidth="24dp" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

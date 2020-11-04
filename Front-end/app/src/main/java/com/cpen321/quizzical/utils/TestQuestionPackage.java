@@ -10,10 +10,10 @@ public class TestQuestionPackage {
      * This class is used for testing the functionality of Latex rendering and quiz set up
      */
 
-    private QuestionPackage questionPackage;
+    private QuizPackage quizPackage;
 
     public TestQuestionPackage() {
-        questionPackage = new QuestionPackage(0, 0);
+        quizPackage = new QuizPackage(0, 0);
 
         List<ChoicePair> choicePairList = new ArrayList<>();
 
@@ -23,7 +23,7 @@ public class TestQuestionPackage {
         choicePairList.add(new ChoicePair(false, "$$ c = \\sqrt{a^2 + b^2} $$"));
 
         try {
-            questionPackage.addMCQuestion(1, CourseCategory.Math, "calculate: $$1+1=$$", false, "", choicePairList, 1);
+            quizPackage.addMCQuestion(1, CourseCategory.Math, "calculate: $$1+1=$$", false, "", choicePairList, 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -35,7 +35,7 @@ public class TestQuestionPackage {
         choicePairList.add(new ChoicePair(false, "<p align=\"middle\">$5$ with some text</p>"));
 
         try {
-            questionPackage.addMCQuestion(2, CourseCategory.Math, "calculate: $\\frac{\\sqrt{4}+2}{2}$",
+            quizPackage.addMCQuestion(2, CourseCategory.Math, "calculate: $\\frac{\\sqrt{4}+2}{2}$",
                     false, "",
                     choicePairList, 1);
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class TestQuestionPackage {
         }
 
         try {
-            questionPackage.addMCQuestion(3, CourseCategory.Math, "",
+            quizPackage.addMCQuestion(3, CourseCategory.Math, "",
                     true, "https://raw.githubusercontent.com/yuntaowu2000/testUploadModels/master/006.png",
                     choicePairList, 1);
         } catch (Exception e) {
@@ -52,7 +52,7 @@ public class TestQuestionPackage {
 
     }
 
-    public QuestionPackage getPackage() {
-        return this.questionPackage;
+    public QuizPackage getPackage() {
+        return this.quizPackage;
     }
 }

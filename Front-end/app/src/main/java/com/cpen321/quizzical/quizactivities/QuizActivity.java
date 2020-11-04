@@ -25,7 +25,7 @@ import com.cpen321.quizzical.data.questions.QuestionType;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.cpen321.quizzical.utils.ChoicePair;
 import com.cpen321.quizzical.utils.OtherUtils;
-import com.cpen321.quizzical.utils.QuestionPackage;
+import com.cpen321.quizzical.utils.QuizPackage;
 import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.cpen321.quizzical.utils.buttonwrappers.ButtonTypes;
 import com.cpen321.quizzical.utils.buttonwrappers.IButtons;
@@ -102,8 +102,8 @@ public class QuizActivity extends AppCompatActivity {
             quizJson = OtherUtils.readFromURL(quizUrl);
         }
 
-        QuestionPackage questionPackage = new QuestionPackage(quizJson);
-        questions = questionPackage.getQuestionList();
+        QuizPackage quizPackage = new QuizPackage(quizJson);
+        questions = quizPackage.getQuestionList();
 
         if (questions.size() == 0) {
             TestQuestionPackage testPackage = new TestQuestionPackage();
@@ -111,7 +111,7 @@ public class QuizActivity extends AppCompatActivity {
             quizId = testPackage.getPackage().getId();
             Log.d("Json_version", testPackage.getPackage().toJson());
         } else {
-            quizId = questionPackage.getId();
+            quizId = quizPackage.getId();
             totalQuestionNum = questions.size();
         }
 
