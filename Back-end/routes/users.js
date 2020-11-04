@@ -18,10 +18,10 @@ router.get("/", (req, res, next) => {
   let uid = url.searchParams.get("user_id");
   let type = url.searchParams.get("type");
   
-  let timeout = 2000
+  let timeout = 2000;
   if (type === "Profile_Image") {
     let filepath = "/home/site/wwwroot/images/" + uid + "/profile_img.jpg";
-    let string = '';
+    let string = "";
     if (fs.existsSync(filepath)) {
       let bitmap = fs.readFileSync(filepath);
       string = Buffer(bitmap).toString("base64");
@@ -52,7 +52,7 @@ router.get("/", (req, res, next) => {
         throw err;
       } else {
         username = Object.values(username[0])[0];
-        res.send(''+username);
+        res.send(""+username);
       }
     });
   }
@@ -62,7 +62,7 @@ router.get("/", (req, res, next) => {
         throw err;
       } else {
         email = Object.values(email[0])[0];
-        res.send(''+email);
+        res.send(""+email);
       }
     });
   }
@@ -72,7 +72,7 @@ router.get("/", (req, res, next) => {
         throw err;
       } else {
         isInstructor = Object.values(isInstructor[0])[0];
-        res.send(''+isInstructor);
+        res.send(""+isInstructor);
       }
     });
   }
@@ -82,7 +82,7 @@ router.get("/", (req, res, next) => {
         throw err;
       } else {
         quizCount = Object.values(quizCount[0])[0];
-        res.send(''+quizCount);
+        res.send(""+quizCount);
       }
     });
   }
@@ -92,7 +92,7 @@ router.get("/", (req, res, next) => {
         throw err;
       } else {
         exp = Object.values(exp[0])[0]
-        res.send(''+exp);
+        res.send(""+exp);
       }
     });
   }
@@ -102,7 +102,7 @@ router.get("/", (req, res, next) => {
         throw err;
       } else {
         classCode = Object.values(classCode[0])[0];
-        res.send(''+classCode);
+        res.send(""+classCode);
       }
     });
   }
@@ -112,7 +112,7 @@ router.get("/", (req, res, next) => {
         throw err;
       } else {
         frequency = Object.values(frequency[0])[0];
-        res.send(''+frequency);
+        res.send(""+frequency);
       }
     });
   }
