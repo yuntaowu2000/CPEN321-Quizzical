@@ -87,6 +87,14 @@ router.post("/", (req, res, next) => {
     });
   } else if (req.body.type === "class_list") {
   } else if (req.body.type === "create_class") {
+  } else if (req.body.type === "create_quiz") {
+    let filename = req.body.uid + "_quiz.txt"
+    fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
+    let result = fs.readFileSync(filename);
+    result = Buffer(result).toString("base64");
+    if (result[result.length-1] !== "{") {
+      res.send(413);
+    }
   }
 
   res.statusCode = 200;
