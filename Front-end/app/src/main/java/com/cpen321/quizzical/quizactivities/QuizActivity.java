@@ -62,8 +62,6 @@ public class QuizActivity extends AppCompatActivity {
     private ArrayList<Integer> wrongQuestionIds;
     private int quizId;
 
-    private String default_url = "http://module-6-ihsan-webapp-test.azurewebsites.net/quiz?class_code=0&quiz_code=0";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //set up page
@@ -100,7 +98,7 @@ public class QuizActivity extends AppCompatActivity {
         questions = new ArrayList<>();
 
         String quizJson = "";
-        if (!quizUrl.equals(default_url)) {
+        if (!OtherUtils.stringIsNullOrEmpty(quizUrl)) {
             quizJson = OtherUtils.readFromURL(quizUrl);
         }
 

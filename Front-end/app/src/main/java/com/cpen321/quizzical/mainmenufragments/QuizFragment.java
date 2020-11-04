@@ -119,8 +119,6 @@ public class QuizFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        //TODO: may need to separate for teacher and students
-        //TODO: follow what is done in statistic fragment and get values from the server to setup the fragment
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 
@@ -163,7 +161,6 @@ public class QuizFragment extends Fragment {
         assert fab != null;
         fab.setOnClickListener(v -> onAddButtonClicked());
 
-        //TODO: implement the actual function for these two buttons
         assert edit_fab != null;
         assert module_fab != null;
         edit_fab.hide();
@@ -390,7 +387,7 @@ public class QuizFragment extends Fragment {
         String moduleList = sp.getString(moduleId, "");
 //        if (OtherUtils.stringIsNullOrEmpty(classListString)) {
 //            String url = getString(R.string.GET_URL) + "/classes?"
-//                    + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+//                    + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "") + "&"
 //                    + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
 //                    + "&type=" + getString(R.string.QUIZ_MODULES);
 //            classListString = OtherUtils.readFromURL(url);
