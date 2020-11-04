@@ -28,6 +28,8 @@ The progress is written in the sequence of implementation.
 2.7 teacher class statistic board set up finished.  
 2.8 teacher leader board and statistic switching finished.  
 2.9 basic quiz/leaderboard refreshing done.(student side not tested yet)    
+1.1 quiz fragment UI finished  
+1.2 leader board/class statistic fragment UI finished  
 3. Quiz  
 3.1 A Quiz will load a set of questions (currently only multiple choices are supported)  
 3.2 Choices can be either plain text, latex, html formatted, or image  
@@ -51,8 +53,6 @@ after each quiz is finished
 
 ## TODO list
 1. UI set up for home activity  
-1.1 quiz fragment  
-1.2 leader board/class statistic fragment  
 **Note:** need to get info from the server for these layouts, such as quizzes available, class average scores, user ranking.  
 1.3 maybe we can add some review quizzes for all the wrong questions a student has got, the wrong question ids will be sent to the server  
 2. UI and logic set up for teacher creating quiz  
