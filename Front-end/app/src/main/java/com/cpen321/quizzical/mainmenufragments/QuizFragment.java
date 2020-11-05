@@ -79,17 +79,20 @@ public class QuizFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    private void setupQuiz(String quizUrl) {
+    private void setupQuiz(String quizUrl, String localCacheModuleName) {
         Context thisContext = this.getContext();
         assert thisContext != null;
 
-        if (OtherUtils.stringIsNullOrEmpty(quizUrl)) {
+        String localCache = sp.getString(localCacheModuleName, "");
+
+        if (OtherUtils.stringIsNullOrEmpty(quizUrl) && OtherUtils.stringIsNullOrEmpty(localCache)) {
             new AlertDialog.Builder(thisContext).setMessage("Not available.")
                     .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
                     .show();
         } else {
             Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
             quizIntent.putExtra(getString(R.string.QUIZ_URL), quizUrl);
+            quizIntent.putExtra(getString(R.string.LOCAL_CACHE), localCache);
             startActivity(quizIntent);
         }
     }
@@ -129,7 +132,7 @@ public class QuizFragment extends Fragment {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 
         Button quizStartButton = view.findViewById(R.id.quiz_fragment_go_to_quiz_button);
-        quizStartButton.setOnClickListener(v -> setupQuiz(default_url));
+        quizStartButton.setOnClickListener(v -> setupQuiz(default_url, ""));
 
         currClass = new Classes(sp.getString(getString(R.string.CURR_CLASS), ""));
         TextView textView = view.findViewById(R.id.quiz_page_class_info_text);
@@ -345,7 +348,8 @@ public class QuizFragment extends Fragment {
             moduleName.setText(qm.getModuleName());
 
             Button quizButton = layout.findViewById(R.id.go_to_quiz);
-            quizButton.setOnClickListener(v -> setupQuiz(qm.getQuizLink()));
+            String localCacheModuleName = getString(R.string.QUIZ) + "_" + qm.getModuleName();
+            quizButton.setOnClickListener(v -> setupQuiz(qm.getQuizLink(), localCacheModuleName));
 
             Button notesButton = layout.findViewById(R.id.notes_button);
             notesButton.setOnClickListener(v -> setupNotes(qm.getNotesLink()));

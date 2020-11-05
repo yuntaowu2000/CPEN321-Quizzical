@@ -48,6 +48,8 @@
     <string name="QUIZ_URL" translatable="false">QUIZ_URL</string>
     <string name="CREATE_QUIZ" translatable="false">create_quiz</string>
 
+    <string name="LOCAL_CACHE" translatable="false">LOCAL_CACHE</string>
+
     <string name="COURSE_CATEGORY" translatable="false">course_category</string>
 
     <string name="MATH">Math</string>

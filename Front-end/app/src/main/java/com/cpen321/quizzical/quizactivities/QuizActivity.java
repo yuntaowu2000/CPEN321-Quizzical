@@ -56,7 +56,6 @@ public class QuizActivity extends AppCompatActivity {
     private ImageView currQuestionPic;
     private TextView questionInfoText;
     private int questionNumber;
-    private int totalPageNum;
     private List<IQuestion> questions;
     private int correctNumber;
     private ArrayList<Integer> wrongQuestionIds;
@@ -69,8 +68,10 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
 
         String quizUrl = "";
+        String localCache = "";
         if (getIntent() != null && getIntent().getExtras() != null) {
             quizUrl = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.QUIZ_URL));
+            localCache = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.LOCAL_CACHE));
         }
 
         this.questionNumber = 0;
@@ -85,9 +86,9 @@ public class QuizActivity extends AppCompatActivity {
                 new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
 
         if (this.questionNumber == 0) {
-            setUp(quizUrl);
+            setUp(quizUrl, localCache);
             while (questions == null || questions.size() == 0) {
-                setUp(quizUrl);
+                setUp(quizUrl, localCache);
             }
 
         }
@@ -98,7 +99,7 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    private void setUp(String quizUrl) {
+    private void setUp(String quizUrl, String localCache) {
         questions = new ArrayList<>();
 
         String quizJson = "";
@@ -110,16 +111,18 @@ public class QuizActivity extends AppCompatActivity {
         questions = quizPackage.getQuestionList();
 
         if (questions.size() == 0) {
-            TestQuestionPackage testPackage = new TestQuestionPackage();
-            questions = testPackage.getPackage().getQuestionsByCategory(CourseCategory.Math, totalQuestionNum);
-            quizId = testPackage.getPackage().getId();
-            Log.d("Json_version", testPackage.getPackage().toJson());
-        } else {
-            quizId = quizPackage.getId();
-            totalQuestionNum = questions.size();
+            quizPackage = new QuizPackage(localCache);
+            questions = quizPackage.getQuestionList();
         }
 
-        totalPageNum = questions.size();
+        if (questions.size() == 0) {
+            TestQuestionPackage testPackage = new TestQuestionPackage();
+            quizPackage = testPackage.getPackage();
+            questions = quizPackage.getQuestionList();
+        }
+
+        quizId = quizPackage.getId();
+        totalQuestionNum = questions.size();
 
         correctNumber = 0;
         wrongQuestionIds = new ArrayList<>(0);
@@ -292,7 +295,7 @@ public class QuizActivity extends AppCompatActivity {
         if (!checkAnswer())
             return;
 
-        if (this.questionNumber < totalPageNum - 1) {
+        if (this.questionNumber < totalQuestionNum - 1) {
             submitButton.setText(R.string.UI_next);
             submitButton.setOnClickListener(view -> onNextClicked());
         } else {

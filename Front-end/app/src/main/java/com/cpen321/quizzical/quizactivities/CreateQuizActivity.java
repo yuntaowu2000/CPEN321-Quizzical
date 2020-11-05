@@ -261,6 +261,9 @@ public class CreateQuizActivity extends AppCompatActivity {
         QuizPackage quizPackage = new QuizPackage(classCode, category, instructorUID, currModule, questionList);
         String quizPackJson = quizPackage.toJson();
 
+        String localCacheName = getString(R.string.QUIZ) + "_" + currModule;
+        sp.edit().putString(localCacheName, quizPackJson).apply();
+
         new Thread(() -> {
             //TODO: probably needs to get all quiz related info here
             OtherUtils.uploadToServer(instructorUID, getString(R.string.CREATE_QUIZ), quizPackJson);

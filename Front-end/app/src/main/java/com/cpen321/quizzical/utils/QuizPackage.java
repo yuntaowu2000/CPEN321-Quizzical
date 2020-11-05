@@ -1,9 +1,15 @@
 package com.cpen321.quizzical.utils;
 
+import android.util.Log;
+
 import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.data.questions.IQuestion;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,18 +43,39 @@ public class QuizPackage {
 
     public QuizPackage(String quizJson) {
         try {
-            Gson g = new Gson();
-            QuizPackage q = g.fromJson(quizJson, QuizPackage.class);
-            this.id = q.id;
-            this.class_code = q.class_code;
-            this.courseCategory = q.courseCategory;
-            this.instructorUID = q.instructorUID;
-            this.moduleName = q.moduleName;
-            this.questionList = q.questionList;
+            Gson g = new GsonBuilder().registerTypeAdapter(IQuestion.class, new InterfaceAdapter()).create();
+            JSONObject jsonObject = new JSONObject(quizJson);
+            this.id = jsonObject.getInt("id");
+            this.class_code = jsonObject.getInt("class_code");
+            this.courseCategory = getCourseCategoryByString(jsonObject.getString("courseCategory"));
+            this.instructorUID = jsonObject.getString("instructorUID");
+            this.moduleName = jsonObject.getString("moduleName");
+
+            this.questionList = new ArrayList<>();
+            JSONArray ql = jsonObject.getJSONArray("questionList");
+            for (int i = 0; i < ql.length(); i++) {
+                String questionJson = ql.get(i).toString();
+                IQuestion q = g.fromJson(questionJson, IQuestion.class);
+                questionList.add(q);
+            }
         } catch (Exception e) {
+            Log.d("quiz_package", "parsing failed, "+ e.getMessage());
             this.id = 0;
             this.class_code = 0;
             this.questionList = new ArrayList<>();
+        }
+    }
+
+    private CourseCategory getCourseCategoryByString(String category) {
+        switch (category) {
+            case "Math":
+                return CourseCategory.Math;
+            case "English":
+                return CourseCategory.English;
+            case "QuantumPhysic":
+                return CourseCategory.QuantumPhysic;
+            default:
+                return CourseCategory.DontCare;
         }
     }
 
