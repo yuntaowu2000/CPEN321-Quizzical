@@ -93,7 +93,13 @@ router.post("/", (req, res, next) => {
   } else if (req.body.type === "class_list") {
   } else if (req.body.type === "create_class") {
   } else if (req.body.type === "create_quiz") {
-    db.collection("quizzes").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
+    db.collection("quizzes").updateOne({uid: req.body.uid, moduleName: req.body.moduleName, class_code: req.body.class_code}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  } else if (req.body.type === "EXP") {
+    db.collection("user info").updateOne({uid: req.body.uid}, {$set: {username: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
       }
