@@ -31,7 +31,7 @@ public class QuizPackageTest {
         QuizPackage quizPackage = new QuizPackage(12, 0);
 
         assertEquals(0, quizPackage.getQuestionList().size());
-        assertEquals(12, quizPackage.getId());
+        assertEquals(12, quizPackage.getQuizCode());
     }
 
     @Test

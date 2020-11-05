@@ -56,6 +56,7 @@ public class CreateQuizActivity extends AppCompatActivity {
     private List<List<ImageView>> choicesPicPreview;
 
     private String currModule;
+    private int quiz_code;
     private Classes currClass;
     private List<IQuestion> questionList;
     private List<Bitmap> prevUsedImageList;
@@ -105,6 +106,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         moduleList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 int selectedPosition = moduleList.getSelectedItemPosition();
+                quiz_code = selectedPosition;
                 currModule = moduleNames[selectedPosition];
                 Toast.makeText(getBaseContext(), currModule, Toast.LENGTH_LONG).show();
             }
@@ -308,6 +310,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         formatImages();
 
         QuizPackage quizPackage = new QuizPackage(classCode, category, instructorUID, currModule, questionList);
+        quizPackage.setQuizCode(quiz_code);
         String quizPackJson = quizPackage.toJson();
 
         String localCacheName = getString(R.string.QUIZ) + "_" + currModule;

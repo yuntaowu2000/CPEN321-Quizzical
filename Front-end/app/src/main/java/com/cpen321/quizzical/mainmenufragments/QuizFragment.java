@@ -69,7 +69,7 @@ public class QuizFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout quizLinearLayout;
 
-    private String default_url = "http://module-6-ihsan-webapp-test.azurewebsites.net/quiz?class_code=0&quiz_code=0";
+    private String default_url = "http://quizzical.canadacentral.cloudapp.azure.com/quiz?class_code=0&quiz_code=0";
     private Classes currClass;
     private ArrayList<QuizModules> modulesList;
     private ArrayList<View> moduleViewList;
@@ -474,6 +474,9 @@ public class QuizFragment extends Fragment {
             if (OtherUtils.checkUserName(newModuleName)) {
                 QuizModules qm = new QuizModules(newModuleName, currClass.getClassCode(), currClass.getCategory());
                 modulesList.add(qm);
+                int quiz_code = modulesList.size() - 1;
+                String quiz_link = getString(R.string.GET_URL) + "quiz?class_code=" + currClass.getClassCode() + "&quiz_code=" + quiz_code;
+                qm.setQuizLink(quiz_link);
                 String moduleList = parseModuleListToString();
                 String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
                 sp.edit().putString(moduleId, moduleList).apply();

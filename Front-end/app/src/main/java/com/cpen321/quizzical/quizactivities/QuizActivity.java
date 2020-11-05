@@ -120,7 +120,7 @@ public class QuizActivity extends AppCompatActivity {
             questions = quizPackage.getQuestionList();
         }
 
-        quizId = quizPackage.getId();
+        quizId = quizPackage.getQuizCode();
         totalQuestionNum = questions.size();
 
         correctNumber = 0;
@@ -217,9 +217,13 @@ public class QuizActivity extends AppCompatActivity {
     private void setUpQuestionPicture(QuestionsMC q) {
 
         Bitmap pic = OtherUtils.getBitmapFromUrl(q.getPicSrc());
+        if (pic == null) {
+            pic = OtherUtils.decodeImage(q.getPicSrc());
+        }
+        Bitmap finalPic = pic;
         runOnUiThread(() -> {
             questionInfoText = new TextView(this);
-            if (pic == null) {
+            if (finalPic == null) {
                 questionInfoText.setText(R.string.UI_error_loading_pic_msg);
                 questionStack.addView(questionInfoText);
             } else {
@@ -231,7 +235,7 @@ public class QuizActivity extends AppCompatActivity {
                 layoutParams.setMargins(0, 30, 0, 0);
                 imageView.setLayoutParams(layoutParams);
 
-                imageView.setImageBitmap(pic);
+                imageView.setImageBitmap(finalPic);
                 questionStack.addView(imageView);
                 currQuestionPic = imageView;
             }
@@ -252,6 +256,9 @@ public class QuizActivity extends AppCompatActivity {
             new Thread(() ->
             {
                 Bitmap image = OtherUtils.getBitmapFromUrl(choicePair.getStr());
+                if (image == null) {
+                    image = OtherUtils.decodeImage(choicePair.getStr());
+                }
                 assert image != null;
                 Bitmap finalImage = Bitmap.createScaledBitmap(image, 400, 200, true);
                 runOnUiThread(() -> imageButton.setImageBitmap(finalImage));

@@ -153,7 +153,7 @@ public class OtherUtils {
             InputStream input = connection.getInputStream();
             return BitmapFactory.decodeStream(input);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d("get_bitmap_err", e.getMessage() + "");
             return null;
         }
     }

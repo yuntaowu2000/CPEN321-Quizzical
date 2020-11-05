@@ -25,7 +25,7 @@ public class QuizPackage {
      * When a student/instructor do a quiz, GetQuestions will be called
      */
 
-    private int id;
+    private int quizCode;
     private int class_code;
     private CourseCategory courseCategory;
     private String instructorUID;
@@ -33,7 +33,7 @@ public class QuizPackage {
     private List<IQuestion> questionList;
 
     public QuizPackage() {
-        this.id = 0;
+        this.quizCode = 0;
         this.class_code = 0;
         this.courseCategory = CourseCategory.DontCare;
         this.instructorUID = "";
@@ -45,7 +45,7 @@ public class QuizPackage {
         try {
             Gson g = new GsonBuilder().registerTypeAdapter(IQuestion.class, new InterfaceAdapter()).create();
             JSONObject jsonObject = new JSONObject(quizJson);
-            this.id = jsonObject.getInt("id");
+            this.quizCode = jsonObject.getInt("quizCode");
             this.class_code = jsonObject.getInt("class_code");
             this.courseCategory = getCourseCategoryByString(jsonObject.getString("courseCategory"));
             this.instructorUID = jsonObject.getString("instructorUID");
@@ -60,7 +60,7 @@ public class QuizPackage {
             }
         } catch (Exception e) {
             Log.d("quiz_package", "parsing failed, "+ e.getMessage());
-            this.id = 0;
+            this.quizCode = 0;
             this.class_code = 0;
             this.questionList = new ArrayList<>();
         }
@@ -79,8 +79,8 @@ public class QuizPackage {
         }
     }
 
-    public QuizPackage(int id, int class_code) {
-        this.id = id;
+    public QuizPackage(int quizCode, int class_code) {
+        this.quizCode = quizCode;
         this.class_code = class_code;
         this.moduleName = "";
         this.instructorUID = "";
@@ -88,7 +88,7 @@ public class QuizPackage {
     }
 
     public QuizPackage(int class_code, CourseCategory courseCategory, String instructorUID, String moduleName, List<IQuestion> questions) {
-        this.id = 0;
+        this.quizCode = 0;
         this.class_code = class_code;
         this.courseCategory = courseCategory;
         this.instructorUID = instructorUID;
@@ -96,8 +96,12 @@ public class QuizPackage {
         this.questionList = questions;
     }
 
-    public int getId() {
-        return this.id;
+    public void setQuizCode(int quizCode) {
+        this.quizCode = quizCode;
+    }
+
+    public int getQuizCode() {
+        return this.quizCode;
     }
 
     public List<IQuestion> getQuestionList() {
