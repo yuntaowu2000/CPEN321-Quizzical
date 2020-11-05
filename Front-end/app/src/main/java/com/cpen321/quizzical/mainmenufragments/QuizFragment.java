@@ -85,14 +85,15 @@ public class QuizFragment extends Fragment {
         assert thisContext != null;
 
         String localCache = sp.getString(localCacheModuleName, "");
+        String quizContent = OtherUtils.readFromURL(quizUrl);
 
-        if (OtherUtils.stringIsNullOrEmpty(quizUrl) && OtherUtils.stringIsNullOrEmpty(localCache)) {
+        if (OtherUtils.stringIsNullOrEmpty(quizContent) && OtherUtils.stringIsNullOrEmpty(localCache)) {
             new AlertDialog.Builder(thisContext).setMessage("Not available.")
                     .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
                     .show();
         } else {
             Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
-            quizIntent.putExtra(getString(R.string.QUIZ_URL), quizUrl);
+            quizIntent.putExtra(getString(R.string.QUIZ_CONTENT), quizContent);
             quizIntent.putExtra(getString(R.string.LOCAL_CACHE), localCache);
             startActivity(quizIntent);
         }
@@ -374,8 +375,25 @@ public class QuizFragment extends Fragment {
             wrongQuestionButton.setOnClickListener(v -> setupWrongQuestions(qm.getWrongQuestionLink()));
 
             ImageButton deleteButton = layout.findViewById(R.id.delete_module_button);
-            deleteButton.setOnClickListener(v -> deleteModule(qm));
+            deleteButton.setOnClickListener(v -> promptForDeletingModule(qm));
         }
+    }
+
+    private void promptForDeletingModule(QuizModules qm) {
+        Context thisContext = this.getContext();
+        if (thisContext == null) {
+            return;
+        }
+        String formattedString = String.format(getString(R.string.UI_check_delete_module), qm.getModuleName());
+        new AlertDialog.Builder(thisContext).setTitle(R.string.UI_warning)
+                .setMessage(formattedString)
+                .setPositiveButton(R.string.YES, ((dialogInterface, i) -> {
+                    deleteModule(qm);
+                    dialogInterface.dismiss();
+                }))
+                .setNegativeButton(R.string.NO, ((dialogInterface, i) -> dialogInterface.dismiss()))
+                .show();
+
     }
 
     private void deleteModule(QuizModules qm) {

@@ -69,7 +69,7 @@ public class QuizActivity extends AppCompatActivity {
         String quizUrl = "";
         String localCache = "";
         if (getIntent() != null && getIntent().getExtras() != null) {
-            quizUrl = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.QUIZ_URL));
+            quizUrl = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.QUIZ_CONTENT));
             localCache = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.LOCAL_CACHE));
         }
 
@@ -98,15 +98,10 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    private void setUp(String quizUrl, String localCache) {
+    private void setUp(String quizConent, String localCache) {
         questions = new ArrayList<>();
 
-        String quizJson = "";
-        if (!OtherUtils.stringIsNullOrEmpty(quizUrl)) {
-            quizJson = OtherUtils.readFromURL(quizUrl);
-        }
-
-        QuizPackage quizPackage = new QuizPackage(quizJson);
+        QuizPackage quizPackage = new QuizPackage(quizConent);
         questions = quizPackage.getQuestionList();
 
         if (questions.size() == 0) {

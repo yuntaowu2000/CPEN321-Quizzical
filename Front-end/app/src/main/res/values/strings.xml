@@ -81,7 +81,7 @@
     <!--    for integrating Google login API-->
     <!--    andrew: <614503168151-hvg3r35tmfsqldrd32h25a9kb9inmvdv.apps.googleusercontent.com>-->
     <!--    <3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com<>-->
-    <string name="client_id" translatable="false">614503168151-hvg3r35tmfsqldrd32h25a9kb9inmvdv.apps.googleusercontent.com</string>
+    <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
 
     <!--    used for debugging page, can be deleted later-->
     <string name="test">Test</string>
@@ -141,6 +141,7 @@
     <string name="UI_create_new_module">Create new module</string>
     <string name="UI_enter_module_name">Please enter module name</string>
     <string name="UI_example_module_name" translatable="false">E.g module 1</string>
+    <string name="UI_check_delete_module">Are you sure you want to delete module: %s?</string>
     <string name="UI_invalid_module_name">Invalid module name</string>
 
     <string name="AVERAGE" translatable="false">Average</string>
