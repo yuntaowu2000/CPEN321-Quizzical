@@ -76,7 +76,8 @@ public class CreateQuizActivity extends AppCompatActivity {
         String moduleListString = sp.getString(moduleId, "");
 
         if (OtherUtils.stringIsNullOrEmpty(moduleListString)) {
-            Log.d("failed", "modulelist is none");
+            //this should never happen
+            Log.d("failed", "module list is none");
         }
 
         try {
@@ -108,10 +109,11 @@ public class CreateQuizActivity extends AppCompatActivity {
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
+                /*not used*/
             }
         });
 
-        ImageButton addQuestionButton = findViewById(R.id.add_question_button);
+        Button addQuestionButton = findViewById(R.id.add_question_button);
         addQuestionButton.setOnClickListener(v -> addNewQuestion());
 
         questionList = new ArrayList<>();
@@ -129,7 +131,7 @@ public class CreateQuizActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        // check if the request code is same as what is passed  here it is 2
+
         if(requestCode == QUESTION_PICTURE_CAPTURE_CODE)
         {
             Bitmap orignalPic = (Bitmap) Objects.requireNonNull(data.getExtras()).get(getString(R.string.ORIGINAL_IMG));
@@ -149,6 +151,16 @@ public class CreateQuizActivity extends AppCompatActivity {
     }
 
     private void addNewQuestion() {
+
+        int MAX_QUESTION_NUM = 20;
+        if (questionList.size() >= MAX_QUESTION_NUM) {
+            new AlertDialog.Builder(this).setTitle(R.string.UI_warning)
+                    .setMessage(String.format(getString(R.string.UI_too_many_questions), MAX_QUESTION_NUM))
+                    .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
+                    .show();
+            return;
+        }
+
         View newQuestionView = getLayoutInflater().inflate(R.layout.create_quiz_question_layout, questionCreateLayout, false);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(10, 10, 10, 10);
@@ -158,10 +170,14 @@ public class CreateQuizActivity extends AppCompatActivity {
         q.setCorrectAnsNum(-1);
 
         questionList.add(q);
-        imageList.add(null); //make sure they are aligned
+        imageList.add(null); //make sure all the lists are aligned
         choicesImageList.add(new ArrayList<>());
         choicesPicPreview.add(new ArrayList<>());
         correctAnsCheckBoxes.add(new ArrayList<>());
+
+        TextView questionNumberText = newQuestionView.findViewById(R.id.question_number);
+        String questionNumber = getString(R.string.QUESTION) + " " + questionList.size();
+        questionNumberText.setText(questionNumber);
 
         ImageView preview = newQuestionView.findViewById(R.id.pic_preview);
         picPreview.add(preview);
@@ -172,7 +188,23 @@ public class CreateQuizActivity extends AppCompatActivity {
         questionCreateLayout.addView(newQuestionView, childCount - 1, params);
 
         EditText questionInput = newQuestionView.findViewById(R.id.question_input);
-        questionInput.setOnClickListener(v -> q.setQuestion(questionInput.getText().toString()));
+        questionInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        questionInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                /*not used*/
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                /*not used*/
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                q.setQuestion(editable.toString());
+            }
+        });
 
         CheckBox questionHasPic = newQuestionView.findViewById(R.id.question_has_pic);
         questionHasPic.setOnClickListener(v -> q.setHasPic(questionHasPic.isChecked()));
@@ -218,10 +250,7 @@ public class CreateQuizActivity extends AppCompatActivity {
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.UI_warning))
                         .setMessage(String.format(getString(R.string.UI_no_correct_answer), i))
-                        .setPositiveButton(R.string.OK, ((dialogInterface, j) -> {
-                            dialogInterface.dismiss();
-                            finish();
-                        }))
+                        .setPositiveButton(R.string.OK, ((dialogInterface, j) -> dialogInterface.dismiss()))
                         .show();
                 return;
             }
@@ -233,6 +262,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         String quizPackJson = quizPackage.toJson();
 
         new Thread(() -> {
+            //TODO: probably needs to get all quiz related info here
             OtherUtils.uploadToServer(instructorUID, getString(R.string.CREATE_QUIZ), quizPackJson);
         }).start();
         Log.d("Quiz_create", quizPackJson);
@@ -249,6 +279,15 @@ public class CreateQuizActivity extends AppCompatActivity {
     private void addNewAnswer(LinearLayout answersLayout, int questionNum) {
 
         int choiceNum = choicesImageList.get(questionNum).size();
+
+        int MAX_CHOICE_NUM = 6;
+        if (choiceNum >= MAX_CHOICE_NUM) {
+            new AlertDialog.Builder(this).setTitle(R.string.UI_warning)
+                    .setMessage(String.format(getString(R.string.UI_too_many_choices), MAX_CHOICE_NUM))
+                    .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
+                    .show();
+            return;
+        }
 
         ImageView choicePicPreview = new ImageView(this);
         choicesPicPreview.get(questionNum).add(choicePicPreview);
@@ -363,7 +402,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         LinearLayout layout = new LinearLayout(this);
 
         final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(10, 5, 10, 5);
+        layoutParams.setMargins(20, 5, 20, 5);
         layout.setLayoutParams(layoutParams);
         layout.setOrientation(LinearLayout.HORIZONTAL);
 

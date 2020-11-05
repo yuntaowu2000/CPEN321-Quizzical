@@ -17,7 +17,7 @@
             tools:visibility="visible">
 
             <TextView
-                android:id="@+id/textView"
+                    android:id="@+id/question_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:width="100dp"
@@ -32,7 +32,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="text" />
+                android:hint="@string/UI_example_question" />
         </LinearLayout>
 
         <LinearLayout
@@ -46,7 +46,7 @@
                 android:id="@+id/question_has_pic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="is pic" />
+                android:text="@string/UI_has_pic" />
 
             <ImageButton
                 android:id="@+id/take_picture_button"

@@ -107,4 +107,8 @@
     <string name="UI_create_quiz_success_msg">你成功创建了一个测试。</string>
     <string name="UI_enter_answer">请输入答案</string>
     <string name="UI_picture">图片</string>
+    <string name="UI_has_pic">题目图片</string>
+    <string name="UI_too_many_choices">选项过多。最多支持%d个选项。</string>
+    <string name="UI_add_question">" 添加问题"</string>
+    <string name="UI_too_many_questions">题目过多。最多支持%d个选项。</string>
 </resources>

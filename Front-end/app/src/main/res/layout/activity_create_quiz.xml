@@ -39,14 +39,13 @@
                     tools:layout_conversion_absoluteWidth="48dp" />
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/add_question_button"
-                android:layout_gravity="center"
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_baseline_add_24"
-                tools:layout_conversion_absoluteHeight="0dp"
-                tools:layout_conversion_absoluteWidth="24dp" />
+                android:layout_gravity="center"
+                android:id="@+id/add_question_button"
+                android:textAllCaps="false"
+                android:text="@string/UI_add_question" />
         </LinearLayout>
     </ScrollView>
 
