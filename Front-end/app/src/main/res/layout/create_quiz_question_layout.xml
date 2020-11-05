@@ -27,15 +27,16 @@
 
             <EditText
                 android:id="@+id/question_input"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:hint="@string/UI_example_question" />
+                android:hint="@string/UI_example_question"
+                android:autofillHints="" />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/take_picture_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,17 +47,31 @@
                 android:id="@+id/question_has_pic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/UI_has_pic" />
+                android:text="@string/UI_has_pic"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="10dp"/>
 
             <ImageButton
                 android:id="@+id/take_picture_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/ic_menu_camera"
-                tools:layout_conversion_absoluteHeight="0dp"
-                tools:layout_conversion_absoluteWidth="24dp" />
+                android:contentDescription="@string/UI_picture"
+                android:layout_centerInParent="true" />
 
-        </LinearLayout>
+            <ImageButton
+                android:contentDescription="@string/UI_delete"
+                android:id="@+id/delete_question_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                app:srcCompat="@drawable/ic_baseline_delete_24" />
+
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/pic_preview"
@@ -78,6 +93,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Create answer" />
+            android:text="@string/UI_create_answer" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

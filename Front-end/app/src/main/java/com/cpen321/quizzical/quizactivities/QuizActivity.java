@@ -19,7 +19,6 @@ import androidx.core.app.ActivityCompat;
 
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.data.Classes;
-import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.data.questions.IQuestion;
 import com.cpen321.quizzical.data.questions.QuestionType;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
@@ -164,7 +163,8 @@ public class QuizActivity extends AppCompatActivity {
             MathView view = new MathView(this);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             view.setLayoutParams(layoutParams);
-            view.setDisplayText(question.getQuestion());
+            String formattedString = String.format(getString(R.string.mid_align_format), question.getQuestion());
+            view.setDisplayText(formattedString);
             questionStack.addView(view);
             currQuestion = view;
         }
@@ -264,7 +264,9 @@ public class QuizActivity extends AppCompatActivity {
 
             MathView mathButton = new MathView(this);
 
-            mathButton.setDisplayText(choicePair.getStr());
+            String formattedChoice = String.format(getString(R.string.mid_align_format), choicePair.getStr());
+
+            mathButton.setDisplayText(formattedChoice);
 
             mathButton.setViewBackgroundColor(Color.WHITE);
             mathButton.setLayoutParams(layoutParams);

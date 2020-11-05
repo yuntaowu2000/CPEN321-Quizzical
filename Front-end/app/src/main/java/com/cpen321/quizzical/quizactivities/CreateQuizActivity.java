@@ -58,6 +58,7 @@ public class CreateQuizActivity extends AppCompatActivity {
     private String currModule;
     private Classes currClass;
     private List<IQuestion> questionList;
+    private List<Bitmap> prevUsedImageList;
     private List<Bitmap> imageList;
     private List<List<Bitmap>> choicesImageList;
     private List<List<CheckBox>> correctAnsCheckBoxes;
@@ -122,6 +123,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         choicesPicPreview = new ArrayList<>();
         choicesImageList = new ArrayList<>();
         correctAnsCheckBoxes = new ArrayList<>();
+        prevUsedImageList = new ArrayList<>();
 
         Button finishButton = findViewById(R.id.quiz_create_finish);
         finishButton.setOnClickListener(v -> onFinishClicked());
@@ -138,13 +140,16 @@ public class CreateQuizActivity extends AppCompatActivity {
             Bitmap pic = (Bitmap) data.getExtras().get(getString(R.string.MODIFIED_IMG));
             int questionNum = data.getIntExtra(getString(R.string.QUESTION_NUM), 0);
 
-            imageList.set(questionNum, orignalPic);
+            prevUsedImageList.set(questionNum, orignalPic);
+            imageList.set(questionNum, pic);
             picPreview.get(questionNum).setImageBitmap(pic);
         } else if (requestCode == CHOICE_PICTURE_CAPTURE_CODE) {
+            Bitmap originalPic = (Bitmap) Objects.requireNonNull(data.getExtras()).get(getString(R.string.ORIGINAL_IMG));
             Bitmap pic = (Bitmap) Objects.requireNonNull(data.getExtras()).get(getString(R.string.MODIFIED_IMG));
             int questionNum = data.getIntExtra(getString(R.string.QUESTION_NUM), 0);
             int choiceNum = data.getIntExtra(getString(R.string.CHOICE_NUM), 0);
 
+            prevUsedImageList.set(questionNum, originalPic);
             choicesImageList.get(questionNum).set(choiceNum, pic);
             choicesPicPreview.get(questionNum).get(choiceNum).setImageBitmap(pic);
         }
@@ -171,6 +176,7 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         questionList.add(q);
         imageList.add(null); //make sure all the lists are aligned
+        prevUsedImageList.add(null);
         choicesImageList.add(new ArrayList<>());
         choicesPicPreview.add(new ArrayList<>());
         correctAnsCheckBoxes.add(new ArrayList<>());
@@ -181,8 +187,6 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         ImageView preview = newQuestionView.findViewById(R.id.pic_preview);
         picPreview.add(preview);
-
-        int curr_question_num = questionList.size() - 1;
 
         int childCount = questionCreateLayout.getChildCount();
         questionCreateLayout.addView(newQuestionView, childCount - 1, params);
@@ -211,9 +215,10 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         ImageButton takePictureButton = newQuestionView.findViewById(R.id.take_picture_button);
         takePictureButton.setOnClickListener(v -> {
+            int updated_curr_question_num = findQuestionPosition(q);
             Intent takePictureIntent = new Intent(this, PictureActivity.class);
-            takePictureIntent.putExtra(getString(R.string.QUESTION_NUM), curr_question_num);
-            takePictureIntent.putExtra(getString(R.string.ORIGINAL_IMG), imageList.get(curr_question_num));
+            takePictureIntent.putExtra(getString(R.string.QUESTION_NUM), updated_curr_question_num);
+            takePictureIntent.putExtra(getString(R.string.ORIGINAL_IMG), prevUsedImageList.get(updated_curr_question_num));
             takePictureIntent.putExtra(getString(R.string.REQUEST_CODE), QUESTION_PICTURE_CAPTURE_CODE);
             startActivityForResult(takePictureIntent, QUESTION_PICTURE_CAPTURE_CODE);
         });
@@ -221,7 +226,21 @@ public class CreateQuizActivity extends AppCompatActivity {
         LinearLayout answersLayout = newQuestionView.findViewById(R.id.answers_layout);
 
         Button answerInputButton = newQuestionView.findViewById(R.id.answer_input_button);
-        answerInputButton.setOnClickListener(v -> addNewAnswer(answersLayout, curr_question_num));
+        answerInputButton.setOnClickListener(v -> addNewAnswer(answersLayout, q));
+
+        ImageButton deleteButton = newQuestionView.findViewById(R.id.delete_question_button);
+        deleteButton.setOnClickListener(v -> deleteQuestion(q));
+
+    }
+
+    private int findQuestionPosition (IQuestion q) {
+        int pos;
+        for (pos = 0; pos < questionList.size(); pos++) {
+            if (q.equals(questionList.get(pos))) {
+                break;
+            }
+        }
+        return pos;
     }
 
     private void formatImages() {
@@ -238,22 +257,52 @@ public class CreateQuizActivity extends AppCompatActivity {
         }
     }
 
-    private void onFinishClicked() {
-        int classCode = currClass.getClassCode();
-        CourseCategory category = currClass.getCategory();
-        String instructorUID = sp.getString(getString(R.string.UID), "");
-
+    private boolean checkQuestionsValid() {
         for (int i = 0; i < questionList.size(); i++) {
             QuestionsMC mc = (QuestionsMC)questionList.get(i);
 
+            //check if the question field is valid
+            if (OtherUtils.stringIsNullOrEmpty(mc.getQuestion()) && OtherUtils.stringIsNullOrEmpty(mc.getPicSrc())) {
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.UI_warning))
+                        .setMessage(String.format(getString(R.string.UI_no_question), i))
+                        .setPositiveButton(R.string.OK, ((dialogInterface, j) -> dialogInterface.dismiss()))
+                        .show();
+                return false;
+            }
+
+            //check if the choice field is valid
+            if (mc.getChoices().size() < 2) {
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.UI_warning))
+                        .setMessage(String.format(getString(R.string.UI_too_few_choices), i))
+                        .setPositiveButton(R.string.OK, ((dialogInterface, j) -> dialogInterface.dismiss()))
+                        .show();
+                return false;
+            }
+
+            //check if the correct answer is given
             if (mc.getCorrectAnsNum() == -1) {
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.UI_warning))
                         .setMessage(String.format(getString(R.string.UI_no_correct_answer), i))
                         .setPositiveButton(R.string.OK, ((dialogInterface, j) -> dialogInterface.dismiss()))
                         .show();
-                return;
+                return false;
             }
+        }
+
+        //every question is valid
+        return true;
+    }
+
+    private void onFinishClicked() {
+        int classCode = currClass.getClassCode();
+        CourseCategory category = currClass.getCategory();
+        String instructorUID = sp.getString(getString(R.string.UID), "");
+
+        if (!checkQuestionsValid()) {
+            return;
         }
 
         formatImages();
@@ -279,7 +328,9 @@ public class CreateQuizActivity extends AppCompatActivity {
 
     }
 
-    private void addNewAnswer(LinearLayout answersLayout, int questionNum) {
+    private void addNewAnswer(LinearLayout answersLayout, IQuestion q) {
+
+        int questionNum = findQuestionPosition(q);
 
         int choiceNum = choicesImageList.get(questionNum).size();
 
@@ -332,27 +383,15 @@ public class CreateQuizActivity extends AppCompatActivity {
             }
         });
 
-        Bitmap imageToPassIn = imageList.get(questionNum);
-        if (imageToPassIn == null) {
-            List<Bitmap> choicesImages = choicesImageList.get(questionNum);
-            for (Bitmap b : choicesImages) {
-                if (b != null) {
-                    imageToPassIn = b;
-                    break;
-                }
-            }
-        }
-
-        final Bitmap finalImageToPassIn = imageToPassIn;
-
         ImageButton answerPic = new ImageButton(this);
         answerPic.setImageResource(android.R.drawable.ic_menu_camera);
         answerPic.setVisibility(View.GONE);
         answerPic.setOnClickListener(v -> {
+            int updated_question_num = findQuestionPosition(q);
             Intent takePictureIntent = new Intent(this, PictureActivity.class);
-            takePictureIntent.putExtra(getString(R.string.QUESTION_NUM), questionNum);
+            takePictureIntent.putExtra(getString(R.string.QUESTION_NUM), updated_question_num);
             takePictureIntent.putExtra(getString(R.string.CHOICE_NUM), choiceNum);
-            takePictureIntent.putExtra(getString(R.string.ORIGINAL_IMG), finalImageToPassIn);
+            takePictureIntent.putExtra(getString(R.string.ORIGINAL_IMG), prevUsedImageList.get(updated_question_num));
             takePictureIntent.putExtra(getString(R.string.REQUEST_CODE), CHOICE_PICTURE_CAPTURE_CODE);
             startActivityForResult(takePictureIntent, CHOICE_PICTURE_CAPTURE_CODE);
         });
@@ -380,14 +419,16 @@ public class CreateQuizActivity extends AppCompatActivity {
         alertDialog.show();
 
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
-                generateAnswerRow(answersLayout, questionNum, isPic[0], ans[0], choicesImageList.get(questionNum).get(choiceNum));
+                int updated_question_num = findQuestionPosition(q);
+                generateAnswerRow(answersLayout, q, isPic[0], ans[0], choicesImageList.get(updated_question_num).get(choiceNum));
                 alertDialog.dismiss();
         });
     }
 
-    private void generateAnswerRow(LinearLayout answersLayout, int curr_question_num, boolean isPic, String ans, Bitmap ansBitmap) {
+    private void generateAnswerRow(LinearLayout answersLayout, IQuestion q, boolean isPic, String ans, Bitmap ansBitmap) {
 
-        QuestionsMC currQuestion = (QuestionsMC)questionList.get(curr_question_num);
+        QuestionsMC currQuestion = (QuestionsMC)q;
+        int questionNum = findQuestionPosition(q);
 
         String choiceString = ans;
         if (isPic) {
@@ -412,7 +453,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         CheckBox isCorrectAnsCheck = new CheckBox(this);
         isCorrectAnsCheck.setText(R.string.UI_correct_answer);
         isCorrectAnsCheck.setLayoutParams(layoutParams);
-        List<CheckBox> currQuestionCheckBoxs = correctAnsCheckBoxes.get(curr_question_num);
+        List<CheckBox> currQuestionCheckBoxs = correctAnsCheckBoxes.get(questionNum);
         currQuestionCheckBoxs.add(isCorrectAnsCheck);
 
         isCorrectAnsCheck.setOnClickListener(v -> {
@@ -440,7 +481,10 @@ public class CreateQuizActivity extends AppCompatActivity {
         ImageButton deleteButton = new ImageButton(this);
         deleteButton.setBackgroundResource(R.drawable.ic_baseline_delete_24);
         deleteButton.setLayoutParams(layoutParams);
-        deleteButton.setOnClickListener(v -> deleteChoice(answersLayout, curr_question_num, choicePair));
+        deleteButton.setOnClickListener(v -> {
+            int curr_question_num = findQuestionPosition(q);
+            deleteChoice(answersLayout, curr_question_num, choicePair);
+        });
         layout.addView(deleteButton);
 
         scrollView.addView(layout);
@@ -461,6 +505,19 @@ public class CreateQuizActivity extends AppCompatActivity {
         if (q.getCorrectAnsNum() == choiceNum) {
             q.setCorrectAnsNum(0);
         }
+    }
+
+    private void deleteQuestion(IQuestion q) {
+        int questionPos = findQuestionPosition(q);
+        questionList.remove(q);
+        questionCreateLayout.removeViewAt(questionPos + 1);
+        picPreview.remove(questionPos);
+        prevUsedImageList.remove(questionPos);
+        imageList.remove(questionPos);
+        choicesImageList.remove(questionPos);
+        choicesPicPreview.remove(questionPos);
+        correctAnsCheckBoxes.remove(questionPos);
+
     }
 
 

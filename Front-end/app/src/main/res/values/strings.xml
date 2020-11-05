@@ -129,7 +129,6 @@
     <string name="UI_student_delete_course">Do you want to quit this course?</string>
 
     <!--    used in quiz fragment-->
-    <!--    need update later-->
     <string name="go_to_quiz">Go to Quiz</string>
     <string name="quiz_fragment_debug_text" translatable="false">This is the quiz page</string>
     <string name="teacher_quiz_fragment_debug_text" translatable="false">This is the quiz page for teachers</string>
@@ -150,6 +149,8 @@
 
     <string name="UI_create_module_notification">Please create a module before creating a quiz</string>
     <string name="UI_correct_answer">correct answer</string>
+    <string name="UI_no_question">Question %d has no question field.</string>
+    <string name="UI_too_few_choices">Question %d has less than 2 choices.</string>
     <string name="UI_no_correct_answer">Question %d is a multiple choice question, but has no correct answer.</string>
     <string name="UI_create_quiz_success_msg">Congratulations! You have just created a quiz.</string>
     <string name="UI_enter_answer">Enter answer</string>
@@ -161,12 +162,14 @@
     <string name="UI_add_question">Add question</string>
     <string name="UI_too_many_questions">Too many questions. Maximum of %d supported.</string>
 
+    <string name="UI_create_answer">Create answer</string>
+    <string name="UI_delete">delete</string>
+
+
     <!--    used in class statistic fragment (for teachers)-->
-    <!--    need update later-->
     <string name="class_statistic_page_text1" translatable="false">This is the class statistic page for teachers</string>
 
     <!--    used in leader board fragment (for students)-->
-    <!--    need update later-->
     <string name="leader_board_page_text1" translatable="false">This is the leaderBoard page</string>
     <string name="UI_teachers_leaderboard">Teacher\'s leaderboard</string>
     <string name="UI_leaderboard_number" translatable="false">#</string>
@@ -230,5 +233,9 @@
     <string name="UI_rotate">Rotate 90</string>
     <string name="MODIFIED_IMG" translatable="false">modified_image</string>
     <string name="ORIGINAL_IMG" translatable="false">original_image</string>
+
+
+    <!--    used for beautifying choices-->
+    <string name="mid_align_format" translatable="false"><![CDATA[<p align=\"middle\">%s</p>]]></string>
 
 </resources>
