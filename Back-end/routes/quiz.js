@@ -23,7 +23,7 @@ router.get("/", (req, res, next) => {
     if (err) {
       throw err;
     } else {
-      res.send(Object.values(data[0])[0]);
+      res.send(data);
     }
   });
 });
