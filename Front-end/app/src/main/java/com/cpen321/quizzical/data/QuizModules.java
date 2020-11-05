@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 public class QuizModules {
 
     private String moduleName;
+    private int id;
     private int classCode;
     private CourseCategory category;
     private String quizLink;
@@ -14,6 +15,7 @@ public class QuizModules {
     private String notesLink;
 
     public QuizModules (String moduleName, int classCode, CourseCategory category) {
+        this.id = 0;
         this.moduleName = moduleName;
         this.classCode = classCode;
         this.category = category;
@@ -25,6 +27,7 @@ public class QuizModules {
 
     public QuizModules (String jsonString) {
         if (OtherUtils.stringIsNullOrEmpty(jsonString)) {
+            this.id = 0;
             this.moduleName = "";
             this.classCode = 0;
             this.category = CourseCategory.DontCare;
@@ -42,6 +45,14 @@ public class QuizModules {
         this.wrongQuestionLink = q.wrongQuestionLink;
         this.statsLink = q.statsLink;
         this.notesLink = q.notesLink;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public void setQuizLink(String quizLink) {

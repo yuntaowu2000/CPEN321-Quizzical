@@ -18,6 +18,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -335,7 +336,19 @@ public class QuizFragment extends Fragment {
 
         moduleViewList = new ArrayList<>();
 
-        for (QuizModules qm : modulesList) {
+        for (int i = 0; i < modulesList.size(); i++) {
+            QuizModules qm = modulesList.get(i);
+            if (qm.getId() == 0) {
+                qm.setId(i);
+            }
+            if (OtherUtils.stringIsNullOrEmpty(qm.getQuizLink())) {
+                String quiz_link = getString(R.string.GET_URL) + "quiz?class_code=" + currClass.getClassCode() + "&quiz_code=" + i;
+                String wrong_question_link = quiz_link + "&type=wrong_question_list&uid=" + sp.getString(getString(R.string.UID), "");
+                String stats_link = quiz_link + "&type=stats&uid=" + sp.getString(getString(R.string.UID), "");
+                qm.setQuizLink(quiz_link);
+                qm.setWrongQuestionLink(wrong_question_link);
+                qm.setStatsLink(stats_link);
+            }
             View layout = getLayoutInflater().inflate(R.layout.quiz_module_layout, quizLinearLayout, false);
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -359,7 +372,24 @@ public class QuizFragment extends Fragment {
 
             Button wrongQuestionButton = layout.findViewById(R.id.wrong_question_button);
             wrongQuestionButton.setOnClickListener(v -> setupWrongQuestions(qm.getWrongQuestionLink()));
+
+            ImageButton deleteButton = layout.findViewById(R.id.delete_module_button);
+            deleteButton.setOnClickListener(v -> deleteModule(qm));
         }
+    }
+
+    private void deleteModule(QuizModules qm) {
+        modulesList.remove(qm);
+        String localCacheName = getString(R.string.QUIZ) + "_" + qm.getModuleName();
+        sp.edit().remove(localCacheName).apply();
+        setupQuizModule();
+        String newModuleList = parseModuleListToString();
+        String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
+        sp.edit().putString(moduleId, newModuleList).apply();
+        new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                getString(R.string.QUIZ_MODULES),
+                newModuleList
+                )).start();
     }
 
     private void updateQuizList() {
@@ -475,8 +505,13 @@ public class QuizFragment extends Fragment {
                 QuizModules qm = new QuizModules(newModuleName, currClass.getClassCode(), currClass.getCategory());
                 modulesList.add(qm);
                 int quiz_code = modulesList.size() - 1;
+                qm.setId(quiz_code);
                 String quiz_link = getString(R.string.GET_URL) + "quiz?class_code=" + currClass.getClassCode() + "&quiz_code=" + quiz_code;
+                String wrong_question_link = quiz_link + "&type=wrong_question_list&uid=" + sp.getString(getString(R.string.UID), "");
+                String stats_link = quiz_link + "&type=stats&uid=" + sp.getString(getString(R.string.UID), "");
                 qm.setQuizLink(quiz_link);
+                qm.setWrongQuestionLink(wrong_question_link);
+                qm.setStatsLink(stats_link);
                 String moduleList = parseModuleListToString();
                 String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
                 sp.edit().putString(moduleId, moduleList).apply();
