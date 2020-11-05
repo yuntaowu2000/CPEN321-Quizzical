@@ -92,9 +92,10 @@ router.post("/", (req, res, next) => {
     });
   } else if (req.body.type === "class_list") {
   } else if (req.body.type === "create_quiz") {
+    let quizData = JSON.parse(req.body.data);
     db.collection("quizzes").updateOne(
-      {$and: [{uid: req.body.uid},{moduleName: req.body.moduleName},{class_code: req.body.class_code}]},
-      {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid}, {class_code: req.body.class_code}, {moduleName: req.body.moduleName})},
+      {$and: [{uid: req.body.uid},{moduleName: quizData.moduleName},{class_code: quizData.class_code}]},
+      {$set: Object.assign({}, quizData, {uid: req.body.uid}, {class_code: quizData.class_code}, {moduleName: quizData.moduleName})},
       {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
