@@ -1,3 +1,4 @@
+/*eslint camelcase: ["error", {properties: "never"}]*/
 let express = require("express");
 let MongoClient = require("mongodb").MongoClient;
 let fs = require("fs");

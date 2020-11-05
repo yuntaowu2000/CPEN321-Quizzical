@@ -1,3 +1,4 @@
+/*eslint camelcase: ["error", {properties: "never"}]*/
 let express = require("express");
 let MongoClient = require("mongodb").MongoClient;
 let fs = require("fs");
@@ -27,7 +28,7 @@ router.get("/", (req, res, next) => {
         throw err;
       } else {
         classCode = Object.values(classCode[0])[0];
-        res.send(''+classCode);
+        res.send(""+classCode);
       }
     });
   } else if (type === "class_list") {

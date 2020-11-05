@@ -168,7 +168,7 @@ public class QuizPackage {
         return this.moduleName;
     }
 
-    public int getClass_code() {
+    public int getClassCode() {
         return this.class_code;
     }
 

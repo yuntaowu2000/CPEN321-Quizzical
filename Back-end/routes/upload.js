@@ -1,3 +1,4 @@
+/*eslint camelcase: ["error", {properties: "never"}]*/
 let express = require("express");
 let router = express.Router();
 let fs = require("fs");
