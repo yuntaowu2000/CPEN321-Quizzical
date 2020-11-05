@@ -9,31 +9,21 @@ MongoClient.connect(
   {useUnifiedTopology: true},
   (err, client) => {
     db = client.db("data");
-    db.createCollection("quizzes", (err, res) => {
-      if (err) {
-        console.log(err);
-      }
-    });
   }
 );
 
 /* GET quiz listing. */
 router.get("/", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
-  let class_code = url.searchParams.get("class_code");
-  let quiz_code = url.searchParams.get("quiz_code");
+  let class_code = Number(url.searchParams.get("class_code"));
+  let quiz_code = Number(url.searchParams.get("quiz_code"));
   let timeout = 2000;
   
-  db.collection("quizzes").find({ $and: [ {"class_code": class_code}, {"quizCode": quiz_code} ] }).project({questionList:1, _id:0}).maxTimeMS(timeout).toArray((err, questionList) => {
+  db.collection("quizzes").find({$and: [{class_code: class_code},{quizCode: quiz_code}]}).project({_id:0, questionList:1}).maxTimeMS(timeout).toArray((err, questionList) => {
     if (err) {
       throw err;
     } else {
-      try {
-        questionList = Object.values(questionList[0])[0];
-      } catch (ex) {
-        questionList = "";
-      }
-      res.send(questionList+"");
+      res.send(Object.values(questionList[0])[0]);
     }
   });
 });
