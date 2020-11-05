@@ -24,6 +24,11 @@ MongoClient.connect(
         console.error(err);
       }
     });
+    db.createCollection("quizzes", (err, res) => {
+      if (err) {
+        console.log(err);
+      }
+    });
   }
 );
 
@@ -88,13 +93,11 @@ router.post("/", (req, res, next) => {
   } else if (req.body.type === "class_list") {
   } else if (req.body.type === "create_class") {
   } else if (req.body.type === "create_quiz") {
-    let filename = req.body.uid + "_quiz.txt"
-    fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
-    let result = fs.readFileSync(filename);
-    result = Buffer(result).toString("base64");
-    if (result[result.length-1] !== "{") {
-      res.send(413);
-    }
+    db.collection("quizzes").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
+      if (err) {
+        console.error(err);
+      }
+    });
   }
 
   res.statusCode = 200;

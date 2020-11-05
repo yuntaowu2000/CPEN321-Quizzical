@@ -17,34 +17,6 @@ MongoClient.connect(
   }
 );
 
-router.use(express.json());
-
-router.post("/", (req, res, next) => {
-  console.log("UID: " + req.body.uid);
-  console.log("Type: " + req.body.type);
-  console.log("Data: %j", req.body);
-
-  if (req.body.type === "quiz") {
-    if (req.body.data.id === null){
-      db.collection("quizzes").insertOne(Object.assign({}, req.body.data, {uid: req.body.uid}, {quiz_code: db.collection("quizzes").count() }, {class_code: req.body.data.class_code}), (err, res) => {
-        if (err) {
-          console.log(err);
-        }
-      });      
-    }
-    else {
-      db.collection("quizzes").insertOne(Object.assign({}, req.body.data, {uid: req.body.uid}, {quiz_code: req.body.data.id}, {class_code: req.body.data.class_code}), (err, res) => {
-        if (err) {
-          console.log(err);
-        }
-      });          
-    }
-  }
-
-  res.statusCode = 200;
-  res.end();
-});
-
 /* GET quiz listing. */
 router.get("/", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
@@ -52,16 +24,16 @@ router.get("/", (req, res, next) => {
   let quiz_code = url.searchParams.get("quiz_code");
   let timeout = 2000;
   
-  db.collection("quizzes").find({ $and: [ {"class_code": class_code}, {"quiz_code": quiz_code} ] }).maxTimeMS(timeout).toArray((err, frequency) => {
+  db.collection("quizzes").find({ $and: [ {"class_code": class_code}, {"quiz_code": quiz_code} ] }).project({questionList:1, _id:0}).maxTimeMS(timeout).toArray((err, questionList) => {
     if (err) {
       throw err;
     } else {
       try {
-        frequency = Object.values(frequency[0])[0];
+        questionList = Object.values(questionList[0])[0];
       } catch (ex) {
-        frequency = "";
+        questionList = "";
       }
-      res.send(frequency+"");
+      res.send(questionList+"");
     }
   });
 });
