@@ -51,14 +51,14 @@ after each quiz is finished
 ### Back-end  
 1. Simple POST GET request handling done.  
 2. user info (username, email, profile image, is_instructor, class taken, class statistics) mostly done  
+3 quiz info (created quiz parsed and sent onto the server; retrive quiz from the server)   
 
 ## TODO list
 1. UI set up for home activity  
 **Note:** need to get info from the server for these layouts, such as quizzes available, class average scores, user ranking.  
 1.3 maybe we can add some review quizzes for all the wrong questions a student has got, the wrong question ids will be sent to the server  
 3. Front-Back end communication  
-3.2 class info (class statistics)  
-3.3 quiz info (created quiz parsed and sent onto the server; retrive quiz from the server)  
+3.2 class info (class statistics, quiz modules)   
 4. Push notification  
 4.1 email when account created  
 4.2 email when class created  

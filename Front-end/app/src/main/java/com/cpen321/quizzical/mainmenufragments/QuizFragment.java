@@ -539,9 +539,15 @@ public class QuizFragment extends Fragment {
                 qm.setQuizLink(quiz_link);
                 qm.setWrongQuestionLink(wrong_question_link);
                 qm.setStatsLink(stats_link);
-                String moduleList = parseModuleListToString();
+                String moduleListString = parseModuleListToString();
                 String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
-                sp.edit().putString(moduleId, moduleList).apply();
+                sp.edit().putString(moduleId, moduleListString).apply();
+
+                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                        getString(R.string.QUIZ_MODULES),
+                        moduleListString
+                        )).start();
+
                 setupQuizModule();
                 alertDialog.dismiss();
             } else {
