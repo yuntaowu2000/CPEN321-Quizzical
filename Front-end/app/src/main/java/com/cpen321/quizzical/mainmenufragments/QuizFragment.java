@@ -92,6 +92,10 @@ public class QuizFragment extends Fragment {
                     .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
                     .show();
         } else {
+            if (OtherUtils.stringIsNullOrEmpty(localCache)) {
+                //we are probably the student, so cache the values for him/her as well
+                sp.edit().putString(localCacheModuleName, localCache).apply();
+            }
             Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
             quizIntent.putExtra(getString(R.string.QUIZ_CONTENT), quizContent);
             quizIntent.putExtra(getString(R.string.LOCAL_CACHE), localCache);
@@ -375,7 +379,12 @@ public class QuizFragment extends Fragment {
             wrongQuestionButton.setOnClickListener(v -> setupWrongQuestions(qm.getWrongQuestionLink()));
 
             ImageButton deleteButton = layout.findViewById(R.id.delete_module_button);
-            deleteButton.setOnClickListener(v -> promptForDeletingModule(qm));
+            if (is_Instructor) {
+                deleteButton.setOnClickListener(v -> promptForDeletingModule(qm));
+            } else {
+                deleteButton.setVisibility(View.INVISIBLE);
+                deleteButton.setClickable(false);
+            }
         }
     }
 

@@ -153,7 +153,7 @@
     <string name="UI_no_question">Question %d has no question field.</string>
     <string name="UI_too_few_choices">Question %d has less than 2 choices.</string>
     <string name="UI_no_correct_answer">Question %d is a multiple choice question, but has no correct answer.</string>
-    <string name="UI_create_quiz_success_msg">Congratulations! You have just created a quiz.</string>
+    <string name="UI_create_quiz_success_msg">Congratulations! You have just created a quiz and earned 10 EXP.</string>
     <string name="UI_enter_answer">Enter answer</string>
     <string name="UI_example_question" translatable="false">E.g. 1+1=?</string>
     <string name="UI_example_answer" translatable="false">E.g. 2</string>

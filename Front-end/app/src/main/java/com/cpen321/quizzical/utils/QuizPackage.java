@@ -44,7 +44,13 @@ public class QuizPackage {
     public QuizPackage(String quizJson) {
         try {
             Gson g = new GsonBuilder().registerTypeAdapter(IQuestion.class, new InterfaceAdapter()).create();
-            JSONObject jsonObject = new JSONObject(quizJson);
+            JSONObject jsonObject;
+            try {
+                jsonObject = new JSONObject(quizJson);
+            } catch (Exception e) {
+                JSONArray jsonArray = new JSONArray(quizJson);
+                jsonObject = jsonArray.getJSONObject(0);
+            }
             this.quizCode = jsonObject.getInt("quizCode");
             this.class_code = jsonObject.getInt("class_code");
             this.courseCategory = getCourseCategoryByString(jsonObject.getString("courseCategory"));
@@ -152,6 +158,10 @@ public class QuizPackage {
     public String toJson() {
         Gson g = new Gson();
         return g.toJson(this);
+    }
+
+    public String getInstructorUID() {
+        return this.instructorUID;
     }
 
 }

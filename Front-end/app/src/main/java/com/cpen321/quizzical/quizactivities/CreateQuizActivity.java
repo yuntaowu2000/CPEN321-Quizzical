@@ -316,9 +316,22 @@ public class CreateQuizActivity extends AppCompatActivity {
         String localCacheName = getString(R.string.QUIZ) + "_" + currModule;
         sp.edit().putString(localCacheName, quizPackJson).apply();
 
+        //update EXP point
+        int currEXP = sp.getInt(getString(R.string.EXP), 0);
+        currEXP += 10;
+        sp.edit().putInt(getString(R.string.EXP), currEXP).apply();
+        String currEXPVal = String.valueOf(currEXP);
+
+        //update quiz count
+        int userQuizCount = sp.getInt(getString(R.string.USER_QUIZ_COUNT), 0);
+        userQuizCount += 1;
+        sp.edit().putInt(getString(R.string.USER_QUIZ_COUNT), userQuizCount).apply();
+        String currQuizCountVal = String.valueOf(userQuizCount);
+
         new Thread(() -> {
-            //TODO: probably needs to get all quiz related info here
             OtherUtils.uploadToServer(instructorUID, getString(R.string.CREATE_QUIZ), quizPackJson);
+            OtherUtils.uploadToServer(instructorUID, getString(R.string.EXP), currEXPVal);
+            OtherUtils.uploadToServer(instructorUID, getString(R.string.USER_QUIZ_COUNT), currQuizCountVal);
         }).start();
         Log.d("Quiz_create", quizPackJson);
 

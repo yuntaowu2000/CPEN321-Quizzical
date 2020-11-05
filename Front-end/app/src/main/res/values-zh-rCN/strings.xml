@@ -104,7 +104,7 @@
     <string name="UI_correct_answer">正确答案</string>
     <string name="UI_create_module_notification">请先新建一个单元</string>
     <string name="UI_no_correct_answer">第%d题是选择题，但没有正确答案。</string>
-    <string name="UI_create_quiz_success_msg">你成功创建了一个测试。</string>
+    <string name="UI_create_quiz_success_msg">你成功创建了一个测试并获得了10EXP。</string>
     <string name="UI_enter_answer">请输入答案</string>
     <string name="UI_picture">图片</string>
     <string name="UI_has_pic">题目图片</string>

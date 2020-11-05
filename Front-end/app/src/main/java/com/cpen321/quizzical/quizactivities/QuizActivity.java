@@ -59,6 +59,7 @@ public class QuizActivity extends AppCompatActivity {
     private int correctNumber;
     private ArrayList<Integer> wrongQuestionIds;
     private int quizId;
+    private String instructorUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +117,8 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         quizId = quizPackage.getQuizCode();
+        instructorUID = quizPackage.getInstructorUID();
+
         totalQuestionNum = questions.size();
 
         correctNumber = 0;
@@ -406,6 +409,8 @@ public class QuizActivity extends AppCompatActivity {
             jsonObject.addProperty(getString(R.string.EXP), exp);
             jsonObject.addProperty(getString(R.string.correct_num), correctNumber);
             jsonObject.addProperty(getString(R.string.CLASS_CODE), classCode);
+            jsonObject.addProperty(getString(R.string.UID), instructorUID);
+            jsonObject.addProperty(getString(R.string.QUIZ_CODE), quizId);
             if (correctNumber != totalQuestionNum)
                 jsonObject.addProperty(getString(R.string.wrong_question_ids), jsonForList);
 
