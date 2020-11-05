@@ -189,6 +189,7 @@ public class ProfileFragment extends Fragment {
                 Log.d("server_response", "notification freq: " + server_response);
                 try {
                     int new_freq = Integer.parseInt(server_response);
+                    sp.edit().putInt(getString(R.string.NOTIFICATION_FREQ), new_freq).apply();
                     Objects.requireNonNull(getActivity()).runOnUiThread(() -> pushNotificationSpinner.setSelection(new_freq));
                 } catch (NumberFormatException e) {
                     Objects.requireNonNull(getActivity()).runOnUiThread(() -> pushNotificationSpinner.setSelection(2));
