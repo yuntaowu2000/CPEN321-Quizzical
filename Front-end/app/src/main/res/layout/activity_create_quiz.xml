@@ -7,16 +7,19 @@
     tools:context=".quizactivities.CreateQuizActivity">
 
     <ScrollView
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="10dp"
-        android:layout_width="match_parent"
         android:id="@+id/scrollView"
-        android:layout_height="620dp">
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/quiz_create_finish"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="600dp">
+
         <LinearLayout
             android:id="@+id/question_create_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,18 +43,18 @@
             </LinearLayout>
 
             <Button
+                android:id="@+id/add_question_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:id="@+id/add_question_button"
-                android:textAllCaps="false"
-                android:text="@string/UI_add_question" />
+                android:text="@string/UI_add_question"
+                android:textAllCaps="false" />
         </LinearLayout>
     </ScrollView>
 
     <Button
-        app:layout_constraintTop_toBottomOf="@id/scrollView"
-        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/UI_finish"
