@@ -474,7 +474,7 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         isCorrectAnsCheck.setOnClickListener(v -> {
             for (CheckBox checkBox : currQuestionCheckBoxs) {
-                if (checkBox != isCorrectAnsCheck)
+                if (!checkBox.equals(isCorrectAnsCheck))
                     checkBox.setChecked(false);
             }
             currQuestion.setCorrectAnsNum(curr_choice_num + 1);

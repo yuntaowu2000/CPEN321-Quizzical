@@ -164,4 +164,15 @@ public class QuizPackage {
         return this.instructorUID;
     }
 
+    public String getModuleName() {
+        return this.moduleName;
+    }
+
+    public int getClass_code() {
+        return this.class_code;
+    }
+
+    public CourseCategory getCourseCategory() {
+        return this.courseCategory;
+    }
 }

@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.util.Objects;
+
 public class PictureActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -23,8 +25,6 @@ public class PictureActivity extends AppCompatActivity {
     private int questionNum;
     private int choiceNum;
     private LinearLayout linearLayout;
-    private Button picButton;
-    private Button ContinueButton;
     private ImageView imageView;
     private Bitmap imageBitmap;
     private Bitmap croppedBitmap;
@@ -34,16 +34,16 @@ public class PictureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture);
 
-        picButton = findViewById(R.id.test_page_take_photo_button);
+        Button picButton = findViewById(R.id.test_page_take_photo_button);
         imageView = findViewById(R.id.test_image);
         linearLayout = findViewById(R.id.test_page_view);
         picButton.setOnClickListener(view -> takePic());
 
-        ContinueButton = findViewById(R.id.test_page_continue);
-        ContinueButton.setOnClickListener(view -> onContinueClicked());
+        Button continueButton = findViewById(R.id.test_page_continue);
+        continueButton.setOnClickListener(view -> onContinueClicked());
 
         questionNum = getIntent().getIntExtra(getString(R.string.QUESTION_NUM), 0);
-        imageBitmap = (Bitmap) getIntent().getExtras().get(getString(R.string.ORIGINAL_IMG));
+        imageBitmap = (Bitmap) Objects.requireNonNull(getIntent().getExtras()).get(getString(R.string.ORIGINAL_IMG));
         if (imageBitmap != null) {
             askForModification();
         }

@@ -43,6 +43,7 @@ The progress is written in the sequence of implementation.
 4.2 The EXP for the student is calculated as follows:  
 after each quiz is finished  
 <img src="pics/score_calculation.png"/>  
+
 5. Other things  
 5.1 Most parts are translated in Chinese as well.  
 5.2 Some code refactored after checking with Codacy.  
