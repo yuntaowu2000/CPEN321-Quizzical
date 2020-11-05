@@ -87,5 +87,8 @@ public class QuizActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.quiz_finished_page_response))
                 .check(ViewAssertions.matches(ViewMatchers.withText("You got 2/3 correct. Great work!")));
 
+        if (!is_instructor)
+            Espresso.onView(ViewMatchers.withId(R.id.quiz_finished_page_exp_earned))
+                    .check(ViewAssertions.matches(ViewMatchers.withText("You got 13 EXP!")));
     }
 }

@@ -68,7 +68,11 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        String quizUrl = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.QUIZ_URL));
+        String quizUrl = "";
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            quizUrl = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.QUIZ_URL));
+        }
+
         this.questionNumber = 0;
 
         infoLabel = findViewById(R.id.quiz_page_info_label);
