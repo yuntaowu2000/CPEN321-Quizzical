@@ -24,7 +24,7 @@ router.get("/", (req, res, next) => {
   let quiz_code = url.searchParams.get("quiz_code");
   let timeout = 2000;
   
-  db.collection("quizzes").find({ $and: [ {"class_code": class_code}, {"quiz_code": quiz_code} ] }).project({questionList:1, _id:0}).maxTimeMS(timeout).toArray((err, questionList) => {
+  db.collection("quizzes").find({ $and: [ {"class_code": class_code}, {"quizCode": quiz_code} ] }).project({questionList:1, _id:0}).maxTimeMS(timeout).toArray((err, questionList) => {
     if (err) {
       throw err;
     } else {
