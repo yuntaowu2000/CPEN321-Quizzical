@@ -2,9 +2,9 @@
 
 ## Overview
  CPEN321 APP  
-Name of Project: Project Quizzical
+Name of Project: Project Quizzical  
 
-Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao Wu
+Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao Wu  
 
 ## Current progress  
 
@@ -28,8 +28,8 @@ The progress is written in the sequence of implementation.
 2.7 teacher class statistic board set up finished.  
 2.8 teacher leader board and statistic switching finished.  
 2.9 basic quiz/leaderboard refreshing done.(student side not tested yet)    
-1.1 quiz fragment UI finished  
-1.2 leader board/class statistic fragment UI finished  
+2.10 quiz fragment UI finished  
+2.11 leader board/class statistic fragment UI finished  
 3. Quiz  
 3.1 A Quiz will load a set of questions (currently only multiple choices are supported)  
 3.2 Choices can be either plain text, latex, html formatted, or image  
@@ -37,6 +37,7 @@ The progress is written in the sequence of implementation.
 3.4 After the user submits a question, they will be informed if they are correct or not. If they are incorrect, correct answer will also be highlighted.  
 3.5 After the user finishes a quiz, they will be shown how they did in the quiz.  
 3.6 The quiz result (including score and wrong question numbers) will be uploaded to the server.  
+3.7 UI and logic set up for teacher creating quiz finished    
 4. Complex logic  
 4.1 A user is ranked by his/her overall EXP in a semester  
 4.2 The EXP for the student is calculated as follows:  
@@ -55,8 +56,6 @@ after each quiz is finished
 1. UI set up for home activity  
 **Note:** need to get info from the server for these layouts, such as quizzes available, class average scores, user ranking.  
 1.3 maybe we can add some review quizzes for all the wrong questions a student has got, the wrong question ids will be sent to the server  
-2. UI and logic set up for teacher creating quiz  
-**Note:** most picture reading, processing related stuff are in OtherUtils, testActivity
 3. Front-Back end communication  
 3.2 class info (class statistics)  
 3.3 quiz info (created quiz parsed and sent onto the server; retrive quiz from the server)  
@@ -67,6 +66,6 @@ after each quiz is finished
 5. Complex logic  
 5.1 The EXP for the teacher is calculated as follows:  
 After each quiz is created  
-EXP = BASIC_EXP, (BASIC_EXP = 10)
+EXP = BASIC_EXP, (BASIC_EXP = 10)  
 
-When a student/another teacher liked the quiz, EXP += BONUS_EXP, BONUS_EXP = ?
+When a student/another teacher liked the quiz, EXP += BONUS_EXP, BONUS_EXP = ?  
