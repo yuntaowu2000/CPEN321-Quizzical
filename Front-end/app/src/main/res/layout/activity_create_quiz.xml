@@ -11,7 +11,7 @@
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:id="@+id/scrollView"
-        android:layout_height="620dp">
+        android:layout_height="590dp">
         <LinearLayout
             android:id="@+id/question_create_layout"
             android:layout_width="match_parent"
