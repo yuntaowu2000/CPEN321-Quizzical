@@ -104,6 +104,12 @@ router.post("/", (req, res, next) => {
         console.error(err);
       }
     });
+  } else if (req.body.type === "user quiz count") {
+    db.collection("user info").updateOne({uid: req.body.uid}, {$set: {"user quiz count": req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
+      if (err) {
+        console.error(err);
+      }
+    });
   }
 
   res.statusCode = 200;
