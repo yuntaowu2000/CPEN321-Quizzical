@@ -84,14 +84,13 @@ router.post("/", (req, res, next) => {
       }
     });
   }
-  else if (req.body.type === "Add class") {
+  else if (req.body.type === "join_class" || req.body.type === "create_class") {
     db.collection("class info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
       }
     });
   } else if (req.body.type === "class_list") {
-  } else if (req.body.type === "create_class") {
   } else if (req.body.type === "create_quiz") {
     db.collection("quizzes").updateOne(
       {$and: [{uid: req.body.uid},{moduleName: req.body.moduleName},{class_code: req.body.class_code}]},
