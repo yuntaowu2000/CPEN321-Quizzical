@@ -2,6 +2,7 @@
     <!--    general usage-->
     <string name="BACKUP_GET_URL" translatable="false">http://193.122.108.23:7070/</string>
     <string name="GET_URL" translatable="false">http://quizzical.canadacentral.cloudapp.azure.com/</string>
+    <string name="QUIZ_URL" translatable="false"><![CDATA[http://quizzical.canadacentral.cloudapp.azure.com/quiz?class_code=%d&quiz_code=%d]]></string>
     <string name="TYPE" translatable="false">type=</string>
 
     <string name="app_name" translatable="false">quizzical</string>
@@ -45,7 +46,7 @@
     <string name="QUESTION_NUM" translatable="false">question_num</string>
     <string name="CHOICE_NUM" translatable="false">choice_num</string>
     <string name="REQUEST_CODE" translatable="false">request_code</string>
-    <string name="QUIZ_URL" translatable="false">QUIZ_URL</string>
+    <string name="QUIZ_CONTENT" translatable="false">QUIZ_CONTENT</string>
     <string name="CREATE_QUIZ" translatable="false">create_quiz</string>
 
     <string name="LOCAL_CACHE" translatable="false">LOCAL_CACHE</string>
