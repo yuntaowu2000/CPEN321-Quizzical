@@ -81,7 +81,7 @@
 
     <!--    for integrating Google login API-->
     <!--    andrew: <614503168151-hvg3r35tmfsqldrd32h25a9kb9inmvdv.apps.googleusercontent.com>-->
-    <!--    <3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com<>-->
+    <!--    <3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com>-->
     <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
 
     <!--    used for debugging page, can be deleted later-->
