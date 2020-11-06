@@ -32,10 +32,10 @@ public class StatisticFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView realTimeText;
 
-    private boolean is_Instructor;
+    private boolean isInstructor;
     private TableLayout boardLayout;
-    private Button teachers_leaderboard_btn;
-    private boolean teacher_in_statistic;
+    private Button teachersLeaderboardBtn;
+    private boolean teacherInStatistic;
     private Classes currClass;
 
     @Override
@@ -46,9 +46,9 @@ public class StatisticFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sp = Objects.requireNonNull(getContext()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
-        is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
+        isInstructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
 
-        if (is_Instructor) {
+        if (isInstructor) {
             return inflater.inflate(R.layout.fragment_class_statistic, container, false);
         } else {
             return inflater.inflate(R.layout.fragment_leaderboard, container, false);
@@ -72,7 +72,7 @@ public class StatisticFragment extends Fragment {
 
         //TODO: implement the same thing for the quiz fragment
         //TODO: load the info from the server
-        if (is_Instructor) {
+        if (isInstructor) {
             TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.statistic_class_name_text);
 
             Objects.requireNonNull(getActivity()).runOnUiThread(() ->
@@ -82,10 +82,10 @@ public class StatisticFragment extends Fragment {
             sp.registerOnSharedPreferenceChangeListener(statisticFragmentOnSPChangeListener);
 
             boardLayout = view.findViewById(R.id.class_statistic_board);
-            teacher_in_statistic = true;
+            teacherInStatistic = true;
 
-            teachers_leaderboard_btn = view.findViewById(R.id.teacher_leader_board_btn);
-            teachers_leaderboard_btn.setOnClickListener(v -> switchTeacherLeaderboard());
+            teachersLeaderboardBtn = view.findViewById(R.id.teacher_leader_board_btn);
+            teachersLeaderboardBtn.setOnClickListener(v -> switchTeacherLeaderboard());
 
         } else {
             TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.leader_board_class_code_text);
@@ -119,7 +119,7 @@ public class StatisticFragment extends Fragment {
                 );
                 updateText();
                 //should generate statistic table here as well
-                if (is_Instructor) {
+                if (isInstructor) {
                     generateClassStatisticTableRows(true);
                 } else {
                     generateLeaderboardRows();
@@ -143,7 +143,7 @@ public class StatisticFragment extends Fragment {
         Objects.requireNonNull(getActivity()).runOnUiThread(() ->
         {
             realTimeText.setText(text);
-            if (is_Instructor && teacher_in_statistic) {
+            if (isInstructor && teacherInStatistic) {
                 generateClassStatisticTableRows(false);
             } else {
                 generateLeaderboardRows();
@@ -189,9 +189,9 @@ public class StatisticFragment extends Fragment {
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
         newRow.setLayoutParams(lp);
 
-        if (teacher_in_statistic) {
-            teacher_in_statistic = false;
-            teachers_leaderboard_btn.setText(R.string.UI_back_to_statistics);
+        if (teacherInStatistic) {
+            teacherInStatistic = false;
+            teachersLeaderboardBtn.setText(R.string.UI_back_to_statistics);
 
             newRow.addView(generateTableElement(getString(R.string.UI_leaderboard_number)), 0);
             newRow.addView(generateTableElement(getString(R.string.UI_username)), 1);
@@ -201,8 +201,8 @@ public class StatisticFragment extends Fragment {
             generateLeaderboardRows();
 
         } else {
-            teacher_in_statistic = true;
-            teachers_leaderboard_btn.setText(R.string.UI_teachers_leaderboard);
+            teacherInStatistic = true;
+            teachersLeaderboardBtn.setText(R.string.UI_teachers_leaderboard);
 
             newRow.addView(generateTableElement(getString(R.string.UI_leaderboard_number)), 0);
             newRow.addView(generateTableElement(getString(R.string.UI_username)), 1);

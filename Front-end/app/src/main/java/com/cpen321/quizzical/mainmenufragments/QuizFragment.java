@@ -56,21 +56,21 @@ public class QuizFragment extends Fragment {
     public static SharedPreferences.OnSharedPreferenceChangeListener quizFragmentSPChangeListener;
     private SharedPreferences sp;
 
-    private boolean is_Instructor;
+    private boolean isInstructor;
 
     private Animation rotateOpen;
     private Animation rotateClose;
     private Animation fromBottom;
     private Animation toBottom;
     private FloatingActionButton fab;
-    private FloatingActionButton edit_fab;
-    private FloatingActionButton module_fab;
+    private FloatingActionButton editFab;
+    private FloatingActionButton moduleFab;
     private boolean clicked = false;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout quizLinearLayout;
 
-    private String default_url = "http://quizzical.canadacentral.cloudapp.azure.com/quiz?class_code=0&quiz_code=0";
+    private String defaultUrl;
     private Classes currClass;
     private ArrayList<QuizModules> modulesList;
     private ArrayList<View> moduleViewList;
@@ -123,9 +123,10 @@ public class QuizFragment extends Fragment {
 
         sp = Objects.requireNonNull(getContext()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
 
-        is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
+        isInstructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
+        defaultUrl = String.format(getString(R.string.QUIZ_URL), 0, 0);
 
-        if (is_Instructor) {
+        if (isInstructor) {
             return inflater.inflate(R.layout.fragment_quiz_teacher, container, false);
         } else {
             return inflater.inflate(R.layout.fragment_quiz, container, false);
@@ -138,7 +139,7 @@ public class QuizFragment extends Fragment {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 
         Button quizStartButton = view.findViewById(R.id.quiz_fragment_go_to_quiz_button);
-        quizStartButton.setOnClickListener(v -> setupQuiz(default_url, ""));
+        quizStartButton.setOnClickListener(v -> setupQuiz(defaultUrl, ""));
 
         currClass = new Classes(sp.getString(getString(R.string.CURR_CLASS), ""));
         TextView textView = view.findViewById(R.id.quiz_page_class_info_text);
@@ -158,7 +159,7 @@ public class QuizFragment extends Fragment {
 
 
 
-        if (is_Instructor) {
+        if (isInstructor) {
             onTeacherViewCreated();
         }
     }
@@ -170,18 +171,18 @@ public class QuizFragment extends Fragment {
         toBottom = AnimationUtils.loadAnimation(this.getContext(), R.anim.to_bottom_anim);
 
         fab = Objects.requireNonNull(getView()).findViewById(R.id.fab);
-        edit_fab = Objects.requireNonNull(getView()).findViewById(R.id.edit_fab);
-        module_fab = Objects.requireNonNull(getView()).findViewById(R.id.module_fab);
+        editFab = Objects.requireNonNull(getView()).findViewById(R.id.edit_fab);
+        moduleFab = Objects.requireNonNull(getView()).findViewById(R.id.module_fab);
 
         assert fab != null;
         fab.setOnClickListener(v -> onAddButtonClicked());
 
-        assert edit_fab != null;
-        assert module_fab != null;
-        edit_fab.hide();
-        edit_fab.setOnClickListener(v -> setupCreateQuiz());
-        module_fab.hide();
-        module_fab.setOnClickListener(v -> promptForAddingModule());
+        assert editFab != null;
+        assert moduleFab != null;
+        editFab.hide();
+        editFab.setOnClickListener(v -> setupCreateQuiz());
+        moduleFab.hide();
+        moduleFab.setOnClickListener(v -> promptForAddingModule());
 
     }
 
@@ -193,26 +194,26 @@ public class QuizFragment extends Fragment {
 
     private void setVisibility(boolean clicked) {
         if (!clicked) {
-            edit_fab.show();
-            module_fab.show();
-            edit_fab.setClickable(true);
-            module_fab.setClickable(true);
+            editFab.show();
+            moduleFab.show();
+            editFab.setClickable(true);
+            moduleFab.setClickable(true);
         } else {
-            edit_fab.hide();
-            module_fab.hide();
-            edit_fab.setClickable(false);
-            module_fab.setClickable(false);
+            editFab.hide();
+            moduleFab.hide();
+            editFab.setClickable(false);
+            moduleFab.setClickable(false);
         }
     }
 
     private void setAnimation(boolean clicked) {
         if (!clicked) {
-            edit_fab.startAnimation(fromBottom);
-            module_fab.startAnimation(fromBottom);
+            editFab.startAnimation(fromBottom);
+            moduleFab.startAnimation(fromBottom);
             fab.startAnimation(rotateOpen);
         } else {
-            edit_fab.startAnimation(toBottom);
-            module_fab.startAnimation(toBottom);
+            editFab.startAnimation(toBottom);
+            moduleFab.startAnimation(toBottom);
             fab.startAnimation(rotateClose);
         }
     }
@@ -379,7 +380,7 @@ public class QuizFragment extends Fragment {
             wrongQuestionButton.setOnClickListener(v -> setupWrongQuestions(qm.getWrongQuestionLink()));
 
             ImageButton deleteButton = layout.findViewById(R.id.delete_module_button);
-            if (is_Instructor) {
+            if (isInstructor) {
                 deleteButton.setOnClickListener(v -> promptForDeletingModule(qm));
             } else {
                 deleteButton.setVisibility(View.INVISIBLE);
@@ -533,7 +534,7 @@ public class QuizFragment extends Fragment {
                 modulesList.add(qm);
                 int quiz_code = modulesList.size() - 1;
                 qm.setId(quiz_code);
-                String quiz_link = getString(R.string.GET_URL) + "quiz?class_code=" + currClass.getClassCode() + "&quiz_code=" + quiz_code;
+                String quiz_link = String.format(getString(R.string.QUIZ_URL), currClass.getClassCode(), quiz_code);
                 String wrong_question_link = quiz_link + "&type=wrong_question_list&uid=" + sp.getString(getString(R.string.UID), "");
                 String stats_link = quiz_link + "&type=stats&uid=" + sp.getString(getString(R.string.UID), "");
                 qm.setQuizLink(quiz_link);

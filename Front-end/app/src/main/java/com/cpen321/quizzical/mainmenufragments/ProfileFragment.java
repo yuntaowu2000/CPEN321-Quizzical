@@ -56,9 +56,9 @@ public class ProfileFragment extends Fragment {
     private TextView quizNumText;
     private TextView expText;
     private Spinner pushNotificationSpinner;
-    private ArrayList<Classes> class_list;
+    private ArrayList<Classes> classList;
     private LinearLayout profileClassLayout;
-    private boolean is_instructor;
+    private boolean isInstructor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class ProfileFragment extends Fragment {
 
         sp = Objects.requireNonNull(getActivity()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
 
-        is_instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
+        isInstructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
 
         usernameText = Objects.requireNonNull(getView()).findViewById(R.id.profile_username);
         usernameText.setText(sp.getString(getString(R.string.USERNAME), getString(R.string.UI_username)));
@@ -120,7 +120,7 @@ public class ProfileFragment extends Fragment {
         setupClassLayout();
 
         quizNumText = getView().findViewById(R.id.profile_quiz_num_text);
-        if (is_instructor)
+        if (isInstructor)
             quizNumText.setText(String.format(getString(R.string.UI_quiz_made), sp.getInt(getString(R.string.USER_QUIZ_COUNT), 0)));
         else
             quizNumText.setText(String.format(getString(R.string.UI_quiz_taken), sp.getInt(getString(R.string.USER_QUIZ_COUNT), 0)));
@@ -391,7 +391,7 @@ public class ProfileFragment extends Fragment {
             return;
 
         if (key.equals(getString(R.string.USER_QUIZ_COUNT)) || key.equals(getString(R.string.EXP))) {
-            if (is_instructor)
+            if (isInstructor)
                 Objects.requireNonNull(getActivity()).runOnUiThread(
                         () -> quizNumText.setText(String.format(getString(R.string.UI_quiz_made), sp.getInt(getString(R.string.USER_QUIZ_COUNT), 0)))
                 );
@@ -410,7 +410,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void parseClassListFromString() {
-        class_list = new ArrayList<>();
+        classList = new ArrayList<>();
         String classListString = sp.getString(getString(R.string.CLASS_LIST), "");
 
         if (OtherUtils.stringIsNullOrEmpty(classListString)) {
@@ -420,7 +420,7 @@ public class ProfileFragment extends Fragment {
         try {
             String[] classes = classListString.split(";");
             for (String c : classes) {
-                class_list.add(new Classes(c));
+                classList.add(new Classes(c));
             }
         } catch (Exception e) {
             Log.d("parse", "cannot parse class list");
@@ -433,7 +433,7 @@ public class ProfileFragment extends Fragment {
 
         profileClassLayout.removeAllViews();
 
-        for (Classes c : class_list) {
+        for (Classes c : classList) {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(150, ViewGroup.LayoutParams.MATCH_PARENT);
             layoutParams.setMargins(10, 10, 10, 10);
             TextView textView = new TextView(thisContext);

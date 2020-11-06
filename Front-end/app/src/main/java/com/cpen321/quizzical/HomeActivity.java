@@ -46,14 +46,14 @@ public class HomeActivity extends AppCompatActivity {
     private Animation rotateClose;
     private Animation fromBottom;
     private Animation toBottom;
-    private ArrayList<Button> class_button_list;
-    private ArrayList<Classes> class_list;
-    private LinearLayout class_scroll_content_layout;
+    private ArrayList<Button> classButtonList;
+    private ArrayList<Classes> classList;
+    private LinearLayout classScrollContentLayout;
     private TabLayout tabLayout;
-    private ImageButton add_class_button;
-    private FloatingActionButton class_switch_button;
-    private HorizontalScrollView class_scroll_view;
-    private boolean is_Instructor;
+    private ImageButton addClassButton;
+    private FloatingActionButton classSwitchButton;
+    private HorizontalScrollView classScrollView;
+    private boolean isInstructor;
     private SharedPreferences sp;
 
     /**
@@ -76,26 +76,26 @@ public class HomeActivity extends AppCompatActivity {
 
         //check if the user is instructor from shared preferences
         sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
-        is_Instructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
+        isInstructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
 
-        class_scroll_view = findViewById(R.id.class_scroll_view);
-        class_scroll_content_layout = findViewById(R.id.class_scroll_linear_layout);
-        add_class_button = findViewById(R.id.add_class_button);
+        classScrollView = findViewById(R.id.class_scroll_view);
+        classScrollContentLayout = findViewById(R.id.class_scroll_linear_layout);
+        addClassButton = findViewById(R.id.add_class_button);
 
-        class_switch_button = findViewById(R.id.class_switch_fab);
-        class_switch_button.setOnClickListener(v -> onClassSwitchButtonClicked());
+        classSwitchButton = findViewById(R.id.class_switch_fab);
+        classSwitchButton.setOnClickListener(v -> onClassSwitchButtonClicked());
 
-        if (is_Instructor) {
-            add_class_button.setOnClickListener(v -> createClass());
+        if (isInstructor) {
+            addClassButton.setOnClickListener(v -> createClass());
         } else {
-            add_class_button.setOnClickListener(v -> joinClass());
+            addClassButton.setOnClickListener(v -> joinClass());
         }
 
         //we need to initialize the list based on server info
-        class_button_list = new ArrayList<>(0);
+        classButtonList = new ArrayList<>(0);
         parseClassListFromString();
 
-        if (class_list.size() == 0) {
+        if (classList.size() == 0) {
             promptForClassCode();
         } else {
             //set up the class list and default class
@@ -117,11 +117,11 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                if (class_scroll_view.getVisibility() == View.VISIBLE) {
-                    class_switch_button.setAnimation(rotateClose);
-                    class_scroll_view.setAnimation(toBottom);
-                    class_scroll_view.setVisibility(View.INVISIBLE);
-                    for (Button b : class_button_list) {
+                if (classScrollView.getVisibility() == View.VISIBLE) {
+                    classSwitchButton.setAnimation(rotateClose);
+                    classScrollView.setAnimation(toBottom);
+                    classScrollView.setVisibility(View.INVISIBLE);
+                    for (Button b : classButtonList) {
                         if (b.getVisibility() == View.VISIBLE) {
                             b.setVisibility(View.INVISIBLE);
                             b.setClickable(false);
@@ -144,7 +144,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void parseClassListFromString() {
-        class_list = new ArrayList<>();
+        classList = new ArrayList<>();
         String classListString = sp.getString(getString(R.string.CLASS_LIST), "");
 //        if (OtherUtils.stringIsNullOrEmpty(classListString)) {
 //            String url = getString(R.string.GET_URL) + "/users?"
@@ -160,7 +160,7 @@ public class HomeActivity extends AppCompatActivity {
         try {
             String[] classes = classListString.split(";");
             for (String c : classes) {
-                class_list.add(new Classes(c));
+                classList.add(new Classes(c));
             }
         } catch (Exception e) {
             Log.d("parse", "cannot parse class list");
@@ -169,7 +169,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private String parseClassListToString() {
         StringBuilder strb = new StringBuilder();
-        for (Classes c : class_list) {
+        for (Classes c : classList) {
             strb.append(c.toJson()).append(";");
         }
         if (strb.length() > 0) {
@@ -184,7 +184,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //this will be used for a new user initial setup
         //and for future enrollment by clicking on some button
-        if (is_Instructor) {
+        if (isInstructor) {
             createClass();
         } else {
             joinClass();
@@ -370,36 +370,36 @@ public class HomeActivity extends AppCompatActivity {
         newClassButton.setAllCaps(false);
         newClassButton.setOnClickListener(v -> switchClass(c));
         newClassButton.setOnLongClickListener(v -> requestDeleteClass(c));
-        class_button_list.add(newClassButton);
+        classButtonList.add(newClassButton);
     }
 
     private void generateClassButtonLayout() {
-        for (Button b : class_button_list) {
-            class_scroll_content_layout.addView(b);
+        for (Button b : classButtonList) {
+            classScrollContentLayout.addView(b);
         }
 
-        class_scroll_content_layout.addView(add_class_button);
+        classScrollContentLayout.addView(addClassButton);
     }
 
     private void generateUIClassListOnCreate() {
-        for (Classes c : class_list) {
+        for (Classes c : classList) {
             generateNewClassButton(c);
         }
 
-        class_scroll_content_layout.removeAllViews();
+        classScrollContentLayout.removeAllViews();
 
         generateClassButtonLayout();
 
-        switchClass(class_list.get(0));
+        switchClass(classList.get(0));
     }
 
     private void appendNewClassToList(Classes mClass) {
-        if (class_list.contains(mClass)) {
+        if (classList.contains(mClass)) {
             Toast.makeText(this, R.string.UI_class_joined_already_msg, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        class_list.add(mClass);
+        classList.add(mClass);
         String class_list_string = parseClassListToString();
         sp.edit().putString(getString(R.string.CLASS_LIST), class_list_string).apply();
 
@@ -411,7 +411,7 @@ public class HomeActivity extends AppCompatActivity {
 
         generateNewClassButton(mClass);
 
-        class_scroll_content_layout.removeAllViews();
+        classScrollContentLayout.removeAllViews();
 
         generateClassButtonLayout();
 
@@ -422,7 +422,7 @@ public class HomeActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle(R.string.UI_warning);
 
-        if (is_Instructor) {
+        if (isInstructor) {
             alertDialogBuilder.setMessage(R.string.UI_teacher_delete_course);
         } else {
             alertDialogBuilder.setMessage(R.string.UI_student_delete_course);
@@ -437,7 +437,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void deleteClass(Classes mClass) {
-        class_list.remove(mClass);
+        classList.remove(mClass);
 
         String class_list_string = parseClassListToString();
         sp.edit().putString(getString(R.string.CLASS_LIST), class_list_string).apply();
@@ -448,24 +448,24 @@ public class HomeActivity extends AppCompatActivity {
                 class_list_string
         )).start();
 
-        for (Button b : class_button_list) {
+        for (Button b : classButtonList) {
             if (b.getText().equals(mClass.getClassName())) {
-                class_button_list.remove(b);
+                classButtonList.remove(b);
                 break;
             }
         }
 
-        class_scroll_content_layout.removeAllViews();
+        classScrollContentLayout.removeAllViews();
         generateClassButtonLayout();
 
-        if (class_list.size() == 0) {
-            if (is_Instructor) {
+        if (classList.size() == 0) {
+            if (isInstructor) {
                 createClass();
             } else {
                 joinClass();
             }
         } else {
-            switchClass(class_list.get(0));
+            switchClass(classList.get(0));
         }
     }
 
@@ -482,7 +482,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setupAllTabs() {
         setupTab(getString(R.string.UI_quizzes));
-        if (is_Instructor) {
+        if (isInstructor) {
             setupTab(getString(R.string.UI_class_statistics));
         } else {
             setupTab(getString(R.string.UI_leader_board));
@@ -491,19 +491,19 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void onClassSwitchButtonClicked() {
-        if (class_scroll_view.getVisibility() == View.INVISIBLE) {
-            class_switch_button.setAnimation(rotateOpen);
-            class_scroll_view.setAnimation(fromBottom);
-            class_scroll_view.setVisibility(View.VISIBLE);
-            for (Button b : class_button_list) {
+        if (classScrollView.getVisibility() == View.INVISIBLE) {
+            classSwitchButton.setAnimation(rotateOpen);
+            classScrollView.setAnimation(fromBottom);
+            classScrollView.setVisibility(View.VISIBLE);
+            for (Button b : classButtonList) {
                 b.setVisibility(View.VISIBLE);
                 b.setClickable(true);
             }
         } else {
-            class_switch_button.setAnimation(rotateClose);
-            class_scroll_view.setAnimation(toBottom);
-            class_scroll_view.setVisibility(View.INVISIBLE);
-            for (Button b : class_button_list) {
+            classSwitchButton.setAnimation(rotateClose);
+            classScrollView.setAnimation(toBottom);
+            classScrollView.setVisibility(View.INVISIBLE);
+            for (Button b : classButtonList) {
                 if (b.getVisibility() == View.VISIBLE) {
                     b.setVisibility(View.INVISIBLE);
                     b.setClickable(false);

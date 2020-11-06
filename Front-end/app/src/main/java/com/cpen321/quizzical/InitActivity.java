@@ -47,7 +47,7 @@ public class InitActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 420;
     protected boolean username_input_OK = false;
-    protected boolean email_input_OK = false;
+    protected boolean emailInputOK = false;
     private SharedPreferences sp;
     private GoogleSignInClient mGoogleSignInClient;
     private LinearLayout.LayoutParams layoutParams;
@@ -177,7 +177,7 @@ public class InitActivity extends AppCompatActivity {
                     sp.edit().putString(getString(R.string.PROFILE_IMG), encodedBitmap).apply();
                 }).start();
                 username_input_OK = OtherUtils.checkUserName(username);
-                email_input_OK = OtherUtils.checkEmail(email);
+                emailInputOK = OtherUtils.checkEmail(email);
 
                 sp.edit().putString(getString(R.string.USERNAME), username).apply();
                 sp.edit().putString(getString(R.string.EMAIL), email).apply();
@@ -324,14 +324,14 @@ public class InitActivity extends AppCompatActivity {
                 String email = editable.toString();
                 if (OtherUtils.stringIsNullOrEmpty(email)) {
                     emailErrorText.setText(R.string.UI_prompt_for_valid_email);
-                    email_input_OK = false;
+                    emailInputOK = false;
                 } else if (!OtherUtils.checkEmail(email)) {
                     emailErrorText.setText(R.string.UI_email_invalid_msg);
-                    email_input_OK = false;
+                    emailInputOK = false;
                 } else {
                     sp.edit().putString(getString(R.string.EMAIL), email).apply();
                     emailErrorText.setText("");
-                    email_input_OK = true;
+                    emailInputOK = true;
                 }
             }
         });
@@ -346,7 +346,7 @@ public class InitActivity extends AppCompatActivity {
     }
 
     private void onFinishClicked() {
-        if (username_input_OK && email_input_OK) {
+        if (username_input_OK && emailInputOK) {
             boolean is_instructor = instructorCheckBox.isChecked();
 
             sp.edit().putInt(getString(R.string.USER_QUIZ_COUNT), 0).apply();

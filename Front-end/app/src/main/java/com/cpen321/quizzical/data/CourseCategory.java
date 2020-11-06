@@ -4,6 +4,5 @@ public enum CourseCategory {
     Math,
     English,
     QuantumPhysic,
-    Misc,
     DontCare
 }

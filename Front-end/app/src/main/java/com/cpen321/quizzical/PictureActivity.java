@@ -21,7 +21,7 @@ public class PictureActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int RETURN_CODE = 2;
     private static final int CHOICE_RETURN_CODE = 3;
-    private int curr_request_num;
+    private int currRequestNum;
     private int questionNum;
     private int choiceNum;
     private LinearLayout linearLayout;
@@ -48,8 +48,8 @@ public class PictureActivity extends AppCompatActivity {
             askForModification();
         }
 
-        curr_request_num = getIntent().getIntExtra(getString(R.string.REQUEST_CODE), RETURN_CODE);
-        if (curr_request_num == CHOICE_RETURN_CODE) {
+        currRequestNum = getIntent().getIntExtra(getString(R.string.REQUEST_CODE), RETURN_CODE);
+        if (currRequestNum == CHOICE_RETURN_CODE) {
             choiceNum = getIntent().getIntExtra(getString(R.string.CHOICE_NUM), 0);
         }
     }
@@ -122,7 +122,7 @@ public class PictureActivity extends AppCompatActivity {
         i.putExtra(getString(R.string.ORIGINAL_IMG), imageBitmap);
         i.putExtra(getString(R.string.QUESTION_NUM), questionNum);
 
-        if (curr_request_num == RETURN_CODE) {
+        if (currRequestNum == RETURN_CODE) {
             setResult(RETURN_CODE, i);
         } else {
             i.putExtra(getString(R.string.CHOICE_NUM), choiceNum);
