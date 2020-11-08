@@ -36,7 +36,7 @@ MongoClient.connect(
 router.use(express.json());
 
 router.post("/", (req, res, next) => {
-  if (req.body.type === "ProfileImage") 
+  if (req.body.type === "profileImage") 
   {
     let path = "images/" + req.body.uid;
     let filename = path + "/profile_img.jpg";
@@ -79,7 +79,7 @@ router.post("/", (req, res, next) => {
 
 router.post("/", (req, res, next) => {
   
-  else if (req.body.type === "notificationFrequency") {
+  if (req.body.type === "notificationFrequency") {
     try {
       db.collection(req.body.type).updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
         if (err) {
