@@ -27,7 +27,7 @@ public class InitActivityTest {
     @Before
     public void cleanUpSharedPreferences() {
         Activity activity = activityTestRule.getActivity();
-        sp = activity.getSharedPreferences("curr_login_user", Context.MODE_PRIVATE);
+        sp = activity.getSharedPreferences("currLoginUser", Context.MODE_PRIVATE);
         sp.edit().clear().apply();
     }
 

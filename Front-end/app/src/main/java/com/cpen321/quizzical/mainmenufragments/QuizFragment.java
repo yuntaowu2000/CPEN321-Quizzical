@@ -348,8 +348,8 @@ public class QuizFragment extends Fragment {
                 qm.setId(i);
             }
             if (OtherUtils.stringIsNullOrEmpty(qm.getQuizLink())) {
-                String quiz_link = getString(R.string.GET_URL) + "quiz?class_code=" + currClass.getClassCode() + "&quiz_code=" + i;
-                String wrong_question_link = quiz_link + "&type=wrong_question_list&uid=" + sp.getString(getString(R.string.UID), "");
+                String quiz_link = String.format(getString(R.string.QUIZ_URL), currClass.getClassCode(), i);
+                String wrong_question_link = quiz_link + "&type=wrongQuestionList&uid=" + sp.getString(getString(R.string.UID), "");
                 String stats_link = quiz_link + "&type=stats&uid=" + sp.getString(getString(R.string.UID), "");
                 qm.setQuizLink(quiz_link);
                 qm.setWrongQuestionLink(wrong_question_link);

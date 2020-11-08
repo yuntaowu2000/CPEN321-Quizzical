@@ -2,56 +2,56 @@
     <!--    general usage-->
     <string name="BACKUP_GET_URL" translatable="false">http://193.122.108.23:7070/</string>
     <string name="GET_URL" translatable="false">http://quizzical.canadacentral.cloudapp.azure.com/</string>
-    <string name="QUIZ_URL" translatable="false"><![CDATA[http://quizzical.canadacentral.cloudapp.azure.com/quiz?class_code=%d&quiz_code=%d]]></string>
+    <string name="QUIZ_URL" translatable="false"><![CDATA[http://quizzical.canadacentral.cloudapp.azure.com/quiz?classCode=%d&quizCode=%d]]></string>
     <string name="TYPE" translatable="false">type=</string>
 
     <string name="app_name" translatable="false">quizzical</string>
     <string name="YES">yes</string>
     <string name="NO">no</string>
 
-    <string name="curr_login_user" translatable="false">curr_login_user</string>
+    <string name="curr_login_user" translatable="false">currLoginUser</string>
     <string name="LOGGED" translatable="false">logged</string>
 
     <string name="Continue_text">Continue</string>
 
     <!--    set an untranslatable version of username for server communication-->
-    <string name="USER_INFO" translatable="false">user_info</string>
-    <string name="UID" translatable="false">user_id</string>
+    <string name="USER_INFO" translatable="false">userInfo</string>
+    <string name="UID" translatable="false">userId</string>
     <string name="USERNAME" translatable="false">username</string>
     <string name="EMAIL" translatable="false">Email</string>
-    <string name="PROFILE_IMG" translatable="false">Profile_Image</string>
+    <string name="PROFILE_IMG" translatable="false">profileImage</string>
     <string name="EXP" translatable="false">EXP</string>
-    <string name="USER_QUIZ_COUNT" translatable="false">user quiz count</string>
-    <string name="FIREBASE_TOKEN" translatable="false">Firebase_token</string>
-    <string name="NOTIFICATION_FREQ" translatable="false">notification_frequency</string>
+    <string name="USER_QUIZ_COUNT" translatable="false">userQuizCount</string>
+    <string name="FIREBASE_TOKEN" translatable="false">firebaseToken</string>
+    <string name="NOTIFICATION_FREQ" translatable="false">notificationFrequency</string>
 
     <string name="TRUE" translatable="false">True</string>
     <string name="FALSE" translatable="false">False</string>
     <string name="OK" translatable="false">OK</string>
 
-    <string name="IS_INSTRUCTOR" translatable="false">IS_INSTRUCTOR</string>
+    <string name="IS_INSTRUCTOR" translatable="false">isInstructor</string>
 
-    <string name="CREATE_CLASS" translatable="false">create_class</string>
-    <string name="JOIN_CLASS" translatable="false">join_class</string>
-    <string name="CLASS_CODE" translatable="false">class_code</string>
-    <string name="CLASS_NAME" translatable="false">class_name</string>
-    <string name="CLASS_LIST" translatable="false">class_list</string>
-    <string name="CLASS_INFO" translatable="false">class_info</string>
-    <string name="CURR_CLASS_CODE" translatable="false">curr_class_code</string>
-    <string name="CURR_CLASS" translatable="false">curr_class</string>
+    <string name="CREATE_CLASS" translatable="false">createClass</string>
+    <string name="JOIN_CLASS" translatable="false">joinClass</string>
+    <string name="CLASS_CODE" translatable="false">classCode</string>
+    <string name="CLASS_NAME" translatable="false">className</string>
+    <string name="CLASS_LIST" translatable="false">classList</string>
+    <string name="CLASS_INFO" translatable="false">classInfo</string>
+    <string name="CURR_CLASS_CODE" translatable="false">currClassCode</string>
+    <string name="CURR_CLASS" translatable="false">currClass</string>
 
     <string name="QUIZ" translatable="false">quiz</string>
-    <string name="QUIZ_CODE" translatable="false">quiz_code</string>
-    <string name="QUIZ_MODULES" translatable="false">quiz_modules</string>
-    <string name="QUESTION_NUM" translatable="false">question_num</string>
-    <string name="CHOICE_NUM" translatable="false">choice_num</string>
-    <string name="REQUEST_CODE" translatable="false">request_code</string>
-    <string name="QUIZ_CONTENT" translatable="false">QUIZ_CONTENT</string>
-    <string name="CREATE_QUIZ" translatable="false">create_quiz</string>
+    <string name="QUIZ_CODE" translatable="false">quizCode</string>
+    <string name="QUIZ_MODULES" translatable="false">quizModules</string>
+    <string name="QUESTION_NUM" translatable="false">questionNum</string>
+    <string name="CHOICE_NUM" translatable="false">choiceNum</string>
+    <string name="REQUEST_CODE" translatable="false">requestCode</string>
+    <string name="QUIZ_CONTENT" translatable="false">quizContent</string>
+    <string name="CREATE_QUIZ" translatable="false">createQuiz</string>
 
-    <string name="LOCAL_CACHE" translatable="false">LOCAL_CACHE</string>
+    <string name="LOCAL_CACHE" translatable="false">localCache</string>
 
-    <string name="COURSE_CATEGORY" translatable="false">course_category</string>
+    <string name="COURSE_CATEGORY" translatable="false">courseCategory</string>
 
     <string name="MATH">Math</string>
     <string name="ENGLISH">English</string>
@@ -63,7 +63,7 @@
         <item>QuantumPhysic</item>
     </string-array>
 
-    <string name="GRADE_LEVEL" translatable="false">grade_level</string>
+    <string name="GRADE_LEVEL" translatable="false">gradeLevel</string>
 
     <string-array name="grades_array">
         <item>Grade 9</item>
@@ -212,9 +212,9 @@
     <string name="UI_in_quiz_correct_msg">You are correct. You got %d/%d correct.</string>
     <string name="UI_in_quiz_wrong_msg">You are wrong. You got %d/%d correct.</string>
 
-    <string name="correct_num" translatable="false">Correct_Num</string>
-    <string name="total_num" translatable="false">Total_Num</string>
-    <string name="wrong_question_ids" translatable="false">Wrong question ids</string>
+    <string name="correct_num" translatable="false">correctNum</string>
+    <string name="total_num" translatable="false">totalNum</string>
+    <string name="wrong_question_ids" translatable="false">wrongQuestionIds</string>
     <string name="quiz_result" translatable="false">Quiz %d result</string>
     <string name="EXP_earned_for_quiz" translatable="false">EXP earned</string>
 
@@ -233,8 +233,8 @@
     <string name="UI_modify_image_msg">Do you want to crop or rotate the image?</string>
     <string name="UI_crop">Crop</string>
     <string name="UI_rotate">Rotate 90</string>
-    <string name="MODIFIED_IMG" translatable="false">modified_image</string>
-    <string name="ORIGINAL_IMG" translatable="false">original_image</string>
+    <string name="MODIFIED_IMG" translatable="false">modifiedImage</string>
+    <string name="ORIGINAL_IMG" translatable="false">originalImage</string>
 
 
     <!--    used for beautifying choices-->

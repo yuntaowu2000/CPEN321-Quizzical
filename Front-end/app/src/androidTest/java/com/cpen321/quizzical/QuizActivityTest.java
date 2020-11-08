@@ -23,13 +23,13 @@ import org.junit.runner.RunWith;
 public class QuizActivityTest {
     @Rule
     public ActivityTestRule<QuizActivity> activityTestRule = new ActivityTestRule<>(QuizActivity.class);
-    private boolean is_instructor = false;
+    private boolean isInstructor = false;
 
     @Before
     public void setupTest() {
         Activity activity = activityTestRule.getActivity();
-        SharedPreferences sp = activity.getSharedPreferences("curr_login_user", Context.MODE_PRIVATE);
-        is_instructor = sp.getBoolean("IS_INSTRUCTOR", false);
+        SharedPreferences sp = activity.getSharedPreferences("currLoginUser", Context.MODE_PRIVATE);
+        isInstructor = sp.getBoolean("isInstructor", false);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class QuizActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.quiz_finished_page_response))
                 .check(ViewAssertions.matches(ViewMatchers.withText("You got 3/3 correct. Congratulations!")));
 
-        if (!is_instructor)
+        if (!isInstructor)
             Espresso.onView(ViewMatchers.withId(R.id.quiz_finished_page_exp_earned))
                     .check(ViewAssertions.matches(ViewMatchers.withText("You got 15 EXP!")));
     }
@@ -87,7 +87,7 @@ public class QuizActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.quiz_finished_page_response))
                 .check(ViewAssertions.matches(ViewMatchers.withText("You got 2/3 correct. Great work!")));
 
-        if (!is_instructor)
+        if (!isInstructor)
             Espresso.onView(ViewMatchers.withId(R.id.quiz_finished_page_exp_earned))
                     .check(ViewAssertions.matches(ViewMatchers.withText("You got 13 EXP!")));
     }

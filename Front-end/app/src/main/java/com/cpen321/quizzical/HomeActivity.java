@@ -217,8 +217,8 @@ public class HomeActivity extends AppCompatActivity {
 
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v ->
         {
-            int class_code = Integer.parseInt(editText.getText().toString());
-            Classes newClass = parseClassInfoForStudents(class_code);
+            int classCode = Integer.parseInt(editText.getText().toString());
+            Classes newClass = parseClassInfoForStudents(classCode);
             if (newClass != null) {
                 appendNewClassToList(newClass);
                 alertDialog.dismiss();
@@ -229,15 +229,15 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    private Classes parseClassInfoForStudents(int class_code) {
+    private Classes parseClassInfoForStudents(int classCode) {
         // when a student join a class by class code, get the general class info from the server
 
         new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
                 getString(R.string.JOIN_CLASS),
-                String.valueOf(class_code)
+                String.valueOf(classCode)
         )).start();
 
-        String classInfoLink = getString(R.string.GET_URL) + "/classes?" + getString(R.string.CLASS_CODE) + "=" + class_code;
+        String classInfoLink = getString(R.string.GET_URL) + "/classes?" + getString(R.string.CLASS_CODE) + "=" + classCode;
         String classInfoString = OtherUtils.readFromURL(classInfoLink);
 
         try {
@@ -249,7 +249,7 @@ public class HomeActivity extends AppCompatActivity {
             Log.d("parse_json", "parse class info failed");
         }
         //TODO: need to change to return null here after the server is working
-        return new Classes(getString(R.string.UID), class_code, "testClass", CourseCategory.DontCare);
+        return new Classes(getString(R.string.UID), classCode, "testClass", CourseCategory.DontCare);
     }
 
     private void createClass() {
@@ -340,16 +340,16 @@ public class HomeActivity extends AppCompatActivity {
 
     private void createNewClassCode(String course_category, String grade_level, String class_name) {
 
-        int curr_class_code = (course_category.hashCode() + grade_level.hashCode() + class_name.hashCode()) % 65536;
+        int curr_classCode = (course_category.hashCode() + grade_level.hashCode() + class_name.hashCode()) % 65536;
         CourseCategory courseCategory = convertCategoryStringToEnum(course_category);
 
         Classes mClass = new Classes(sp.getString(getString(R.string.UID), ""),
-                curr_class_code,
+                curr_classCode,
                 class_name,
                 courseCategory);
 
         new AlertDialog.Builder(this).setTitle(R.string.UI_create_class_success_title)
-                .setMessage(String.format(getString(R.string.UI_create_class_success_msg), curr_class_code))
+                .setMessage(String.format(getString(R.string.UI_create_class_success_msg), curr_classCode))
                 .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
                 .show();
         appendNewClassToList(mClass);
