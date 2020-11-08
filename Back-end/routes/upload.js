@@ -35,6 +35,7 @@ MongoClient.connect(
 
 router.use(express.json());
 
+/*eslint complexity: ["error", 10]*/
 router.post("/", (req, res, next) => {
   console.error("UID: " + req.body.uid);
   console.error("Type: " + req.body.type);
