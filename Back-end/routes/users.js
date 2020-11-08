@@ -14,6 +14,7 @@ MongoClient.connect(
 );
 
 /* GET users listing. */
+/*eslint complexity: ["error", 10]*/
 router.get("/", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
   let uid = url.searchParams.get("user_id");
