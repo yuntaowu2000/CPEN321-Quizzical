@@ -30,10 +30,19 @@ router.get("/", (req, res, next) => {
         res.send(""+classCode);
       }
     });
-  } else if (type === "class_list") {
-  } else if (type === "class_statistics") {
-  } else if (type === "quiz_modules") {
+  } 
+  /*
+  else if (type === "class_list") 
+  {
+  } 
+  else if (type === "class_statistics") 
+  {
+  } 
+  else if (type === "quiz_modules") 
+  {
   }
+  */
+  
 });
 
 module.exports = router;
