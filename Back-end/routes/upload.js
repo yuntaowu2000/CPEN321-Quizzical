@@ -90,8 +90,13 @@ router.post("/", (req, res, next) => {
         console.error(err);
       }
     });
-  } else if (req.body.type === "class_list") {
-  } else if (req.body.type === "create_quiz") {
+  } 
+  /*
+  else if (req.body.type === "class_list") 
+  {
+  }
+  */
+  else if (req.body.type === "create_quiz") {
     let quizData = JSON.parse(req.body.data);
     db.collection("quizzes").updateOne(
       {$and: [{uid: req.body.uid},{moduleName: quizData.moduleName},{class_code: quizData.class_code}]},
