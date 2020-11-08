@@ -52,7 +52,7 @@ after each quiz is finished
 ### Back-end  
 1. Simple POST GET request handling done.  
 2. user info (username, email, profile image, is_instructor, class taken, class statistics) mostly done  
-3 quiz info (created quiz parsed and sent onto the server; retrive quiz from the server)   
+3. quiz info (created quiz parsed and sent onto the server; retrive quiz from the server)   
 
 ## TODO list
 1. UI set up for home activity  
