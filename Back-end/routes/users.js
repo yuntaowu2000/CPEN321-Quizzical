@@ -31,7 +31,7 @@ router.get("/", (req, res, next) => {
     res.send(string);
   }
   else if (type === null) {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({Profile_Image:0, _id:0}).maxTimeMS(timeout).toArray((err,data) => {
+    db.collection("user info").find({ uid: { $eq: uid }}).project({ProfileImage:0, _id:0}).maxTimeMS(timeout).toArray((err,data) => {
       if (err) {
         throw err;
       } else {
@@ -79,7 +79,7 @@ router.get("/", (req, res, next) => {
     });
   }
   else if (type === "user_quiz_count") {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({user_quiz_count:1, _id:0}).maxTimeMS(timeout).toArray((err, quizCount) => {
+    db.collection("user info").find({ uid: { $eq: uid }}).project({userQuizCount:1, _id:0}).maxTimeMS(timeout).toArray((err, quizCount) => {
       if (err) {
         throw err;
       } else {
@@ -99,7 +99,7 @@ router.get("/", (req, res, next) => {
     });
   }
   else if (type === "class_code") {
-    db.collection("class info").find({ uid: { $eq: uid }}).project({class_code:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
+    db.collection("class info").find({ uid: { $eq: uid }}).project({classCode:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
       if (err) {
         throw err;
       } else {
@@ -109,7 +109,7 @@ router.get("/", (req, res, next) => {
     });
   }
   else if (type === "notification_frequency") {
-    db.collection("notification_frequency").find({ uid: { $eq: uid }}).project({notification_frequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
+    db.collection("notificationFrequency").find({ uid: { $eq: uid }}).project({notificationFrequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
       if (err) {
         throw err;
       } else {
