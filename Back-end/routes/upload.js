@@ -44,11 +44,11 @@ router.post("/", (req, res, next) => {
 
   if (req.body.type === "ProfileImage") {
     let path = "images/" + req.body.uid;
-    if (!fs.existsSync(path)) {
-      fs.mkdirSync(path, {recursive:true});
+    if (!fs.existsSync( "images/" + req.body.uid )) {
+      fs.mkdirSync( "images/" + req.body.uid , {recursive:true});
     }
     let filename = path + "/profile_img.jpg";
-    fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
+    fs.writeFileSync( path + "/profile_img.jpg" , req.body.data, {encoding: "base64"});
   }
   else if (req.body.type === "userInfo") {
     db.collection("user info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
