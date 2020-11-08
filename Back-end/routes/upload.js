@@ -27,7 +27,7 @@ MongoClient.connect(
     });
     db.createCollection("quizzes", (err, res) => {
       if (err) {
-        console.log(err);
+        //console.log(err);
       }
     });
   }
@@ -37,10 +37,10 @@ router.use(express.json());
 
 /*eslint complexity: ["error", 10]*/
 router.post("/", (req, res, next) => {
-  console.error("UID: " + req.body.uid);
-  console.error("Type: " + req.body.type);
-  console.error("Data: %j", req.body);
-  console.error(Object.entries(req.body));
+  //console.error("UID: " + req.body.uid);
+  //console.error("Type: " + req.body.type);
+  //console.error("Data: %j", req.body);
+  //console.error(Object.entries(req.body));
 
   if (req.body.type === "ProfileImage") {
     let path = "images/" + req.body.uid;
