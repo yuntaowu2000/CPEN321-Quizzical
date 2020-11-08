@@ -35,13 +35,7 @@ MongoClient.connect(
 
 router.use(express.json());
 
-/*eslint complexity: ["error", 10]*/
 router.post("/", (req, res, next) => {
-  //console.error("UID: " + req.body.uid);
-  //console.error("Type: " + req.body.type);
-  //console.error("Data: %j", req.body);
-  //console.error(Object.entries(req.body));
-
   if (req.body.type === "ProfileImage") {
     let path = "images/" + req.body.uid;
     if (!fs.existsSync( "images/" + req.body.uid )) {
@@ -50,13 +44,38 @@ router.post("/", (req, res, next) => {
     let filename = path + "/profile_img.jpg";
     fs.writeFileSync( path + "/profile_img.jpg" , req.body.data, {encoding: "base64"});
   }
-  else if (req.body.type === "userInfo") {
+
+  res.statusCode = 200;
+  res.end();
+});
+
+
+
+router.post("/", (req, res, next) => {
+  
+  if (req.body.type === "userInfo") {
     db.collection("user info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
       }
     });
   }
+  
+  else if (req.body.type === "Email") {
+    db.collection("user info").updateOne({uid: req.body.uid}, {$set: {Email: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
+  
+  res.statusCode = 200;
+  res.end();
+});
+
+
+router.post("/", (req, res, next) => {
+  
   else if (req.body.type === "notificationFrequency") {
     try {
       db.collection(req.body.type).updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
@@ -72,20 +91,21 @@ router.post("/", (req, res, next) => {
       });
     }
   }
-  else if (req.body.type === "Email") {
-    db.collection("user info").updateOne({uid: req.body.uid}, {$set: {Email: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-  }
-  else if (req.body.type === "username") {
+  
+  res.statusCode = 200;
+  res.end();
+});
+
+router.post("/", (req, res, next) => {
+  
+   if (req.body.type === "username") {
     db.collection("user info").updateOne({uid: req.body.uid}, {$set: {username: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
       }
     });
   }
+  
   else if (req.body.type === "joinClass" || req.body.type === "createClass") {
     db.collection("class info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
@@ -93,22 +113,14 @@ router.post("/", (req, res, next) => {
       }
     });
   } 
-  /*
-  else if (req.body.type === "class_list") 
-  {
-  }
-  */
-  else if (req.body.type === "createQuiz") {
-    let quizData = JSON.parse(req.body.data);
-    db.collection("quizzes").updateOne(
-      {$and: [{uid: req.body.uid},{moduleName: quizData.moduleName},{classCode: quizData.classCode}]},
-      {$set: Object.assign({}, quizData, {uid: req.body.uid}, {classCode: quizData.classCode}, {moduleName: quizData.moduleName})},
-      {upsert: true}, (err, res) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-  } else if (req.body.type === "EXP") {
+  
+  res.statusCode = 200;
+  res.end();
+});
+
+router.post("/", (req, res, next) => {
+
+  if (req.body.type === "EXP") {
     db.collection("user info").updateOne({uid: req.body.uid}, {$set: {EXP: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
@@ -121,6 +133,34 @@ router.post("/", (req, res, next) => {
       }
     });
   }
+ 
+  res.statusCode = 200;
+  res.end();
+});
+
+  
+/*eslint complexity: ["error", 10]*/
+router.post("/", (req, res, next) => {
+  //console.error("UID: " + req.body.uid);
+  //console.error("Type: " + req.body.type);
+  //console.error("Data: %j", req.body);
+  //console.error(Object.entries(req.body));
+  /*
+  else if (req.body.type === "class_list") 
+  {
+  }
+  */
+  if (req.body.type === "createQuiz") {
+    let quizData = JSON.parse(req.body.data);
+    db.collection("quizzes").updateOne(
+      {$and: [{uid: req.body.uid},{moduleName: quizData.moduleName},{classCode: quizData.classCode}]},
+      {$set: Object.assign({}, quizData, {uid: req.body.uid}, {classCode: quizData.classCode}, {moduleName: quizData.moduleName})},
+      {upsert: true}, (err, res) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  } 
 
   res.statusCode = 200;
   res.end();
