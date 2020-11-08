@@ -16,7 +16,7 @@ MongoClient.connect(
 /* GET users listing. */
 router.get("/", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
-  let uid = url.searchParams.get("user_id");
+  let uid = url.searchParams.get("userId");
   let type = url.searchParams.get("type");
   let className = url.searchParams.get("className");
   let classCode = url.searchParams.get("classCode");

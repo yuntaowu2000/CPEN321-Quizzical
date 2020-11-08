@@ -86,7 +86,7 @@ router.post("/", (req, res, next) => {
       }
     });
   }
-  else if (req.body.type === "joinClass" || req.body.type === "create_class") {
+  else if (req.body.type === "joinClass" || req.body.type === "createClass") {
     db.collection("class info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);

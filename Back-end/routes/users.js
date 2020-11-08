@@ -17,11 +17,11 @@ MongoClient.connect(
 /*eslint complexity: ["error", 10]*/
 router.get("/", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
-  let uid = url.searchParams.get("user_id");
+  let uid = url.searchParams.get("userId");
   let type = url.searchParams.get("type");
   
   let timeout = 2000;
-  if (type === "ProfileImage") {
+  if (type === "profileImage") {
     let filepath = "images/" + uid + "/profile_img.jpg";
     let string = "";
     if (fs.existsSync(filepath)) {
@@ -31,7 +31,7 @@ router.get("/", (req, res, next) => {
     res.send(string);
   }
   else if (type === null) {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({ProfileImage:0, _id:0}).maxTimeMS(timeout).toArray((err,data) => {
+    db.collection("user info").find({ uid: { $eq: uid }}).project({profileImage:0, _id:0}).maxTimeMS(timeout).toArray((err,data) => {
       if (err) {
         throw err;
       } else {
@@ -68,8 +68,8 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  else if (type === "IS_INSTRUCTOR") {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({IS_INSTRUCTOR:1, _id:0}).maxTimeMS(timeout).toArray((err, isInstructor) => {
+  else if (type === "isInstructor") {
+    db.collection("user info").find({ uid: { $eq: uid }}).project({isInstructor:1, _id:0}).maxTimeMS(timeout).toArray((err, isInstructor) => {
       if (err) {
         throw err;
       } else {
