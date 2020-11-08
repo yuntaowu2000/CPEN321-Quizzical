@@ -361,8 +361,8 @@ public class InitActivity extends AppCompatActivity {
 
             new Thread(() ->
             {
-                OtherUtils.uploadToServer(getString(R.string.USER_END_POINT),sp.getString(getString(R.string.UID), ""), getString(R.string.USER_INFO), user_info);
-                OtherUtils.uploadToServer(getString(R.string.PROFILE_IMAGE_END_POINT), sp.getString(getString(R.string.UID), ""),
+                OtherUtils.uploadToServer(getString(R.string.USER_ENDPOINT),sp.getString(getString(R.string.UID), ""), getString(R.string.USER_INFO), user_info);
+                OtherUtils.uploadToServer(getString(R.string.PROFILE_IMAGE_ENDPOINT), sp.getString(getString(R.string.UID), ""),
                         getString(R.string.PROFILE_IMG),
                         sp.getString(getString(R.string.PROFILE_IMG), ""));
             }).start();

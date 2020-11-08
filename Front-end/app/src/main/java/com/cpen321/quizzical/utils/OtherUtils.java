@@ -101,8 +101,9 @@ public class OtherUtils {
 
         String jsonStringToSend = createJsonString(uid, type, data);
         String response = "";
-        String serverLink = "http://quizzical.canadacentral.cloudapp.azure.com/" + endpoint;
+        String serverLink = "http://quizzical.canadacentral.cloudapp.azure.com/upload/" + endpoint;
         Log.d("upload", "uploading: " + jsonStringToSend);
+        Log.d("upload", "upload to: "+ serverLink);
         try {
             URL url = new URL(serverLink);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

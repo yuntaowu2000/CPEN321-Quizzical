@@ -174,7 +174,7 @@ public class ProfileFragment extends Fragment {
         sp.edit().putInt(getString(R.string.NOTIFICATION_FREQ), i).apply();
         String jsonRepresentation = parseNotificationInfo(i, sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
         new Thread(() -> OtherUtils.uploadToServer(
-                getString(R.string.NOTIFICATION_END_POINT),
+                getString(R.string.NOTIFICATION_ENDPOINT),
                 sp.getString(getString(R.string.UID), ""),
                 getString(R.string.NOTIFICATION_FREQ), jsonRepresentation)).start();
     }
@@ -198,7 +198,7 @@ public class ProfileFragment extends Fragment {
                     String jsonRepresentation = parseNotificationInfo(default_notification_freq,
                             sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
                     OtherUtils.uploadToServer(
-                            getString(R.string.NOTIFICATION_END_POINT),
+                            getString(R.string.NOTIFICATION_ENDPOINT),
                             sp.getString(getString(R.string.UID), ""),
                             getString(R.string.NOTIFICATION_FREQ),
                             jsonRepresentation);
@@ -263,7 +263,7 @@ public class ProfileFragment extends Fragment {
                 }
 
                 new Thread(() -> OtherUtils.uploadToServer(
-                        getString(R.string.PROFILE_IMAGE_END_POINT),
+                        getString(R.string.PROFILE_IMAGE_ENDPOINT),
                         sp.getString(getString(R.string.UID), ""),
                         getString(R.string.PROFILE_IMG),
                         encoded)).start();
@@ -337,7 +337,7 @@ public class ProfileFragment extends Fragment {
 
                 usernameText.setText(newUsername);
                 new Thread(() -> OtherUtils.uploadToServer(
-                        getString(R.string.USER_END_POINT),
+                        getString(R.string.USER_ENDPOINT),
                         sp.getString(getString(R.string.UID), ""),
                         getString(R.string.USERNAME),
                         newUsername)).start();
@@ -387,7 +387,7 @@ public class ProfileFragment extends Fragment {
 
                 emailText.setText(newEmail);
                 new Thread(() -> OtherUtils.uploadToServer(
-                        getString(R.string.USER_END_POINT),
+                        getString(R.string.USER_ENDPOINT),
                         sp.getString(getString(R.string.UID), ""),
                         getString(R.string.EMAIL),
                         newEmail)).start();

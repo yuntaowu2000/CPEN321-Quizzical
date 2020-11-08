@@ -232,7 +232,7 @@ public class HomeActivity extends AppCompatActivity {
     private Classes parseClassInfoForStudents(int classCode) {
         // when a student join a class by class code, get the general class info from the server
 
-        OtherUtils.uploadToServer(getString(R.string.CLASS_END_POINT), sp.getString(getString(R.string.UID), ""),
+        OtherUtils.uploadToServer(getString(R.string.CLASS_ENDPOINT), sp.getString(getString(R.string.UID), ""),
                 getString(R.string.JOIN_CLASS),
                 String.valueOf(classCode)
         );
@@ -355,7 +355,7 @@ public class HomeActivity extends AppCompatActivity {
         appendNewClassToList(mClass);
 
 
-        new Thread(() -> OtherUtils.uploadToServer(getString(R.string.CLASS_END_POINT), sp.getString(getString(R.string.UID), ""), getString(R.string.CREATE_CLASS), mClass.toJson())).start();
+        new Thread(() -> OtherUtils.uploadToServer(getString(R.string.CLASS_ENDPOINT), sp.getString(getString(R.string.UID), ""), getString(R.string.CREATE_CLASS), mClass.toJson())).start();
     }
 
     private void generateNewClassButton(Classes c) {
@@ -404,7 +404,7 @@ public class HomeActivity extends AppCompatActivity {
         sp.edit().putString(getString(R.string.CLASS_LIST), class_list_string).apply();
 
         new Thread(() -> OtherUtils.uploadToServer(
-                getString(R.string.CLASS_END_POINT),
+                getString(R.string.CLASS_ENDPOINT),
                 sp.getString(getString(R.string.UID), ""),
                 getString(R.string.CLASS_LIST),
                 class_list_string
@@ -444,7 +444,7 @@ public class HomeActivity extends AppCompatActivity {
         sp.edit().putString(getString(R.string.CLASS_LIST), class_list_string).apply();
 
         new Thread(() -> OtherUtils.uploadToServer(
-                getString(R.string.CLASS_END_POINT),
+                getString(R.string.CLASS_ENDPOINT),
                 sp.getString(getString(R.string.UID), ""),
                 getString(R.string.CLASS_LIST),
                 class_list_string

@@ -18,7 +18,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         SharedPreferences sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
         sp.edit().putString(getString(R.string.FIREBASE_TOKEN), token).apply();
         new Thread(() -> OtherUtils.uploadToServer(
-                getString(R.string.NOTIFICATION_END_POINT),
+                getString(R.string.NOTIFICATION_ENDPOINT),
                 sp.getString(getString(R.string.UID), ""),
                 getString(R.string.FIREBASE_TOKEN),
                 token

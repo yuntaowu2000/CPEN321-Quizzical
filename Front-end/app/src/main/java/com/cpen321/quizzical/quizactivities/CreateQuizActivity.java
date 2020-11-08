@@ -329,9 +329,21 @@ public class CreateQuizActivity extends AppCompatActivity {
         String currQuizCountVal = String.valueOf(userQuizCount);
 
         new Thread(() -> {
-            OtherUtils.uploadToServer(instructorUID, getString(R.string.CREATE_QUIZ), quizPackJson);
-            OtherUtils.uploadToServer(instructorUID, getString(R.string.EXP), currEXPVal);
-            OtherUtils.uploadToServer(instructorUID, getString(R.string.USER_QUIZ_COUNT), currQuizCountVal);
+            OtherUtils.uploadToServer(
+                    getString(R.string.QUIZ_ENDPOINT),
+                    instructorUID,
+                    getString(R.string.CREATE_QUIZ),
+                    quizPackJson);
+            OtherUtils.uploadToServer(
+                    getString(R.string.STATS_ENDPOINT),
+                    instructorUID,
+                    getString(R.string.EXP),
+                    currEXPVal);
+            OtherUtils.uploadToServer(
+                    getString(R.string.STATS_ENDPOINT),
+                    instructorUID,
+                    getString(R.string.USER_QUIZ_COUNT),
+                    currQuizCountVal);
         }).start();
         Log.d("Quiz_create", quizPackJson);
 

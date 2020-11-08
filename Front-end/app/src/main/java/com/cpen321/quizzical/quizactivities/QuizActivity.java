@@ -391,7 +391,11 @@ public class QuizActivity extends AppCompatActivity {
             Classes mClass = new Classes(sp.getString(getString(R.string.CURR_CLASS), ""));
 
             String parsedResult = parseQuizResults(quizNumAndExp[0], quizNumAndExp[1], mClass.getClassCode());
-            new Thread(() -> OtherUtils.uploadToServer(uid, type, parsedResult)).start();
+            new Thread(() -> OtherUtils.uploadToServer(
+                    getString(R.string.STATS_ENDPOINT),
+                    uid,
+                    type,
+                    parsedResult)).start();
         }
 
 
