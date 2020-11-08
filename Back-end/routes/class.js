@@ -18,12 +18,12 @@ router.get("/", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
   let uid = url.searchParams.get("user_id");
   let type = url.searchParams.get("type");
-  let class_name = url.searchParams.get("class_name");
-  let class_code = url.searchParams.get("class_code");
+  let className = url.searchParams.get("className");
+  let classCode = url.searchParams.get("classCode");
   let timeout = 2000;
 
   if (type === null) {
-    db.collection("class info").find({ class_name: { $eq: class_name }}).project({class_code:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
+    db.collection("class info").find({ className: { $eq: className }}).project({classCode:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
       if (err) {
         throw err;
       } else {
