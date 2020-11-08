@@ -31,6 +31,8 @@ router.get("/", (req, res, next) => {
       }
     });
   } 
+  // Note: when below cases are uncommented, Codacy complains about complexity(too many paths through code),
+  // maybe put in another router.get?
   /*
   else if (type === "class_list") 
   {
