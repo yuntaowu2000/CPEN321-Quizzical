@@ -23,7 +23,7 @@ router.get("/", (req, res, next) => {
   let timeout = 2000;
 
   if (type === null) {
-    db.collection("class info").find({ className: { $eq: className }}).project({classCode:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
+    db.collection("classInfo").find({ className: { $eq: className }}).project({classCode:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
       if (err) {
         throw err;
       } else {

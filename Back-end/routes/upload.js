@@ -10,17 +10,17 @@ MongoClient.connect(
   {useUnifiedTopology: true},
   (err, client) => {
     db = client.db("data");
-    db.createCollection("class info", (err, res) => {
+    db.createCollection("classInfo", (err, res) => {
       if (err) {
         console.error(err);
       }
     });
-    db.createCollection("user info", (err, res) => {
+    db.createCollection("userInfo", (err, res) => {
       if (err) {
         console.error(err);
       }
     });
-    db.createCollection("notification frequency", (err, res) => {
+    db.createCollection("notificationFrequency", (err, res) => {
       if (err) {
         console.error(err);
       }
@@ -57,7 +57,7 @@ router.post("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
   
   if (req.body.type === "userInfo") {
-    db.collection("user info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
+    db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
       }
@@ -65,7 +65,7 @@ router.post("/", (req, res, next) => {
   }
   
   else if (req.body.type === "Email") {
-    db.collection("user info").updateOne({uid: req.body.uid}, {$set: {Email: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
+    db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {Email: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
       }
@@ -81,13 +81,13 @@ router.post("/", (req, res, next) => {
   
   if (req.body.type === "notificationFrequency") {
     try {
-      db.collection("notification frequency").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
+      db.collection("notificationFrequency").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
         if (err) {
           console.error(err);
         }
       });
     } catch (ex) {
-      db.collection("notification frequency").updateOne({uid: req.body.uid}, {$set: req.body}, {upsert: true}, (err, res) => {
+      db.collection("notificationFrequency").updateOne({uid: req.body.uid}, {$set: req.body}, {upsert: true}, (err, res) => {
         if (err) {
           console.error(err);
         }
@@ -102,7 +102,7 @@ router.post("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
   
    if (req.body.type === "username") {
-    db.collection("user info").updateOne({uid: req.body.uid}, {$set: {username: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
+    db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {username: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
       }
@@ -110,7 +110,7 @@ router.post("/", (req, res, next) => {
   }
   
   else if (req.body.type === "joinClass" || req.body.type === "createClass") {
-    db.collection("class info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
+    db.collection("classInfo").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
       }
@@ -124,13 +124,13 @@ router.post("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
 
   if (req.body.type === "EXP") {
-    db.collection("user info").updateOne({uid: req.body.uid}, {$set: {EXP: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
+    db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {EXP: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
       }
     });
   } else if (req.body.type === "userQuizCount") {
-    db.collection("user info").updateOne({uid: req.body.uid}, {$set: {"userQuizCount": req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
+    db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {"userQuizCount": req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
       }

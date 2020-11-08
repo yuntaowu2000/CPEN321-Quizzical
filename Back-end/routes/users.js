@@ -22,7 +22,7 @@ router.get("/", (req, res, next) => {
   let timeout = 2000;
 
   if (type === null) {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({profileImage:0, _id:0}).maxTimeMS(timeout).toArray((err,data) => {
+    db.collection("userInfo").find({ uid: { $eq: uid }}).project({profileImage:0, _id:0}).maxTimeMS(timeout).toArray((err,data) => {
       if (err) {
         throw err;
       } else {
@@ -31,7 +31,7 @@ router.get("/", (req, res, next) => {
     });
   }
   else if (type === "userInfo") {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({_id:0}).maxTimeMS(timeout).toArray((err,data) => {
+    db.collection("userInfo").find({ uid: { $eq: uid }}).project({_id:0}).maxTimeMS(timeout).toArray((err,data) => {
       if (err) {
         throw err;
       } else {
@@ -50,7 +50,7 @@ router.get("/", (req, res, next) => {
   let timeout = 2000;
 
   if (type === "username") {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({username:1, _id:0}).maxTimeMS(timeout).toArray((err, username) => {
+    db.collection("userInfo").find({ uid: { $eq: uid }}).project({username:1, _id:0}).maxTimeMS(timeout).toArray((err, username) => {
       if (err) {
         throw err;
       } else {
@@ -60,7 +60,7 @@ router.get("/", (req, res, next) => {
     });
   }
   else if (type === "Email") {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({Email:1, _id:0}).maxTimeMS(timeout).toArray((err, email) => {
+    db.collection("userInfo").find({ uid: { $eq: uid }}).project({Email:1, _id:0}).maxTimeMS(timeout).toArray((err, email) => {
       if (err) {
         throw err;
       } else {
@@ -80,7 +80,7 @@ router.get("/", (req, res, next) => {
   let timeout = 2000;
 
   if (type === "isInstructor") {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({isInstructor:1, _id:0}).maxTimeMS(timeout).toArray((err, isInstructor) => {
+    db.collection("userInfo").find({ uid: { $eq: uid }}).project({isInstructor:1, _id:0}).maxTimeMS(timeout).toArray((err, isInstructor) => {
       if (err) {
         throw err;
       } else {
@@ -90,7 +90,7 @@ router.get("/", (req, res, next) => {
     });
   }
   else if (type === "userQuizCount") {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({userQuizCount:1, _id:0}).maxTimeMS(timeout).toArray((err, quizCount) => {
+    db.collection("userInfo").find({ uid: { $eq: uid }}).project({userQuizCount:1, _id:0}).maxTimeMS(timeout).toArray((err, quizCount) => {
       if (err) {
         throw err;
       } else {
@@ -110,7 +110,7 @@ router.get("/", (req, res, next) => {
   let timeout = 2000;
   
   if (type === "EXP") {
-    db.collection("user info").find({ uid: { $eq: uid }}).project({EXP:1, _id:0}).maxTimeMS(timeout).toArray((err, exp) => {
+    db.collection("userInfo").find({ uid: { $eq: uid }}).project({EXP:1, _id:0}).maxTimeMS(timeout).toArray((err, exp) => {
       if (err) {
         throw err;
       } else {
@@ -120,7 +120,7 @@ router.get("/", (req, res, next) => {
     });
   }
   else if (type === "classCode") {
-    db.collection("class info").find({ uid: { $eq: uid }}).project({classCode:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
+    db.collection("classInfo").find({ uid: { $eq: uid }}).project({classCode:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
       if (err) {
         throw err;
       } else {
@@ -140,7 +140,7 @@ router.get("/", (req, res, next) => {
   let timeout = 2000;
   
    if (type === "notificationFrequency") {
-    db.collection("notification frequency").find({ uid: { $eq: uid }}).project({notificationFrequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
+    db.collection("notificationFrequency").find({ uid: { $eq: uid }}).project({notificationFrequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
       if (err) {
         throw err;
       } else {
