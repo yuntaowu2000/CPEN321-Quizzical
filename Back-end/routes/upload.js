@@ -12,17 +12,17 @@ MongoClient.connect(
     db = client.db("data");
     db.createCollection("classInfo", (err, res) => {
       if (err) {
-        console.error(err);
+        //console.error(err);
       }
     });
     db.createCollection("userInfo", (err, res) => {
       if (err) {
-        console.error(err);
+        //console.error(err);
       }
     });
     db.createCollection("notificationFrequency", (err, res) => {
       if (err) {
-        console.error(err);
+        //console.error(err);
       }
     });
     db.createCollection("quizzes", (err, res) => {
