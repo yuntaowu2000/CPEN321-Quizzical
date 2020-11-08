@@ -101,8 +101,8 @@ router.post("/", (req, res, next) => {
   else if (req.body.type === "create_quiz") {
     let quizData = JSON.parse(req.body.data);
     db.collection("quizzes").updateOne(
-      {$and: [{uid: req.body.uid},{moduleName: quizData.moduleName},{class_code: quizData.class_code}]},
-      {$set: Object.assign({}, quizData, {uid: req.body.uid}, {class_code: quizData.class_code}, {moduleName: quizData.moduleName})},
+      {$and: [{uid: req.body.uid},{moduleName: quizData.moduleName},{classCode: quizData.classCode}]},
+      {$set: Object.assign({}, quizData, {uid: req.body.uid}, {classCode: quizData.classCode}, {moduleName: quizData.moduleName})},
       {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
