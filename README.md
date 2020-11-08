@@ -1,7 +1,7 @@
 # CPEN321-Quizzical
 
 ## Overview
- CPEN321 APP  
+CPEN321 APP  
 Name of Project: Project Quizzical  
 
 Team members of our Project: Jason Bai, Andrew Lance Chan, Ihsan Olawale, Yuntao Wu  
