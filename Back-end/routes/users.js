@@ -18,7 +18,7 @@ router.get("/", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
   let uid = url.searchParams.get("userId");
   let type = url.searchParams.get("type");
-  
+
   let timeout = 2000;
 
   if (type === null) {
@@ -39,14 +39,13 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  
 });
 
-router.get("/", (req, res, next) => {
+router.get("/contact", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
   let uid = url.searchParams.get("userId");
   let type = url.searchParams.get("type");
-  
+
   let timeout = 2000;
 
   if (type === "username") {
@@ -69,14 +68,13 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  
 });
 
-router.get("/", (req, res, next) => {
+router.get("/classDetails", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
   let uid = url.searchParams.get("userId");
   let type = url.searchParams.get("type");
-  
+
   let timeout = 2000;
 
   if (type === "isInstructor") {
@@ -86,36 +84,6 @@ router.get("/", (req, res, next) => {
       } else {
         isInstructor = Object.values(isInstructor[0])[0];
         res.send(""+isInstructor);
-      }
-    });
-  }
-  else if (type === "userQuizCount") {
-    db.collection("userInfo").find({ uid: { $eq: uid }}).project({userQuizCount:1, _id:0}).maxTimeMS(timeout).toArray((err, quizCount) => {
-      if (err) {
-        throw err;
-      } else {
-        quizCount = Object.values(quizCount[0])[0];
-        res.send(""+quizCount);
-      }
-    });
-  }
-  
-});
-
-router.get("/", (req, res, next) => {
-  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
-  let uid = url.searchParams.get("userId");
-  let type = url.searchParams.get("type");
-  
-  let timeout = 2000;
-  
-  if (type === "EXP") {
-    db.collection("userInfo").find({ uid: { $eq: uid }}).project({EXP:1, _id:0}).maxTimeMS(timeout).toArray((err, exp) => {
-      if (err) {
-        throw err;
-      } else {
-        exp = Object.values(exp[0])[0];
-        res.send(""+exp);
       }
     });
   }
@@ -129,17 +97,45 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-
 });
 
-router.get("/", (req, res, next) => {
+router.get("/classStats", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
   let uid = url.searchParams.get("userId");
   let type = url.searchParams.get("type");
-  
+
   let timeout = 2000;
-  
-   if (type === "notificationFrequency") {
+
+  if (type === "EXP") {
+    db.collection("userInfo").find({ uid: { $eq: uid }}).project({EXP:1, _id:0}).maxTimeMS(timeout).toArray((err, exp) => {
+      if (err) {
+        throw err;
+      } else {
+        exp = Object.values(exp[0])[0];
+        res.send(""+exp);
+      }
+    });
+  }
+  else if (type === "userQuizCount") {
+    db.collection("userInfo").find({ uid: { $eq: uid }}).project({userQuizCount:1, _id:0}).maxTimeMS(timeout).toArray((err, quizCount) => {
+      if (err) {
+        throw err;
+      } else {
+        quizCount = Object.values(quizCount[0])[0];
+        res.send(""+quizCount);
+      }
+    });
+  }
+});
+
+router.get("/notifications", (req, res, next) => {
+  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
+  let uid = url.searchParams.get("userId");
+  let type = url.searchParams.get("type");
+
+  let timeout = 2000;
+
+  if (type === "notificationFrequency") {
     db.collection("notificationFrequency").find({ uid: { $eq: uid }}).project({notificationFrequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
       if (err) {
         throw err;
@@ -149,16 +145,15 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-
 });
 
 /* GET users listing. */
 /*eslint complexity: ["error", 10]*/
-router.get("/", (req, res, next) => {
+router.get("/profile", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
   let uid = url.searchParams.get("userId");
   let type = url.searchParams.get("type");
-  
+
   let timeout = 2000;
   if (type === "profileImage") {
     let filepath = "images/" + uid + "/profile_img.jpg";
