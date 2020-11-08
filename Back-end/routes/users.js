@@ -21,7 +21,7 @@ router.get("/", (req, res, next) => {
   let type = url.searchParams.get("type");
   
   let timeout = 2000;
-  if (type === "Profile_Image") {
+  if (type === "ProfileImage") {
     let filepath = "images/" + uid + "/profile_img.jpg";
     let string = "";
     if (fs.existsSync(filepath)) {
@@ -39,7 +39,7 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  else if (type === "user_info") {
+  else if (type === "userInfo") {
     db.collection("user info").find({ uid: { $eq: uid }}).project({_id:0}).maxTimeMS(timeout).toArray((err,data) => {
       if (err) {
         throw err;
@@ -78,7 +78,7 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  else if (type === "user_quiz_count") {
+  else if (type === "userQuizCount") {
     db.collection("user info").find({ uid: { $eq: uid }}).project({userQuizCount:1, _id:0}).maxTimeMS(timeout).toArray((err, quizCount) => {
       if (err) {
         throw err;
@@ -98,7 +98,7 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  else if (type === "class_code") {
+  else if (type === "classCode") {
     db.collection("class info").find({ uid: { $eq: uid }}).project({classCode:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
       if (err) {
         throw err;
@@ -108,7 +108,7 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  else if (type === "notification_frequency") {
+  else if (type === "notificationFrequency") {
     db.collection("notificationFrequency").find({ uid: { $eq: uid }}).project({notificationFrequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
       if (err) {
         throw err;
