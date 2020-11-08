@@ -101,7 +101,7 @@ public class OtherUtils {
 
         String jsonStringToSend = createJsonString(uid, type, data);
         String response = "";
-        String serverLink = "http://quizzical.canadacentral.cloudapp.azure.com/upload/" + endpoint;
+        String serverLink = "http://quizzical.canadacentral.cloudapp.azure.com/upload" + endpoint;
         Log.d("upload", "uploading: " + jsonStringToSend);
         Log.d("upload", "upload to: "+ serverLink);
         try {
@@ -109,7 +109,7 @@ public class OtherUtils {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
-            conn.setConnectTimeout(1000);
+            conn.setConnectTimeout(3000);
             conn.setDoOutput(true);
             conn.connect();
             DataOutputStream wr = new DataOutputStream(conn.getOutputStream());

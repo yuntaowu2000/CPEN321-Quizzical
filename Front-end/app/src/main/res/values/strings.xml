@@ -2,12 +2,17 @@
     <!--    general usage-->
     <string name="BACKUP_GET_URL" translatable="false">http://193.122.108.23:7070/</string>
     <string name="GET_URL" translatable="false">http://quizzical.canadacentral.cloudapp.azure.com/</string>
-    <string name="PROFILE_IMAGE_ENDPOINT" translatable="false">profileImg</string>
-    <string name="USER_ENDPOINT" translatable="false">user</string>
-    <string name="NOTIFICATION_ENDPOINT" translatable="false">notifications</string>
-    <string name="CLASS_ENDPOINT" translatable="false">class</string>
-    <string name="STATS_ENDPOINT" translatable="false">stats</string>
-    <string name="QUIZ_ENDPOINT" translatable="false">quiz</string>
+    <string name="PROFILE_IMAGE_ENDPOINT" translatable="false">/profileImg</string>
+    <string name="USER_ENDPOINT" translatable="false">/user</string>
+    <string name="NOTIFICATION_ENDPOINT" translatable="false">/notifications</string>
+    <string name="CLASS_ENDPOINT" translatable="false">/class</string>
+    <string name="STATS_ENDPOINT" translatable="false">/stats</string>
+    <string name="QUIZ_ENDPOINT" translatable="false">/quiz</string>
+    <string name="CONTACT_ENDPOINT" translatable="false">/contact</string>
+    <string name="CLASS_DETAIL_ENDPOINT" translatable="false">/classDetails</string>
+    <string name="CLASS_STATS_ENDPOINT" translatable="false">/classStats</string>
+    <string name="PROFILE_ENDPOINT" translatable="false">users/profile</string>
+
     <string name="QUIZ_URL" translatable="false"><![CDATA[http://quizzical.canadacentral.cloudapp.azure.com/quiz?classCode=%d&quizCode=%d]]></string>
     <string name="TYPE" translatable="false">type=</string>
 

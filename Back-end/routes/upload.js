@@ -55,7 +55,7 @@ router.post("/user", (req, res, next) => {
   if (req.body.type === "userInfo") {
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
-        console.error(err);
+        // console.error(err);
       }
     });
   }
@@ -63,7 +63,7 @@ router.post("/user", (req, res, next) => {
   else if (req.body.type === "Email") {
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {Email: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
-        console.error(err);
+        // console.error(err);
       }
     });
   }
@@ -71,7 +71,7 @@ router.post("/user", (req, res, next) => {
   else if (req.body.type === "username") {
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {username: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
-        console.error(err);
+        // console.error(err);
       }
     });
   }
@@ -84,13 +84,13 @@ router.post("/notifications", (req, res, next) => {
     try {
       db.collection("notificationFrequency").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
         if (err) {
-          console.error(err);
+          // console.error(err);
         }
       });
     } catch (ex) {
       db.collection("notificationFrequency").updateOne({uid: req.body.uid}, {$set: req.body}, {upsert: true}, (err, res) => {
         if (err) {
-          console.error(err);
+          // console.error(err);
         }
       });
     }
@@ -104,7 +104,7 @@ router.post("/class", (req, res, next) => {
   if (req.body.type === "joinClass" || req.body.type === "createClass") {
     db.collection("classInfo").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
-        console.error(err);
+        // console.error(err);
       }
     });
   }
@@ -117,13 +117,13 @@ router.post("/stats", (req, res, next) => {
   if (req.body.type === "EXP") {
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {EXP: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
-        console.error(err);
+        // console.error(err);
       }
     });
   } else if (req.body.type === "userQuizCount") {
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {"userQuizCount": req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
-        console.error(err);
+        // console.error(err);
       }
     });
   }
@@ -150,7 +150,7 @@ router.post("/quiz", (req, res, next) => {
       {$set: Object.assign({}, quizData, {uid: req.body.uid}, {classCode: quizData.classCode}, {moduleName: quizData.moduleName})},
       {upsert: true}, (err, res) => {
       if (err) {
-        console.error(err);
+        // console.error(err);
       }
     });
   }
