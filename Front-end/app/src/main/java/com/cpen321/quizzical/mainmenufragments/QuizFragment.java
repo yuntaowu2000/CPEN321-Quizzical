@@ -414,7 +414,9 @@ public class QuizFragment extends Fragment {
         String newModuleList = parseModuleListToString();
         String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
         sp.edit().putString(moduleId, newModuleList).apply();
-        new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+        new Thread(() -> OtherUtils.uploadToServer(
+                getString(R.string.QUIZ_ENDPOINT),
+                sp.getString(getString(R.string.UID), ""),
                 getString(R.string.QUIZ_MODULES),
                 newModuleList
                 )).start();
@@ -544,7 +546,9 @@ public class QuizFragment extends Fragment {
                 String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
                 sp.edit().putString(moduleId, moduleListString).apply();
 
-                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                new Thread(() -> OtherUtils.uploadToServer(
+                        getString(R.string.QUIZ_ENDPOINT),
+                        sp.getString(getString(R.string.UID), ""),
                         getString(R.string.QUIZ_MODULES),
                         moduleListString
                         )).start();

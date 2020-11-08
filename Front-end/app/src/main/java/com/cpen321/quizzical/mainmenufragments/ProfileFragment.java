@@ -173,7 +173,9 @@ public class ProfileFragment extends Fragment {
     private void setNotificationFrequency(int i) {
         sp.edit().putInt(getString(R.string.NOTIFICATION_FREQ), i).apply();
         String jsonRepresentation = parseNotificationInfo(i, sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
-        new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+        new Thread(() -> OtherUtils.uploadToServer(
+                getString(R.string.NOTIFICATION_END_POINT),
+                sp.getString(getString(R.string.UID), ""),
                 getString(R.string.NOTIFICATION_FREQ), jsonRepresentation)).start();
     }
 
@@ -195,7 +197,9 @@ public class ProfileFragment extends Fragment {
                     Objects.requireNonNull(getActivity()).runOnUiThread(() -> pushNotificationSpinner.setSelection(2));
                     String jsonRepresentation = parseNotificationInfo(default_notification_freq,
                             sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
-                    OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
+                    OtherUtils.uploadToServer(
+                            getString(R.string.NOTIFICATION_END_POINT),
+                            sp.getString(getString(R.string.UID), ""),
                             getString(R.string.NOTIFICATION_FREQ),
                             jsonRepresentation);
                 }
@@ -258,8 +262,11 @@ public class ProfileFragment extends Fragment {
                     return;
                 }
 
-                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
-                        getString(R.string.PROFILE_IMG), encoded)).start();
+                new Thread(() -> OtherUtils.uploadToServer(
+                        getString(R.string.PROFILE_IMAGE_END_POINT),
+                        sp.getString(getString(R.string.UID), ""),
+                        getString(R.string.PROFILE_IMG),
+                        encoded)).start();
                 sp.edit().putString(getString(R.string.PROFILE_IMG), encoded).apply();
 
                 //scale the image and make it round to fit into the image button.
@@ -329,8 +336,11 @@ public class ProfileFragment extends Fragment {
             if (OtherUtils.checkUserName(newUsername)) {
 
                 usernameText.setText(newUsername);
-                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
-                        getString(R.string.USERNAME), newUsername)).start();
+                new Thread(() -> OtherUtils.uploadToServer(
+                        getString(R.string.USER_END_POINT),
+                        sp.getString(getString(R.string.UID), ""),
+                        getString(R.string.USERNAME),
+                        newUsername)).start();
                 sp.edit().putString(getString(R.string.USERNAME), newUsername).apply();
                 alertDialog.dismiss();
             } else {
@@ -376,8 +386,11 @@ public class ProfileFragment extends Fragment {
             if (OtherUtils.checkEmail(newEmail)) {
 
                 emailText.setText(newEmail);
-                new Thread(() -> OtherUtils.uploadToServer(sp.getString(getString(R.string.UID), ""),
-                        getString(R.string.EMAIL), newEmail)).start();
+                new Thread(() -> OtherUtils.uploadToServer(
+                        getString(R.string.USER_END_POINT),
+                        sp.getString(getString(R.string.UID), ""),
+                        getString(R.string.EMAIL),
+                        newEmail)).start();
                 sp.edit().putString(getString(R.string.EMAIL), newEmail).apply();
                 alertDialog.dismiss();
             } else {

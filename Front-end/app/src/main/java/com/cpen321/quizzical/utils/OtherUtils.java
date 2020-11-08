@@ -97,11 +97,11 @@ public class OtherUtils {
      * upload strings, bitmap to the server
      * returns true if success, false otherwise
      * */
-    public static String uploadToServer(String uid, String type, String data) {
+    public static String uploadToServer(String endpoint, String uid, String type, String data) {
 
         String jsonStringToSend = createJsonString(uid, type, data);
         String response = "";
-        String serverLink = "http://quizzical.canadacentral.cloudapp.azure.com/upload";
+        String serverLink = "http://quizzical.canadacentral.cloudapp.azure.com/" + endpoint;
         Log.d("upload", "uploading: " + jsonStringToSend);
         try {
             URL url = new URL(serverLink);
