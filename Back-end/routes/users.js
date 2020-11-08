@@ -140,7 +140,7 @@ router.get("/", (req, res, next) => {
   let timeout = 2000;
   
    if (type === "notificationFrequency") {
-    db.collection("notificationFrequency").find({ uid: { $eq: uid }}).project({notificationFrequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
+    db.collection("notification frequency").find({ uid: { $eq: uid }}).project({notificationFrequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
       if (err) {
         throw err;
       } else {

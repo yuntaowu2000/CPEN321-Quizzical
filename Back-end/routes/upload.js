@@ -20,7 +20,7 @@ MongoClient.connect(
         console.error(err);
       }
     });
-    db.createCollection("notification_frequency", (err, res) => {
+    db.createCollection("notification frequency", (err, res) => {
       if (err) {
         console.error(err);
       }
@@ -81,13 +81,13 @@ router.post("/", (req, res, next) => {
   
   if (req.body.type === "notificationFrequency") {
     try {
-      db.collection(req.body.type).updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
+      db.collection("notification frequency").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
         if (err) {
           console.error(err);
         }
       });
     } catch (ex) {
-      db.collection(req.body.type).updateOne({uid: req.body.uid}, {$set: req.body}, {upsert: true}, (err, res) => {
+      db.collection("notification frequency").updateOne({uid: req.body.uid}, {$set: req.body}, {upsert: true}, (err, res) => {
         if (err) {
           console.error(err);
         }
