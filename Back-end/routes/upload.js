@@ -27,7 +27,7 @@ MongoClient.connect(
     });
     db.createCollection("quizzes", (err, res) => {
       if (err) {
-        console.log(err);
+        //console.log(err);
       }
     });
   }
@@ -37,12 +37,12 @@ router.use(express.json());
 
 /*eslint complexity: ["error", 10]*/
 router.post("/", (req, res, next) => {
-  console.error("UID: " + req.body.uid);
-  console.error("Type: " + req.body.type);
-  console.error("Data: %j", req.body);
-  console.error(Object.entries(req.body));
+  //console.error("UID: " + req.body.uid);
+  //console.error("Type: " + req.body.type);
+  //console.error("Data: %j", req.body);
+  //console.error(Object.entries(req.body));
 
-  if (req.body.type === "Profile_Image") {
+  if (req.body.type === "ProfileImage") {
     let path = "images/" + req.body.uid;
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path, {recursive:true});
@@ -50,14 +50,14 @@ router.post("/", (req, res, next) => {
     let filename = path + "/profile_img.jpg";
     fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
   }
-  else if (req.body.type === "user_info") {
+  else if (req.body.type === "userInfo") {
     db.collection("user info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
       }
     });
   }
-  else if (req.body.type === "notification_frequency") {
+  else if (req.body.type === "notificationFrequency") {
     try {
       db.collection(req.body.type).updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
         if (err) {
@@ -86,7 +86,7 @@ router.post("/", (req, res, next) => {
       }
     });
   }
-  else if (req.body.type === "join_class" || req.body.type === "create_class") {
+  else if (req.body.type === "joinClass" || req.body.type === "create_class") {
     db.collection("class info").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
@@ -98,7 +98,7 @@ router.post("/", (req, res, next) => {
   {
   }
   */
-  else if (req.body.type === "create_quiz") {
+  else if (req.body.type === "createQuiz") {
     let quizData = JSON.parse(req.body.data);
     db.collection("quizzes").updateOne(
       {$and: [{uid: req.body.uid},{moduleName: quizData.moduleName},{classCode: quizData.classCode}]},
@@ -114,8 +114,8 @@ router.post("/", (req, res, next) => {
         console.error(err);
       }
     });
-  } else if (req.body.type === "user quiz count") {
-    db.collection("user info").updateOne({uid: req.body.uid}, {$set: {"user quiz count": req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
+  } else if (req.body.type === "userQuizCount") {
+    db.collection("user info").updateOne({uid: req.body.uid}, {$set: {"userQuizCount": req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
         console.error(err);
       }
