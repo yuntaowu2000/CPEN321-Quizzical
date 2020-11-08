@@ -20,7 +20,11 @@ router.get("/", (req, res, next) => {
   let quiz_code = Number(url.searchParams.get("quiz_code"));
   let timeout = 2000;
   
-  db.collection("quizzes").find({$and: [{class_code: class_code},{quizCode: quiz_code}]}).project({_id:0}).maxTimeMS(timeout).toArray((err, data) => {
+  db.collection("quizzes")
+    .find({$and: [{class_code: class_code},{quizCode: quiz_code}]})
+    .project({_id:0})
+    .maxTimeMS(timeout)
+    .toArray((err, data) => {
     if (err) {
       throw err;
     } else {
