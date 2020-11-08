@@ -13,24 +13,15 @@ MongoClient.connect(
   }
 );
 
-/* GET users listing. */
-/*eslint complexity: ["error", 10]*/
+
 router.get("/", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
   let uid = url.searchParams.get("userId");
   let type = url.searchParams.get("type");
   
   let timeout = 2000;
-  if (type === "profileImage") {
-    let filepath = "images/" + uid + "/profile_img.jpg";
-    let string = "";
-    if (fs.existsSync(filepath)) {
-      let bitmap = fs.readFileSync(filepath);
-      string = Buffer(bitmap).toString("base64");
-    }
-    res.send(string);
-  }
-  else if (type === null) {
+
+  if (type === null) {
     db.collection("user info").find({ uid: { $eq: uid }}).project({profileImage:0, _id:0}).maxTimeMS(timeout).toArray((err,data) => {
       if (err) {
         throw err;
@@ -48,7 +39,17 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  else if (type === "username") {
+  
+});
+
+router.get("/", (req, res, next) => {
+  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
+  let uid = url.searchParams.get("userId");
+  let type = url.searchParams.get("type");
+  
+  let timeout = 2000;
+
+  if (type === "username") {
     db.collection("user info").find({ uid: { $eq: uid }}).project({username:1, _id:0}).maxTimeMS(timeout).toArray((err, username) => {
       if (err) {
         throw err;
@@ -68,7 +69,17 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  else if (type === "isInstructor") {
+  
+});
+
+router.get("/", (req, res, next) => {
+  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
+  let uid = url.searchParams.get("userId");
+  let type = url.searchParams.get("type");
+  
+  let timeout = 2000;
+
+  if (type === "isInstructor") {
     db.collection("user info").find({ uid: { $eq: uid }}).project({isInstructor:1, _id:0}).maxTimeMS(timeout).toArray((err, isInstructor) => {
       if (err) {
         throw err;
@@ -88,7 +99,17 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  else if (type === "EXP") {
+  
+});
+
+router.get("/", (req, res, next) => {
+  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
+  let uid = url.searchParams.get("userId");
+  let type = url.searchParams.get("type");
+  
+  let timeout = 2000;
+  
+  if (type === "EXP") {
     db.collection("user info").find({ uid: { $eq: uid }}).project({EXP:1, _id:0}).maxTimeMS(timeout).toArray((err, exp) => {
       if (err) {
         throw err;
@@ -108,7 +129,17 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  else if (type === "notificationFrequency") {
+
+});
+
+router.get("/", (req, res, next) => {
+  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
+  let uid = url.searchParams.get("userId");
+  let type = url.searchParams.get("type");
+  
+  let timeout = 2000;
+  
+   if (type === "notificationFrequency") {
     db.collection("notificationFrequency").find({ uid: { $eq: uid }}).project({notificationFrequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
       if (err) {
         throw err;
@@ -117,6 +148,26 @@ router.get("/", (req, res, next) => {
         res.send(""+frequency);
       }
     });
+  }
+
+});
+
+/* GET users listing. */
+/*eslint complexity: ["error", 10]*/
+router.get("/", (req, res, next) => {
+  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
+  let uid = url.searchParams.get("userId");
+  let type = url.searchParams.get("type");
+  
+  let timeout = 2000;
+  if (type === "profileImage") {
+    let filepath = "images/" + uid + "/profile_img.jpg";
+    let string = "";
+    if (fs.existsSync(filepath)) {
+      let bitmap = fs.readFileSync(filepath);
+      string = Buffer(bitmap).toString("base64");
+    }
+    res.send(string);
   }
 });
 
