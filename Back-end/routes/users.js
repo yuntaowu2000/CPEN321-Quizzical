@@ -91,7 +91,7 @@ router.get("/", (req, res, next) => {
       if (err) {
         throw err;
       } else {
-        exp = Object.values(exp[0])[0]
+        exp = Object.values(exp[0])[0];
         res.send(""+exp);
       }
     });
