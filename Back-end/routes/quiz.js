@@ -22,7 +22,8 @@ router.get("/", (req, res, next) => {
   
   db.collection("quizzes")
     .find({$and: 
-           [{
+           [
+             {
              class_code
              :class_code}, 
             {
