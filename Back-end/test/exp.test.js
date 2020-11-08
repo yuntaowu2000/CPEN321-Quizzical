@@ -1,4 +1,6 @@
 test("test EXP calculation", () => {
+  /*global jest*/
+  /*eslint no-undef: "error"*/
   const mock = jest.fn((likes) => 10 + 20*likes);
 
   let result = mock(5);
