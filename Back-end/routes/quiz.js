@@ -21,14 +21,7 @@ router.get("/", (req, res, next) => {
   let timeout = 2000;
   
   db.collection("quizzes")
-    .find({$and: 
-           [
-             {
-             classCode
-             :classCode}, 
-            {
-              quizCode
-              :quizCode}]})
+    .find({$and: [{classCode}, {quizCode}]})
     .project({_id:0})
     .maxTimeMS(timeout)
     .toArray((err, data) => {
