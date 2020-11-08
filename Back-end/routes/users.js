@@ -39,7 +39,9 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  res.send("request invalid");
+  else {
+    res.send("request invalid");
+  }
 });
 
 router.get("/contact", (req, res, next) => {
@@ -69,7 +71,9 @@ router.get("/contact", (req, res, next) => {
       }
     });
   }
-  res.send("request invalid");
+  else {
+    res.send("request invalid");
+  }
 });
 
 router.get("/classDetails", (req, res, next) => {
@@ -99,7 +103,9 @@ router.get("/classDetails", (req, res, next) => {
       }
     });
   }
-  res.send("request invalid");
+  else {
+    res.send("request invalid");
+  }
 });
 
 router.get("/classStats", (req, res, next) => {
@@ -129,7 +135,9 @@ router.get("/classStats", (req, res, next) => {
       }
     });
   }
-  res.send("request invalid");
+  else {
+    res.send("request invalid");
+  }
 });
 
 router.get("/notifications", (req, res, next) => {
@@ -149,7 +157,9 @@ router.get("/notifications", (req, res, next) => {
       }
     });
   }
-  res.send("request invalid");
+  else {
+    res.send("request invalid");
+  }
 });
 
 /* GET users listing. */
@@ -169,7 +179,9 @@ router.get("/profile", (req, res, next) => {
     }
     res.send(string);
   }
-  res.send("request invalid");
+  else {
+    res.send("request invalid");
+  }
 });
 
 module.exports = router;
