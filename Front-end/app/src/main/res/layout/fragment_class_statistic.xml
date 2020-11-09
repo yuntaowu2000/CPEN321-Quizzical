@@ -26,16 +26,12 @@
                 android:background="@drawable/round_corner_button"/>
 
             <TextView
-                android:id="@id/statistic_time_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
                 android:id="@+id/statistic_class_name_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:gravity="center" />
 
-            <ScrollView
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="350dp"
                 android:layout_marginTop="20sp"
@@ -87,7 +83,7 @@
                     </TableRow>
 
                 </TableLayout>
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
 
 
         </LinearLayout>

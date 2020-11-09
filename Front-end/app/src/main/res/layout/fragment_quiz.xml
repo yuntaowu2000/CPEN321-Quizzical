@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:id="@+id/quiz_page_refresh_layout">
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout
@@ -45,6 +45,6 @@
                     android:text="@string/go_to_quiz"
                     android:textAllCaps="false" />
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

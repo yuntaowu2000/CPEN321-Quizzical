@@ -30,7 +30,6 @@ public class StatisticFragment extends Fragment {
     public static SharedPreferences.OnSharedPreferenceChangeListener statisticFragmentOnSPChangeListener;
     private SharedPreferences sp;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private TextView realTimeText;
 
     private boolean isInstructor;
     private TableLayout boardLayout;
@@ -64,11 +63,6 @@ public class StatisticFragment extends Fragment {
         currClass = new Classes(sp.getString(getString(R.string.CURR_CLASS), ""));
 
         swipeRefreshLayout = view.findViewById(R.id.statistic_swipe_layout);
-
-        realTimeText = view.findViewById(R.id.statistic_time_text);
-        new Thread(this::updateText).start();
-
-        swipeRefreshLayout.setOnRefreshListener(() -> new Thread(this::updateText).start());
         
         //TODO: load the info from the server
         if (isInstructor) {
@@ -97,6 +91,10 @@ public class StatisticFragment extends Fragment {
 
             boardLayout = view.findViewById(R.id.student_leaderboard_table);
         }
+
+        new Thread(this::updateLeaderboard).start();
+
+        swipeRefreshLayout.setOnRefreshListener(() -> new Thread(this::updateLeaderboard).start());
     }
 
     private void onStatsFragmentSPChanged(String key, TextView class_name_text) {
@@ -116,55 +114,47 @@ public class StatisticFragment extends Fragment {
                 Objects.requireNonNull(getActivity()).runOnUiThread(() ->
                         class_name_text.setText(String.format(getString(R.string.UI_current_class_name), currClass.getClassName()))
                 );
-                updateText();
-                //should generate statistic table here as well
-                if (isInstructor) {
-                    generateClassStatisticTableRows(true);
-                } else {
-                    generateLeaderboardRows();
-                }
+                updateLeaderboard();
             }
         }
     }
 
-    private void updateText() {
+    private void updateLeaderboard() {
         //we need to update UI on UI thread, otherwise it will crash the app
         //however, it adds the load onto the Main thread, causing lags
         //so we need to run a new thread which runs this function
-        String timerLink = "http://193.122.108.23:8080/Time";
-        String result = OtherUtils.readFromURL(timerLink);
-        result = OtherUtils.stringIsNullOrEmpty(result) ? getString(R.string.UI_server_failure_msg) : result;
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
-        final String text = result;
 
         Objects.requireNonNull(getActivity()).runOnUiThread(() ->
         {
-            realTimeText.setText(text);
             if (isInstructor && teacherInStatistic) {
-                generateClassStatisticTableRows(false);
+                generateClassStatisticTableRows();
             } else {
                 generateLeaderboardRows();
             }
         });
     }
 
-    private void generateClassStatisticTableRows(boolean cleanup) {
+    private void generateClassStatisticTableRows() {
         int count = boardLayout.getChildCount();
-        if (count > 5 || cleanup) {
-            boardLayout.removeViews(1, count - 1);
+
+        boardLayout.removeViews(1, count - 1);
+
+        for (int i = 1; i <= 20; i++) {
+
+            TableRow newRow = new TableRow(this.getContext());
+            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+            newRow.setLayoutParams(lp);
+            newRow.addView(generateTableElement(String.valueOf(i)), 0);
+            newRow.addView(generateTableElement("test student " + i), 1);
+            newRow.addView(generateTableElement("98"), 2);
+            newRow.addView(generateTableElement("100"), 3);
+            boardLayout.addView(newRow, i);
         }
-        TableRow newRow = new TableRow(this.getContext());
-        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-        newRow.setLayoutParams(lp);
 
-        newRow.addView(generateTableElement("1"), 0);
-        newRow.addView(generateTableElement("test student"), 1);
-        newRow.addView(generateTableElement("98"), 2);
-        newRow.addView(generateTableElement("100"), 3);
 
-        boardLayout.addView(newRow, 1);
     }
 
     private TextView generateTableElement(String text) {
@@ -209,24 +199,26 @@ public class StatisticFragment extends Fragment {
             newRow.addView(generateTableElement(getString(R.string.EXP)), 3);
 
             boardLayout.addView(newRow);
-            generateClassStatisticTableRows(true);
+            generateClassStatisticTableRows();
         }
     }
 
     private void generateLeaderboardRows() {
         int count = boardLayout.getChildCount();
-        if (count > 5) {
-            boardLayout.removeViews(1, 5);
+
+        boardLayout.removeViews(1, count - 1);
+
+        for (int i = 1; i <= 10; i++) {
+            TableRow newRow = new TableRow(this.getContext());
+            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+            newRow.setLayoutParams(lp);
+
+            newRow.addView(generateTableElement(String.valueOf(i)), 0);
+            newRow.addView(generateTableElement("test student" + i), 1);
+            newRow.addView(generateTableElement("100"), 2);
+
+            boardLayout.addView(newRow, i);
         }
-        TableRow newRow = new TableRow(this.getContext());
-        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-        newRow.setLayoutParams(lp);
-
-        newRow.addView(generateTableElement("1"), 0);
-        newRow.addView(generateTableElement("test student"), 1);
-        newRow.addView(generateTableElement("100"), 2);
-
-        boardLayout.addView(newRow, 1);
     }
 
 }

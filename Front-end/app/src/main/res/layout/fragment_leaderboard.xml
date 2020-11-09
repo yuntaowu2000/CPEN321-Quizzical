@@ -24,11 +24,6 @@
                 android:textAlignment="center"
                 android:text="@string/leader_board_page_text1" />
 
-            <TextView
-                android:id="@+id/statistic_time_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
             <TableLayout
                 android:id="@+id/student_leaderboard_table"
                 android:layout_width="225dp"

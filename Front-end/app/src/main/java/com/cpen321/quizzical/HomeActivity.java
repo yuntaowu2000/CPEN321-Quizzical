@@ -444,12 +444,17 @@ public class HomeActivity extends AppCompatActivity {
         String classListString = parseClassListToString();
         sp.edit().putString(getString(R.string.CLASS_LIST), classListString).apply();
 
-        new Thread(() -> OtherUtils.uploadToServer(
-                getString(R.string.CLASS_ENDPOINT),
-                sp.getString(getString(R.string.UID), ""),
-                getString(R.string.CLASS_LIST),
-                classListString
-        )).start();
+        new Thread(() -> {
+            OtherUtils.uploadToServer(
+                    getString(R.string.CLASS_ENDPOINT),
+                    sp.getString(getString(R.string.UID), ""),
+                    getString(R.string.CLASS_LIST),
+                    classListString
+            );
+            String params = getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                    + "&" + getString(R.string.CLASS_CODE) + "=" + mClass.getClassCode();
+            OtherUtils.deleteRequest(params);
+        }).start();
 
         for (Button b : classButtonList) {
             if (b.getText().equals(mClass.getClassName())) {

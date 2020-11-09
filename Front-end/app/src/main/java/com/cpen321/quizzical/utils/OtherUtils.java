@@ -93,7 +93,7 @@ public class OtherUtils {
      * upload strings, bitmap to the server
      * returns true if success, false otherwise
      * */
-    public static String uploadToServer(String endpoint, String uid, String type, String data) {
+    public static void uploadToServer(String endpoint, String uid, String type, String data) {
 
         String jsonStringToSend = createJsonString(uid, type, data);
         String response = "";
@@ -119,7 +119,6 @@ public class OtherUtils {
         } catch (Exception e) {
             Log.d("error_message", "" + e.getMessage());
         }
-        return response;
     }
 
     private static String createJsonString(String uid, String type, String data) {
@@ -184,5 +183,23 @@ public class OtherUtils {
             Log.d("html_exception", eMessage);
         }
         return result;
+    }
+
+    public static void deleteRequest(String params) {
+        String urlLink = "http://quizzical.canadacentral.cloudapp.azure.com/class/delete/" + params;
+        Log.d("html_delete", "deleting: " + urlLink);
+        try {
+            URL url = new URL(urlLink);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("DELETE");
+            conn.setConnectTimeout(3000);
+            conn.connect();
+            int result = conn.getResponseCode();
+            conn.disconnect();
+            Log.d("html_delete", "result: " + result);
+        } catch (Exception e) {
+            String eMessage = e.getMessage() + "";
+            Log.d("html_exception", eMessage);
+        }
     }
 }
