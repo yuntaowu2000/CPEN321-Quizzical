@@ -101,8 +101,14 @@ router.post("/notifications", (req, res, next) => {
 });
 
 router.post("/class", (req, res, next) => {
-  if (/*req.body.type === "joinClass" || */req.body.type === "createClass") {
-    db.collection("classInfo").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
+  if (req.body.type === "createClass") {
+    let data = JSON.parse(req.body.data);
+    db.collection("classInfo")
+      .updateOne(
+	{$and: [{uid: req.body.uid},{classCode: data.classCode}]},
+	{$set: Object.assign({}, data, {uid: req.body.uid})},
+	{upsert: true},
+	(err, res) => {
       if (err) {
         // console.error(err);
       }
@@ -113,7 +119,18 @@ router.post("/class", (req, res, next) => {
         // console.error(err);
       }
     });
-  }
+  } else if (req.body.type === "joinClass") {
+    let data = JSON.parse(req.body.data);
+    db.collection("userInfo")
+      .updateOne(
+	{$and: [{uid: req.body.uid}]},
+	{$set: Object.assign({}, data, {uid: req.body.uid})},
+	{upsert: true},
+	(err, res) => {
+      if (err) {
+        // console.error(err);
+      }
+    });
 
   res.statusCode = 200;
   res.end();
