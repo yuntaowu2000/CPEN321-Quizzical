@@ -61,6 +61,8 @@
     <string name="CREATE_QUIZ" translatable="false">createQuiz</string>
 
     <string name="LOCAL_CACHE" translatable="false">localCache</string>
+    <string name="PROFILE_IMG_UP_TO_DATE" translatable="false">profileImgUpToDate</string>
+    <string name="NOTIFICATION_FREQ_UP_TO_DATE" translatable="false">notificationFreqUpToDate</string>
 
     <string name="COURSE_CATEGORY" translatable="false">courseCategory</string>
 

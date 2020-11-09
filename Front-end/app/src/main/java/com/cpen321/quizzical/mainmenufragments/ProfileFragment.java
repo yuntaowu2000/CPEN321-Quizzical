@@ -133,23 +133,36 @@ public class ProfileFragment extends Fragment {
         sp.registerOnSharedPreferenceChangeListener(profileFragmentOnSPChangeListener);
 
         new Thread(() -> {
-            //try getting the profile image from the server
+
             Bitmap profileImg = null;
-            String url = getString(R.string.GET_URL) + getString(R.string.PROFILE_ENDPOINT)
-                    + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
-                    + "&" + getString(R.string.TYPE) + getString(R.string.PROFILE_IMG);
-            String img = OtherUtils.readFromURL(url);
-            Log.d("server_response", "img: " + img);
-            if (!OtherUtils.stringIsNullOrEmpty(img)) {
-                sp.edit().putString(getString(R.string.PROFILE_IMG), img).apply();
-                profileImg = OtherUtils.decodeImage(img);
-            } else {
-                //try getting the profile image from local cache
+
+            if (sp.getBoolean(getString(R.string.PROFILE_IMG_UP_TO_DATE), false)) {
+                //the local cache is up to date try getting the profile image from local cache
                 String encodedProfileImg = sp.getString(getString(R.string.PROFILE_IMG), "");
                 if (!OtherUtils.stringIsNullOrEmpty(encodedProfileImg)) {
                     profileImg = OtherUtils.decodeImage(encodedProfileImg);
                 }
-
+            } else {
+                //try getting the profile image from the server,
+                // this part will now be called only when user login after logged out or first log in
+                String url = getString(R.string.GET_URL) + getString(R.string.PROFILE_ENDPOINT)
+                        + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                        + "&" + getString(R.string.TYPE) + getString(R.string.PROFILE_IMG);
+                String img = OtherUtils.readFromURL(url);
+                Log.d("server_response", "img: " + img);
+                if (!OtherUtils.stringIsNullOrEmpty(img)) {
+                    //we have the value from the server, then we can just use the value
+                    sp.edit().putString(getString(R.string.PROFILE_IMG), img).apply();
+                    sp.edit().putBoolean(getString(R.string.PROFILE_IMG_UP_TO_DATE), true).apply();
+                    profileImg = OtherUtils.decodeImage(img);
+                } else {
+                    //safe guard if we cannot get anything from the server,
+                    //because we are sure that the front end will cache a default profile image
+                    String encodedProfileImg = sp.getString(getString(R.string.PROFILE_IMG), "");
+                    if (!OtherUtils.stringIsNullOrEmpty(encodedProfileImg)) {
+                        profileImg = OtherUtils.decodeImage(encodedProfileImg);
+                    }
+                }
             }
 
             if (profileImg != null) {
