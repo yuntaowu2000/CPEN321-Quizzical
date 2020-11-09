@@ -173,6 +173,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         params.setMargins(10, 10, 10, 10);
 
         QuestionsMC q = new QuestionsMC();
+        q.setID(questionList.size() + 1);
         q.setCategory(currClass.getCategory());
         q.setCorrectAnsNum(-1);
 
