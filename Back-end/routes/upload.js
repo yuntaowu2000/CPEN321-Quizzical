@@ -131,6 +131,7 @@ router.post("/class", (req, res, next) => {
         // console.error(err);
       }
     });
+  }
 
   res.statusCode = 200;
   res.end();
