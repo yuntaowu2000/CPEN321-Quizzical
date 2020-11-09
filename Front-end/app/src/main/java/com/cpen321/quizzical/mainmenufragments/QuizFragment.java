@@ -157,8 +157,6 @@ public class QuizFragment extends Fragment {
         quizFragmentSPChangeListener = (sp, key) -> onQuizFragmentSPChanged(key);
         sp.registerOnSharedPreferenceChangeListener(quizFragmentSPChangeListener);
 
-
-
         if (isInstructor) {
             onTeacherViewCreated();
         }
@@ -414,12 +412,18 @@ public class QuizFragment extends Fragment {
         String newModuleList = parseModuleListToString();
         String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
         sp.edit().putString(moduleId, newModuleList).apply();
-        new Thread(() -> OtherUtils.uploadToServer(
-                getString(R.string.QUIZ_ENDPOINT),
-                sp.getString(getString(R.string.UID), ""),
-                getString(R.string.QUIZ_MODULES),
-                newModuleList
-                )).start();
+        new Thread(() -> {
+//            OtherUtils.uploadToServer(
+//                    getString(R.string.QUIZ_ENDPOINT),
+//                    sp.getString(getString(R.string.UID), ""),
+//                    getString(R.string.QUIZ_MODULES),
+//                    newModuleList
+//            );
+            String params = getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                    + "&" + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
+                    + "&" + getString(R.string.QUIZ_MODULES) + "=" + qm.getId();
+            OtherUtils.deleteRequest(params);
+        }).start();
     }
 
     private void updateQuizList() {
@@ -455,13 +459,13 @@ public class QuizFragment extends Fragment {
         modulesList = new ArrayList<>();
         String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
         String moduleList = sp.getString(moduleId, "");
-//        if (OtherUtils.stringIsNullOrEmpty(classListString)) {
-//            String url = getString(R.string.GET_URL) + "/classes?"
-//                    + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "") + "&"
-//                    + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
-//                    + "&type=" + getString(R.string.QUIZ_MODULES);
-//            classListString = OtherUtils.readFromURL(url);
-//        }
+        if (OtherUtils.stringIsNullOrEmpty(moduleList)) {
+            String url = getString(R.string.GET_URL) + "/classes?"
+                    + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "") + "&"
+                    + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
+                    + "&type=" + getString(R.string.QUIZ_MODULES);
+            moduleList = OtherUtils.readFromURL(url);
+        }
 
         if (OtherUtils.stringIsNullOrEmpty(moduleList)) {
             return;

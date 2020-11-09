@@ -23,14 +23,23 @@ router.get("/", (req, res, next) => {
   let timeout = 2000;
 
   if (type === null) {
-    db.collection("classInfo").find({ classCode: { $eq: classCode }}).project({_id:0}).maxTimeMS(timeout).toArray((err, classInfo) => {
+    db.collection("classInfo").find({ classCode: { $eq: classCode }}).project({quizModules:0, _id:0}).maxTimeMS(timeout).toArray((err, classInfo) => {
       if (err) {
         throw err;
       } else {
         res.send(classInfo);
       }
     });
-  } 
+  } else if (type === "quizModules") 
+  {
+    db.collection("classInfo").find({ classCode: { $eq: classCode }}).project({quizModules:1, _id:0}).maxTimeMS(timeout).toArray((err, classInfo) => {
+      if (err) {
+        throw err;
+      } else {
+        res.send(classInfo);
+      }
+    });
+  }
   // Note: when below cases are uncommented, Codacy complains about complexity(too many paths through code),
   // maybe put in another router.get?
   /*
@@ -40,9 +49,7 @@ router.get("/", (req, res, next) => {
   else if (type === "classStatistics") 
   {
   } 
-  else if (type === "quizModules") 
-  {
-  }
+  
   */
   
 });
