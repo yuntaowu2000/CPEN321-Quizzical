@@ -159,7 +159,7 @@ router.post("/quiz", (req, res, next) => {
         // console.error(err);
       }
     });
-  } else if (req.body.type == "quizModules") {
+  } else if (req.body.type === "quizModules") {
     let quizModuleData = JSON.parse(req.body.data);
     let quizModuleClassCode = quizModuleData.classCode;
 

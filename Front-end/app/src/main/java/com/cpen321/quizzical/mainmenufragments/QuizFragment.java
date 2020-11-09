@@ -466,12 +466,6 @@ public class QuizFragment extends Fragment {
                     + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
                     + "&type=" + getString(R.string.QUIZ_MODULES);
             moduleList = OtherUtils.readFromURL(url);
-            try {
-                JSONArray jsonArray = new JSONArray(moduleList);
-                moduleList = jsonArray.get(0).toString();
-            } catch (JSONException e) {
-                Log.d("parse_failed", "" + e.getMessage());
-            }
         }
 
         if (OtherUtils.stringIsNullOrEmpty(moduleList)) {

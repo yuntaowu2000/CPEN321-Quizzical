@@ -32,12 +32,12 @@ router.get("/", (req, res, next) => {
     });
   } else if (type === "quizModules") 
   {
-    db.collection("classInfo").find({ classCode: { $eq: classCode }}).project({quizModules:1, _id:0}).maxTimeMS(timeout).toArray((err, classInfo) => {
+    db.collection("classInfo").find({ classCode: { $eq: classCode }}).project({quizModules:1, _id:0}).maxTimeMS(timeout).toArray((err, quizModules) => {
       if (err) {
         throw err;
       } else {
-        classInfo = Object.values(classInfo[0])[0];
-        res.send("" + classInfo);
+        quizModules = Object.values(quizModules[0]);
+        res.send("" + quizModules);
       }
     });
   }
