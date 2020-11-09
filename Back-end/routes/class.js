@@ -19,7 +19,7 @@ router.get("/", (req, res, next) => {
   let uid = url.searchParams.get("userId");
   let type = url.searchParams.get("type");
   let className = url.searchParams.get("className");
-  let classCode = url.searchParams.get("classCode");
+  let classCode = Number(url.searchParams.get("classCode"));
   let timeout = 2000;
 
   if (type === null) {
