@@ -36,7 +36,8 @@ router.get("/", (req, res, next) => {
       if (err) {
         throw err;
       } else {
-        res.send(classInfo);
+        classInfo = Object.values(classInfo[0])[0];
+        res.send("" + classInfo);
       }
     });
   }
