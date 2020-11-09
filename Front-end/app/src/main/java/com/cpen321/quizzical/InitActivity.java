@@ -159,7 +159,6 @@ public class InitActivity extends AppCompatActivity {
 
     private void validateAndLogin(GoogleSignInAccount account) {
         if (account != null) {
-            //TODO: need to get user name and other stuff from the server here
             //use google ID as our default id
             sp.edit().putString(getString(R.string.UID), account.getId()).apply();
 

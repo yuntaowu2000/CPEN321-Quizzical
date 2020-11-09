@@ -69,8 +69,7 @@ public class StatisticFragment extends Fragment {
         new Thread(this::updateText).start();
 
         swipeRefreshLayout.setOnRefreshListener(() -> new Thread(this::updateText).start());
-
-        //TODO: implement the same thing for the quiz fragment
+        
         //TODO: load the info from the server
         if (isInstructor) {
             TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.statistic_class_name_text);
