@@ -108,18 +108,11 @@ router.post("/class", (req, res, next) => {
       }
     });
   } else if (req.body.type === "classList") {
-    /*
-    db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
+    db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {"classList": req.body.data}}, {upsert: true}, (err, res) => {
       if (err) {
-	console.error(err);
+        // console.error(err);
       }
     });
-    db.collection("classInfo").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
-      if (err) {
-	console.error(err);
-      }
-    });
-    */
   }
 
   res.statusCode = 200;
