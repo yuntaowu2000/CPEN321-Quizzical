@@ -101,22 +101,24 @@ router.post("/notifications", (req, res, next) => {
 });
 
 router.post("/class", (req, res, next) => {
-  if (req.body.type === "joinClass" || req.body.type === "createClass") {
+  if (req.body.type === "joinClass" /*|| req.body.type === "createClass"*/) {
     db.collection("classInfo").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
         // console.error(err);
       }
     });
   } else if (req.body.type === "classList") {
+    /*
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
-	// console.error(err);
+	console.error(err);
       }
     });
     db.collection("classInfo").updateOne({uid: req.body.uid}, {$set: Object.assign({}, JSON.parse(req.body.data), {uid: req.body.uid})}, {upsert: true}, (err, res) => {
       if (err) {
-	// console.error(err);
+	console.error(err);
       }
+      */
     });
   }
 

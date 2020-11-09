@@ -23,12 +23,11 @@ router.get("/", (req, res, next) => {
   let timeout = 2000;
 
   if (type === null) {
-    db.collection("classInfo").find({ className: { $eq: className }}).project({classCode:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
+    db.collection("classInfo").find({ classCode: { $eq: classCode }}).project({_id:0}).maxTimeMS(timeout).toArray((err, classInfo) => {
       if (err) {
         throw err;
       } else {
-        classCode = Object.values(classCode[0])[0];
-        res.send(""+classCode);
+        res.send(classInfo);
       }
     });
   } 
