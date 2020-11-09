@@ -260,48 +260,48 @@ public class HomeActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
         //use spinner to select a course category
 
-        TextView course_category_text = new TextView(this);
-        course_category_text.setText(R.string.UI_select_course_category_msg);
-        course_category_text.setLayoutParams(layoutParams);
+        TextView courseCategoryText = new TextView(this);
+        courseCategoryText.setText(R.string.UI_select_course_category_msg);
+        courseCategoryText.setLayoutParams(layoutParams);
 
-        Spinner course_category_list = new Spinner(this);
-        course_category_list.setLayoutParams(layoutParams);
-        String[] course_categories = getResources().getStringArray(R.array.course_category_array);
-        ArrayAdapter<String> course_category_adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, course_categories);
-        course_category_list.setAdapter(course_category_adapter);
+        Spinner courseCategorySpinner = new Spinner(this);
+        courseCategorySpinner.setLayoutParams(layoutParams);
+        String[] courseCategoriesArray = getResources().getStringArray(R.array.course_category_array);
+        ArrayAdapter<String> courseCategoryAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, courseCategoriesArray);
+        courseCategorySpinner.setAdapter(courseCategoryAdapter);
 
-        TextView grade_text = new TextView(this);
-        grade_text.setText(R.string.UI_select_grade_level_msg);
-        grade_text.setLayoutParams(layoutParams);
+        TextView selectGradeLevelText = new TextView(this);
+        selectGradeLevelText.setText(R.string.UI_select_grade_level_msg);
+        selectGradeLevelText.setLayoutParams(layoutParams);
 
-        Spinner grade_list = new Spinner(this);
-        grade_list.setLayoutParams(layoutParams);
-        String[] grade_levels = getResources().getStringArray(R.array.grades_array);
-        ArrayAdapter<String> grade_level_adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, grade_levels);
-        grade_list.setAdapter(grade_level_adapter);
+        Spinner gradeListSpinner = new Spinner(this);
+        gradeListSpinner.setLayoutParams(layoutParams);
+        String[] gradeLevelsArray = getResources().getStringArray(R.array.grades_array);
+        ArrayAdapter<String> grade_level_adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, gradeLevelsArray);
+        gradeListSpinner.setAdapter(grade_level_adapter);
 
-        TextView class_name_text = new TextView(this);
-        class_name_text.setText(R.string.UI_enter_class_name_msg);
-        class_name_text.setLayoutParams(layoutParams);
+        TextView classNameText = new TextView(this);
+        classNameText.setText(R.string.UI_enter_class_name_msg);
+        classNameText.setLayoutParams(layoutParams);
 
-        EditText class_name_input = new EditText(this);
-        class_name_input.setLayoutParams(layoutParams);
-        class_name_input.setHint(R.string.UI_example_class_name);
-        class_name_input.setInputType(InputType.TYPE_CLASS_TEXT);
-        class_name_input.setMaxLines(1);
+        EditText classNameInput = new EditText(this);
+        classNameInput.setLayoutParams(layoutParams);
+        classNameInput.setHint(R.string.UI_example_class_name);
+        classNameInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        classNameInput.setMaxLines(1);
 
-        TextView class_name_error_text = new TextView(this);
-        class_name_error_text.setLayoutParams(layoutParams);
-        class_name_error_text.setText("");
-        class_name_error_text.setTextColor(getResources().getColor(R.color.colorCrimson));
+        TextView classNameErrorText = new TextView(this);
+        classNameErrorText.setLayoutParams(layoutParams);
+        classNameErrorText.setText("");
+        classNameErrorText.setTextColor(getResources().getColor(R.color.colorCrimson));
 
-        layout.addView(course_category_text);
-        layout.addView(course_category_list);
-        layout.addView(grade_text);
-        layout.addView(grade_list);
-        layout.addView(class_name_text);
-        layout.addView(class_name_input);
-        layout.addView(class_name_error_text);
+        layout.addView(courseCategoryText);
+        layout.addView(courseCategorySpinner);
+        layout.addView(selectGradeLevelText);
+        layout.addView(gradeListSpinner);
+        layout.addView(classNameText);
+        layout.addView(classNameInput);
+        layout.addView(classNameErrorText);
 
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this).setTitle(R.string.UI_creating_class_msg)
                 .setView(layout)
@@ -312,41 +312,41 @@ public class HomeActivity extends AppCompatActivity {
 
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v ->
         {
-            String class_name = class_name_input.getText().toString();
-            if (OtherUtils.checkClassName(class_name)) {
+            String className = classNameInput.getText().toString();
+            if (OtherUtils.checkClassName(className)) {
                 createNewClassCode(
-                        course_categories[course_category_list.getSelectedItemPosition()],
-                        grade_levels[grade_list.getSelectedItemPosition()],
-                        class_name_input.getText().toString()
+                        courseCategoriesArray[courseCategorySpinner.getSelectedItemPosition()],
+                        gradeLevelsArray[gradeListSpinner.getSelectedItemPosition()],
+                        classNameInput.getText().toString()
                 );
                 alertDialog.dismiss();
             } else {
-                class_name_error_text.setText(R.string.UI_class_name_invalid_msg);
+                classNameErrorText.setText(R.string.UI_class_name_invalid_msg);
             }
         });
     }
 
-    private CourseCategory convertCategoryStringToEnum(String course_category) {
+    private CourseCategory convertCategoryStringToEnum(String courseCategoryString) {
         String[] courseCategories = getResources().getStringArray(R.array.course_category_array);
-        if (course_category.equals(courseCategories[0])) {
+        if (courseCategoryString.equals(courseCategories[0])) {
             return CourseCategory.Math;
-        } else if (course_category.equals(courseCategories[1])) {
+        } else if (courseCategoryString.equals(courseCategories[1])) {
             return CourseCategory.English;
-        } else if (course_category.equals(courseCategories[2])) {
+        } else if (courseCategoryString.equals(courseCategories[2])) {
             return CourseCategory.QuantumPhysic;
         } else {
             return CourseCategory.DontCare;
         }
     }
 
-    private void createNewClassCode(String course_category, String grade_level, String class_name) {
+    private void createNewClassCode(String courseCategoryString, String gradeLevelString, String className) {
 
-        int curr_classCode = (course_category.hashCode() + grade_level.hashCode() + class_name.hashCode()) % 65536;
-        CourseCategory courseCategory = convertCategoryStringToEnum(course_category);
+        int curr_classCode = (courseCategoryString.hashCode() + gradeLevelString.hashCode() + className.hashCode()) % 65536;
+        CourseCategory courseCategory = convertCategoryStringToEnum(courseCategoryString);
 
         Classes mClass = new Classes(sp.getString(getString(R.string.UID), ""),
                 curr_classCode,
-                class_name,
+                className,
                 courseCategory);
 
         new AlertDialog.Builder(this).setTitle(R.string.UI_create_class_success_title)
@@ -361,13 +361,13 @@ public class HomeActivity extends AppCompatActivity {
 
     private void generateNewClassButton(Classes c) {
         Button newClassButton = new Button(this);
-        String class_name = c.getClassName();
+        String className = c.getClassName();
 
-        if (OtherUtils.stringIsNullOrEmpty(class_name)) {
-            class_name = String.valueOf(c.getClassCode());
+        if (OtherUtils.stringIsNullOrEmpty(className)) {
+            className = String.valueOf(c.getClassCode());
         }
 
-        newClassButton.setText(class_name);
+        newClassButton.setText(className);
         newClassButton.setAllCaps(false);
         newClassButton.setOnClickListener(v -> switchClass(c));
         newClassButton.setOnLongClickListener(v -> requestDeleteClass(c));
@@ -401,14 +401,14 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         classList.add(mClass);
-        String class_list_string = parseClassListToString();
-        sp.edit().putString(getString(R.string.CLASS_LIST), class_list_string).apply();
+        String classListString = parseClassListToString();
+        sp.edit().putString(getString(R.string.CLASS_LIST), classListString).apply();
 
         new Thread(() -> OtherUtils.uploadToServer(
                 getString(R.string.CLASS_ENDPOINT),
                 sp.getString(getString(R.string.UID), ""),
                 getString(R.string.CLASS_LIST),
-                class_list_string
+                classListString
         )).start();
 
         generateNewClassButton(mClass);
@@ -441,14 +441,14 @@ public class HomeActivity extends AppCompatActivity {
     private void deleteClass(Classes mClass) {
         classList.remove(mClass);
 
-        String class_list_string = parseClassListToString();
-        sp.edit().putString(getString(R.string.CLASS_LIST), class_list_string).apply();
+        String classListString = parseClassListToString();
+        sp.edit().putString(getString(R.string.CLASS_LIST), classListString).apply();
 
         new Thread(() -> OtherUtils.uploadToServer(
                 getString(R.string.CLASS_ENDPOINT),
                 sp.getString(getString(R.string.UID), ""),
                 getString(R.string.CLASS_LIST),
-                class_list_string
+                classListString
         )).start();
 
         for (Button b : classButtonList) {

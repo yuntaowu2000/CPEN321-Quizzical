@@ -163,8 +163,8 @@ public class InitActivity extends AppCompatActivity {
             sp.edit().putString(getString(R.string.UID), account.getId()).apply();
 
             String url = getString(R.string.GET_URL) + "users?" + getString(R.string.UID) + "=" + account.getId();
-            String user_info = OtherUtils.readFromURL(url);
-            getUserInfo(user_info);
+            String userInfoJson = OtherUtils.readFromURL(url);
+            getUserInfo(userInfoJson);
 
             if (OtherUtils.stringIsNullOrEmpty(sp.getString(getString(R.string.USERNAME), ""))) {
                 //default is google credential
@@ -192,28 +192,28 @@ public class InitActivity extends AppCompatActivity {
     private void getUserInfo(String userInfoJson) {
         String username = "";
         String email = "";
-        boolean is_instructor = false;
-        int user_quiz_count = 0;
+        boolean isInstructor = false;
+        int userQuizCount = 0;
         int EXP = 0;
-        String class_codes = "";
+        String classCodes = "";
         try {
             JSONArray jsonArray = new JSONArray(userInfoJson);
             JSONObject jsonObject = jsonArray.getJSONObject(0);
             username = jsonObject.getString(getString(R.string.USERNAME));
             email = jsonObject.getString(getString(R.string.EMAIL));
-            is_instructor = jsonObject.getBoolean(getString(R.string.IS_INSTRUCTOR));
-            user_quiz_count = jsonObject.getInt(getString(R.string.USER_QUIZ_COUNT));
+            isInstructor = jsonObject.getBoolean(getString(R.string.IS_INSTRUCTOR));
+            userQuizCount = jsonObject.getInt(getString(R.string.USER_QUIZ_COUNT));
             EXP = jsonObject.getInt(getString(R.string.EXP));
-            class_codes = jsonObject.getString(getString(R.string.CLASS_CODE));
+            classCodes = jsonObject.getString(getString(R.string.CLASS_CODE));
         } catch (Exception e) {
             Log.d("parse_user_info", "failed " + e.getMessage());
         }
         sp.edit().putString(getString(R.string.USERNAME), username).apply();
         sp.edit().putString(getString(R.string.EMAIL), email).apply();
-        sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), is_instructor).apply();
-        sp.edit().putInt(getString(R.string.USER_QUIZ_COUNT), user_quiz_count).apply();
+        sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), isInstructor).apply();
+        sp.edit().putInt(getString(R.string.USER_QUIZ_COUNT), userQuizCount).apply();
         sp.edit().putInt(getString(R.string.EXP), EXP).apply();
-        sp.edit().putString(getString(R.string.CLASS_CODE), class_codes).apply();
+        sp.edit().putString(getString(R.string.CLASS_CODE), classCodes).apply();
     }
 
     private void requestUserNameAndEmail() {
@@ -346,21 +346,21 @@ public class InitActivity extends AppCompatActivity {
 
     private void onFinishClicked() {
         if (usernameInputOK && emailInputOK) {
-            boolean is_instructor = instructorCheckBox.isChecked();
+            boolean isInstructor = instructorCheckBox.isChecked();
 
             sp.edit().putInt(getString(R.string.USER_QUIZ_COUNT), 0).apply();
             sp.edit().putInt(getString(R.string.EXP), 0).apply();
-            sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), is_instructor).apply();
+            sp.edit().putBoolean(getString(R.string.IS_INSTRUCTOR), isInstructor).apply();
 
 
             //the user is newly created, we need to upload the credentials to the server
-            String user_info = parseUserInfo(sp.getString(getString(R.string.USERNAME), ""),
+            String userInfoJson = parseUserInfo(sp.getString(getString(R.string.USERNAME), ""),
                     sp.getString(getString(R.string.EMAIL), ""),
-                    is_instructor);
+                    isInstructor);
 
             new Thread(() ->
             {
-                OtherUtils.uploadToServer(getString(R.string.USER_ENDPOINT),sp.getString(getString(R.string.UID), ""), getString(R.string.USER_INFO), user_info);
+                OtherUtils.uploadToServer(getString(R.string.USER_ENDPOINT),sp.getString(getString(R.string.UID), ""), getString(R.string.USER_INFO), userInfoJson);
                 OtherUtils.uploadToServer(getString(R.string.PROFILE_IMAGE_ENDPOINT), sp.getString(getString(R.string.UID), ""),
                         getString(R.string.PROFILE_IMG),
                         sp.getString(getString(R.string.PROFILE_IMG), ""));
@@ -374,12 +374,12 @@ public class InitActivity extends AppCompatActivity {
     }
 
 
-    private String parseUserInfo(String username, String email, boolean is_instructor) {
+    private String parseUserInfo(String username, String email, boolean isInstructor) {
         JsonObject jsonObject = new JsonObject();
         try {
             jsonObject.addProperty(getString(R.string.USERNAME), username);
             jsonObject.addProperty(getString(R.string.EMAIL), email);
-            jsonObject.addProperty(getString(R.string.IS_INSTRUCTOR), is_instructor);
+            jsonObject.addProperty(getString(R.string.IS_INSTRUCTOR), isInstructor);
             jsonObject.addProperty(getString(R.string.USER_QUIZ_COUNT), 0);
             jsonObject.addProperty(getString(R.string.EXP), 0);
         } catch (Exception e) {

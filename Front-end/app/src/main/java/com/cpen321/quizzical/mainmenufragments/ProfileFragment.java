@@ -47,7 +47,7 @@ import java.util.Objects;
 public class ProfileFragment extends Fragment {
 
     private static final int PICK_IMG = 10;
-    private static final int permission_code = 1;
+    private static final int PERMISSION_CODE = 1;
     public static SharedPreferences.OnSharedPreferenceChangeListener profileFragmentOnSPChangeListener;
     private SharedPreferences sp;
     private ImageButton profileImageButton;
@@ -95,11 +95,11 @@ public class ProfileFragment extends Fragment {
         emailText.setText(sp.getString(getString(R.string.EMAIL), getString(R.string.UI_example_email)));
 
         pushNotificationSpinner = Objects.requireNonNull(getView()).findViewById(R.id.notification_settings);
-        String[] notification_frequency = getResources().getStringArray(R.array.notification_frequency);
+        String[] notificationFrequencyArray = getResources().getStringArray(R.array.notification_frequency);
         ArrayAdapter<String> pushNotificationArrayAdapter = new ArrayAdapter<>(
                 getActivity().getApplicationContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                notification_frequency);
+                notificationFrequencyArray);
         pushNotificationSpinner.setAdapter(pushNotificationArrayAdapter);
         getNotificationFrequency();
 
@@ -182,8 +182,8 @@ public class ProfileFragment extends Fragment {
 
     private void getNotificationFrequency() {
         //set to default weekly notification or previously set frequency
-        int default_notification_freq = sp.getInt(getString(R.string.NOTIFICATION_FREQ), 2);
-        if (default_notification_freq == 2) {
+        int defaultNotificationFreq = sp.getInt(getString(R.string.NOTIFICATION_FREQ), 2);
+        if (defaultNotificationFreq == 2) {
             //try get the value from the sever, if none, still keep it 2
             new Thread(() -> {
                 String url = getString(R.string.GET_URL) + "users" + getString(R.string.NOTIFICATION_ENDPOINT)
@@ -197,7 +197,7 @@ public class ProfileFragment extends Fragment {
                     Objects.requireNonNull(getActivity()).runOnUiThread(() -> pushNotificationSpinner.setSelection(new_freq));
                 } catch (NumberFormatException e) {
                     Objects.requireNonNull(getActivity()).runOnUiThread(() -> pushNotificationSpinner.setSelection(2));
-                    String jsonRepresentation = parseNotificationInfo(default_notification_freq,
+                    String jsonRepresentation = parseNotificationInfo(defaultNotificationFreq,
                             sp.getString(getString(R.string.FIREBASE_TOKEN), ""));
                     OtherUtils.uploadToServer(
                             getString(R.string.NOTIFICATION_ENDPOINT),
@@ -207,7 +207,7 @@ public class ProfileFragment extends Fragment {
                 }
             }).start();
         } else {
-            pushNotificationSpinner.setSelection(default_notification_freq);
+            pushNotificationSpinner.setSelection(defaultNotificationFreq);
         }
     }
 
@@ -219,6 +219,8 @@ public class ProfileFragment extends Fragment {
             sp.unregisterOnSharedPreferenceChangeListener(profileFragmentOnSPChangeListener);
         if (StatisticFragment.statisticFragmentOnSPChangeListener != null)
             sp.unregisterOnSharedPreferenceChangeListener(StatisticFragment.statisticFragmentOnSPChangeListener);
+        if (QuizFragment.quizFragmentSPChangeListener != null)
+            sp.unregisterOnSharedPreferenceChangeListener(QuizFragment.quizFragmentSPChangeListener);
 
         HomeActivity parentAct = (HomeActivity) getActivity();
 
@@ -287,7 +289,7 @@ public class ProfileFragment extends Fragment {
         int readPermission = ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()), Manifest.permission.READ_EXTERNAL_STORAGE);
 
         if (readPermission != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, permission_code);
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_CODE);
         } else {
             setUpProfileImage();
         }
@@ -295,7 +297,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == permission_code && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == PERMISSION_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             setUpProfileImage();
         }
     }

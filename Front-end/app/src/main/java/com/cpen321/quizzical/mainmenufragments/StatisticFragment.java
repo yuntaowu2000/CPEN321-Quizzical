@@ -72,12 +72,12 @@ public class StatisticFragment extends Fragment {
         
         //TODO: load the info from the server
         if (isInstructor) {
-            TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.statistic_class_name_text);
+            TextView classNameText = Objects.requireNonNull(getView()).findViewById(R.id.statistic_class_name_text);
 
             Objects.requireNonNull(getActivity()).runOnUiThread(() ->
-                    class_name_text.setText(String.format(getString(R.string.UI_current_class_name), currClass.getClassName()))
+                    classNameText.setText(String.format(getString(R.string.UI_current_class_name), currClass.getClassName()))
             );
-            statisticFragmentOnSPChangeListener = (sp, key) -> onStatsFragmentSPChanged(key, class_name_text);
+            statisticFragmentOnSPChangeListener = (sp, key) -> onStatsFragmentSPChanged(key, classNameText);
             sp.registerOnSharedPreferenceChangeListener(statisticFragmentOnSPChangeListener);
 
             boardLayout = view.findViewById(R.id.class_statistic_board);
@@ -87,12 +87,12 @@ public class StatisticFragment extends Fragment {
             teachersLeaderboardBtn.setOnClickListener(v -> switchTeacherLeaderboard());
 
         } else {
-            TextView class_name_text = Objects.requireNonNull(getView()).findViewById(R.id.leader_board_class_code_text);
+            TextView classNameText = Objects.requireNonNull(getView()).findViewById(R.id.leader_board_class_code_text);
 
             Objects.requireNonNull(getActivity()).runOnUiThread(() ->
-                    class_name_text.setText(String.format(getString(R.string.UI_current_class_name), currClass.getClassName()))
+                    classNameText.setText(String.format(getString(R.string.UI_current_class_name), currClass.getClassName()))
             );
-            statisticFragmentOnSPChangeListener = (sp, key) -> onStatsFragmentSPChanged(key, class_name_text);
+            statisticFragmentOnSPChangeListener = (sp, key) -> onStatsFragmentSPChanged(key, classNameText);
             sp.registerOnSharedPreferenceChangeListener(statisticFragmentOnSPChangeListener);
 
             boardLayout = view.findViewById(R.id.student_leaderboard_table);
@@ -105,11 +105,11 @@ public class StatisticFragment extends Fragment {
         }
         if (key.equals(getContext().getString(R.string.CURR_CLASS))) {
 
-            String class_info = sp.getString(getContext().getString(R.string.CURR_CLASS), "");
+            String classInfoString = sp.getString(getContext().getString(R.string.CURR_CLASS), "");
 
-            if (!OtherUtils.stringIsNullOrEmpty(class_info)) {
+            if (!OtherUtils.stringIsNullOrEmpty(classInfoString)) {
 
-                currClass = new Classes(class_info);
+                currClass = new Classes(classInfoString);
                 Log.d("In_statistic", "class code changed to " + currClass.getClassCode());
 
 
