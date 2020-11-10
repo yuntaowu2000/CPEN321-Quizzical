@@ -4,6 +4,8 @@ let router = express.Router();
 let fs = require("fs");
 let MongoClient = require("mongodb").MongoClient;
 let db;
+let nodemailer = require("nodemailer");
+let util = require("util");
 
 MongoClient.connect(
   "mongodb://localhost:27017",
@@ -112,7 +114,10 @@ router.post("/class", (req, res, next) => {
       if (err) {
         // console.error(err);
       }
+
     });
+
+    sendCreateClassEmail(req.body.uid, data.className, data.classCode);
   } else if (req.body.type === "classList") {
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {"classList": req.body.data}}, {upsert: true}, (err, res) => {
       if (err) {
@@ -204,3 +209,45 @@ router.post("/quiz", (req, res, next) => {
 });
 
 module.exports = router;
+
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "cloudwhale321@gmail.com",
+    pass: "SuperJalen123"
+  }
+});
+
+function sendEmail(emailAddr, emailSubject, emailHtml) {
+  let mailOptions = {
+    from: "cloudwhale321@gmail.com",
+    to: emailAddr,
+    subject: emailSubject,
+    html: emailHtml
+  };
+
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      //do nothing for now.
+    }
+  });
+}
+
+function parseCreateClassEmailContent(username, className, classCode) {
+  return util.format("<p>Congratulations, %s!</p><p>You have just created a new Class: %s</p><p>Your class code is: %d.</p><p>share it with the students and begin your quizzes!</p>", username, className, classCode);
+}
+
+function sendCreateClassEmail(uid, className, classCode) {
+  db.collection("userInfo").find({ uid: { $eq: uid }}).project({username:1, Email:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
+    if (err) {
+      throw err;
+    } else {
+      let username = Object.values(retval[0])[0];
+      let email = Object.values(retval[0])[1];
+      let parsedContent = parseCreateClassEmailContent(username, className, classCode);
+      sendEmail(email, "Quizzical: New class created", parsedContent);
+    }
+  });
+}
+
+
