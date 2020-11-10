@@ -41,8 +41,8 @@ function sendCreateClassEmail(uid, className, classCode) {
     if (err) {
       throw err;
     } else {
-      let username = Object.values(retval[0])[0];
-      let email = Object.values(retval[0])[1];
+      let username = Object.values(retval[0])[1];
+      let email = Object.values(retval[0])[0];
       let parsedContent = parseCreateClassEmailContent(username, className, classCode);
       sendEmail(email, "Quizzical: New class created", parsedContent);
     }
