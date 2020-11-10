@@ -51,13 +51,14 @@ The progress is written in the sequence of implementation.
 - Simple POST GET request handling done.  
 - user info (username, email, profile image, is_instructor, class taken, class statistics) mostly done  
 - quiz info (created quiz parsed and sent onto the server; retrive quiz from the server)   
+- class list and quiz modules for each class done.  
 
 ## TODO list
 -  UI set up for home activity  
 **Note:** need to get info from the server for these layouts, such as quizzes available, class average scores, user ranking.  
     - maybe we can add some review quizzes for all the wrong questions a student has got, the wrong question ids will be sent to the server  
 - Front-Back end communication  
-    - class info (class statistics, quiz modules)   
+    - class info (student info)   
 - Push notification  
     - email when account created  
     - email when class created  
