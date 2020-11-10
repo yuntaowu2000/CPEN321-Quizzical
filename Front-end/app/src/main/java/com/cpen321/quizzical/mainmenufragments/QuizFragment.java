@@ -594,4 +594,10 @@ public class QuizFragment extends Fragment {
         }
         return true;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshModuleList();
+    }
 }

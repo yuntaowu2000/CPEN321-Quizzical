@@ -29,6 +29,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d("Firebase", "Message received in app");
         Handler h = new Handler(Looper.getMainLooper());
-        h.post(() -> Toast.makeText(getApplicationContext(), remoteMessage.getNotification().getBody(), Toast.LENGTH_LONG).show());
+        String messageToShow = remoteMessage.getNotification().getBody() + " Please refresh to see the update.";
+        h.post(() -> Toast.makeText(getApplicationContext(), messageToShow, Toast.LENGTH_LONG).show());
     }
 }

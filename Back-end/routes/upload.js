@@ -21,7 +21,7 @@ function setupMessage(classCode, userToken) {
       throw err;
     } else {
       let className = Object.values(retval[0])[0] + "";
-      let message =  util.format("Quiz modules in %s has been updated", className);
+      let message =  util.format("Quiz modules in %s has been updated.", className);
       let payload = {
         notification: {
           title: "Quizzical",
