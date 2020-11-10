@@ -228,7 +228,7 @@ function sendEmail(emailAddr, emailSubject, emailHtml) {
 
   transporter.sendMail(mailOptions, (err, info) => {
     if (err) {
-      //do nothing for now.
+      throw err;
     }
   });
 }
