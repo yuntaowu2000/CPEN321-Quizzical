@@ -414,12 +414,12 @@ public class QuizFragment extends Fragment {
         String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
         sp.edit().putString(moduleId, newModuleList).apply();
         new Thread(() -> {
-//            OtherUtils.uploadToServer(
-//                    getString(R.string.QUIZ_ENDPOINT),
-//                    sp.getString(getString(R.string.UID), ""),
-//                    getString(R.string.QUIZ_MODULES),
-//                    newModuleList
-//            );
+            OtherUtils.uploadToServer(
+                    getString(R.string.QUIZ_ENDPOINT),
+                    String.valueOf(currClass.getClassCode()),
+                    getString(R.string.QUIZ_MODULES),
+                    newModuleList
+            );
             String params = getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
                     + "&" + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
                     + "&" + getString(R.string.QUIZ_MODULES) + "=" + qm.getId();
