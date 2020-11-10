@@ -14,20 +14,25 @@ firebaseAdmin.initializeApp({
   databaseURL: "https://plated-inn-286021.firebaseio.com"
 });
 
-function sendMessage(userId, message) {
+function sendMessage(userIds, message) {
   let timeout = 2000;
-  db.collection("notificationFrequency").find({uid: {$eq: userId }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
+  db.collection("notificationFrequency").find({uid: {$in: userIds }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
     if (err) {
       throw err;
     } else {
+      let userTokens = [];
+      for (var val of retval) {
+        userTokens.push(Object.values(val)[0]);
+      }
+
       let payload = {
         notification: {
           title: "Quizzical",
           body: message
         },
-        token: userToken
+        tokens: userTokens
       };
-      firebaseAdmin.messaging().send(payload);
+      firebaseAdmin.messaging().sendMulticast(payload);
     }
   });
 }
@@ -43,9 +48,7 @@ function sendQuizModulePushNotification(classCode) {
       let message =  util.format("Quiz modules in %s has been updated.", className);
       let userIds = ["105960354998423944600", "118436222585761741438"];
       //get all the students here and send the message to all students
-      for (var userId of userIds) {
-        sendMessage(userId, message);
-      }
+      sendMessage(userIds, message);
     }
   });
 }
