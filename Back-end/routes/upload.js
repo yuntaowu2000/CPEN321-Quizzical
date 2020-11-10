@@ -6,50 +6,12 @@ let MongoClient = require("mongodb").MongoClient;
 let db;
 let nodemailer = require("nodemailer");
 let util = require("util");
-let firebaseAdmin = require("firebase-admin");
-
-let serviceAccount = require("../plated-inn-286021-firebase-adminsdk-oxi0q-0e23826d54.json");
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(serviceAccount),
-  databaseURL: "https://plated-inn-286021.firebaseio.com"
-});
-
-function setupMessage(classCode) {
-  let timeout = 2000;
-  db.collection("classInfo").find({classCode: { $eq: classCode }}).project({className:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
-    if (err) {
-      throw err;
-    } else {
-      return "Quiz modules in " + Object.values(retval[0])[0] + "has been updated";
-    }
-  });
-}
-
-function sendQuizModulePushNotification(classCode) {
-  let timeout = 2000;
-  let message = setupMessage(classCode);
-
-  let payload = {
-    notification: {
-      title: "Quizzical",
-      body: message
-    }
-  };
-
-  let options = {
-    priority: "high",
-    timeToLive: 60 * 60 * 24
-  }
-
-  db.collection("notificationFrequency").find({uid: {$eq: "118436222585761741438" }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval)=>{
-    if (err) {
-      throw err;
-    } else {
-      let token = Object.values(retval[0])[0];
-      firebaseAdmin.messaging().sendToDevice(token, payload, options);
-    }
-  });
-}
+// var admin = require("firebase-admin");
+// var serviceAccount = require("../plated-inn-286021-firebase-adminsdk-oxi0q-0e23826d54.json");
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://plated-inn-286021.firebaseio.com"
+// });
 
 let transporter = nodemailer.createTransport({
   host: "smtp.mailtrap.io",
@@ -288,7 +250,6 @@ router.post("/quiz", (req, res, next) => {
         // console.error(err);
       }
     });
-    sendQuizModulePushNotification(Number(req.body.uid));
   }
 
   res.statusCode = 200;
