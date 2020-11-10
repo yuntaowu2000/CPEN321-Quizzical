@@ -7,6 +7,47 @@ let db;
 let nodemailer = require("nodemailer");
 let util = require("util");
 
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "cloudwhale321@gmail.com",
+    pass: "SuperJalen123"
+  }
+});
+
+function sendEmail(emailAddr, emailSubject, emailHtml) {
+  let mailOptions = {
+    from: "cloudwhale321@gmail.com",
+    to: emailAddr,
+    subject: emailSubject,
+    html: emailHtml
+  };
+
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      throw err;
+    }
+  });
+}
+
+function parseCreateClassEmailContent(username, className, classCode) {
+  return util.format("<p>Congratulations, %s!</p><p>You have just created a new Class: %s</p><p>Your class code is: %d.</p><p>share it with the students and begin your quizzes!</p>", username, className, classCode);
+}
+
+function sendCreateClassEmail(uid, className, classCode) {
+  let timeout = 2000;
+  db.collection("userInfo").find({ uid: { $eq: uid }}).project({username:1, Email:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
+    if (err) {
+      throw err;
+    } else {
+      let username = Object.values(retval[0])[0];
+      let email = Object.values(retval[0])[1];
+      let parsedContent = parseCreateClassEmailContent(username, className, classCode);
+      sendEmail(email, "Quizzical: New class created", parsedContent);
+    }
+  });
+}
+
 MongoClient.connect(
   "mongodb://localhost:27017",
   {useUnifiedTopology: true},
@@ -209,45 +250,3 @@ router.post("/quiz", (req, res, next) => {
 });
 
 module.exports = router;
-
-let transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "cloudwhale321@gmail.com",
-    pass: "SuperJalen123"
-  }
-});
-
-function sendEmail(emailAddr, emailSubject, emailHtml) {
-  let mailOptions = {
-    from: "cloudwhale321@gmail.com",
-    to: emailAddr,
-    subject: emailSubject,
-    html: emailHtml
-  };
-
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      throw err;
-    }
-  });
-}
-
-function parseCreateClassEmailContent(username, className, classCode) {
-  return util.format("<p>Congratulations, %s!</p><p>You have just created a new Class: %s</p><p>Your class code is: %d.</p><p>share it with the students and begin your quizzes!</p>", username, className, classCode);
-}
-
-function sendCreateClassEmail(uid, className, classCode) {
-  db.collection("userInfo").find({ uid: { $eq: uid }}).project({username:1, Email:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
-    if (err) {
-      throw err;
-    } else {
-      let username = Object.values(retval[0])[0];
-      let email = Object.values(retval[0])[1];
-      let parsedContent = parseCreateClassEmailContent(username, className, classCode);
-      sendEmail(email, "Quizzical: New class created", parsedContent);
-    }
-  });
-}
-
-
