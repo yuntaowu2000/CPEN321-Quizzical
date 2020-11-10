@@ -268,7 +268,7 @@ public class CreateQuizActivity extends AppCompatActivity {
             if (OtherUtils.stringIsNullOrEmpty(mc.getQuestion()) && OtherUtils.stringIsNullOrEmpty(mc.getPicSrc())) {
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.UI_warning))
-                        .setMessage(String.format(getString(R.string.UI_no_question), i))
+                        .setMessage(String.format(getString(R.string.UI_no_question), i + 1))
                         .setPositiveButton(R.string.OK, ((dialogInterface, j) -> dialogInterface.dismiss()))
                         .show();
                 return false;
@@ -304,11 +304,11 @@ public class CreateQuizActivity extends AppCompatActivity {
         CourseCategory category = currClass.getCategory();
         String instructorUID = sp.getString(getString(R.string.UID), "");
 
+        formatImages();
+
         if (!checkQuestionsValid()) {
             return;
         }
-
-        formatImages();
 
         QuizPackage quizPackage = new QuizPackage(classCode, category, instructorUID, currModule, questionList);
         quizPackage.setQuizCode(quiz_code);

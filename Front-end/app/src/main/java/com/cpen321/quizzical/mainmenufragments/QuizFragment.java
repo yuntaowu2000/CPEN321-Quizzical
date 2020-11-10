@@ -84,18 +84,19 @@ public class QuizFragment extends Fragment {
         Context thisContext = this.getContext();
         assert thisContext != null;
 
-        String quizContent = sp.getString(localCacheModuleName, "");
-        if (OtherUtils.stringIsNullOrEmpty(quizContent)) {
-            quizContent = OtherUtils.readFromURL(quizUrl);
-            if (OtherUtils.stringIsNullOrEmpty(quizContent) || quizContent.equals(getString(R.string.NO_VALUE_JSON))) {
+        String quizContent = OtherUtils.readFromURL(quizUrl);
+        if (OtherUtils.stringIsNullOrEmpty(quizContent) || quizContent.equals(getString(R.string.NO_VALUE_JSON))) {
+            quizContent = sp.getString(localCacheModuleName, "");
+            if (OtherUtils.stringIsNullOrEmpty(quizContent)) {
                 new AlertDialog.Builder(thisContext).setMessage("Not available.")
                         .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
                         .show();
                 return;
             }
-            //we are probably the student, so cache the values for him/her as well
-            sp.edit().putString(localCacheModuleName, quizContent).apply();
         }
+
+        //update the local cache
+        sp.edit().putString(localCacheModuleName, quizContent).apply();
 
         Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
         quizIntent.putExtra(getString(R.string.QUIZ_CONTENT), quizContent);
