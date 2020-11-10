@@ -14,14 +14,12 @@ firebaseAdmin.initializeApp({
   databaseURL: "https://plated-inn-286021.firebaseio.com"
 });
 
-function setupMessage(classCode, userToken) {
+function sendMessage(userId, message) {
   let timeout = 2000;
-  db.collection("classInfo").find({classCode: { $eq: classCode }}).project({className:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
+  db.collection("notificationFrequency").find({uid: {$eq: userId }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
     if (err) {
       throw err;
     } else {
-      let className = Object.values(retval[0])[0] + "";
-      let message =  util.format("Quiz modules in %s has been updated.", className);
       let payload = {
         notification: {
           title: "Quizzical",
@@ -37,12 +35,17 @@ function setupMessage(classCode, userToken) {
 function sendQuizModulePushNotification(classCode) {
   let timeout = 2000;
 
-  db.collection("notificationFrequency").find({uid: {$eq: "105960354998423944600" }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
+  db.collection("classInfo").find({classCode: { $eq: classCode }}).project({className:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
     if (err) {
       throw err;
     } else {
-      let userToken = Object.values(retval[0])[0];
-      setupMessage(classCode, userToken);
+      let className = Object.values(retval[0])[0] + "";
+      let message =  util.format("Quiz modules in %s has been updated.", className);
+      let userIds = ["105960354998423944600", "118436222585761741438"];
+      //get all the students here and send the message to all students
+      for (var userId of userIds) {
+        sendMessage(userId, message);
+      }
     }
   });
 }
