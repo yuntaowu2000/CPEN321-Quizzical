@@ -36,6 +36,9 @@ router.get("/", (req, res, next) => {
       if (err) {
         throw err;
       } else {
+        if (quizModules == null) {
+          res.send("");
+        }
         quizModules = Object.values(quizModules[0]);
         res.send("" + quizModules);
       }
