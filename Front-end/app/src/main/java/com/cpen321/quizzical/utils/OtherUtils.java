@@ -16,6 +16,10 @@ import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -58,6 +62,26 @@ public class OtherUtils {
         image.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] b = baos.toByteArray();
 
+        return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    /*
+     * Takes a file and converts it into string
+     * This is so you can upload pdf
+     * I haven't tested it yet, it is based on code I found online.
+     * */
+    public static String encodeFile(File file) throws FileNotFoundException {
+        FileInputStream fis = new FileInputStream(file);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buf = new byte[1024];
+        try {
+            for (int readNum; (readNum = fis.read(buf)) != -1;) {
+                baos.write(buf, 0, readNum);
+            }
+        } catch (IOException ex) {
+            Log.d("encode_file_error", "io error");
+        }
+        byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
