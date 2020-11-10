@@ -46,11 +46,6 @@ public class OtherUtils {
         return Pattern.matches(regex, email);
     }
 
-    public static boolean checkClassName(String class_name) {
-        //check if the username is valid or not
-        return Pattern.matches("^[aA-zZ0-9_-]{3,15}$", class_name);
-    }
-
     /*
      * Encoding and decoding images for storing in shared preferences and send to server
      * */

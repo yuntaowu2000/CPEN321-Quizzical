@@ -313,7 +313,7 @@ public class HomeActivity extends AppCompatActivity {
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v ->
         {
             String className = classNameInput.getText().toString();
-            if (OtherUtils.checkClassName(className)) {
+            if (checkClassName(className)) {
                 createNewClassCode(
                         courseCategoriesArray[courseCategorySpinner.getSelectedItemPosition()],
                         gradeLevelsArray[gradeListSpinner.getSelectedItemPosition()],
@@ -324,6 +324,18 @@ public class HomeActivity extends AppCompatActivity {
                 classNameErrorText.setText(R.string.UI_class_name_invalid_msg);
             }
         });
+    }
+
+    private boolean checkClassName(String className) {
+        if (!OtherUtils.checkUserName(className)) {
+            return false;
+        }
+        for (Classes c : classList) {
+            if (c.getClassName().equals(className)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private CourseCategory convertCategoryStringToEnum(String courseCategoryString) {

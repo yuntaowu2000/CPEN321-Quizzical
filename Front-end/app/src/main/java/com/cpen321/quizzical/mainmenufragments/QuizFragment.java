@@ -536,7 +536,7 @@ public class QuizFragment extends Fragment {
         {
             String newModuleName = editText.getText().toString();
 
-            if (OtherUtils.checkUserName(newModuleName)) {
+            if (checkModuleName(newModuleName)) {
                 QuizModules qm = new QuizModules(newModuleName, currClass.getClassCode(), currClass.getCategory());
                 modulesList.add(qm);
                 int quiz_code = modulesList.size() - 1;
@@ -564,5 +564,18 @@ public class QuizFragment extends Fragment {
                 errorText.setText(R.string.UI_invalid_module_name);
             }
         });
+    }
+
+    private boolean checkModuleName(String moduleName) {
+        if (!OtherUtils.checkUserName(moduleName)) {
+            return false;
+        }
+
+        for (QuizModules qm : modulesList) {
+            if (qm.getModuleName().equals(moduleName)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
