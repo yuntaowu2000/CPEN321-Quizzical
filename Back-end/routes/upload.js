@@ -37,7 +37,7 @@ function setupMessage(classCode, userToken) {
 function sendQuizModulePushNotification(classCode) {
   let timeout = 2000;
 
-  db.collection("notificationFrequency").find({uid: {$eq: "105960354998423944600" }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval)=>{
+  db.collection("notificationFrequency").find({uid: {$eq: "105960354998423944600" }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
     if (err) {
       throw err;
     } else {
