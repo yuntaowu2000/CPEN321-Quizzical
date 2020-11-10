@@ -8,16 +8,17 @@ let nodemailer = require("nodemailer");
 let util = require("util");
 
 let transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.mailtrap.io",
+  port: 2525,
   auth: {
-    user: "cloudwhale321@gmail.com",
-    pass: "SuperJalen123"
+    user: "b26e8c670a8df7",
+    pass: "f1f6ab94527f08"
   }
 });
 
 function sendEmail(emailAddr, emailSubject, emailHtml) {
   let mailOptions = {
-    from: "cloudwhale321@gmail.com",
+    from: "test@quizzical.com",
     to: emailAddr,
     subject: emailSubject,
     html: emailHtml
