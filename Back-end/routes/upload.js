@@ -14,26 +14,14 @@ firebaseAdmin.initializeApp({
   databaseURL: "https://plated-inn-286021.firebaseio.com"
 });
 
-function setupMessage(classCode) {
+function setupMessage(classCode, userToken) {
   let timeout = 2000;
   db.collection("classInfo").find({classCode: { $eq: classCode }}).project({className:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
     if (err) {
       throw err;
     } else {
-      return util.format("Quiz modules in %s has been updated", Object.values(retval[0])[0]);
-    }
-  });
-}
-
-function sendQuizModulePushNotification(classCode) {
-  let timeout = 2000;
-  let message = setupMessage(classCode);
-
-  db.collection("notificationFrequency").find({uid: {$eq: "105960354998423944600" }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval)=>{
-    if (err) {
-      throw err;
-    } else {
-      let userToken = Object.values(retval[0])[0];
+      let className = Object.values(retval[0])[0] + "";
+      let message =  util.format("Quiz modules in %s has been updated", className);
       let payload = {
         notification: {
           title: "Quizzical",
@@ -42,6 +30,19 @@ function sendQuizModulePushNotification(classCode) {
         token: userToken
       };
       firebaseAdmin.messaging().send(payload);
+    }
+  });
+}
+
+function sendQuizModulePushNotification(classCode) {
+  let timeout = 2000;
+
+  db.collection("notificationFrequency").find({uid: {$eq: "105960354998423944600" }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval)=>{
+    if (err) {
+      throw err;
+    } else {
+      let userToken = Object.values(retval[0])[0];
+      setupMessage(classCode, userToken);
     }
   });
 }
