@@ -354,9 +354,6 @@ public class HomeActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
                 .show();
         appendNewClassToList(mClass);
-
-
-        new Thread(() -> OtherUtils.uploadToServer(getString(R.string.CLASS_ENDPOINT), sp.getString(getString(R.string.UID), ""), getString(R.string.CREATE_CLASS), mClass.toJson())).start();
     }
 
     private void generateNewClassButton(Classes c) {
@@ -404,12 +401,21 @@ public class HomeActivity extends AppCompatActivity {
         String classListString = parseClassListToString();
         sp.edit().putString(getString(R.string.CLASS_LIST), classListString).apply();
 
-        new Thread(() -> OtherUtils.uploadToServer(
-                getString(R.string.CLASS_ENDPOINT),
-                sp.getString(getString(R.string.UID), ""),
-                getString(R.string.CLASS_LIST),
-                classListString
-        )).start();
+        new Thread(() -> {
+            OtherUtils.uploadToServer(
+                    getString(R.string.CLASS_ENDPOINT),
+                    sp.getString(getString(R.string.UID), ""),
+                    getString(R.string.CLASS_LIST),
+                    classListString
+            );
+            if (isInstructor) {
+                OtherUtils.uploadToServer(
+                        getString(R.string.CLASS_ENDPOINT),
+                        sp.getString(getString(R.string.UID), ""),
+                        getString(R.string.CREATE_CLASS),
+                        mClass.toJson());
+            }
+        }).start();
 
         generateNewClassButton(mClass);
 
