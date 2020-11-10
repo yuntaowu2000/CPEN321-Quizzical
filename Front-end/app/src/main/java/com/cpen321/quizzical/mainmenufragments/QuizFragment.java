@@ -152,7 +152,7 @@ public class QuizFragment extends Fragment {
         setupQuizModule();
 
         swipeRefreshLayout = view.findViewById(R.id.quiz_page_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(() -> new Thread(this::updateQuizList).start());
+        swipeRefreshLayout.setOnRefreshListener(() -> new Thread(this::refreshModuleList).start());
 
         quizFragmentSPChangeListener = (sp, key) -> onQuizFragmentSPChanged(key);
         sp.registerOnSharedPreferenceChangeListener(quizFragmentSPChangeListener);
@@ -160,6 +160,21 @@ public class QuizFragment extends Fragment {
         if (isInstructor) {
             onTeacherViewCreated();
         }
+    }
+
+    private void refreshModuleList() {
+        String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
+        String moduleListString;
+        String url = getString(R.string.GET_URL) + "classes?"
+                + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "") + "&"
+                + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
+                + "&type=" + getString(R.string.QUIZ_MODULES);
+        moduleListString = OtherUtils.readFromURL(url);
+        if (!OtherUtils.stringIsNullOrEmpty(moduleListString)) {
+            sp.edit().putString(moduleId, moduleListString).apply();
+        }
+        parseQuizModulesFromString();
+        updateQuizList();
     }
 
     private void onTeacherViewCreated() {
@@ -427,6 +442,7 @@ public class QuizFragment extends Fragment {
     }
 
     private void updateQuizList() {
+
         Objects.requireNonNull(getActivity()).runOnUiThread(this::setupQuizModule);
 
         if (swipeRefreshLayout.isRefreshing()) {
@@ -458,22 +474,22 @@ public class QuizFragment extends Fragment {
     private void parseQuizModulesFromString() {
         modulesList = new ArrayList<>();
         String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
-        String moduleList = sp.getString(moduleId, "");
-        if (OtherUtils.stringIsNullOrEmpty(moduleList)) {
+        String moduleListString = sp.getString(moduleId, "");
+        if (OtherUtils.stringIsNullOrEmpty(moduleListString)) {
             String url = getString(R.string.GET_URL) + "classes?"
                     + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "") + "&"
                     + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
                     + "&type=" + getString(R.string.QUIZ_MODULES);
-            moduleList = OtherUtils.readFromURL(url);
-            sp.edit().putString(moduleId, moduleList).apply();
+            moduleListString = OtherUtils.readFromURL(url);
+            sp.edit().putString(moduleId, moduleListString).apply();
         }
 
-        if (OtherUtils.stringIsNullOrEmpty(moduleList)) {
+        if (OtherUtils.stringIsNullOrEmpty(moduleListString)) {
             return;
         }
 
         try {
-            String[] modules = moduleList.split(";");
+            String[] modules = moduleListString.split(";");
             for (String m : modules) {
                 modulesList.add(new QuizModules(m));
             }
