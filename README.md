@@ -42,8 +42,11 @@ The progress is written in the sequence of implementation.
 
 -   Complex logic  
     -   A user is ranked by his/her overall EXP in a semester  
+
     -   The EXP for the student is calculated after each quiz is finished as follows:  
+
         <img src="pics/score_calculation.png"/>  
+
     -   The EXP for the teacher is calculated after each quiz is created EXP = BASIC_EXP, (BASIC_EXP = 10)  
 
 -   Other things  
@@ -71,5 +74,5 @@ The progress is written in the sequence of implementation.
     -   mobile notification when quiz, leaderboard updated  
 
 -   Complex logic   
-    - The EXP for the teacher is calculated as follows:  
-    - When a student/another teacher liked the quiz, EXP += BONUS_EXP, BONUS_EXP = ?  
+    -   The EXP for the teacher is calculated as follows:  
+    -   When a student/another teacher liked the quiz, EXP += BONUS_EXP, BONUS_EXP = ?  
