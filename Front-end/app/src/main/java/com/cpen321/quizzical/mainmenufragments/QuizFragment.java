@@ -465,6 +465,7 @@ public class QuizFragment extends Fragment {
                     + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
                     + "&type=" + getString(R.string.QUIZ_MODULES);
             moduleList = OtherUtils.readFromURL(url);
+            sp.edit().putString(moduleId, moduleList).apply();
         }
 
         if (OtherUtils.stringIsNullOrEmpty(moduleList)) {

@@ -392,7 +392,7 @@ public class QuizActivity extends AppCompatActivity {
 
             String parsedResult = parseQuizResults(quizNumAndExp[0], quizNumAndExp[1], mClass.getClassCode());
             new Thread(() -> OtherUtils.uploadToServer(
-                    getString(R.string.STATS_ENDPOINT),
+                    getString(R.string.STUDENT_STATS_ENDPOINT),
                     uid,
                     type,
                     parsedResult)).start();

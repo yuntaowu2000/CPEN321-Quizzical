@@ -137,7 +137,7 @@ router.post("/class", (req, res, next) => {
   res.end();
 });
 
-router.post("/stats", (req, res, next) => {
+router.post("/instructorStats", (req, res, next) => {
   if (req.body.type === "EXP") {
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {EXP: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
@@ -145,12 +145,26 @@ router.post("/stats", (req, res, next) => {
       }
     });
   } else if (req.body.type === "userQuizCount") {
-    db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {"userQuizCount": req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
+    db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {userQuizCount: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
         // console.error(err);
       }
     });
   }
+
+  res.statusCode = 200;
+  res.end();
+});
+
+router.post("/studentStats", (req, res, next) => {
+  let studentQuizResult = JSON.parse(req.body.data);
+  db.collection("userInfo").updateOne({uid: req.body.uid}, 
+    {$set: {userQuizCount: studentQuizResult.userQuizCount, EXP: studentQuizResult.EXP, uid: req.body.uid}},
+    {upsert: true}, (err, res) => {
+    if (err) {
+      // console.error(err);
+    }
+  });
 
   res.statusCode = 200;
   res.end();

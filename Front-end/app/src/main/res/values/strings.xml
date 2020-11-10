@@ -6,7 +6,8 @@
     <string name="USER_ENDPOINT" translatable="false">/user</string>
     <string name="NOTIFICATION_ENDPOINT" translatable="false">/notifications</string>
     <string name="CLASS_ENDPOINT" translatable="false">/class</string>
-    <string name="STATS_ENDPOINT" translatable="false">/stats</string>
+    <string name="INSTRUCTOR_STATS_ENDPOINT" translatable="false">/instructorStats</string>
+    <string name="STUDENT_STATS_ENDPOINT" translatable="false">/studentStats</string>
     <string name="QUIZ_ENDPOINT" translatable="false">/quiz</string>
     <string name="CONTACT_ENDPOINT" translatable="false">/contact</string>
     <string name="CLASS_DETAIL_ENDPOINT" translatable="false">/classDetails</string>
