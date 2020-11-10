@@ -553,7 +553,7 @@ public class QuizFragment extends Fragment {
 
                 new Thread(() -> OtherUtils.uploadToServer(
                         getString(R.string.QUIZ_ENDPOINT),
-                        sp.getString(getString(R.string.UID), ""),
+                        String.valueOf(currClass.getClassCode()),
                         getString(R.string.QUIZ_MODULES),
                         moduleListString
                         )).start();

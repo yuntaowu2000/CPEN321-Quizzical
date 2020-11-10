@@ -178,10 +178,7 @@ router.post("/quiz", (req, res, next) => {
       }
     });
   } else if (req.body.type === "quizModules") {
-    let quizModuleData = JSON.parse(req.body.data);
-    let quizModuleClassCode = quizModuleData.classCode;
-
-    db.collection("classInfo").updateOne({classCode: quizModuleClassCode}, {$set: {"quizModules":req.body.data}}, {upsert: true}, (err, res) => {
+    db.collection("classInfo").updateOne({classCode: Number(req.body.uid)}, {$set: {"quizModules":req.body.data}}, {upsert: true}, (err, res) => {
       if (err) {
         // console.error(err);
       }
