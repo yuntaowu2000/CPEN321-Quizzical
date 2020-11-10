@@ -4,7 +4,6 @@ let router = express.Router();
 let fs = require("fs");
 let MongoClient = require("mongodb").MongoClient;
 let db;
-let path = require("path");
 
 MongoClient.connect(
   "mongodb://localhost:27017",
@@ -39,12 +38,12 @@ router.use(express.json());
 router.post("/profileImg", (req, res, next) => {
   if (req.body.type === "profileImage")
   {
-    let imgPath = path.join("images", req.body.uid);
-    if (!fs.existsSync(imgPath))
+    let path = "images/" + req.body.uid;
+    if (!fs.existsSync(path))
     {
-      fs.mkdirSync(imgPath, {recursive:true});
+      fs.mkdirSync(path, {recursive:true});
     }
-    let filename = path.join("images", req.body.uid, "profile_img.jpg");
+    let filename = path + "/profile_img.jpg";
     fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
   }
 
