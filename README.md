@@ -52,6 +52,7 @@ The progress is written in the sequence of implementation.
 - user info (username, email, profile image, is_instructor, class taken, class statistics) mostly done  
 - quiz info (created quiz parsed and sent onto the server; retrive quiz from the server)   
 - class list and quiz modules for each class done.  
+- email when class created  
 
 ## TODO list
 -  UI set up for home activity  
@@ -61,7 +62,6 @@ The progress is written in the sequence of implementation.
     - class info (student info)   
 - Push notification  
     - email when account created  
-    - email when class created  
     - mobile notification when quiz, leaderboard updated  
 - Complex logic  
     - The EXP for the teacher is calculated as follows:  
