@@ -67,11 +67,9 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        String quizUrl = "";
-        String localCache = "";
+        String quizContent = "";
         if (getIntent() != null && getIntent().getExtras() != null) {
-            quizUrl = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.QUIZ_CONTENT));
-            localCache = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.LOCAL_CACHE));
+            quizContent = Objects.requireNonNull(getIntent().getExtras()).getString(getString(R.string.QUIZ_CONTENT));
         }
 
         this.questionNumber = 0;
@@ -86,9 +84,9 @@ public class QuizActivity extends AppCompatActivity {
                 new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
 
         if (this.questionNumber == 0) {
-            setUp(quizUrl, localCache);
+            setUp(quizContent);
             while (questions == null || questions.size() == 0) {
-                setUp(quizUrl, localCache);
+                setUp(quizContent);
             }
 
         }
@@ -99,16 +97,11 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    private void setUp(String quizConent, String localCache) {
+    private void setUp(String quizContent) {
         questions = new ArrayList<>();
 
-        QuizPackage quizPackage = new QuizPackage(quizConent);
+        QuizPackage quizPackage = new QuizPackage(quizContent);
         questions = quizPackage.getQuestionList();
-
-        if (questions.size() == 0) {
-            quizPackage = new QuizPackage(localCache);
-            questions = quizPackage.getQuestionList();
-        }
 
         if (questions.size() == 0) {
             TestQuestionPackage testPackage = new TestQuestionPackage();

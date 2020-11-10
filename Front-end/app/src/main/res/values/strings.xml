@@ -14,6 +14,8 @@
     <string name="CLASS_STATS_ENDPOINT" translatable="false">/classStats</string>
     <string name="PROFILE_ENDPOINT" translatable="false">users/profile</string>
 
+    <string name="NO_VALUE_JSON" translatable="false">[]</string>
+
     <string name="QUIZ_URL" translatable="false"><![CDATA[http://quizzical.canadacentral.cloudapp.azure.com/quiz?classCode=%d&quizCode=%d]]></string>
     <string name="TYPE" translatable="false">type=</string>
 

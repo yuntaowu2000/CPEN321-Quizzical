@@ -84,23 +84,23 @@ public class QuizFragment extends Fragment {
         Context thisContext = this.getContext();
         assert thisContext != null;
 
-        String localCache = sp.getString(localCacheModuleName, "");
-        String quizContent = OtherUtils.readFromURL(quizUrl);
-
-        if (OtherUtils.stringIsNullOrEmpty(quizContent) && OtherUtils.stringIsNullOrEmpty(localCache)) {
-            new AlertDialog.Builder(thisContext).setMessage("Not available.")
-                    .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
-                    .show();
-        } else {
-            if (OtherUtils.stringIsNullOrEmpty(localCache)) {
-                //we are probably the student, so cache the values for him/her as well
-                sp.edit().putString(localCacheModuleName, localCache).apply();
+        String quizContent = sp.getString(localCacheModuleName, "");
+        if (OtherUtils.stringIsNullOrEmpty(quizContent)) {
+            quizContent = OtherUtils.readFromURL(quizUrl);
+            if (OtherUtils.stringIsNullOrEmpty(quizContent) || quizContent.equals(getString(R.string.NO_VALUE_JSON))) {
+                new AlertDialog.Builder(thisContext).setMessage("Not available.")
+                        .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
+                        .show();
+                return;
             }
-            Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
-            quizIntent.putExtra(getString(R.string.QUIZ_CONTENT), quizContent);
-            quizIntent.putExtra(getString(R.string.LOCAL_CACHE), localCache);
-            startActivity(quizIntent);
+            //we are probably the student, so cache the values for him/her as well
+            sp.edit().putString(localCacheModuleName, quizContent).apply();
         }
+
+        Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
+        quizIntent.putExtra(getString(R.string.QUIZ_CONTENT), quizContent);
+        startActivity(quizIntent);
+
     }
 
     private void setupCreateQuiz() {
