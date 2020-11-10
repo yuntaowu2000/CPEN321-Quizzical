@@ -42,7 +42,6 @@ import com.cpen321.quizzical.utils.QuizPackage;
 import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
