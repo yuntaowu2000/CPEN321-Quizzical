@@ -117,7 +117,33 @@ public class OtherUtils {
             conn.disconnect();
             Log.d("HTTP_POST", "response msg: " + response);
         } catch (Exception e) {
+            retransmit(serverLink, jsonStringToSend);
             Log.d("error_message", "" + e.getMessage());
+        }
+    }
+
+    private static void retransmit(String link, String data) {
+        for (int tryTime = 0; tryTime < 10; tryTime++) {
+            try {
+                URL url = new URL(link);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setConnectTimeout(3000);
+                conn.setDoOutput(true);
+                conn.connect();
+                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+                wr.writeBytes(data);
+                wr.flush();
+                wr.close();
+
+                String response = conn.getResponseMessage();
+                conn.disconnect();
+                Log.d("HTTP_POST", "response msg: " + response);
+                return;
+            } catch (Exception e) {
+                Log.d("error_message", "" + e.getMessage());
+            }
         }
     }
 
