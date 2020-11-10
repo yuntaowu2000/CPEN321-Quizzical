@@ -63,6 +63,6 @@ The progress is written in the sequence of implementation.
 - Push notification  
     - email when account created  
     - mobile notification when quiz, leaderboard updated  
-- Complex logic  
+- Complex logic   
     - The EXP for the teacher is calculated as follows:  
     - When a student/another teacher liked the quiz, EXP += BONUS_EXP, BONUS_EXP = ?  
