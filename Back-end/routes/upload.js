@@ -6,6 +6,12 @@ let MongoClient = require("mongodb").MongoClient;
 let db;
 let nodemailer = require("nodemailer");
 let util = require("util");
+// var admin = require("firebase-admin");
+// var serviceAccount = require("../plated-inn-286021-firebase-adminsdk-oxi0q-0e23826d54.json");
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://plated-inn-286021.firebaseio.com"
+// });
 
 let transporter = nodemailer.createTransport({
   host: "smtp.mailtrap.io",
