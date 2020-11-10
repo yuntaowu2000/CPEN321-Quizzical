@@ -336,12 +336,12 @@ public class CreateQuizActivity extends AppCompatActivity {
                     getString(R.string.CREATE_QUIZ),
                     quizPackJson);
             OtherUtils.uploadToServer(
-                    getString(R.string.STATS_ENDPOINT),
+                    getString(R.string.INSTRUCTOR_STATS_ENDPOINT),
                     instructorUID,
                     getString(R.string.EXP),
                     currEXPVal);
             OtherUtils.uploadToServer(
-                    getString(R.string.STATS_ENDPOINT),
+                    getString(R.string.INSTRUCTOR_STATS_ENDPOINT),
                     instructorUID,
                     getString(R.string.USER_QUIZ_COUNT),
                     currQuizCountVal);

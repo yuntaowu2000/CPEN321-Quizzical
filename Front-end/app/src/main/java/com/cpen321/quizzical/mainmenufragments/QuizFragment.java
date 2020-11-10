@@ -42,7 +42,6 @@ import com.cpen321.quizzical.utils.QuizPackage;
 import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -414,12 +413,12 @@ public class QuizFragment extends Fragment {
         String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
         sp.edit().putString(moduleId, newModuleList).apply();
         new Thread(() -> {
-//            OtherUtils.uploadToServer(
-//                    getString(R.string.QUIZ_ENDPOINT),
-//                    sp.getString(getString(R.string.UID), ""),
-//                    getString(R.string.QUIZ_MODULES),
-//                    newModuleList
-//            );
+            OtherUtils.uploadToServer(
+                    getString(R.string.QUIZ_ENDPOINT),
+                    String.valueOf(currClass.getClassCode()),
+                    getString(R.string.QUIZ_MODULES),
+                    newModuleList
+            );
             String params = getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
                     + "&" + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
                     + "&" + getString(R.string.QUIZ_MODULES) + "=" + qm.getId();
@@ -466,6 +465,7 @@ public class QuizFragment extends Fragment {
                     + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
                     + "&type=" + getString(R.string.QUIZ_MODULES);
             moduleList = OtherUtils.readFromURL(url);
+            sp.edit().putString(moduleId, moduleList).apply();
         }
 
         if (OtherUtils.stringIsNullOrEmpty(moduleList)) {
@@ -553,7 +553,7 @@ public class QuizFragment extends Fragment {
 
                 new Thread(() -> OtherUtils.uploadToServer(
                         getString(R.string.QUIZ_ENDPOINT),
-                        sp.getString(getString(R.string.UID), ""),
+                        String.valueOf(currClass.getClassCode()),
                         getString(R.string.QUIZ_MODULES),
                         moduleListString
                         )).start();
