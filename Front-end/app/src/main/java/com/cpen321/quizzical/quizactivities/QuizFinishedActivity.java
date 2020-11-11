@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -15,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import com.cpen321.quizzical.HomeActivity;
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.utils.OtherUtils;
+import com.google.gson.JsonObject;
 
 public class QuizFinishedActivity extends AppCompatActivity {
 
@@ -41,7 +43,10 @@ public class QuizFinishedActivity extends AppCompatActivity {
             likeQuizButton.setVisibility(View.INVISIBLE);
         } else {
             String instructorUID = getIntent().getStringExtra(getString(R.string.INSTRUCTOR_UID));
-            likeQuizButton.setOnClickListener(v -> sendLikeToServer(instructorUID));
+            int classCode = getIntent().getIntExtra(getString(R.string.CLASS_CODE), 0);
+            int quizCode= getIntent().getIntExtra(getString(R.string.QUIZ_CODE), 0);
+            String jsonToSend = parseContent(classCode, quizCode, instructorUID);
+            likeQuizButton.setOnClickListener(v -> sendLikeToServer(jsonToSend));
         }
 
         if (correctNum < (double) totalNum / 2) {
@@ -73,7 +78,19 @@ public class QuizFinishedActivity extends AppCompatActivity {
         ActivityCompat.finishAffinity(this);
     }
 
-    public void sendLikeToServer(String instructorUID) {
+    private String parseContent(int classCode, int quizCode, String instructorUID) {
+        JsonObject jsonObject = new JsonObject();
+        try {
+            jsonObject.addProperty(getString(R.string.CLASS_CODE), classCode);
+            jsonObject.addProperty(getString(R.string.QUIZ_CODE), quizCode);
+            jsonObject.addProperty(getString(R.string.INSTRUCTOR_UID), instructorUID);
+        } catch (Exception e) {
+            Log.d("parse_result_failed", e.getMessage() + "");
+        }
+        return jsonObject.toString();
+    }
+
+    private void sendLikeToServer(String parsedData) {
         SharedPreferences sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
         String uid = sp.getString(getString(R.string.UID), "");
         likeQuizButton.setOnClickListener(null);
@@ -81,7 +98,7 @@ public class QuizFinishedActivity extends AppCompatActivity {
                 getString(R.string.LIKE_ENDPOINT),
                 uid,
                 getString(R.string.VOTE_FOR_LIKE),
-                instructorUID
+                parsedData
                 )).start();
     }
 

@@ -370,6 +370,8 @@ public class QuizActivity extends AppCompatActivity {
         intent.putExtra(getString(R.string.correct_num), correctNumber);
         intent.putExtra(getString(R.string.total_num), totalQuestionNum);
 
+        Classes mClass = new Classes(sp.getString(getString(R.string.CURR_CLASS), ""));
+
         if (!sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false)) {
             String uid = sp.getString(getString(R.string.UID), "");
             String type = String.format(getString(R.string.quiz_result), quizId);
@@ -380,8 +382,6 @@ public class QuizActivity extends AppCompatActivity {
             int[] quizNumAndExp = updateQuizNumAndExp(sp, prev_quiz_num, prev_EXP);
 
             intent.putExtra(getString(R.string.EXP_earned_for_quiz), quizNumAndExp[1] - prev_EXP);
-
-            Classes mClass = new Classes(sp.getString(getString(R.string.CURR_CLASS), ""));
 
             String parsedResult = parseQuizResults(quizNumAndExp[0], quizNumAndExp[1], mClass.getClassCode());
             new Thread(() -> OtherUtils.uploadToServer(
@@ -396,6 +396,8 @@ public class QuizActivity extends AppCompatActivity {
             // we can pass the parameters to the next page, asking whether the student like the quiz
             intent.putExtra(getString(R.string.INSTRUCTOR_UID), instructorUID);
             intent.putExtra(getString(R.string.VOTE_FOR_LIKE), true);
+            intent.putExtra(getString(R.string.QUIZ_CODE), quizId);
+            intent.putExtra(getString(R.string.CLASS_CODE), mClass.getClassCode());
         }
 
         startActivity(intent);

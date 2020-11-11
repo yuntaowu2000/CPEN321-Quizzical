@@ -298,19 +298,65 @@ router.post("/quiz", (req, res, next) => {
   res.end();
 });
 
+function checkLikedBefore(classCode, quizCode, likePersonUid) {
+  let likedBefore = false;
+  let timeout = 1000;
+  
+  db.collection("quizzes")
+    .find({$and: [{classCode}, {quizCode}]})
+    .project({liked: 1, _id:0})
+    .maxTimeMS(timeout)
+    .toArray(likedBefore = (err, data) => {
+      if (err) {
+        let likedPersons = [likePersonUid];
+        db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
+          {$set: {liked: likedPersons} }, {upsert = true},
+          (err, res) => {
+            if (err) {
+              // console.error(err);
+            }
+          });
+        return false;
+      }
+    let likedPersons = Object.values(data[0])[0];
+    if (likedPersons.contains(likePersonUid)) {
+      return true;
+    } else {
+      likedPersons.push(likePersonUid);
+      db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
+          {$set: {liked: likedPersons} }, {upsert = true},
+          (err, res) => {
+            if (err) {
+              // console.error(err);
+            }
+          });
+        return false;
+    }
+  });
+
+  return likedBefore;
+}
+
 router.post("/like", (req, res, next) => {
   if (req.body.type === "like") {
-    let instructorUID = req.body.data;
-    db.collection("userInfo").updateOne(
-      {uid: {$eq: instructorUID}},
-      {$inc: {EXP: 5}},
-      {upsert: true}, (err, res) => {
-        if (err) {
-          // console.error(err);
-        }
-      });
-      let userIds = [instructorUID];
-      sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
+    let likeDetails = JSON.parse(req.body.data);
+    let instructorUID = likeDetails.instructorUID;
+    let classCode = likeDetails.classCode;
+    let quizCode = likeDetails.quizCode;
+    let likePersonUid = req.body.uid;
+    
+    if (!checkLikedBefore(classCode, quizCode, likePersonUid)) {
+      db.collection("userInfo").updateOne(
+        {uid: {$eq: instructorUID}},
+        {$inc: {EXP: 5}},
+        {upsert: true}, (err, res) => {
+          if (err) {
+            // console.error(err);
+          }
+        });
+        let userIds = [instructorUID];
+        sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
+    }
   }
 
   res.statusCode = 200;
