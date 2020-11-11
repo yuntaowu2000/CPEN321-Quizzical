@@ -193,28 +193,28 @@ router.post("/notifications", (req, res, next) => {
   res.end();
 });
 
-function createClassFunction(reqData) {
+function createClassFunction(reqData, userId) {
   let data = JSON.parse(reqData);
   db.collection("classInfo")
     .updateOne(
-    {$and: [{uid: req.body.uid},{classCode: data.classCode}]},
-    {$set: Object.assign({}, data, {uid: req.body.uid})},
+    {$and: [{uid: userId},{classCode: data.classCode}]},
+    {$set: Object.assign({}, data, {uid: userId})},
     {upsert: true},
     (err, res) => {
     if (err) {
       // console.error(err);
     }
   });
-  classesDb.createCollection(data.classCode + "", (err, res) => {
+  classesDb.createCollection("class" + data.classCode, (err, res) => {
     if (err) {
       //console.error(err);
     }
   });
-  sendCreateClassEmail(req.body.uid, data.className, data.classCode);
+  sendCreateClassEmail(userId, data.className, data.classCode);
 }
 
 function joinClassFunction(classCode, studentuid) {
-  classesDb.collection(classCode).insertOne({uid: studentuid, userQuizCount: 0, score: 0}, 
+  classesDb.collection("class" + classCode).insertOne({uid: studentuid, userQuizCount: 0, score: 0}, 
     (err, res) => {
       if (err) {
         throw err;
@@ -224,7 +224,7 @@ function joinClassFunction(classCode, studentuid) {
 
 router.post("/class", (req, res, next) => {
   if (req.body.type === "createClass") {
-    createClassFunction(req.body.data);
+    createClassFunction(req.body.data, req.body.uid);
   } else if (req.body.type === "classList") {
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {"classList": req.body.data}}, {upsert: true}, (err, res) => {
       if (err) {
@@ -269,7 +269,7 @@ router.post("/studentStats", (req, res, next) => {
     }
   });
 
-  let student = classesDb.collection(classCode + "" ).findOne({uid: req.body.uid});
+  let student = classesDb.collection("class" + classCode).findOne({uid: req.body.uid});
   let prevScore = student.score;
   let prevUserQuizCount = student.userQuizCount;
 
@@ -277,7 +277,7 @@ router.post("/studentStats", (req, res, next) => {
   let newUserQuizCount = prevUserQuizCount + 1;
   let newScore = (prevScore * prevUserQuizCount + currScore) / newUserQuizCount;
 
-  classesDb.collection(classCode + "").updateOne({uid: req.body.uid},
+  classesDb.collection("class" + classCode).updateOne({uid: req.body.uid},
     {$set: {EXP: studentQuizResult.EXP, userQuizCount: newUserQuizCount, score: newScore}},
     {upsert: true}, (err, res) => {
       if (err) {

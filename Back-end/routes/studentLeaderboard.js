@@ -2,13 +2,13 @@ let express = require("express");
 let MongoClient = require("mongodb").MongoClient;
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 let router = express.Router();
-let classDb;
+let classesDb;
 
 MongoClient.connect(
   "mongodb://localhost:27017",
   {useUnifiedTopology: true},
   (err, client) => {
-    classDb = client.db("classes");
+    classesDb = client.db("classes");
   }
 );
 
@@ -32,7 +32,7 @@ router.get("/", (req, res, next) => {
     let classCode = url.searchParams.get("classCode");
     let timeout = 2000;
     
-    db.collection(classCode + "")
+    classesDb.collection("class" + classCode)
       .find({isInstructor: true})
       .project({_id:0, username: 1, EXP: 1, uid: 1, score: 1})
       .sort({EXP: -1})
