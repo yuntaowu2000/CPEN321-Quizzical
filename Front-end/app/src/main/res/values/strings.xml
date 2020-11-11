@@ -13,6 +13,8 @@
     <string name="CLASS_DETAIL_ENDPOINT" translatable="false">/classDetails</string>
     <string name="CLASS_STATS_ENDPOINT" translatable="false">/classStats</string>
     <string name="PROFILE_ENDPOINT" translatable="false">users/profile</string>
+    <string name="DELETE_CLASS" translatable="false">deleteClass</string>
+    <string name="DELETE_QUIZ" translatable="false">deleteQuiz</string>
 
     <string name="NO_VALUE_JSON" translatable="false">[]</string>
 

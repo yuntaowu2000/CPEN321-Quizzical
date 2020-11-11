@@ -62,7 +62,52 @@ router.get("/", (req, res, next) => {
   } 
   
   */
-  
+});
+
+function handleDeleteClass(isInstructor, classCode, uid) {
+  if (isInstructor === "true") {
+    db.collection("classInfo").deleteOne(
+      {$and: [{instructorUID: uid},{classCode: classCode}]},
+      (err, db) => {
+        if (err) {
+          throw err;
+        }
+      });
+    
+      db.collection("quizzes").deleteMany(
+      {$and: [{instructorUID: uid},{classCode: classCode}]},
+      (err, db) => {
+        if (err) {
+          throw err;
+        }
+      });
+  } else {
+    //delete the student from the class.
+  }
+}
+
+router.delete("/delete", (req, res, next) => {
+  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
+  let uid = url.searchParams.get("userId");
+  let type = url.searchParams.get("type");
+  let classCode = Number(url.searchParams.get("classCode"));
+
+  if (type === "deleteClass") {
+    let isInstructor = url.searchParams.get("isInstructor");
+    handleDeleteClass(isInstructor, classCode, uid);
+  } else if (type === "deleteQuiz") {
+    let quizCode = url.searchParams.get("quizModules");
+    db.collection("quizzes").deleteOne(
+      {$and: [{instructorUID: uid},{classCode: classCode}, {quizCode: quizCode}]},
+      (err, db) => {
+        if (err) {
+          throw err;
+        }
+      });
+  }
+
+  res.statusCode = 204;
+  res.end();
 });
 
 module.exports = router;

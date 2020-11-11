@@ -471,6 +471,8 @@ public class HomeActivity extends AppCompatActivity {
                     classListString
             );
             String params = getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                    + "&" + getString(R.string.TYPE) + getString(R.string.DELETE_CLASS)
+                    + "&" + getString(R.string.IS_INSTRUCTOR) + "=" + sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false)
                     + "&" + getString(R.string.CLASS_CODE) + "=" + mClass.getClassCode();
             OtherUtils.deleteRequest(params);
         }).start();

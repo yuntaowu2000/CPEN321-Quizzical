@@ -436,6 +436,7 @@ public class QuizFragment extends Fragment {
                     newModuleList
             );
             String params = getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                    + "&" + getString(R.string.TYPE) + getString(R.string.DELETE_QUIZ)
                     + "&" + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
                     + "&" + getString(R.string.QUIZ_MODULES) + "=" + qm.getId();
             OtherUtils.deleteRequest(params);
