@@ -18,7 +18,7 @@ import com.cpen321.quizzical.utils.OtherUtils;
 
 public class QuizFinishedActivity extends AppCompatActivity {
 
-    ImageButton likeQuizButton;
+    private ImageButton likeQuizButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
