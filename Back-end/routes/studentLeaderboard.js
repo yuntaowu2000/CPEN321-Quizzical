@@ -26,13 +26,14 @@ function getUserPosition(data, uid) {
 }
 
 function refactorData(data, uid) {
-    if (data.length > 10) {
-        data = data.slice(0, 10);
-    }
+    var newData = data;
     var userValues = getUserPosition(data, uid);
-    data.push(userValues[0]);
-    data.push(userValues[1]);
-    return data;
+    if (data.length > 10) {
+        newData = data.slice(0, 10);
+    }
+    newData.push(userValues[0]);
+    newData.push(userValues[1]);
+    return newData;
 }
 
 router.get("/", (req, res, next) => {
