@@ -231,7 +231,7 @@ public class OtherUtils {
     }
 
     public static void deleteRequest(String params) {
-        String urlLink = "http://quizzical.canadacentral.cloudapp.azure.com/classes/delete/" + params;
+        String urlLink = "http://quizzical.canadacentral.cloudapp.azure.com/classes/delete?" + params;
         Log.d("html_delete", "deleting: " + urlLink);
         try {
             URL url = new URL(urlLink);

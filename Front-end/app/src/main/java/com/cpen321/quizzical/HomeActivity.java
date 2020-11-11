@@ -463,6 +463,9 @@ public class HomeActivity extends AppCompatActivity {
         String classListString = parseClassListToString();
         sp.edit().putString(getString(R.string.CLASS_LIST), classListString).apply();
 
+        String moduleId = mClass.getClassCode() + getString(R.string.QUIZ_MODULES);
+        sp.edit().remove(moduleId).apply();
+
         new Thread(() -> {
             OtherUtils.uploadToServer(
                     getString(R.string.CLASS_ENDPOINT),

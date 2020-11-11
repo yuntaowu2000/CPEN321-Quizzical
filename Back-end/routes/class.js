@@ -96,7 +96,7 @@ router.delete("/delete", (req, res, next) => {
     let isInstructor = url.searchParams.get("isInstructor");
     handleDeleteClass(isInstructor, classCode, uid);
   } else if (type === "deleteQuiz") {
-    let quizCode = url.searchParams.get("quizModules");
+    let quizCode = Number(url.searchParams.get("quizModules"));
     db.collection("quizzes").deleteOne(
       {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}, {quizCode: { $eq: quizCode }}]},
       (err, db) => {
