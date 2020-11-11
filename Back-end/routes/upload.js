@@ -299,34 +299,28 @@ router.post("/quiz", (req, res, next) => {
 });
 
 function checkLikedBefore(classCode, quizCode, likePersonUid) {
-  let likedBefore = false;
-  let timeout = 1000;
 
-  db.collection("quizzes")
-    .find({$and: [{classCode}, {quizCode}]})
-    .project({liked: 1, _id:0})
-    .maxTimeMS(timeout)
-    .toArray(likedBefore = (err, data) => {
-    let likedPersons = [];
-    if (Array.isArray(data) && data.length != 0) {
-      likedPersons = Object.values(data[0])[0];
-    }
-    if (likedPersons.includes(likePersonUid)) {
-      return true;
-    } else {
-      likedPersons.push(likePersonUid);
-      db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
-          {$set: {liked: likedPersons} }, {upsert: true},
-          (err, res) => {
-            if (err) {
-              // console.error(err);
-            }
-          });
-        return false;
-    }
-  });
+  var targetQuiz = db.collection("quizzes").findOne({$and: [{classCode}, {quizCode}]});
 
-  return likedBefore;
+  var likedPersons = new Array();
+
+  if (targetQuiz && targetQuiz.hasLiked) {
+    likedPersons = targetQuiz.liked;
+  }
+  //currently always return false, not sure why
+  if (likedPersons.includes(likePersonUid)) {
+    return true;
+  } else {
+    likedPersons.push(likePersonUid);
+    db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
+        {$set: {liked: likedPersons, hasLiked: true} }, {upsert: true},
+        (err, res) => {
+          if (err) {
+            // console.error(err);
+          }
+        });
+    return false;
+  }
 }
 
 router.post("/like", (req, res, next) => {
@@ -343,7 +337,7 @@ router.post("/like", (req, res, next) => {
         {$inc: {EXP: 5}},
         {upsert: true}, (err, res) => {
           if (err) {
-            // console.error(err);
+            throw err;
           }
         });
         let userIds = [instructorUID];

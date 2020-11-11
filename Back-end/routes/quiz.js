@@ -22,7 +22,7 @@ router.get("/", (req, res, next) => {
   
   db.collection("quizzes")
     .find({$and: [{classCode}, {quizCode}]})
-    .project({_id:0})
+    .project({_id:0, liked:0, hasLiked:0})
     .maxTimeMS(timeout)
     .toArray((err, data) => {
     if (err) {
