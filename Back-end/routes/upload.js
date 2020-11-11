@@ -313,7 +313,7 @@ function checkLikedBefore(classCode, quizCode, likePersonUid) {
   } else {
     likedPersons.push(likePersonUid);
     db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
-        {$set: {liked: likedPersons, hasLiked: true} }, {upsert: true},
+        {$set: {liked: likedPersons, hasLiked: true} },
         (err, res) => {
           if (err) {
             // console.error(err);
