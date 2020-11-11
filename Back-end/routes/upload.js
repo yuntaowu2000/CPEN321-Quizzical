@@ -309,6 +309,8 @@ router.post("/like", (req, res, next) => {
           // console.error(err);
         }
       });
+      let userIds = [instructorUID];
+      sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
   }
 
   res.statusCode = 200;
