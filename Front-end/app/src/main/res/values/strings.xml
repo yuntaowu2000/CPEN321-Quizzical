@@ -16,6 +16,7 @@
     <string name="DELETE_CLASS" translatable="false">deleteClass</string>
     <string name="DELETE_QUIZ" translatable="false">deleteQuiz</string>
     <string name="LIKE_ENDPOINT" translatable="false">/like</string>
+    <string name="INSTRUCTOR_LEADERBOARD_ENDPOINT" translatable="false">instructorLeaderboard</string>
 
     <string name="NO_VALUE_JSON" translatable="false">[]</string>
 

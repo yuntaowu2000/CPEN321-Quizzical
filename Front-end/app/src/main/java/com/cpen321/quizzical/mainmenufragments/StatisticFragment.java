@@ -23,6 +23,9 @@ import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.data.Classes;
 import com.cpen321.quizzical.utils.OtherUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.Objects;
 
 public class StatisticFragment extends Fragment {
@@ -130,14 +133,18 @@ public class StatisticFragment extends Fragment {
         Objects.requireNonNull(getActivity()).runOnUiThread(() ->
         {
             if (isInstructor && teacherInStatistic) {
-                generateClassStatisticTableRows();
+                generateClassStatisticTableRows("");
+            } else if (isInstructor){
+                String urlToFetch = getString(R.string.GET_URL) + getString(R.string.INSTRUCTOR_LEADERBOARD_ENDPOINT)
+                        + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "");
+                generateLeaderboardRows(urlToFetch);
             } else {
-                generateLeaderboardRows();
+                generateLeaderboardRows("");
             }
         });
     }
 
-    private void generateClassStatisticTableRows() {
+    private void generateClassStatisticTableRows(String urlToFetch) {
         int count = boardLayout.getChildCount();
 
         boardLayout.removeViews(1, count - 1);
@@ -187,7 +194,9 @@ public class StatisticFragment extends Fragment {
             newRow.addView(generateTableElement(getString(R.string.EXP)), 2);
 
             boardLayout.addView(newRow);
-            generateLeaderboardRows();
+            String urlToFetch = getString(R.string.GET_URL) + getString(R.string.INSTRUCTOR_LEADERBOARD_ENDPOINT)
+                    + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "");
+            generateLeaderboardRows(urlToFetch);
 
         } else {
             teacherInStatistic = true;
@@ -199,26 +208,57 @@ public class StatisticFragment extends Fragment {
             newRow.addView(generateTableElement(getString(R.string.EXP)), 3);
 
             boardLayout.addView(newRow);
-            generateClassStatisticTableRows();
+            generateClassStatisticTableRows("");
         }
     }
 
-    private void generateLeaderboardRows() {
+    private void generateLeaderboardRows(String url) {
         int count = boardLayout.getChildCount();
-
         boardLayout.removeViews(1, count - 1);
 
-        for (int i = 1; i <= 10; i++) {
-            TableRow newRow = new TableRow(this.getContext());
-            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-            newRow.setLayoutParams(lp);
+        if (!OtherUtils.stringIsNullOrEmpty(url)) {
+            String leaderboardContent = OtherUtils.readFromURL(url);
+            try {
+                //shows top 10 and the current user if not in
+                JSONArray jsonArray = new JSONArray(leaderboardContent);
+                for (int i = 0; i < jsonArray.length() - 2; i++) {
+                    TableRow newRow = getTableRow(jsonArray, i + 1, i);
 
-            newRow.addView(generateTableElement(String.valueOf(i)), 0);
-            newRow.addView(generateTableElement("test student" + i), 1);
-            newRow.addView(generateTableElement("100"), 2);
+                    boardLayout.addView(newRow, i + 1);
+                }
+                int userPosition = jsonArray.getInt(jsonArray.length() - 2);
+                if (userPosition > 10) {
+                    TableRow newRow = getTableRow(jsonArray, userPosition, jsonArray.length() - 1);
 
-            boardLayout.addView(newRow, i);
+                    boardLayout.addView(newRow, 11);
+                }
+            } catch (JSONException e) {
+                Log.d("parse", "parse leaderboard failed");
+            }
+        } else {
+            for (int i = 1; i <= 10; i++) {
+                TableRow newRow = new TableRow(this.getContext());
+                TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+                newRow.setLayoutParams(lp);
+
+                newRow.addView(generateTableElement(String.valueOf(i)), 0);
+                newRow.addView(generateTableElement("test student" + i), 1);
+                newRow.addView(generateTableElement("100"), 2);
+
+                boardLayout.addView(newRow, i);
+            }
         }
+    }
+
+    private TableRow getTableRow(JSONArray jsonArray, int userPosition, int objectPosition) throws JSONException {
+        TableRow newRow = new TableRow(this.getContext());
+        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+        newRow.setLayoutParams(lp);
+
+        newRow.addView(generateTableElement(String.valueOf(userPosition)), 0);
+        newRow.addView(generateTableElement(jsonArray.getJSONObject(objectPosition).getString(getString(R.string.USERNAME))), 1);
+        newRow.addView(generateTableElement(jsonArray.getJSONObject(objectPosition).getString(getString(R.string.EXP))), 2);
+        return newRow;
     }
 
     @Override
