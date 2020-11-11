@@ -25,6 +25,16 @@ function getUserPosition(data, uid) {
     return [userRank, userData];
 }
 
+function refactorData(data) {
+    if (data.length > 10) {
+        data = data.slice(0, 10);
+    }
+    var userValues = getUserPosition(data, uid);
+    data.push(userValues[0]);
+    data.push(userValues[1]);
+    return data;
+}
+
 router.get("/", (req, res, next) => {
     let url = new URL(req.originalUrl, `http://${req.headers.host}`);
     let uid = url.searchParams.get("userId");
@@ -33,7 +43,7 @@ router.get("/", (req, res, next) => {
     let timeout = 2000;
     
     classesDb.collection("class" + classCode)
-      .find({isInstructor: true})
+      .find({})
       .project({_id:0, username: 1, EXP: 1, uid: 1, score: 1})
       .sort({EXP: -1})
       .maxTimeMS(timeout)
@@ -41,11 +51,8 @@ router.get("/", (req, res, next) => {
       if (err) {
         throw err;
       } else {
-        if (data.length > 10 && isInstructor === "false") {
-            data = data.slice(0, 10);
-            var userValues = getUserPosition(data, uid);
-            data.push(userValues[0]);
-            data.push(userValues[1]);
+        if (isInstructor === "false") {
+            data = refactorData(data);
         }
         res.send(data);
       }
