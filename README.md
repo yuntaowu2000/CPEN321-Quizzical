@@ -48,6 +48,7 @@ The progress is written in the sequence of implementation.
         <img src="pics/score_calculation.png"/>  
 
     -   The EXP for the teacher is calculated after each quiz is created EXP = BASIC_EXP, (BASIC_EXP = 10)  
+    -   When a student/another teacher liked the quiz, EXP += BONUS_EXP, BONUS_EXP = 5  
 
 -   Other things  
     -   Most parts are translated in Chinese as well.  
@@ -73,7 +74,4 @@ The progress is written in the sequence of implementation.
 -   Push notification  
     -   email when account created  
     -   mobile notification leaderboard updated  
-
--   Complex logic   
-    -   The EXP for the teacher is calculated as follows:  
-    -   When a student/another teacher liked the quiz, EXP += BONUS_EXP, BONUS_EXP = ?  
+    
