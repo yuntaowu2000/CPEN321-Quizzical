@@ -145,7 +145,7 @@ public class StatisticFragment extends Fragment {
                 String urlToFetch = getString(R.string.GET_URL) + getString(R.string.STUDENT_LEADERBOARD_ENDPOINT)
                         + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
                         + "&" + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
-                        + "&" + getString(R.string.IS_INSTRUCTOR) + "=" + "true";
+                        + "&" + getString(R.string.IS_INSTRUCTOR) + "=" + "false";
                 generateLeaderboardRows(urlToFetch);
             }
         });
@@ -161,7 +161,7 @@ public class StatisticFragment extends Fragment {
             try {
                 //shows top 10 and the current user if not in
                 JSONArray jsonArray = new JSONArray(statsContent);
-                for (int i = 0; i < jsonArray.length() - 1; i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     TableRow newRow = getStatsTableRow(jsonArray, i + 1, i);
                     boardLayout.addView(newRow, i + 1);
                 }
