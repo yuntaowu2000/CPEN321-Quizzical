@@ -67,20 +67,20 @@ router.get("/", (req, res, next) => {
 function handleDeleteClass(isInstructor, classCode, uid) {
   if (isInstructor === "true") {
     db.collection("classInfo").deleteOne(
-      {$and: [{instructorUID: uid},{classCode: classCode}]},
+      {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]},
       (err, db) => {
         if (err) {
           throw err;
         }
-      });
+    });
     
-      db.collection("quizzes").deleteMany(
-      {$and: [{instructorUID: uid},{classCode: classCode}]},
+    db.collection("quizzes").deleteMany(
+      {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]},
       (err, db) => {
         if (err) {
           throw err;
         }
-      });
+    });
   } else {
     //delete the student from the class.
   }
@@ -98,7 +98,7 @@ router.delete("/delete", (req, res, next) => {
   } else if (type === "deleteQuiz") {
     let quizCode = url.searchParams.get("quizModules");
     db.collection("quizzes").deleteOne(
-      {$and: [{instructorUID: uid},{classCode: classCode}, {quizCode: quizCode}]},
+      {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}, {quizCode: { $eq: quizCode }}]},
       (err, db) => {
         if (err) {
           throw err;
