@@ -67,7 +67,6 @@ public class StatisticFragment extends Fragment {
 
         swipeRefreshLayout = view.findViewById(R.id.statistic_swipe_layout);
         
-        //TODO: load the info from the server
         if (isInstructor) {
             TextView classNameText = Objects.requireNonNull(getView()).findViewById(R.id.statistic_class_name_text);
 
@@ -133,13 +132,16 @@ public class StatisticFragment extends Fragment {
         Objects.requireNonNull(getActivity()).runOnUiThread(() ->
         {
             if (isInstructor && teacherInStatistic) {
-                generateClassStatisticTableRows("");
+                String urlToFetch = "";
+                generateClassStatisticTableRows(urlToFetch);
             } else if (isInstructor){
                 String urlToFetch = getString(R.string.GET_URL) + getString(R.string.INSTRUCTOR_LEADERBOARD_ENDPOINT)
                         + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "");
                 generateLeaderboardRows(urlToFetch);
             } else {
-                generateLeaderboardRows("");
+                String urlToFetch = getString(R.string.GET_URL) + getString(R.string.INSTRUCTOR_LEADERBOARD_ENDPOINT)
+                        + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "");
+                generateLeaderboardRows(urlToFetch);
             }
         });
     }
@@ -149,16 +151,30 @@ public class StatisticFragment extends Fragment {
 
         boardLayout.removeViews(1, count - 1);
 
-        for (int i = 1; i <= 20; i++) {
+        if (!OtherUtils.stringIsNullOrEmpty(urlToFetch)) {
+            String statsContent = OtherUtils.readFromURL(urlToFetch);
+            try {
+                //shows top 10 and the current user if not in
+                JSONArray jsonArray = new JSONArray(statsContent);
+                for (int i = 0; i < jsonArray.length() - 1; i++) {
+                    TableRow newRow = getStatsTableRow(jsonArray, i + 1, i);
+                    boardLayout.addView(newRow, i + 1);
+                }
 
-            TableRow newRow = new TableRow(this.getContext());
-            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-            newRow.setLayoutParams(lp);
-            newRow.addView(generateTableElement(String.valueOf(i)), 0);
-            newRow.addView(generateTableElement("test student " + i), 1);
-            newRow.addView(generateTableElement("98"), 2);
-            newRow.addView(generateTableElement("100"), 3);
-            boardLayout.addView(newRow, i);
+            } catch (JSONException e) {
+                Log.d("parse", "parse leaderboard failed");
+            }
+        } else {
+            for (int i = 1; i <= 20; i++) {
+                TableRow newRow = new TableRow(this.getContext());
+                TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+                newRow.setLayoutParams(lp);
+                newRow.addView(generateTableElement(String.valueOf(i)), 0);
+                newRow.addView(generateTableElement("test student " + i), 1);
+                newRow.addView(generateTableElement("98"), 2);
+                newRow.addView(generateTableElement("100"), 3);
+                boardLayout.addView(newRow, i);
+            }
         }
 
 
@@ -222,13 +238,13 @@ public class StatisticFragment extends Fragment {
                 //shows top 10 and the current user if not in
                 JSONArray jsonArray = new JSONArray(leaderboardContent);
                 for (int i = 0; i < jsonArray.length() - 2; i++) {
-                    TableRow newRow = getTableRow(jsonArray, i + 1, i);
+                    TableRow newRow = getLeaderboardTableRow(jsonArray, i + 1, i);
 
                     boardLayout.addView(newRow, i + 1);
                 }
                 int userPosition = jsonArray.getInt(jsonArray.length() - 2);
                 if (userPosition > 10) {
-                    TableRow newRow = getTableRow(jsonArray, userPosition, jsonArray.length() - 1);
+                    TableRow newRow = getLeaderboardTableRow(jsonArray, userPosition, jsonArray.length() - 1);
 
                     boardLayout.addView(newRow, 11);
                 }
@@ -250,7 +266,7 @@ public class StatisticFragment extends Fragment {
         }
     }
 
-    private TableRow getTableRow(JSONArray jsonArray, int userPosition, int objectPosition) throws JSONException {
+    private TableRow getLeaderboardTableRow(JSONArray jsonArray, int userPosition, int objectPosition) throws JSONException {
         TableRow newRow = new TableRow(this.getContext());
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
         newRow.setLayoutParams(lp);
@@ -258,6 +274,18 @@ public class StatisticFragment extends Fragment {
         newRow.addView(generateTableElement(String.valueOf(userPosition)), 0);
         newRow.addView(generateTableElement(jsonArray.getJSONObject(objectPosition).getString(getString(R.string.USERNAME))), 1);
         newRow.addView(generateTableElement(jsonArray.getJSONObject(objectPosition).getString(getString(R.string.EXP))), 2);
+        return newRow;
+    }
+
+    private TableRow getStatsTableRow(JSONArray jsonArray, int userPosition, int objectPosition) throws JSONException {
+        TableRow newRow = new TableRow(this.getContext());
+        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+        newRow.setLayoutParams(lp);
+
+        newRow.addView(generateTableElement(String.valueOf(userPosition)), 0);
+        newRow.addView(generateTableElement(jsonArray.getJSONObject(objectPosition).getString(getString(R.string.USERNAME))), 1);
+        newRow.addView(generateTableElement(jsonArray.getJSONObject(objectPosition).getString(getString(R.string.SCORE))), 2);
+        newRow.addView(generateTableElement(jsonArray.getJSONObject(objectPosition).getString(getString(R.string.EXP))), 3);
         return newRow;
     }
 
