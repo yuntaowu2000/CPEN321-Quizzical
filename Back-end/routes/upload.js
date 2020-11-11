@@ -298,30 +298,30 @@ router.post("/quiz", (req, res, next) => {
   res.end();
 });
 
-function checkLikedBefore(classCode, quizCode, likePersonUid) {
+// function checkLikedBefore(classCode, quizCode, likePersonUid) {
 
-  var targetQuiz = db.collection("quizzes").findOne({$and: [{classCode}, {quizCode}]});
+//   var targetQuiz = db.collection("quizzes").findOne({$and: [{classCode}, {quizCode}]});
 
-  var likedPersons = new Array();
+//   var likedPersons = new Array();
 
-  if (targetQuiz && targetQuiz.hasLiked) {
-    likedPersons = targetQuiz.liked;
-  }
-  //currently always return false, not sure why
-  if (likedPersons.includes(likePersonUid)) {
-    return true;
-  } else {
-    likedPersons.push(likePersonUid);
-    db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
-        {$set: {liked: likedPersons, hasLiked: true} },
-        (err, res) => {
-          if (err) {
-            // console.error(err);
-          }
-        });
-    return false;
-  }
-}
+//   if (targetQuiz && targetQuiz.hasLiked) {
+//     likedPersons = targetQuiz.liked;
+//   }
+//   //currently always return false, not sure why
+//   if (likedPersons.includes(likePersonUid)) {
+//     return true;
+//   } else {
+//     likedPersons.push(likePersonUid);
+//     db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
+//         {$set: {liked: likedPersons} },
+//         (err, res) => {
+//           if (err) {
+//             // console.error(err);
+//           }
+//         });
+//     return false;
+//   }
+// }
 
 router.post("/like", (req, res, next) => {
   if (req.body.type === "like") {
@@ -331,18 +331,18 @@ router.post("/like", (req, res, next) => {
     let quizCode = Number(likeDetails.quizCode);
     let likePersonUid = req.body.uid;
     
-    if (!checkLikedBefore(classCode, quizCode, likePersonUid)) {
-      db.collection("userInfo").updateOne(
-        {uid: {$eq: instructorUID}},
-        {$inc: {EXP: 5}},
-        {upsert: true}, (err, res) => {
-          if (err) {
-            throw err;
-          }
-        });
-        let userIds = [instructorUID];
-        sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
-    }
+    // if (!checkLikedBefore(classCode, quizCode, likePersonUid)) {
+    db.collection("userInfo").updateOne(
+      {uid: {$eq: instructorUID}},
+      {$inc: {EXP: 5}},
+      {upsert: true}, (err, res) => {
+        if (err) {
+          throw err;
+        }
+      });
+      let userIds = [instructorUID];
+      sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
+    // }
   }
 
   res.statusCode = 200;
