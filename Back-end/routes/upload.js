@@ -54,11 +54,11 @@ function sendQuizModulePushNotification(classCode) {
 }
 
 let transporter = nodemailer.createTransport({
-  host: 'smtp.ethereal.email',
+  host: "smtp.ethereal.email",
   port: 587,
   auth: {
-    user: 'jessika.reichert39@ethereal.email',
-    pass: 'gtZXRfDehhW2KBYEQy'
+    user: "jessika.reichert39@ethereal.email",
+    pass: "gtZXRfDehhW2KBYEQy"
   }
 });
 
