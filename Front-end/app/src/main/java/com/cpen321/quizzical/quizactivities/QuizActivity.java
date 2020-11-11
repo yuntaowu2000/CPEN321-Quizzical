@@ -410,9 +410,10 @@ public class QuizActivity extends AppCompatActivity {
         String jsonForList = gson.toJson(wrongQuestionIds);
         JsonObject jsonObject = new JsonObject();
         try {
+            double score = ((double)correctNumber / (double)totalQuestionNum) * 100.0;
             jsonObject.addProperty(getString(R.string.USER_QUIZ_COUNT), quizNum);
             jsonObject.addProperty(getString(R.string.EXP), exp);
-            jsonObject.addProperty(getString(R.string.correct_num), correctNumber);
+            jsonObject.addProperty(getString(R.string.SCORE), score);
             jsonObject.addProperty(getString(R.string.CLASS_CODE), classCode);
             jsonObject.addProperty(getString(R.string.INSTRUCTOR_UID), instructorUID);
             jsonObject.addProperty(getString(R.string.QUIZ_CODE), quizId);

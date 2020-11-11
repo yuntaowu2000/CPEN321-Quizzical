@@ -9,6 +9,7 @@ var uploadRouter = require("./routes/upload");
 var quizRouter = require("./routes/quiz");
 var classRouter = require("./routes/class");
 var instructorLeaderboardRouter = require("./routes/instructorLeaderboard");
+var studentLeaderboardRouter = require("./routes/studentLeaderboard");
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.use("/upload", uploadRouter);
 app.use("/quiz", quizRouter);
 app.use("/classes", classRouter);
 app.use("/instructorLeaderboard", instructorLeaderboardRouter);
+app.use("/studentLeaderboard", studentLeaderboardRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

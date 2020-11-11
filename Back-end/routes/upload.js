@@ -193,25 +193,38 @@ router.post("/notifications", (req, res, next) => {
   res.end();
 });
 
+function createClassFunction(reqData) {
+  let data = JSON.parse(reqData);
+  db.collection("classInfo")
+    .updateOne(
+    {$and: [{uid: req.body.uid},{classCode: data.classCode}]},
+    {$set: Object.assign({}, data, {uid: req.body.uid})},
+    {upsert: true},
+    (err, res) => {
+    if (err) {
+      // console.error(err);
+    }
+  });
+  classesDb.createCollection(data.classCode + "", (err, res) => {
+    if (err) {
+      //console.error(err);
+    }
+  });
+  sendCreateClassEmail(req.body.uid, data.className, data.classCode);
+}
+
+function joinClassFunction(classCode, studentuid) {
+  classesDb.collection(classCode).insertOne({uid: studentuid, userQuizCount: 0, score: 0}, 
+    (err, res) => {
+      if (err) {
+        throw err;
+      }
+    });
+}
+
 router.post("/class", (req, res, next) => {
   if (req.body.type === "createClass") {
-    let data = JSON.parse(req.body.data);
-    db.collection("classInfo")
-      .updateOne(
-	{$and: [{uid: req.body.uid},{classCode: data.classCode}]},
-	{$set: Object.assign({}, data, {uid: req.body.uid})},
-	{upsert: true},
-	(err, res) => {
-      if (err) {
-        // console.error(err);
-      }
-    });
-    classesDb.createCollection(data.classCode + "", (err, res) => {
-      if (err) {
-        //console.error(err);
-      }
-    });
-    sendCreateClassEmail(req.body.uid, data.className, data.classCode);
+    createClassFunction(req.body.data);
   } else if (req.body.type === "classList") {
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {"classList": req.body.data}}, {upsert: true}, (err, res) => {
       if (err) {
@@ -219,17 +232,7 @@ router.post("/class", (req, res, next) => {
       }
     });
   } else if (req.body.type === "joinClass") {
-    let data = JSON.parse(req.body.data);
-    db.collection("userInfo")
-      .updateOne(
-	{$and: [{uid: req.body.uid}]},
-	{$set: Object.assign({}, data, {uid: req.body.uid})},
-	{upsert: true},
-	(err, res) => {
-      if (err) {
-        // console.error(err);
-      }
-    });
+    joinClassFunction(req.body.data, req.body.uid);
   }
 
   res.statusCode = 200;
@@ -257,6 +260,7 @@ router.post("/instructorStats", (req, res, next) => {
 
 router.post("/studentStats", (req, res, next) => {
   let studentQuizResult = JSON.parse(req.body.data);
+  let classCode = studentQuizResult.classCode;
   db.collection("userInfo").updateOne({uid: req.body.uid}, 
     {$set: {userQuizCount: studentQuizResult.userQuizCount, EXP: studentQuizResult.EXP, uid: req.body.uid}},
     {upsert: true}, (err, res) => {
@@ -265,21 +269,29 @@ router.post("/studentStats", (req, res, next) => {
     }
   });
 
+  let student = classesDb.collection(classCode + "" ).findOne({uid: req.body.uid});
+  let prevScore = student.score;
+  let prevUserQuizCount = student.userQuizCount;
+
+  let currScore = studentQuizResult.score;
+  let newUserQuizCount = prevUserQuizCount + 1;
+  let newScore = (prevScore * prevUserQuizCount + currScore) / newUserQuizCount;
+
+  classesDb.collection(classCode + "").updateOne({uid: req.body.uid},
+    {$set: {EXP: studentQuizResult.EXP, userQuizCount: newUserQuizCount, score: newScore}},
+    {upsert: true}, (err, res) => {
+      if (err) {
+        // console.error(err);
+      }
+    });
+
   res.statusCode = 200;
   res.end();
 });
 
 /*eslint complexity: ["error", 10]*/
 router.post("/quiz", (req, res, next) => {
-  //console.error("UID: " + req.body.uid);
-  //console.error("Type: " + req.body.type);
-  //console.error("Data: %j", req.body);
-  //console.error(Object.entries(req.body));
-  /*
-  else if (req.body.type === "class_list")
-  {
-  }
-  */
+
   if (req.body.type === "createQuiz") {
     let quizData = JSON.parse(req.body.data);
     db.collection("quizzes").updateOne(

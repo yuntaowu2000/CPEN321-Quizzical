@@ -66,7 +66,7 @@ public class StatisticFragment extends Fragment {
         currClass = new Classes(sp.getString(getString(R.string.CURR_CLASS), ""));
 
         swipeRefreshLayout = view.findViewById(R.id.statistic_swipe_layout);
-        
+
         if (isInstructor) {
             TextView classNameText = Objects.requireNonNull(getView()).findViewById(R.id.statistic_class_name_text);
 
@@ -132,15 +132,20 @@ public class StatisticFragment extends Fragment {
         Objects.requireNonNull(getActivity()).runOnUiThread(() ->
         {
             if (isInstructor && teacherInStatistic) {
-                String urlToFetch = "";
+                String urlToFetch = getString(R.string.GET_URL) + getString(R.string.STUDENT_LEADERBOARD_ENDPOINT)
+                        + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                        + "&" + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
+                        + "&" + getString(R.string.IS_INSTRUCTOR) + "=" + "true";
                 generateClassStatisticTableRows(urlToFetch);
             } else if (isInstructor){
                 String urlToFetch = getString(R.string.GET_URL) + getString(R.string.INSTRUCTOR_LEADERBOARD_ENDPOINT)
                         + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "");
                 generateLeaderboardRows(urlToFetch);
             } else {
-                String urlToFetch = getString(R.string.GET_URL) + getString(R.string.INSTRUCTOR_LEADERBOARD_ENDPOINT)
-                        + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "");
+                String urlToFetch = getString(R.string.GET_URL) + getString(R.string.STUDENT_LEADERBOARD_ENDPOINT)
+                        + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                        + "&" + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
+                        + "&" + getString(R.string.IS_INSTRUCTOR) + "=" + "true";
                 generateLeaderboardRows(urlToFetch);
             }
         });
@@ -224,7 +229,12 @@ public class StatisticFragment extends Fragment {
             newRow.addView(generateTableElement(getString(R.string.EXP)), 3);
 
             boardLayout.addView(newRow);
-            generateClassStatisticTableRows("");
+
+            String urlToFetch = getString(R.string.GET_URL) + getString(R.string.STUDENT_LEADERBOARD_ENDPOINT)
+                    + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                    + "&" + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
+                    + "&" + getString(R.string.IS_INSTRUCTOR) + "=" + "true";
+            generateClassStatisticTableRows(urlToFetch);
         }
     }
 

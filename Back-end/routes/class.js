@@ -4,12 +4,14 @@ let fs = require("fs");
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 let router = express.Router();
 let db;
+let classDb;
 
 MongoClient.connect(
   "mongodb://localhost:27017",
   {useUnifiedTopology: true},
   (err, client) => {
     db = client.db("data");
+    classDb = client.db("classes");
   }
 );
 
@@ -80,6 +82,12 @@ function handleDeleteClass(isInstructor, classCode, uid) {
         if (err) {
           throw err;
         }
+    });
+
+    classDb.collection(classCode + "").drop((err, delOK) => {
+      if (err) {
+        throw err;
+      }
     });
   } else {
     //delete the student from the class.

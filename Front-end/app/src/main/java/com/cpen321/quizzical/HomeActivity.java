@@ -249,8 +249,8 @@ public class HomeActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Log.d("parse_json", "parse class info failed");
         }
-        //TODO: need to change to return null here after the server is working
-        return new Classes(getString(R.string.UID), classCode, "testClass", CourseCategory.DontCare);
+
+        return null;
     }
 
     private void createClass() {
