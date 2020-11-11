@@ -307,14 +307,13 @@ function checkLikedBefore(classCode, quizCode, likePersonUid) {
     .project({liked: 1, _id:0})
     .maxTimeMS(timeout)
     .toArray(likedBefore = (err, data) => {
-    
-    let likedPersons = Object.values(data[0])[0];
-    if (likedPersons != null && likedPersons.contains(likePersonUid)) {
+    let likedPersons = [];
+    if (Array.isArray(data) && data.length != 0) {
+      likedPersons = Object.values(data[0])[0];
+    }
+    if (likedPersons.includes(likePersonUid)) {
       return true;
     } else {
-      if (likedPersons == null) {
-        likedPersons = [];
-      }
       likedPersons.push(likePersonUid);
       db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
           {$set: {liked: likedPersons} }, {upsert: true},
@@ -334,8 +333,8 @@ router.post("/like", (req, res, next) => {
   if (req.body.type === "like") {
     let likeDetails = JSON.parse(req.body.data);
     let instructorUID = likeDetails.instructorUID;
-    let classCode = likeDetails.classCode;
-    let quizCode = likeDetails.quizCode;
+    let classCode = Number(likeDetails.classCode);
+    let quizCode = Number(likeDetails.quizCode);
     let likePersonUid = req.body.uid;
     
     if (!checkLikedBefore(classCode, quizCode, likePersonUid)) {
