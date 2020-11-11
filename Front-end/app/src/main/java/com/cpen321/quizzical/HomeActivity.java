@@ -354,6 +354,7 @@ public class HomeActivity extends AppCompatActivity {
     private void createNewClassCode(String courseCategoryString, String gradeLevelString, String className) {
 
         int curr_classCode = (courseCategoryString.hashCode() + gradeLevelString.hashCode() + className.hashCode()) % 65536;
+        curr_classCode = Math.abs(curr_classCode);
         CourseCategory courseCategory = convertCategoryStringToEnum(courseCategoryString);
 
         Classes mClass = new Classes(sp.getString(getString(R.string.UID), ""),

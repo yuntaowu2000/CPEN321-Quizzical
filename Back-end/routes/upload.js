@@ -54,13 +54,14 @@ function sendQuizModulePushNotification(classCode) {
 }
 
 let transporter = nodemailer.createTransport({
-  host: "smtp.mailtrap.io",
-  port: 2525,
+  host: 'smtp.ethereal.email',
+  port: 587,
   auth: {
-    user: "b26e8c670a8df7",
-    pass: "f1f6ab94527f08"
+    user: 'jessika.reichert39@ethereal.email',
+    pass: 'gtZXRfDehhW2KBYEQy'
   }
 });
+
 
 function sendEmail(emailAddr, emailSubject, emailHtml) {
   let mailOptions = {
