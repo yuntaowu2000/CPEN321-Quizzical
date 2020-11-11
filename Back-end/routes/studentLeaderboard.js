@@ -25,7 +25,7 @@ function getUserPosition(data, uid) {
     return [userRank, userData];
 }
 
-function refactorData(data) {
+function refactorData(data, uid) {
     if (data.length > 10) {
         data = data.slice(0, 10);
     }
@@ -52,7 +52,7 @@ router.get("/", (req, res, next) => {
         throw err;
       } else {
         if (isInstructor === "false") {
-            data = refactorData(data);
+            data = refactorData(data, uid);
         }
         res.send(data);
       }
