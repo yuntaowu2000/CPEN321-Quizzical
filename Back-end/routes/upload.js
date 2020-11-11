@@ -4,6 +4,7 @@ let router = express.Router();
 let fs = require("fs");
 let MongoClient = require("mongodb").MongoClient;
 let db;
+let classesDb;
 let nodemailer = require("nodemailer");
 let util = require("util");
 let firebaseAdmin = require("firebase-admin");
@@ -101,6 +102,7 @@ MongoClient.connect(
   {useUnifiedTopology: true},
   (err, client) => {
     db = client.db("data");
+    classesDb = client.db("classes");
     db.createCollection("classInfo", (err, res) => {
       if (err) {
         //console.error(err);
@@ -203,9 +205,12 @@ router.post("/class", (req, res, next) => {
       if (err) {
         // console.error(err);
       }
-
     });
-
+    classesDb.createCollection(data.classCode + "", (err, res) => {
+      if (err) {
+        //console.error(err);
+      }
+    });
     sendCreateClassEmail(req.body.uid, data.className, data.classCode);
   } else if (req.body.type === "classList") {
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {"classList": req.body.data}}, {upsert: true}, (err, res) => {
