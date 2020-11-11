@@ -18,7 +18,7 @@ import com.cpen321.quizzical.utils.OtherUtils;
 
 public class QuizFinishedActivity extends AppCompatActivity {
 
-
+    ImageButton likeQuizButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +29,7 @@ public class QuizFinishedActivity extends AppCompatActivity {
         Button button = findViewById(R.id.quiz_finished_page_button);
 
         TextView likeQuizText = findViewById(R.id.like_quiz_text);
-        ImageButton likeQuizButton = findViewById(R.id.like_quiz_vote_button);
+        likeQuizButton = findViewById(R.id.like_quiz_vote_button);
 
         int totalNum = getIntent().getIntExtra(getString(R.string.total_num), 0);
         int correctNum = getIntent().getIntExtra(getString(R.string.correct_num), 0);
@@ -76,6 +76,7 @@ public class QuizFinishedActivity extends AppCompatActivity {
     public void sendLikeToServer(String instructorUID) {
         SharedPreferences sp = getSharedPreferences(getString(R.string.curr_login_user), MODE_PRIVATE);
         String uid = sp.getString(getString(R.string.UID), "");
+        likeQuizButton.setOnClickListener(null);
         new Thread(() -> OtherUtils.uploadToServer(
                 getString(R.string.LIKE_ENDPOINT),
                 uid,

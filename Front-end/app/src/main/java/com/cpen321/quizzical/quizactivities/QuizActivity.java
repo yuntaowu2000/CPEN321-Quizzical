@@ -394,7 +394,7 @@ public class QuizActivity extends AppCompatActivity {
         if (instructorUID != null && !sp.getString(getString(R.string.INSTRUCTOR_UID), "").equals(instructorUID)) {
             //null guarding
             // we can pass the parameters to the next page, asking whether the student like the quiz
-            intent.putExtra(getString(R.string.UID), instructorUID);
+            intent.putExtra(getString(R.string.INSTRUCTOR_UID), instructorUID);
             intent.putExtra(getString(R.string.VOTE_FOR_LIKE), true);
         }
 

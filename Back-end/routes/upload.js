@@ -233,7 +233,7 @@ router.post("/class", (req, res, next) => {
 
 router.post("/instructorStats", (req, res, next) => {
   if (req.body.type === "EXP") {
-    db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {EXP: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
+    db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {EXP: Number(req.body.data), uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
         // console.error(err);
       }
@@ -310,7 +310,7 @@ router.post("/like", (req, res, next) => {
         }
       });
   }
-  
+
   res.statusCode = 200;
   res.end();
 });
