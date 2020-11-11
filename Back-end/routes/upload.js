@@ -307,21 +307,14 @@ function checkLikedBefore(classCode, quizCode, likePersonUid) {
     .project({liked: 1, _id:0})
     .maxTimeMS(timeout)
     .toArray(likedBefore = (err, data) => {
-      if (err) {
-        let likedPersons = [likePersonUid];
-        db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
-          {$set: {liked: likedPersons} }, {upsert: true},
-          (err, res) => {
-            if (err) {
-              // console.error(err);
-            }
-          });
-        return false;
-      }
+    
     let likedPersons = Object.values(data[0])[0];
-    if (likedPersons.contains(likePersonUid)) {
+    if (likedPersons != null && likedPersons.contains(likePersonUid)) {
       return true;
     } else {
+      if (likedPersons == null) {
+        likedPersons = [];
+      }
       likedPersons.push(likePersonUid);
       db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
           {$set: {liked: likedPersons} }, {upsert: true},
