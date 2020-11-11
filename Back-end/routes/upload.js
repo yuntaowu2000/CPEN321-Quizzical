@@ -301,7 +301,7 @@ router.post("/quiz", (req, res, next) => {
 function checkLikedBefore(classCode, quizCode, likePersonUid) {
   let likedBefore = false;
   let timeout = 1000;
-  
+
   db.collection("quizzes")
     .find({$and: [{classCode}, {quizCode}]})
     .project({liked: 1, _id:0})
@@ -310,7 +310,7 @@ function checkLikedBefore(classCode, quizCode, likePersonUid) {
       if (err) {
         let likedPersons = [likePersonUid];
         db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
-          {$set: {liked: likedPersons} }, {upsert = true},
+          {$set: {liked: likedPersons} }, {upsert: true},
           (err, res) => {
             if (err) {
               // console.error(err);
@@ -324,7 +324,7 @@ function checkLikedBefore(classCode, quizCode, likePersonUid) {
     } else {
       likedPersons.push(likePersonUid);
       db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
-          {$set: {liked: likedPersons} }, {upsert = true},
+          {$set: {liked: likedPersons} }, {upsert: true},
           (err, res) => {
             if (err) {
               // console.error(err);
