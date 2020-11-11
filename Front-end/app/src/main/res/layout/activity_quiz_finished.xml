@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -41,6 +42,29 @@
                 android:textColor="@color/colorGolden"
                 android:textAlignment="center"
                 android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/quiz_finished_page_button"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:id="@+id/like_quiz_text"
+                android:text="@string/UI_do_you_like_the_quiz"
+                android:gravity="center"
+                android:textSize="15sp"/>
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/like_quiz_vote_button"
+                app:srcCompat="@drawable/ic_baseline_thumb_up_24"
+                android:contentDescription="@string/VOTE_FOR_LIKE" />
         </LinearLayout>
 
         <Button

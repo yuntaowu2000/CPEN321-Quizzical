@@ -116,4 +116,5 @@
     <string name="UI_no_question">第%d题没有题目。</string>
     <string name="UI_too_few_choices">第%d题选项不足2个。</string>
     <string name="UI_check_delete_module">你确定要删除这个单元：%s吗？</string>
+    <string name="UI_do_you_like_the_quiz">你喜欢这个测试吗？</string>
 </resources>

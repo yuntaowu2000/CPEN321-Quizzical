@@ -32,6 +32,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cpen321.quizzical.HomeActivity;
 import com.cpen321.quizzical.InitActivity;
@@ -58,6 +59,7 @@ public class ProfileFragment extends Fragment {
     private Spinner pushNotificationSpinner;
     private ArrayList<Classes> classList;
     private LinearLayout profileClassLayout;
+    private SwipeRefreshLayout refreshLayout;
     private boolean isInstructor;
 
     @Override
@@ -132,7 +134,38 @@ public class ProfileFragment extends Fragment {
 
         sp.registerOnSharedPreferenceChangeListener(profileFragmentOnSPChangeListener);
 
-        new Thread(this::updateProfileImage).start();
+        new Thread(this::updateOnCreate).start();
+
+        refreshLayout = getView().findViewById(R.id.profile_refresh_layout);
+        refreshLayout.setOnRefreshListener(() -> new Thread(this::updateEXP).start());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        new Thread(this::updateEXP).start();
+    }
+
+    private void updateOnCreate() {
+        updateEXP();
+        updateProfileImage();
+    }
+
+    private void updateEXP() {
+        String url = getString(R.string.GET_URL) + "users" + getString(R.string.CLASS_STATS_ENDPOINT)
+                + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
+                + "&" + getString(R.string.TYPE) + getString(R.string.EXP);
+
+        String exp = OtherUtils.readFromURL(url);
+        if (refreshLayout.isRefreshing()) {
+            refreshLayout.setRefreshing(false);
+        }
+        try {
+            int EXP = Integer.parseInt(exp);
+            sp.edit().putInt(getString(R.string.EXP), EXP).apply();
+        } catch (Exception e) {
+            Log.d("parse", "parseEXP failed");
+        }
     }
 
     private void updateProfileImage() {

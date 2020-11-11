@@ -298,4 +298,21 @@ router.post("/quiz", (req, res, next) => {
   res.end();
 });
 
+router.post("/like", (req, res, next) => {
+  if (req.body.type === "like") {
+    let instructorUID = req.body.data;
+    db.collection("userInfo").updateOne(
+      {uid: {$eq: instructorUID}},
+      {$inc: {EXP: 5}},
+      {upsert: true}, (err, res) => {
+        if (err) {
+          // console.error(err);
+        }
+      });
+  }
+  
+  res.statusCode = 200;
+  res.end();
+});
+
 module.exports = router;

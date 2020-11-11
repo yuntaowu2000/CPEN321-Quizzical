@@ -391,6 +391,12 @@ public class QuizActivity extends AppCompatActivity {
                     parsedResult)).start();
         }
 
+        if (instructorUID != null && !sp.getString(getString(R.string.INSTRUCTOR_UID), "").equals(instructorUID)) {
+            //null guarding
+            // we can pass the parameters to the next page, asking whether the student like the quiz
+            intent.putExtra(getString(R.string.UID), instructorUID);
+            intent.putExtra(getString(R.string.VOTE_FOR_LIKE), true);
+        }
 
         startActivity(intent);
         ActivityCompat.finishAffinity(this);
@@ -406,7 +412,7 @@ public class QuizActivity extends AppCompatActivity {
             jsonObject.addProperty(getString(R.string.EXP), exp);
             jsonObject.addProperty(getString(R.string.correct_num), correctNumber);
             jsonObject.addProperty(getString(R.string.CLASS_CODE), classCode);
-            jsonObject.addProperty(getString(R.string.UID), instructorUID);
+            jsonObject.addProperty(getString(R.string.INSTRUCTOR_UID), instructorUID);
             jsonObject.addProperty(getString(R.string.QUIZ_CODE), quizId);
             if (correctNumber != totalQuestionNum)
                 jsonObject.addProperty(getString(R.string.wrong_question_ids), jsonForList);

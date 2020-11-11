@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/profile_refresh_layout"
     tools:context=".mainmenufragments.ProfileFragment">
 
     <LinearLayout
@@ -43,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:contentDescription="@string/UI_change_username"
-                    android:src="@drawable/ic_baseline_edit_24" />
+                    app:srcCompat="@drawable/ic_baseline_edit_24" />
             </TableRow>
 
             <TableRow>
@@ -64,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:contentDescription="@string/UI_change_email"
-                    android:src="@drawable/ic_baseline_edit_24" />
+                    app:srcCompat="@drawable/ic_baseline_edit_24" />
             </TableRow>
 
             <TableRow>
@@ -152,4 +155,4 @@
             android:background="@drawable/round_corner_button"
             android:text="@string/UI_log_out" />
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

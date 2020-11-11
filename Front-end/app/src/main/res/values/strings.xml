@@ -15,6 +15,7 @@
     <string name="PROFILE_ENDPOINT" translatable="false">users/profile</string>
     <string name="DELETE_CLASS" translatable="false">deleteClass</string>
     <string name="DELETE_QUIZ" translatable="false">deleteQuiz</string>
+    <string name="LIKE_ENDPOINT" translatable="false">/like</string>
 
     <string name="NO_VALUE_JSON" translatable="false">[]</string>
 
@@ -46,6 +47,7 @@
     <string name="OK" translatable="false">OK</string>
 
     <string name="IS_INSTRUCTOR" translatable="false">isInstructor</string>
+    <string name="INSTRUCTOR_UID" translatable="false">instructorUID</string>
 
     <string name="CREATE_CLASS" translatable="false">createClass</string>
     <string name="JOIN_CLASS" translatable="false">joinClass</string>
@@ -236,6 +238,8 @@
     <string name="quiz_result" translatable="false">Quiz %d result</string>
     <string name="EXP_earned_for_quiz" translatable="false">EXP earned</string>
 
+    <string name="VOTE_FOR_LIKE" translatable="false">like</string>
+
     <!--    used in quiz finish activity-->
     <string name="UI_quiz_finished_earned_exp_msg">You got %d EXP!</string>
     <string name="UI_quiz_finished_low_score_msg">You got %d/%d correct. Keep learning!</string>
@@ -243,6 +247,7 @@
     <string name="UI_quiz_finished_normal_score_msg">You got %d/%d correct. Great work!</string>
     <string name="UI_finish_quiz_msg">You have finished the quiz!</string>
     <string name="UI_back_to_main_menu">Back to Main Menu</string>
+    <string name="UI_do_you_like_the_quiz">Do you like the quiz?</string>
 
     <!--    used for taking pictures and image modification, for teacher creating quiz-->
     <string name="take_picture">take picture</string>
