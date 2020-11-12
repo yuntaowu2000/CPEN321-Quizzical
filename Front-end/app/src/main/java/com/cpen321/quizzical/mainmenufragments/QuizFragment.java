@@ -363,8 +363,10 @@ public class QuizFragment extends Fragment {
             }
             if (OtherUtils.stringIsNullOrEmpty(qm.getQuizLink())) {
                 String quiz_link = String.format(getString(R.string.QUIZ_URL), currClass.getClassCode(), i);
-                String wrong_question_link = quiz_link + "&type=wrongQuestionList&uid=" + sp.getString(getString(R.string.UID), "");
-                String stats_link = quiz_link + "&type=stats&uid=" + sp.getString(getString(R.string.UID), "");
+                String wrong_question_link = quiz_link + "&type=wrongQuestionList&userId=" + sp.getString(getString(R.string.UID), "")
+                        + "&isInstructor=" + sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
+                String stats_link = quiz_link + "&type=score&userId=" + sp.getString(getString(R.string.UID), "")
+                        + "&isInstructor=" + sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
                 qm.setQuizLink(quiz_link);
                 qm.setWrongQuestionLink(wrong_question_link);
                 qm.setStatsLink(stats_link);
@@ -560,8 +562,10 @@ public class QuizFragment extends Fragment {
                 int quiz_code = modulesList.size() - 1;
                 qm.setId(quiz_code);
                 String quiz_link = String.format(getString(R.string.QUIZ_URL), currClass.getClassCode(), quiz_code);
-                String wrong_question_link = quiz_link + "&type=wrong_question_list&uid=" + sp.getString(getString(R.string.UID), "");
-                String stats_link = quiz_link + "&type=stats&uid=" + sp.getString(getString(R.string.UID), "");
+                String wrong_question_link = quiz_link + "&type=wrongQuestionList&userId=" + sp.getString(getString(R.string.UID), "")
+                        + "&isInstructor=" + sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
+                String stats_link = quiz_link + "&type=score&userId=" + sp.getString(getString(R.string.UID), "")
+                        + "&isInstructor=" + sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
                 qm.setQuizLink(quiz_link);
                 qm.setWrongQuestionLink(wrong_question_link);
                 qm.setStatsLink(stats_link);

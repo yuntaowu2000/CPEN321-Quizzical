@@ -84,7 +84,7 @@ function handleDeleteClass(isInstructor, classCode, uid) {
         }
     });
 
-    classDb.collection(classCode + "").drop((err, delOK) => {
+    classDb.collection("class" + classCode).drop((err, delOK) => {
       if (err) {
         throw err;
       }

@@ -39,10 +39,10 @@ router.get("/", (req, res, next) => {
       if (err) {
         throw err;
       } else {
+        var userValues = getUserPosition(data, instructorUID);
         if (data.length > 10) {
             data = data.slice(0, 10);
         }
-        var userValues = getUserPosition(data, instructorUID);
         data.push(userValues[0]);
         data.push(userValues[1]);
         res.send(data);

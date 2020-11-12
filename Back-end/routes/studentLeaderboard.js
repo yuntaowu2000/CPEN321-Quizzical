@@ -16,7 +16,7 @@ function getUserPosition(data, uid) {
     var userRank = 1;
     var userData;
     for (var user of data) {
-        if (Object.values(user)[0] === uid) {
+        if (Object.values(user)["uid"] === uid) {
             userData = user;
             break;
         }
