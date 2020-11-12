@@ -259,7 +259,7 @@ router.post("/instructorStats", (req, res, next) => {
   res.end();
 });
 
-function updateStudentStats(student, studentQuizResult) {
+function updateStudentStats(student, studentQuizResult, studentUid) {
   let prevScore = student.score;
   let prevUserQuizCount = student.userQuizCount;
   let prevEXP = student.EXP;
@@ -269,7 +269,7 @@ function updateStudentStats(student, studentQuizResult) {
   let newUserQuizCount = prevUserQuizCount + 1;
 
   let newScore = (prevScore * prevUserQuizCount + currScore) / newUserQuizCount;
-  let additionalEXP = Math.trunc((10 + 3 / (1 + Math.exp(50 -currScore)) + 1 / (1 + Math.exp(67 - score)) + 1 / (1 + Math.exp(90 - score))));
+  let additionalEXP = Math.round((10 + 3 / (1 + Math.exp(50 -currScore)) + 1 / (1 + Math.exp(67 - currScore)) + 1 / (1 + Math.exp(90 - currScore))));
   let newEXP = prevEXP + additionalEXP;
 
   let quizCode = studentQuizResult.quizCode;
@@ -277,7 +277,7 @@ function updateStudentStats(student, studentQuizResult) {
   let quizWrongQuestionFieldName = "quiz" + quizCode + "wrongQuesitonIds";
   let wrongQuestionIds = studentQuizResult.wrongQuestionIds;
 
-  classesDb.collection("class" + classCode).updateOne({uid: req.body.uid},
+  classesDb.collection("class" + studentQuizResult.classCode).updateOne({uid: studentUid},
     {$set: {EXP: newEXP, userQuizCount: newUserQuizCount, score: newScore, [quizScoreFieldName]: currScore, [quizWrongQuestionFieldName]: wrongQuestionIds}},
     {upsert: true}, (err, res) => {
       if (err) {
@@ -299,7 +299,7 @@ router.post("/studentStats", (req, res, next) => {
   });
 
   classesDb.collection("class" + classCode).find({uid: req.body.uid}).toArray((err, students) => {
-    updateStudentStats(students[0], studentQuizResult);
+    updateStudentStats(students[0], studentQuizResult, req.body.uid);
   });
   
 
