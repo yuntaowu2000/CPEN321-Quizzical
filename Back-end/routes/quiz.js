@@ -19,18 +19,47 @@ function fetchDataForTeachers(res, classCode, quizCode, type) {
 
 }
 
+function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) {
+  
+  db.collection("quizzes")
+  .find({$and: [{classCode}, {quizCode}]})
+  .project({_id:0, liked:0})
+  .maxTimeMS(timeout)
+  .toArray((err, data) => {
+    if (err) {
+      throw err;
+    } else {
+      let questions = new Array();
+      for (var id of wrongQuestionIds) {
+
+      }
+    }
+  });
+}
+
 function fetchDataForStudents(res, studentUid, classCode, quizCode, type) {
- let classDbName = "class" + classCode;
- let fieldName = "quiz" + quizCode + type;
- classesDb.collection(classDbName).find({uid: {$eq: studentUid}})
- .project({_id:0, [fieldName]: 1})
- .toArray((err, data) => {
-  if (err) {
-    throw err;
+  let classDbName = "class" + classCode;
+  if (type === "score") {
+    classesDb.collection(classDbName).find({uid: {$eq: studentUid}})
+    .project({_id:0, ["quiz" + quizCode + "score"]: 1})
+    .toArray((err, data) => {
+      if (err) {
+        throw err;
+      } else {
+        res.send(data);
+      }
+    });
   } else {
-    res.send(data);
+    classesDb.collection(classDbName).find({uid: {$eq: studentUid}})
+    .project({_id:0, ["quiz" + quizCode + "wrongQuestionIds"]: 1})
+    .toArray((err, data) => {
+      if (err) {
+        throw err;
+      } else {
+        res.send(data);
+      }
+    });
   }
- });
 }
 
 /* GET quiz listing. */

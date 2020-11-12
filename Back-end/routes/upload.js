@@ -274,12 +274,11 @@ function updateStudentStats(student, studentQuizResult, studentUid) {
 
   let quizCode = studentQuizResult.quizCode;
   let quizScoreFieldName = "quiz" + quizCode + "score";
-  let quizWrongQuestionFieldName = "quiz" + quizCode + "wrongQuesitonIds";
+  let quizWrongQuestionFieldName = "quiz" + quizCode + "wrongQuestionIds";
   let wrongQuestionIds = studentQuizResult.wrongQuestionIds;
 
   classesDb.collection("class" + studentQuizResult.classCode).updateOne({uid: studentUid},
-    {$setOnInsert: {userQuizCount: newUserQuizCount, score: newScore, [quizScoreFieldName]: currScore, [quizWrongQuestionFieldName]: wrongQuestionIds}},
-    {$set: {EXP: newEXP}},
+    {$set: {EXP: newEXP, userQuizCount: newUserQuizCount, score: newScore, [quizScoreFieldName]: currScore, [quizWrongQuestionFieldName]: wrongQuestionIds}},
     {upsert: true}, (err, res) => {
       if (err) {
         // console.error(err);
