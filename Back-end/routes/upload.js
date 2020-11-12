@@ -259,9 +259,37 @@ router.post("/instructorStats", (req, res, next) => {
   res.end();
 });
 
+function updateStudentStats(student, studentQuizResult) {
+  let prevScore = student.score;
+  let prevUserQuizCount = student.userQuizCount;
+  let prevEXP = student.EXP;
+
+  let currScore = studentQuizResult.score;
+
+  let newUserQuizCount = prevUserQuizCount + 1;
+
+  let newScore = (prevScore * prevUserQuizCount + currScore) / newUserQuizCount;
+  let additionalEXP = Math.trunc((10 + 3 / (1 + Math.exp(50 -currScore)) + 1 / (1 + Math.exp(67 - score)) + 1 / (1 + Math.exp(90 - score))));
+  let newEXP = prevEXP + additionalEXP;
+
+  let quizCode = studentQuizResult.quizCode;
+  let quizScoreFieldName = "quiz" + quizCode + "score";
+  let quizWrongQuestionFieldName = "quiz" + quizCode + "wrongQuesitonIds";
+  let wrongQuestionIds = studentQuizResult.wrongQuestionIds;
+
+  classesDb.collection("class" + classCode).updateOne({uid: req.body.uid},
+    {$set: {EXP: newEXP, userQuizCount: newUserQuizCount, score: newScore, [quizScoreFieldName]: currScore, [quizWrongQuestionFieldName]: wrongQuestionIds}},
+    {upsert: true}, (err, res) => {
+      if (err) {
+        // console.error(err);
+      }
+    });
+}
+
 router.post("/studentStats", (req, res, next) => {
   let studentQuizResult = JSON.parse(req.body.data);
   let classCode = studentQuizResult.classCode;
+
   db.collection("userInfo").updateOne({uid: req.body.uid}, 
     {$set: {userQuizCount: studentQuizResult.userQuizCount, EXP: studentQuizResult.EXP, uid: req.body.uid}},
     {upsert: true}, (err, res) => {
@@ -270,21 +298,10 @@ router.post("/studentStats", (req, res, next) => {
     }
   });
 
-  let student = classesDb.collection("class" + classCode).findOne({uid: req.body.uid});
-  let prevScore = student.score;
-  let prevUserQuizCount = student.userQuizCount;
-
-  let currScore = studentQuizResult.score;
-  let newUserQuizCount = prevUserQuizCount + 1;
-  let newScore = (prevScore * prevUserQuizCount + currScore) / newUserQuizCount;
-
-  classesDb.collection("class" + classCode).updateOne({uid: req.body.uid},
-    {$set: {EXP: studentQuizResult.EXP, userQuizCount: newUserQuizCount, score: newScore}},
-    {upsert: true}, (err, res) => {
-      if (err) {
-        // console.error(err);
-      }
-    });
+  classesDb.collection("class" + classCode).find({uid: req.body.uid}).toArray((err, students) => {
+    updateStudentStats(students[0], studentQuizResult);
+  });
+  
 
   res.statusCode = 200;
   res.end();
