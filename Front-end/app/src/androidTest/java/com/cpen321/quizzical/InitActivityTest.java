@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class InitActivityTest {
         Espresso.onView(ViewMatchers.withText(sp.getString("Email", "")))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
-        assert(true);
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -65,7 +66,7 @@ public class InitActivityTest {
         Espresso.onView(ViewMatchers.withText(R.string.UI_username_invalid_msg))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
-        assert(true);
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -82,6 +83,6 @@ public class InitActivityTest {
         Espresso.onView(ViewMatchers.withText(R.string.UI_email_invalid_msg))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
-        assert(true);
+        Assert.assertTrue(true);
     }
 }

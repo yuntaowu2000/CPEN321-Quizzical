@@ -8,6 +8,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,7 @@ public class ProfileFragmentTest {
         Espresso.onView(ViewMatchers.withId(R.id.profile_username))
                 .check(ViewAssertions.matches(ViewMatchers.withText(newUserName)));
 
-        assert(true);
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -38,7 +39,7 @@ public class ProfileFragmentTest {
                 .inRoot(RootMatchers.isDialog())
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
-        assert(true);
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -49,7 +50,7 @@ public class ProfileFragmentTest {
         Espresso.onView(ViewMatchers.withId(R.id.profile_email))
                 .check(ViewAssertions.matches(ViewMatchers.withText(newEmail)));
 
-        assert(true);
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -61,7 +62,7 @@ public class ProfileFragmentTest {
                 .inRoot(RootMatchers.isDialog())
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
-        assert(true);
+        Assert.assertTrue(true);
     }
 
     private void performChange(String newEmail, int buttonId, int textId) {
@@ -75,6 +76,6 @@ public class ProfileFragmentTest {
                 .inRoot(RootMatchers.isDialog())
                 .perform(ViewActions.click());
 
-        assert(true);
+        Assert.assertTrue(true);
     }
 }

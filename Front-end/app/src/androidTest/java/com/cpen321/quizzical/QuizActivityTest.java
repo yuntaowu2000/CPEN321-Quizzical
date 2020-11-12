@@ -13,6 +13,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.cpen321.quizzical.quizactivities.QuizActivity;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,16 +35,15 @@ public class QuizActivityTest {
 
     @Test
     public void testResponseNotSelected() {
+
         Espresso.onView(ViewMatchers.withText(R.string.UI_submit)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withText("Please answer the question before submission."))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-
-        assert(true);
+        Assert.assertTrue(true);
     }
 
     @Test
     public void testResponseAllCorrect() {
-
         for (int i = 0; i < 3; i++) {
             Espresso.onView(ViewMatchers.withId(-100)).perform(ViewActions.click());
             Espresso.onView(ViewMatchers.withText(R.string.UI_submit)).perform(ViewActions.click());
@@ -63,7 +63,7 @@ public class QuizActivityTest {
             Espresso.onView(ViewMatchers.withId(R.id.quiz_finished_page_exp_earned))
                     .check(ViewAssertions.matches(ViewMatchers.withText("You got 15 EXP!")));
 
-        assert(true);
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -95,6 +95,6 @@ public class QuizActivityTest {
             Espresso.onView(ViewMatchers.withId(R.id.quiz_finished_page_exp_earned))
                     .check(ViewAssertions.matches(ViewMatchers.withText("You got 13 EXP!")));
 
-        assert(true);
+        Assert.assertTrue(true);
     }
 }
