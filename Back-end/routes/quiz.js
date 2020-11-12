@@ -19,9 +19,18 @@ function fetchDataForTeachers(res, classCode, quizCode, type) {
 
 }
 
-function fetchDataForStudents(res, uid, classCode, quizCode, type) {
+function fetchDataForStudents(res, studentUid, classCode, quizCode, type) {
  let classDbName = "class" + classCode;
  let fieldName = "quiz" + quizCode + type;
+ classesDb.collection(classDbName).find({uid: {$eq: studentUid}})
+ .project({_id:0, [fieldName]: 1})
+ .toArray((err, data) => {
+  if (err) {
+    throw err;
+  } else {
+    res.send(data);
+  }
+ });
 }
 
 /* GET quiz listing. */
