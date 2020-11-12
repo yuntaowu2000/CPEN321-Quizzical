@@ -411,6 +411,7 @@ public class QuizActivity extends AppCompatActivity {
         JsonObject jsonObject = new JsonObject();
         try {
             double score = ((double)correctNumber / (double)totalQuestionNum) * 100.0;
+            score = Math.round(score * 100.0) / 100.0;
             jsonObject.addProperty(getString(R.string.USER_QUIZ_COUNT), quizNum);
             jsonObject.addProperty(getString(R.string.EXP), exp);
             jsonObject.addProperty(getString(R.string.SCORE), score);

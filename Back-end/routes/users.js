@@ -1,6 +1,7 @@
 let express = require("express");
 let MongoClient = require("mongodb").MongoClient;
 let fs = require("fs");
+let path = require("path");
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 let router = express.Router();
 let db;
@@ -171,7 +172,7 @@ router.get("/profile", (req, res, next) => {
 
   let timeout = 2000;
   if (type === "profileImage") {
-    let filepath = "images/" + uid + "/profile_img.jpg";
+    let filepath = path.join("images", uid, "profile_img.jpg");
     let string = "";
     if (fs.existsSync(filepath)) {
       let bitmap = fs.readFileSync(filepath);
