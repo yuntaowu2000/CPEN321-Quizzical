@@ -2,6 +2,7 @@ let express = require("express");
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 let router = express.Router();
 let fs = require("fs");
+let path = require("path");
 let MongoClient = require("mongodb").MongoClient;
 let db;
 let classesDb;
@@ -131,12 +132,12 @@ router.use(express.json());
 router.post("/profileImg", (req, res, next) => {
   if (req.body.type === "profileImage")
   {
-    let path = path.join("images", req.body.uid);
-    if (!fs.existsSync(path))
+    let folderPath = path.join("images", req.body.uid);
+    if (!fs.existsSync(folderPath))
     {
-      fs.mkdirSync(path, {recursive:true});
+      fs.mkdirSync(folderPath, {recursive:true});
     }
-    let filename = path.join(path, "profile_img.jpg");
+    let filename = path.join(folderPath, "profile_img.jpg");
     fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
   }
 
