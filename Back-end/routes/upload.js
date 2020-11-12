@@ -153,7 +153,7 @@ router.post("/user", (req, res, next) => {
       }
     });
   }
-  
+
   else if (req.body.type === "Email") {
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {Email: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
@@ -161,7 +161,7 @@ router.post("/user", (req, res, next) => {
       }
     });
   }
-  
+
   else if (req.body.type === "username") {
     db.collection("userInfo").updateOne({uid: req.body.uid}, {$set: {username: req.body.data, uid: req.body.uid}}, {upsert: true}, (err, res) => {
       if (err) {
@@ -215,7 +215,7 @@ function createClassFunction(reqData, userId) {
 }
 
 function joinClassFunction(classCode, studentuid) {
-  classesDb.collection("class" + classCode).insertOne({uid: studentuid, userQuizCount: 0, score: 0}, 
+  classesDb.collection("class" + classCode).insertOne({uid: studentuid, userQuizCount: 0, score: 0},
     (err, res) => {
       if (err) {
         throw err;
@@ -291,7 +291,7 @@ router.post("/studentStats", (req, res, next) => {
   let studentQuizResult = JSON.parse(req.body.data);
   let classCode = studentQuizResult.classCode;
 
-  db.collection("userInfo").updateOne({uid: req.body.uid}, 
+  db.collection("userInfo").updateOne({uid: req.body.uid},
     {$set: {userQuizCount: studentQuizResult.userQuizCount, EXP: studentQuizResult.EXP, uid: req.body.uid}},
     {upsert: true}, (err, res) => {
     if (err) {
@@ -302,7 +302,7 @@ router.post("/studentStats", (req, res, next) => {
   classesDb.collection("class" + classCode).find({uid: req.body.uid}).toArray((err, students) => {
     updateStudentStats(students[0], studentQuizResult, req.body.uid);
   });
-  
+
 
   res.statusCode = 200;
   res.end();
@@ -334,30 +334,32 @@ router.post("/quiz", (req, res, next) => {
   res.end();
 });
 
-// function checkLikedBefore(classCode, quizCode, likePersonUid) {
+function checkLikedBefore(classCode, quizCode, likePersonUid) {
+  var likedPersons;
+  db.collection("quizzes").find({$and: [{classCode}, {quizCode}]}).project({_id:0,liked:1}).toArray((err, res) => {
+    if (!err) {
+      likedPersons = Object.values(res[0])[0];
+    }
+  });
 
-//   var targetQuiz = db.collection("quizzes").findOne({$and: [{classCode}, {quizCode}]});
-
-//   var likedPersons = new Array();
-
-//   if (targetQuiz && targetQuiz.hasLiked) {
-//     likedPersons = targetQuiz.liked;
-//   }
-//   //currently always return false, not sure why
-//   if (likedPersons.includes(likePersonUid)) {
-//     return true;
-//   } else {
-//     likedPersons.push(likePersonUid);
-//     db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
-//         {$set: {liked: likedPersons} },
-//         (err, res) => {
-//           if (err) {
-//             // console.error(err);
-//           }
-//         });
-//     return false;
-//   }
-// }
+  if (likedPersons && likedPersons.hasLiked) {
+    likedPersons = likedPersons.liked;
+  }
+  //currently always return false, not sure why
+  if (likedPersons.includes(likePersonUid)) {
+    return true;
+  } else {
+    likedPersons.push(likePersonUid);
+    db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
+      {$set: {liked: likedPersons} },
+      (err, res) => {
+        if (err) {
+          // console.error(err);
+        }
+      });
+    return false;
+  }
+}
 
 router.post("/like", (req, res, next) => {
   if (req.body.type === "like") {
@@ -366,19 +368,19 @@ router.post("/like", (req, res, next) => {
     let classCode = Number(likeDetails.classCode);
     let quizCode = Number(likeDetails.quizCode);
     let likePersonUid = req.body.uid;
-    
-    // if (!checkLikedBefore(classCode, quizCode, likePersonUid)) {
-    db.collection("userInfo").updateOne(
-      {uid: {$eq: instructorUID}},
-      {$inc: {EXP: 5}},
-      {upsert: true}, (err, res) => {
-        if (err) {
-          throw err;
-        }
-      });
+
+    if (!checkLikedBefore(classCode, quizCode, likePersonUid)) {
+      db.collection("userInfo").updateOne(
+        {uid: {$eq: instructorUID}},
+        {$inc: {EXP: 5}},
+        {upsert: true}, (err, res) => {
+          if (err) {
+            throw err;
+          }
+        });
       let userIds = [instructorUID];
       sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
-    // }
+    }
   }
 
   res.statusCode = 200;
