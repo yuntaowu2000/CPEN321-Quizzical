@@ -48,6 +48,7 @@ public class InitActivityTest {
         Espresso.onView(ViewMatchers.withText(sp.getString("Email", "")))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
+        assert(true);
     }
 
     @Test
@@ -63,6 +64,8 @@ public class InitActivityTest {
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_username_invalid_msg))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        assert(true);
     }
 
     @Test
@@ -78,5 +81,7 @@ public class InitActivityTest {
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_email_invalid_msg))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        assert(true);
     }
 }

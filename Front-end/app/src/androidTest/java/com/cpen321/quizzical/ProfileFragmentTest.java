@@ -25,6 +25,8 @@ public class ProfileFragmentTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.profile_username))
                 .check(ViewAssertions.matches(ViewMatchers.withText(newUserName)));
+
+        assert(true);
     }
 
     @Test
@@ -35,6 +37,8 @@ public class ProfileFragmentTest {
         Espresso.onView(ViewMatchers.withText(R.string.UI_username_invalid_msg))
                 .inRoot(RootMatchers.isDialog())
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        assert(true);
     }
 
     @Test
@@ -44,6 +48,8 @@ public class ProfileFragmentTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.profile_email))
                 .check(ViewAssertions.matches(ViewMatchers.withText(newEmail)));
+
+        assert(true);
     }
 
     @Test
@@ -54,6 +60,8 @@ public class ProfileFragmentTest {
         Espresso.onView(ViewMatchers.withText(R.string.UI_email_invalid_msg))
                 .inRoot(RootMatchers.isDialog())
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        assert(true);
     }
 
     private void performChange(String newEmail, int buttonId, int textId) {
@@ -66,5 +74,7 @@ public class ProfileFragmentTest {
         Espresso.onView(ViewMatchers.withText(R.string.UI_submit))
                 .inRoot(RootMatchers.isDialog())
                 .perform(ViewActions.click());
+
+        assert(true);
     }
 }

@@ -37,6 +37,8 @@ public class QuizActivityTest {
         Espresso.onView(ViewMatchers.withText(R.string.UI_submit)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withText("Please answer the question before submission."))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        assert(true);
     }
 
     @Test
@@ -60,6 +62,8 @@ public class QuizActivityTest {
         if (!isInstructor)
             Espresso.onView(ViewMatchers.withId(R.id.quiz_finished_page_exp_earned))
                     .check(ViewAssertions.matches(ViewMatchers.withText("You got 15 EXP!")));
+
+        assert(true);
     }
 
     @Test
@@ -90,5 +94,7 @@ public class QuizActivityTest {
         if (!isInstructor)
             Espresso.onView(ViewMatchers.withId(R.id.quiz_finished_page_exp_earned))
                     .check(ViewAssertions.matches(ViewMatchers.withText("You got 13 EXP!")));
+
+        assert(true);
     }
 }
