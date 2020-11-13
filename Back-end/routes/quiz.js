@@ -15,19 +15,19 @@ MongoClient.connect(
   }
 );
 
-function calculateAverage(data) {
+function calculateAverage(data, quizScoreField) {
   let totalScore = 0;
   for (var value of data) {
-    totalScore += value["score"];
+    totalScore += value[quizScoreField];
   }
   return totalScore / data.length;
 }
 
-function findMaxScore(data) {
+function findMaxScore(data, quizScoreField) {
   let maxScore = -1;
   for (var value of data) {
-    if (value["score"] > maxScore) {
-      maxScore = value["score"];
+    if (value[quizScoreField] > maxScore) {
+      maxScore = value[quizScoreField];
     }
   }
   return maxScore;
@@ -35,17 +35,18 @@ function findMaxScore(data) {
 
 function fetchDataForTeachers(res, classCode, quizCode, type) {
   let classDbName = "class" + classCode;
+  let quizScoreField = "quiz" + quizCode + "score";
   if (type === "score") {
     classesDb.collection(classDbName).find({})
-    .project({_id:0, ["quiz" + quizCode + "score"]: 1})
+    .project({_id:0, [quizScoreField]: 1, username: 1})
     .toArray((err, data) => {
       if (err) {
         throw err;
       } else {
         let resultArr = new Array();
         resultArr.push(data);
-        resultArr.push(calculateAverage(data));
-        resultArr.push(findMaxScore(data));
+        resultArr.push(calculateAverage(data, quizScoreField));
+        resultArr.push(findMaxScore(data, quizScoreField));
         res.send(resultArr);
       }
     });
@@ -84,27 +85,28 @@ function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) {
   });
 }
 
-function findStudentScore(data, studentId) {
+function findStudentScore(data, studentId, quizScoreField) {
   for (var value of data) {
     if (value["uid"] === studentId) {
-      return value["score"];
+      return value[quizScoreField];
     }
   }
 }
 
 function fetchDataForStudents(res, studentUid, classCode, quizCode, type) {
   let classDbName = "class" + classCode;
+  let quizScoreField = "quiz" + quizCode + "score";
   if (type === "score") {
     classesDb.collection(classDbName).find({})
-    .project({_id:0, ["quiz" + quizCode + "score"]: 1})
+    .project({_id:0, [quizScoreField]: 1, uid: 1})
     .toArray((err, data) => {
       if (err) {
         throw err;
       } else {
         let resultArr = new Array();
-        resultArr.push(calculateAverage(data));
-        resultArr.push(findMaxScore(data));
-        resultArr.push(findStudentScore(data, studentUid));
+        resultArr.push(calculateAverage(data, quizScoreField));
+        resultArr.push(findMaxScore(data, quizScoreField));
+        resultArr.push(findStudentScore(data, studentUid, quizScoreField));
         res.send(resultArr);
       }
     });
