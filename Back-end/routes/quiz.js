@@ -59,7 +59,7 @@ function fetchDataForTeachers(res, classCode, quizCode, type) {
         throw err;
       } else {
         //correctly just send all questions back
-        res.send(data);
+        res.send(data[0]["questionList"]);
       }
     });
   }

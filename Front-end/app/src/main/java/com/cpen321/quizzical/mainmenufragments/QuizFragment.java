@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.InputType;
@@ -22,6 +24,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -242,6 +246,102 @@ public class QuizFragment extends Fragment {
         }
     }
 
+    private TextView generateTableElement(String text) {
+        TextView textView = new TextView(this.getContext());
+
+        TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.MATCH_PARENT, 1.0f);
+        textViewParam.setMargins(10, 10, 10, 10);
+
+        textView.setLayoutParams(textViewParam);
+        textView.setGravity(Gravity.CENTER);
+        textView.setText(text);
+        textView.setTextSize(15);
+        return textView;
+    }
+
+    private TableLayout generateStudentScoreBoard(JSONArray classScores, String currQuizName) throws JSONException {
+        Context thisContext = this.getContext();
+        assert thisContext != null;
+        TableLayout tableLayout = new TableLayout(thisContext);
+
+        TableRow firstRow = new TableRow(thisContext);
+        firstRow.addView(generateTableElement(getString(R.string.USERNAME)), 0);
+        firstRow.addView(generateTableElement(getString(R.string.SCORE)), 1);
+        tableLayout.addView(firstRow, 0);
+
+        for (int i = 0; i < classScores.length(); i++) {
+            TableRow row = new TableRow(thisContext);
+            JSONObject jsonObject = classScores.getJSONObject(i);
+            String name = jsonObject.getString(getString(R.string.USERNAME));
+            double score = jsonObject.getDouble(currQuizName);
+            score = Math.round(score * 100.0) / 100.0;
+            row.addView(generateTableElement(name), 0);
+            row.addView(generateTableElement(String.valueOf(score)), 1);
+            tableLayout.addView(row);
+        }
+
+        return tableLayout;
+    }
+
+    private void setupStatsForInstructors(String statsLink, AlertDialog.Builder alertDialogBuilder) {
+        String val = OtherUtils.readFromURL(statsLink);
+        Context thisContext = this.getContext();
+        assert thisContext != null;
+        ScrollView scrollView = new ScrollView(thisContext);
+
+        LinearLayout linearLayout = new LinearLayout(thisContext);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        layoutParams.setMargins(10, 10, 10, 10);
+
+        Uri uri = Uri.parse(statsLink);
+        String currQuizName = getString(R.string.QUIZ_NUM_SCORE);
+        try {
+            currQuizName = String.format(getString(R.string.QUIZ_NUM_SCORE), uri.getQueryParameter(getString(R.string.QUIZ_CODE)));
+        } catch (Exception e) {
+            Log.d("parse", "parse quiz score name failed");
+        }
+
+        try {
+            JSONArray jsonArray = new JSONArray(val);
+            JSONArray classScores = jsonArray.getJSONArray(0);
+            double average = jsonArray.getDouble(1);
+            TextView avgField = new TextView(thisContext);
+            avgField.setText(String.format(getString(R.string.UI_average_score_text), average));
+            avgField.setLayoutParams(layoutParams);
+            linearLayout.addView(avgField);
+
+            double highest = jsonArray.getDouble(2);
+            TextView highestScoreField = new TextView(thisContext);
+            highestScoreField.setText(String.format(getString(R.string.UI_highest_score_text), highest));
+            highestScoreField.setLayoutParams(layoutParams);
+            linearLayout.addView(highestScoreField);
+
+            TableLayout tableLayout = generateStudentScoreBoard(classScores, currQuizName);
+            tableLayout.setLayoutParams(layoutParams);
+            linearLayout.addView(tableLayout);
+            scrollView.addView(linearLayout);
+
+            alertDialogBuilder.setView(scrollView);
+        } catch (JSONException e) {
+            Log.d("parse_json", "failed. " + val);
+        }
+    }
+
+    private void setupStatsForStudents(String statsLink, AlertDialog.Builder alertDialogBuilder) {
+        String val = OtherUtils.readFromURL(statsLink);
+        try {
+            JSONArray jsonArray = new JSONArray(val);
+            double avg = jsonArray.getDouble(0);
+            double highest = jsonArray.getDouble(1);
+            double your_score = jsonArray.getDouble(2);
+            alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), avg, highest, your_score));
+        } catch (JSONException e) {
+            Log.d("parse_json", "failed. " + val);
+        }
+    }
+
     private void setupStats(String statsLink) {
         Context thisContext = this.getContext();
         assert thisContext != null;
@@ -251,23 +351,11 @@ public class QuizFragment extends Fragment {
 
         if (OtherUtils.stringIsNullOrEmpty(statsLink)) {
             alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), 80.0, 100.0, 90.0));
+        } else if (isInstructor) {
+            setupStatsForInstructors(statsLink, alertDialogBuilder);
         } else {
-            if (isInstructor) {
-                alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), 80.0, 100.0, 90.0));
-            } else {
-                String val = OtherUtils.readFromURL(statsLink);
-                try {
-                    JSONArray jsonObject = new JSONArray(val);
-                    double avg = jsonObject.getDouble(0);
-                    double highest = jsonObject.getDouble(1);
-                    double your_score = jsonObject.getDouble(2);
-                    alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), avg, highest, your_score));
-                } catch (JSONException e) {
-                    Log.d("parse_json", "failed. " + val);
-                }
-            }
+            setupStatsForStudents(statsLink, alertDialogBuilder);
         }
-
         alertDialogBuilder.show();
     }
 

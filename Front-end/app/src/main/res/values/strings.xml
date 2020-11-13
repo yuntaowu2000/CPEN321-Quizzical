@@ -22,6 +22,7 @@
     <string name="NO_VALUE_JSON" translatable="false">[]</string>
 
     <string name="QUIZ_URL" translatable="false"><![CDATA[http://quizzical.canadacentral.cloudapp.azure.com/quiz?classCode=%d&quizCode=%d]]></string>
+    <string name="QUIZ_NUM_SCORE" translatable="false">quiz%sscore</string>
     <string name="TYPE" translatable="false">type=</string>
 
     <string name="app_name" translatable="false">quizzical</string>
@@ -159,7 +160,9 @@
     <string name="UI_wrong_questions">Wrong Questions</string>
     <string name="UI_stats">stats</string>
     <string name="UI_notes">notes</string>
-    <string name="UI_stats_string">Avg: %.2f, highest: %.2f, your score: %.2f</string>
+    <string name="UI_stats_string">Avg: %.2f\\n highest: %.2f\\n your score: %.2f</string>
+    <string name="UI_highest_score_text">highest: %.2f</string>
+    <string name="UI_average_score_text">Average: %.2f</string>
 
     <string name="UI_create_new_module">Create new module</string>
     <string name="UI_enter_module_name">Please enter module name</string>
