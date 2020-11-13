@@ -160,7 +160,7 @@
     <string name="UI_wrong_questions">Wrong Questions</string>
     <string name="UI_stats">stats</string>
     <string name="UI_notes">notes</string>
-    <string name="UI_stats_string">Avg: %.2f\\n highest: %.2f\\n your score: %.2f</string>
+    <string name="UI_personal_score_string">your score: %.2f</string>
     <string name="UI_highest_score_text">highest: %.2f</string>
     <string name="UI_average_score_text">Average: %.2f</string>
 

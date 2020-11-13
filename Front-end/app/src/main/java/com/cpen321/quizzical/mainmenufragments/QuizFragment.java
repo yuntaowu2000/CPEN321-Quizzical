@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -329,14 +328,36 @@ public class QuizFragment extends Fragment {
         }
     }
 
+    private TextView setUpTextView(String text) {
+        Context thisContext = this.getContext();
+        assert thisContext != null;
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(10, 10, 10, 10);
+        TextView textView = new TextView(thisContext);
+        textView.setGravity(Gravity.CENTER);
+        textView.setText(text);
+        return textView;
+    }
+
     private void setupStatsForStudents(String statsLink, AlertDialog.Builder alertDialogBuilder) {
+        Context thisContext = this.getContext();
+        assert thisContext != null;
         String val = OtherUtils.readFromURL(statsLink);
         try {
             JSONArray jsonArray = new JSONArray(val);
             double avg = jsonArray.getDouble(0);
+            avg = Math.round(avg * 100.0) / 100.0;
             double highest = jsonArray.getDouble(1);
-            double your_score = jsonArray.getDouble(2);
-            alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), avg, highest, your_score));
+            highest = Math.round(highest * 100.0) / 100.0;
+            double yourScore = jsonArray.getDouble(2);
+            yourScore = Math.round(yourScore * 100.0) / 100.0;
+            LinearLayout linearLayout = new LinearLayout(thisContext);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.addView(setUpTextView(String.format(getString(R.string.UI_average_score_text), avg)));
+            linearLayout.addView(setUpTextView(String.format(getString(R.string.UI_highest_score_text), highest)));
+            linearLayout.addView(setUpTextView(String.format(getString(R.string.UI_personal_score_string), yourScore)));
+
+            alertDialogBuilder.setView(linearLayout);
         } catch (JSONException e) {
             Log.d("parse_json", "failed. " + val);
         }
@@ -350,7 +371,7 @@ public class QuizFragment extends Fragment {
         alertDialogBuilder.setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()));
 
         if (OtherUtils.stringIsNullOrEmpty(statsLink)) {
-            alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), 80.0, 100.0, 90.0));
+            alertDialogBuilder.setMessage(String.format(getString(R.string.UI_personal_score_string), 100.0));
         } else if (isInstructor) {
             setupStatsForInstructors(statsLink, alertDialogBuilder);
         } else {
