@@ -286,7 +286,7 @@ function updateStudentStats(student, studentQuizResult, studentUid) {
     });
 
   //update the score only if it does not exist
-  classesDb.collection("").updateOne({uid: studentUid, [quizScoreFieldName]: {$exists: false}}, 
+  classesDb.collection("class" + studentQuizResult.classCode).updateOne({uid: studentUid, [quizScoreFieldName]: {$exists: false}}, 
     {$set: {userQuizCount: newUserQuizCount, score: newScore, [quizScoreFieldName]: currScore, [quizWrongQuestionFieldName]: wrongQuestionIds}},
     (err, res) => {
       if (err) {
