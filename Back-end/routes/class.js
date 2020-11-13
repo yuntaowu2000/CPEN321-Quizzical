@@ -112,6 +112,14 @@ router.delete("/delete", (req, res, next) => {
           throw err;
         }
       });
+    let classDbName = "class" + classCode;
+    let quizScoreField = "quiz" + quizCode + "score";
+    db.collection(classDbName).update({[quizScoreFieldName]: {$exists: true}}, {$unset: {[quizScoreField]: ""}},
+    (err, db) => {
+      if (err) {
+        throw err;
+      }
+    });
   }
 
   res.statusCode = 204;
