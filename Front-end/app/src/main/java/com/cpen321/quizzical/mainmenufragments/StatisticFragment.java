@@ -294,7 +294,9 @@ public class StatisticFragment extends Fragment {
 
         newRow.addView(generateTableElement(String.valueOf(userPosition)), 0);
         newRow.addView(generateTableElement(jsonArray.getJSONObject(objectPosition).getString(getString(R.string.USERNAME))), 1);
-        newRow.addView(generateTableElement(jsonArray.getJSONObject(objectPosition).getString(getString(R.string.SCORE))), 2);
+        String score = jsonArray.getJSONObject(objectPosition).getString(getString(R.string.SCORE));
+        double scoreVal = Math.round(Double.parseDouble(score) * 100.0) / 100.0;
+        newRow.addView(generateTableElement(String.valueOf(scoreVal)), 2);
         newRow.addView(generateTableElement(jsonArray.getJSONObject(objectPosition).getString(getString(R.string.EXP))), 3);
         return newRow;
     }
