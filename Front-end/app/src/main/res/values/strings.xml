@@ -242,6 +242,8 @@
 
     <string name="VOTE_FOR_LIKE" translatable="false">like</string>
 
+    <string name="quiz_back_notification" translatable="false">You can\'t go back in a quiz. Don\'t be a cheater</string>
+
     <!--    used in quiz finish activity-->
     <string name="UI_quiz_finished_earned_exp_msg">You got %d EXP!</string>
     <string name="UI_quiz_finished_low_score_msg">You got %d/%d correct. Keep learning!</string>

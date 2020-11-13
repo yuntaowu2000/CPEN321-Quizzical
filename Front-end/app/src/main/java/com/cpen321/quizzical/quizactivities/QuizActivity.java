@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -444,5 +445,10 @@ public class QuizActivity extends AppCompatActivity {
         sp.edit().putInt(getString(R.string.EXP), new_exp).apply();
 
         return new int[]{new_quiz_num, new_exp};
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, R.string.quiz_back_notification, Toast.LENGTH_LONG).show();
     }
 }
