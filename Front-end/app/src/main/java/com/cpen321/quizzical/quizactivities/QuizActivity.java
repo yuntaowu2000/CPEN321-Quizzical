@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -391,7 +392,7 @@ public class QuizActivity extends AppCompatActivity {
                     parsedResult)).start();
         }
 
-        if (instructorUID != null && !sp.getString(getString(R.string.INSTRUCTOR_UID), "").equals(instructorUID)) {
+        if (instructorUID != null && !sp.getString(getString(R.string.UID), "").equals(instructorUID)) {
             //null guarding
             // we can pass the parameters to the next page, asking whether the student like the quiz
             intent.putExtra(getString(R.string.INSTRUCTOR_UID), instructorUID);
@@ -444,5 +445,14 @@ public class QuizActivity extends AppCompatActivity {
         sp.edit().putInt(getString(R.string.EXP), new_exp).apply();
 
         return new int[]{new_quiz_num, new_exp};
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this).setTitle(R.string.UI_warning)
+                .setMessage(R.string.UI_quit_quiz_warning)
+                .setPositiveButton(R.string.YES, (dialogInterface, i) -> finish())
+                .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
+                .show();
     }
 }

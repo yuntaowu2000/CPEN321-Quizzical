@@ -191,7 +191,7 @@
 
     <string name="UI_create_answer">Create answer</string>
     <string name="UI_delete">delete</string>
-
+    <string name="UI_quit_quiz_editing_warning">Do you want to discard the quiz editing? Note that all your progress will be lost!</string>
 
     <!--    used in class statistic fragment (for teachers)-->
     <string name="class_statistic_page_text1" translatable="false">This is the class statistic page for teachers</string>
@@ -244,6 +244,8 @@
     <string name="EXP_earned_for_quiz" translatable="false">EXP earned</string>
 
     <string name="VOTE_FOR_LIKE" translatable="false">like</string>
+
+    <string name="UI_quit_quiz_warning">Do you want to end the quiz? Note that all your progress will be lost!</string>
 
     <!--    used in quiz finish activity-->
     <string name="UI_quiz_finished_earned_exp_msg">You got %d EXP!</string>

@@ -549,5 +549,14 @@ public class CreateQuizActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this).setTitle(R.string.UI_warning)
+                .setMessage(R.string.UI_quit_quiz_editing_warning)
+                .setPositiveButton(R.string.YES, (dialogInterface, i) -> finish())
+                .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
+                .show();
+    }
+
 
 }

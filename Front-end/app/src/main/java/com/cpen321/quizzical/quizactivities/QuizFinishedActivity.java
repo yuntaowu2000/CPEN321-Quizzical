@@ -68,10 +68,10 @@ public class QuizFinishedActivity extends AppCompatActivity {
             expMsg.setText(String.format(getString(R.string.UI_quiz_finished_earned_exp_msg), exp_gotten));
         }
 
-        button.setOnClickListener(view -> onBackClicked());
+        button.setOnClickListener(view -> onBackButtonClicked());
     }
 
-    private void onBackClicked() {
+    private void onBackButtonClicked() {
         Intent intent = new Intent(QuizFinishedActivity.this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
@@ -100,6 +100,14 @@ public class QuizFinishedActivity extends AppCompatActivity {
                 getString(R.string.VOTE_FOR_LIKE),
                 parsedData
                 )).start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(QuizFinishedActivity.this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        ActivityCompat.finishAffinity(this);
     }
 
 }
