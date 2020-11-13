@@ -15,8 +15,52 @@ MongoClient.connect(
   }
 );
 
-function fetchDataForTeachers(res, classCode, quizCode, type) {
+function calculateAverage(data) {
+  let totalScore = 0;
+  for (var value of data) {
+    totalScore += value["score"];
+  }
+  return totalScore / data.length;
+}
 
+function findMaxScore(data) {
+  let maxScore = -1;
+  for (var value of data) {
+    if (value["score"] > maxScore) {
+      maxScore = value["score"];
+    }
+  }
+  return maxScore;
+}
+
+function fetchDataForTeachers(res, classCode, quizCode, type) {
+  if (type === "score") {
+    classesDb.collection(classDbName).find({})
+    .project({_id:0, ["quiz" + quizCode + "score"]: 1})
+    .toArray((err, data) => {
+      if (err) {
+        throw err;
+      } else {
+        let resultArr = new Array();
+        resultArr.push(data);
+        resultArr.push(calculateAverage(data));
+        resultArr.push(findMaxScore(data));
+        res.send(resultArr);
+      }
+    });
+  } else {
+    db.collection("quizzes")
+    .find({$and: [{classCode}, {quizCode}]})
+    .project({_id:0})
+    .toArray((err, data) => {
+      if (err) {
+        throw err;
+      } else {
+        //correctly just send all questions back
+        res.send(data);
+      }
+    });
+  }
 }
 
 function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) {
@@ -39,16 +83,28 @@ function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) {
   });
 }
 
+function findStudentScore(data, studentId) {
+  for (var value of data) {
+    if (value["uid"] === studentId) {
+      return value["score"];
+    }
+  }
+}
+
 function fetchDataForStudents(res, studentUid, classCode, quizCode, type) {
   let classDbName = "class" + classCode;
   if (type === "score") {
-    classesDb.collection(classDbName).find({uid: {$eq: studentUid}})
+    classesDb.collection(classDbName).find({})
     .project({_id:0, ["quiz" + quizCode + "score"]: 1})
     .toArray((err, data) => {
       if (err) {
         throw err;
       } else {
-        res.send(data);
+        let resultArr = new Array();
+        resultArr.push(calculateAverage(data));
+        resultArr.push(findMaxScore(data));
+        resultArr.push(findStudentScore(data, studentUid));
+        res.send(resultArr);
       }
     });
   } else {
