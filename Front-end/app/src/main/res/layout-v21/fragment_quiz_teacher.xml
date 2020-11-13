@@ -37,13 +37,6 @@
                     android:id="@+id/quiz_page_class_info_text"
                     android:text="@string/UI_current_class_name"/>
 
-                <Button
-                    android:id="@+id/quiz_fragment_go_to_quiz_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/go_to_quiz"
-                    android:textAllCaps="false" />
             </LinearLayout>
         </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -20,19 +20,21 @@ function fetchDataForTeachers(res, classCode, quizCode, type) {
 }
 
 function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) {
-  
   db.collection("quizzes")
   .find({$and: [{classCode}, {quizCode}]})
-  .project({_id:0, liked:0})
-  .maxTimeMS(timeout)
+  .project({_id:0})
   .toArray((err, data) => {
     if (err) {
       throw err;
     } else {
+      // not sending the correct values
       let questions = new Array();
-      for (var id of wrongQuestionIds) {
-
+      let questionList = data[0]["questionList"];
+      let ids = wrongQuestionIds[0].substring(1, wrongQuestionIds[0].length - 1).split(",");
+      for (var questionId of ids) {
+        questions.push(questionList[Number(questionId) - 1]);
       }
+      res.send(questions);
     }
   });
 }
@@ -56,12 +58,13 @@ function fetchDataForStudents(res, studentUid, classCode, quizCode, type) {
       if (err) {
         throw err;
       } else {
-        res.send(data);
+        fetchWrongQuestions(res, classCode, quizCode, Object.values(data[0]));
       }
     });
   }
 }
 
+router.use(express.json());
 /* GET quiz listing. */
 router.get("/", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);

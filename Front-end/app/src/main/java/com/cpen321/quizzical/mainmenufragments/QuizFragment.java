@@ -42,6 +42,7 @@ import com.cpen321.quizzical.utils.QuizPackage;
 import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -70,7 +71,6 @@ public class QuizFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout quizLinearLayout;
 
-    private String defaultUrl;
     private Classes currClass;
     private ArrayList<QuizModules> modulesList;
     private ArrayList<View> moduleViewList;
@@ -125,7 +125,6 @@ public class QuizFragment extends Fragment {
         sp = Objects.requireNonNull(getContext()).getSharedPreferences(getString(R.string.curr_login_user), Context.MODE_PRIVATE);
 
         isInstructor = sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
-        defaultUrl = String.format(getString(R.string.QUIZ_URL), 0, 0);
 
         if (isInstructor) {
             return inflater.inflate(R.layout.fragment_quiz_teacher, container, false);
@@ -138,9 +137,6 @@ public class QuizFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
-
-        Button quizStartButton = view.findViewById(R.id.quiz_fragment_go_to_quiz_button);
-        quizStartButton.setOnClickListener(v -> setupQuiz(defaultUrl, ""));
 
         currClass = new Classes(sp.getString(getString(R.string.CURR_CLASS), ""));
         TextView textView = view.findViewById(R.id.quiz_page_class_info_text);
@@ -256,15 +252,19 @@ public class QuizFragment extends Fragment {
         if (OtherUtils.stringIsNullOrEmpty(statsLink)) {
             alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), 80.0, 100.0, 90.0));
         } else {
-            String val = OtherUtils.readFromURL(statsLink);
-            try {
-                JSONObject jsonObject = new JSONObject(val);
-                double avg = jsonObject.getDouble(getString(R.string.AVERAGE));
-                double highest = jsonObject.getDouble(getString(R.string.HIGHEST));
-                double your_score = jsonObject.getDouble(getString(R.string.SCORE));
-                alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), avg, highest, your_score));
-            } catch (JSONException e) {
-                Log.d("parse_json", "failed. " + val);
+            if (isInstructor) {
+                alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), 80.0, 100.0, 90.0));
+            } else {
+                String val = OtherUtils.readFromURL(statsLink);
+                try {
+                    JSONArray jsonObject = new JSONArray(val);
+                    double avg = jsonObject.getDouble(0);
+                    double highest = jsonObject.getDouble(1);
+                    double your_score = jsonObject.getDouble(2);
+                    alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), avg, highest, your_score));
+                } catch (JSONException e) {
+                    Log.d("parse_json", "failed. " + val);
+                }
             }
         }
 
@@ -301,7 +301,9 @@ public class QuizFragment extends Fragment {
         if (question.hasPic()) {
             ImageView imageView = new ImageView(thisContext);
             Bitmap bitmap = OtherUtils.getBitmapFromUrl(question.getPicSrc());
-            assert bitmap != null;
+            if (bitmap == null) {
+                bitmap = OtherUtils.decodeImage(question.getPicSrc());
+            }
             bitmap = Bitmap.createScaledBitmap(bitmap, 350, 200, true);
             imageView.setImageBitmap(bitmap);
             layout.addView(imageView);
@@ -342,8 +344,18 @@ public class QuizFragment extends Fragment {
             alertDialogBuilder.setView(setUpWrongQuestionView(new TestQuestionPackage().getPackage()));
         } else {
             String val = OtherUtils.readFromURL(wrongQuestionLink);
-            QuizPackage qp = new QuizPackage(val);
-            alertDialogBuilder.setView(setUpWrongQuestionView(qp));
+            try {
+                QuizPackage qp = new QuizPackage();
+                JSONArray jsonArray = new JSONArray(val);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String jsonString = jsonObject.toString();
+                    qp.addMCQuestion(jsonString);
+                }
+                alertDialogBuilder.setView(setUpWrongQuestionView(qp));
+            } catch (JSONException e) {
+                Log.d("parse_failed", "wrong question");
+            }
         }
         alertDialogBuilder.show();
     }
@@ -361,16 +373,15 @@ public class QuizFragment extends Fragment {
             if (qm.getId() == 0) {
                 qm.setId(i);
             }
-            if (OtherUtils.stringIsNullOrEmpty(qm.getQuizLink())) {
-                String quiz_link = String.format(getString(R.string.QUIZ_URL), currClass.getClassCode(), i);
-                String wrong_question_link = quiz_link + "&type=wrongQuestionList&userId=" + sp.getString(getString(R.string.UID), "")
-                        + "&isInstructor=" + sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
-                String stats_link = quiz_link + "&type=score&userId=" + sp.getString(getString(R.string.UID), "")
-                        + "&isInstructor=" + sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
-                qm.setQuizLink(quiz_link);
-                qm.setWrongQuestionLink(wrong_question_link);
-                qm.setStatsLink(stats_link);
-            }
+            String quiz_link = String.format(getString(R.string.QUIZ_URL), currClass.getClassCode(), i);
+            String wrong_question_link = quiz_link + "&type=wrongQuestionList&userId=" + sp.getString(getString(R.string.UID), "")
+                    + "&isInstructor=" + sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
+            String stats_link = quiz_link + "&type=score&userId=" + sp.getString(getString(R.string.UID), "")
+                    + "&isInstructor=" + sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
+            qm.setQuizLink(quiz_link);
+            qm.setWrongQuestionLink(wrong_question_link);
+            qm.setStatsLink(stats_link);
+
             View layout = getLayoutInflater().inflate(R.layout.quiz_module_layout, quizLinearLayout, false);
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -478,15 +489,12 @@ public class QuizFragment extends Fragment {
     private void parseQuizModulesFromString() {
         modulesList = new ArrayList<>();
         String moduleId = currClass.getClassCode() + getString(R.string.QUIZ_MODULES);
-        String moduleListString = sp.getString(moduleId, "");
-        if (OtherUtils.stringIsNullOrEmpty(moduleListString)) {
-            String url = getString(R.string.GET_URL) + "classes?"
-                    + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "") + "&"
-                    + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
-                    + "&type=" + getString(R.string.QUIZ_MODULES);
-            moduleListString = OtherUtils.readFromURL(url);
-            sp.edit().putString(moduleId, moduleListString).apply();
-        }
+        String url = getString(R.string.GET_URL) + "classes?"
+                + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "") + "&"
+                + getString(R.string.CLASS_CODE) + "=" + currClass.getClassCode()
+                + "&type=" + getString(R.string.QUIZ_MODULES);
+        String moduleListString = OtherUtils.readFromURL(url);
+        sp.edit().putString(moduleId, moduleListString).apply();
 
         if (OtherUtils.stringIsNullOrEmpty(moduleListString)) {
             return;
