@@ -34,6 +34,7 @@ function findMaxScore(data) {
 }
 
 function fetchDataForTeachers(res, classCode, quizCode, type) {
+  let classDbName = "class" + classCode;
   if (type === "score") {
     classesDb.collection(classDbName).find({})
     .project({_id:0, ["quiz" + quizCode + "score"]: 1})
