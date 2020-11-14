@@ -67,7 +67,6 @@ The progress is written in the sequence of implementation.
 
 ## TODO list
 -   bugs to fix  
-    -   check like  
     -   delete quiz module does not unset the values correctly  
     -   delete class does not delete the class values in the student side  
 
