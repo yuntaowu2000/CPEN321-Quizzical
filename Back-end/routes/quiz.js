@@ -18,7 +18,7 @@ MongoClient.connect(
 function calculateAverage(data, quizScoreField) {
   let totalScore = 0;
   for (var value of data) {
-    totalScore += value[quizScoreField];
+    totalScore += value[quizScoreField + ""];
   }
   return totalScore / data.length;
 }
@@ -26,8 +26,8 @@ function calculateAverage(data, quizScoreField) {
 function findMaxScore(data, quizScoreField) {
   let maxScore = -1;
   for (var value of data) {
-    if (value[quizScoreField] > maxScore) {
-      maxScore = value[quizScoreField];
+    if (value[quizScoreField + ""] > maxScore) {
+      maxScore = value[quizScoreField + ""];
     }
   }
   return maxScore;
@@ -88,7 +88,7 @@ function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) {
 function findStudentScore(data, studentId, quizScoreField) {
   for (var value of data) {
     if (value["uid"] === studentId) {
-      return value[quizScoreField];
+      return value[quizScoreField + ""];
     }
   }
 }

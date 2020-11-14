@@ -394,7 +394,7 @@ router.post("/like", (req, res, next) => {
           }
         });
       let userIds = [instructorUID];
-      sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
+      firebaseFunctions.sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
     }
   }
 
