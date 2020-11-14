@@ -1,16 +1,7 @@
 let express = require("express");
-let MongoClient = require("mongodb").MongoClient;
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 let router = express.Router();
-let db;
-
-MongoClient.connect(
-  "mongodb://localhost:27017",
-  {useUnifiedTopology: true},
-  (err, client) => {
-    db = client.db("data");
-  }
-);
+let db = require("../databaseAccess").db;
 
 function getUserPosition(data, instructorUID) {
     var userRank = 1;

@@ -1,19 +1,9 @@
 let express = require("express");
-let MongoClient = require("mongodb").MongoClient;
 let fs = require("fs");
 let path = require("path");
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 let router = express.Router();
-let db;
-
-MongoClient.connect(
-  "mongodb://localhost:27017",
-  {useUnifiedTopology: true},
-  (err, client) => {
-    db = client.db("data");
-  }
-);
-
+let db = require("../databaseAccess").db;
 
 router.get("/", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
