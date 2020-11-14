@@ -39,10 +39,6 @@ function sendMessage(userIds, message) {
   });
 }
 
-let MongoClient = require("mongodb").MongoClient;
-let db;
-let classesDb;
-
 MongoClient.connect(
     "mongodb://localhost:27017",
     {useUnifiedTopology: true},
