@@ -8,36 +8,7 @@ let db;
 let classesDb;
 let nodemailer = require("nodemailer");
 let util = require("util");
-let firebaseAdmin = require("firebase-admin");
-
-let serviceAccount = require("../plated-inn-286021-firebase-adminsdk-oxi0q-0e23826d54.json");
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(serviceAccount),
-  databaseURL: "https://plated-inn-286021.firebaseio.com"
-});
-
-function sendMessage(userIds, message) {
-  let timeout = 2000;
-  db.collection("notificationFrequency").find({uid: {$in: userIds }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
-    if (err) {
-      throw err;
-    } else {
-      let userTokens = [];
-      for (var val of retval) {
-        userTokens.push(Object.values(val)[0]);
-      }
-
-      let payload = {
-        notification: {
-          title: "Quizzical",
-          body: message
-        },
-        tokens: userTokens
-      };
-      firebaseAdmin.messaging().sendMulticast(payload);
-    }
-  });
-}
+let firebaseFunctions = require("./firebasePush");
 
 MongoClient.connect(
     "mongodb://localhost:27017",
@@ -77,9 +48,16 @@ function sendQuizModulePushNotification(classCode) {
     } else {
       let className = Object.values(retval[0])[0] + "";
       let message =  util.format("Quiz modules in %s has been updated.", className);
-      let userIds = ["105960354998423944600", "118436222585761741438"];
+
       //get all the students here and send the message to all students
-      sendMessage(userIds, message);
+      classesDb.collection("class" + classCode).find({}).project({_id:0, uid: 1})
+      .toArray((err, data) => {
+        let userIds = [];
+        for (var d of data) {
+          userIds.push(Object.values(d)[0]);
+        }
+        firebaseFunctions.sendMessage(userIds, message);
+      });
     }
   });
 }

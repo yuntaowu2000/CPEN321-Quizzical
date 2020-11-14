@@ -3,6 +3,7 @@ let MongoClient = require("mongodb").MongoClient;
 let fs = require("fs");
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 let router = express.Router();
+let firebaseFunction = require("./firebasePush");
 let db;
 let classDb;
 
@@ -91,6 +92,11 @@ function handleDeleteClass(isInstructor, classCode, uid) {
     });
   } else {
     //delete the student from the class.
+    classDb.collection("class" + classCode).deleteOne({uid: {$eq: uid}}, (err, db) => {
+      if (err) {
+        throw err;
+      }
+    });
   }
 }
 
