@@ -30,6 +30,8 @@ The progress is written in the sequence of implementation.
     -   basic quiz/leaderboard refreshing done.(student side not tested yet)    
     -   quiz fragment UI finished  
     -   leader board/class statistic fragment UI finished  
+    -   quizzes available, class average scores, user ranking finished.  
+    -   class info (student info) fetching from backend  
 
 -   Quiz  
     -   A Quiz will load a set of questions (currently only multiple choices are supported)  
@@ -61,16 +63,16 @@ The progress is written in the sequence of implementation.
 -   class list and quiz modules for each class done.  
 -   email when class created  
 -   push notification when quiz module updated  
+-   notification based on user selected frequency  
 
 ## TODO list
+-   bugs to fix  
+    -   check like  
+    -   delete quiz module does not unset the values correctly  
+    -   delete class does not delete the class values in the student side  
+
+## Discarded implementation
 -   UI set up for home activity  
-**Note:** need to get info from the server for these layouts, such as quizzes available, class average scores, user ranking.  
-    -   maybe we can add some review quizzes for all the wrong questions a student has got, the wrong question ids will be sent to the server  
-
--   Front-Back end communication  
-    -   class info (student info)   
-
--   Push notification  
-    -   email when account created  
-    -   mobile notification leaderboard updated  
+    -   maybe we can add some review quizzes for all the wrong questions a student has got, the wrong question ids will be sent to the server(forget about this one)  
+    
     
