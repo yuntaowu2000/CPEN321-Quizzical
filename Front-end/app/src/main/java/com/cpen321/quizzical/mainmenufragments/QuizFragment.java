@@ -325,6 +325,7 @@ public class QuizFragment extends Fragment {
             alertDialogBuilder.setView(scrollView);
         } catch (JSONException e) {
             Log.d("parse_json", "failed. " + val);
+            alertDialogBuilder.setMessage(R.string.UI_not_available);
         }
     }
 
@@ -360,6 +361,7 @@ public class QuizFragment extends Fragment {
             alertDialogBuilder.setView(linearLayout);
         } catch (JSONException e) {
             Log.d("parse_json", "failed. " + val);
+            alertDialogBuilder.setMessage(R.string.UI_not_available);
         }
     }
 
@@ -369,9 +371,10 @@ public class QuizFragment extends Fragment {
 
         AlertDialog.Builder alertDialogBuilder= new AlertDialog.Builder(thisContext);
         alertDialogBuilder.setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()));
+        alertDialogBuilder.setTitle(R.string.UI_class_statistics);
 
         if (OtherUtils.stringIsNullOrEmpty(statsLink)) {
-            alertDialogBuilder.setMessage(String.format(getString(R.string.UI_personal_score_string), 100.0));
+            alertDialogBuilder.setMessage(R.string.UI_not_available);
         } else if (isInstructor) {
             setupStatsForInstructors(statsLink, alertDialogBuilder);
         } else {
@@ -449,8 +452,9 @@ public class QuizFragment extends Fragment {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(thisContext);
         alertDialogBuilder.setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()));
+        alertDialogBuilder.setTitle(R.string.UI_wrong_questions);
         if (OtherUtils.stringIsNullOrEmpty(wrongQuestionLink)) {
-            alertDialogBuilder.setView(setUpWrongQuestionView(new TestQuestionPackage().getPackage()));
+            alertDialogBuilder.setMessage(R.string.UI_not_available);
         } else {
             String val = OtherUtils.readFromURL(wrongQuestionLink);
             try {
@@ -464,6 +468,7 @@ public class QuizFragment extends Fragment {
                 alertDialogBuilder.setView(setUpWrongQuestionView(qp));
             } catch (JSONException e) {
                 Log.d("parse_failed", "wrong question");
+                alertDialogBuilder.setMessage(R.string.UI_not_available);
             }
         }
         alertDialogBuilder.show();

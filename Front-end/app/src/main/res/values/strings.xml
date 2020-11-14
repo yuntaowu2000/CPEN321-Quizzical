@@ -107,9 +107,6 @@
     <!--    <3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com>-->
     <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
 
-    <!--    used for debugging page, can be deleted later-->
-    <string name="test">Test</string>
-
     <!--    init_activity-->
     <string name="UI_welcome_str">Welcome to Quizzical</string>
 
@@ -153,6 +150,7 @@
     <string name="UI_student_delete_course">Do you want to quit this course?</string>
 
     <!--    used in quiz fragment-->
+    <string name="UI_not_available">Not available</string>
     <string name="go_to_quiz">Go to Quiz</string>
     <string name="UI_default_module_text">module 1</string>
     <string name="UI_wrong_questions">Wrong Questions</string>
@@ -190,9 +188,6 @@
     <string name="UI_create_answer">Create answer</string>
     <string name="UI_delete">delete</string>
     <string name="UI_quit_quiz_editing_warning">Do you want to discard the quiz editing? Note that all your progress will be lost!</string>
-
-    <!--    used in class statistic fragment (for teachers)-->
-    <string name="class_statistic_page_text1" translatable="false">This is the class statistic page for teachers</string>
 
     <!--    used in leader board fragment (for students)-->
     <string name="leader_board_page_text1" translatable="false">This is the leaderBoard page</string>
