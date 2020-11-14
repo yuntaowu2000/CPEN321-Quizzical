@@ -42,6 +42,7 @@ The progress is written in the sequence of implementation.
     -   The quiz result (including score and wrong question numbers) will be uploaded to the server.  
     -   UI and logic set up for teacher creating quiz finished    
     -   the wrong question ids will be sent to the server, and the students can view the questions they got wrong  
+    -   teacher can now see how many people got wrong on each questions.  
 
 -   Complex logic  
     -   A user is ranked by his/her overall EXP in a semester  

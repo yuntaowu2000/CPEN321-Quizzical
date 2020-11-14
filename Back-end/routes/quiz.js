@@ -171,7 +171,7 @@ router.get("/studentWrongCounts", (req, res, next) => {
       .project({_id:0, ["quiz" + quizCode + "wrongQuestionIds"]: 1})
       .toArray((err, wrongIds) => {
         let count = [];
-        for (i = 0; i < len; i++) {
+        for (var i = 0; i < len; i++) {
           count.push(0);
         }
         for (var d of wrongIds) {
