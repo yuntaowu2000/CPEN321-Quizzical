@@ -121,5 +121,5 @@
     <string name="UI_average_score_text">平均分：%.2f</string>
     <string name="UI_quit_quiz_editing_warning">你确定要放弃这个测试的创建吗？所有的数据将被删除。</string>
     <string name="UI_quit_quiz_warning">你确定要退出这次测试吗？所有的数据将不会被记录。</string>
-    <string name="UI_not_available">不可用。</string>
+    <string name="UI_no_data">暂无数据。</string>
 </resources>

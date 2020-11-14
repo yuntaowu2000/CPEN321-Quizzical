@@ -42,7 +42,6 @@ import com.cpen321.quizzical.quizactivities.CreateQuizActivity;
 import com.cpen321.quizzical.quizactivities.QuizActivity;
 import com.cpen321.quizzical.utils.OtherUtils;
 import com.cpen321.quizzical.utils.QuizPackage;
-import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
@@ -236,7 +235,7 @@ public class QuizFragment extends Fragment {
         assert thisContext != null;
 
         if (OtherUtils.stringIsNullOrEmpty(notesLink)) {
-            new AlertDialog.Builder(thisContext).setMessage("Not available.")
+            new AlertDialog.Builder(thisContext).setMessage(R.string.UI_no_data)
                     .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
                     .show();
         } else {
@@ -325,7 +324,7 @@ public class QuizFragment extends Fragment {
             alertDialogBuilder.setView(scrollView);
         } catch (JSONException e) {
             Log.d("parse_json", "failed. " + val);
-            alertDialogBuilder.setMessage(R.string.UI_not_available);
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
         }
     }
 
@@ -361,7 +360,7 @@ public class QuizFragment extends Fragment {
             alertDialogBuilder.setView(linearLayout);
         } catch (JSONException e) {
             Log.d("parse_json", "failed. " + val);
-            alertDialogBuilder.setMessage(R.string.UI_not_available);
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
         }
     }
 
@@ -374,7 +373,7 @@ public class QuizFragment extends Fragment {
         alertDialogBuilder.setTitle(R.string.UI_class_statistics);
 
         if (OtherUtils.stringIsNullOrEmpty(statsLink)) {
-            alertDialogBuilder.setMessage(R.string.UI_not_available);
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
         } else if (isInstructor) {
             setupStatsForInstructors(statsLink, alertDialogBuilder);
         } else {
@@ -454,7 +453,7 @@ public class QuizFragment extends Fragment {
         alertDialogBuilder.setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()));
         alertDialogBuilder.setTitle(R.string.UI_wrong_questions);
         if (OtherUtils.stringIsNullOrEmpty(wrongQuestionLink)) {
-            alertDialogBuilder.setMessage(R.string.UI_not_available);
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
         } else {
             String val = OtherUtils.readFromURL(wrongQuestionLink);
             try {
@@ -468,7 +467,7 @@ public class QuizFragment extends Fragment {
                 alertDialogBuilder.setView(setUpWrongQuestionView(qp));
             } catch (JSONException e) {
                 Log.d("parse_failed", "wrong question");
-                alertDialogBuilder.setMessage(R.string.UI_not_available);
+                alertDialogBuilder.setMessage(R.string.UI_no_data);
             }
         }
         alertDialogBuilder.show();

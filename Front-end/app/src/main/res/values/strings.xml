@@ -150,7 +150,7 @@
     <string name="UI_student_delete_course">Do you want to quit this course?</string>
 
     <!--    used in quiz fragment-->
-    <string name="UI_not_available">Not available</string>
+    <string name="UI_no_data">No data.</string>
     <string name="go_to_quiz">Go to Quiz</string>
     <string name="UI_default_module_text">module 1</string>
     <string name="UI_wrong_questions">Wrong Questions</string>
