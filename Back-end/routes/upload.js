@@ -349,33 +349,6 @@ router.post("/quiz", (req, res, next) => {
   res.end();
 });
 
-function checkLikedBefore(classCode, quizCode, likePersonUid) {
-  var likedPersons;
-  db.collection("quizzes").find({$and: [{classCode}, {quizCode}]}).project({_id:0,liked:1}).toArray((err, res) => {
-    if (!err) {
-      likedPersons = Object.values(res[0])[0];
-    }
-  });
-
-  if (likedPersons && likedPersons.hasLiked) {
-    likedPersons = likedPersons.liked;
-  }
-  //currently always return false, not sure why
-  if (likedPersons.includes(likePersonUid)) {
-    return true;
-  } else {
-    likedPersons.push(likePersonUid);
-    db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
-      {$set: {liked: likedPersons} },
-      (err, res) => {
-        if (err) {
-          // console.error(err);
-        }
-      });
-    return false;
-  }
-}
-
 router.post("/like", (req, res, next) => {
   if (req.body.type === "like") {
     let likeDetails = JSON.parse(req.body.data);
@@ -384,18 +357,36 @@ router.post("/like", (req, res, next) => {
     let quizCode = Number(likeDetails.quizCode);
     let likePersonUid = req.body.uid;
 
-    if (!checkLikedBefore(classCode, quizCode, likePersonUid)) {
-      db.collection("userInfo").updateOne(
-        {uid: {$eq: instructorUID}},
-        {$inc: {EXP: 5}},
-        {upsert: true}, (err, res) => {
-          if (err) {
-            throw err;
-          }
+    db.collection("quizzes").find({$and: [{classCode: { $eq: classCode}}, {quizCode: {$eq: quizCode}}]}).project({_id:0,liked:1}).toArray((err, arr) => {
+      if (err) {
+        throw err;
+      }
+      var likedPersons = Object.values(arr[0])[0];
+      if (!Array.isArray(likedPersons)) {
+        likedPersons = [];
+      }
+
+      if (!likedPersons.includes(likePersonUid)) {
+        likedPersons.push(likePersonUid);
+        db.collection("quizzes").updateOne({$and: [{classCode: { $eq: classCode}}, {quizCode: {$eq: quizCode}}]},
+          {$set: {liked: likedPersons} },
+          (err, res) => {
+            if (err) {
+              throw err;
+            }
+          });
+        db.collection("userInfo").updateOne(
+          {uid: {$eq: instructorUID}},
+          {$inc: {EXP: 5}},
+          {upsert: true}, (err, res) => {
+            if (err) {
+              throw err;
+            }
         });
-      let userIds = [instructorUID];
-      firebaseFunctions.sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
-    }
+        let userIds = [instructorUID];
+        firebaseFunctions.sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
+      }
+    });
   }
 
   res.statusCode = 200;
