@@ -154,8 +154,6 @@
 
     <!--    used in quiz fragment-->
     <string name="go_to_quiz">Go to Quiz</string>
-    <string name="quiz_fragment_debug_text" translatable="false">This is the quiz page</string>
-    <string name="teacher_quiz_fragment_debug_text" translatable="false">This is the quiz page for teachers</string>
     <string name="UI_default_module_text">module 1</string>
     <string name="UI_wrong_questions">Wrong Questions</string>
     <string name="UI_stats">stats</string>
