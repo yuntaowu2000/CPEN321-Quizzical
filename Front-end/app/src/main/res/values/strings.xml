@@ -169,6 +169,7 @@
     <string name="AVERAGE" translatable="false">Average</string>
     <string name="HIGHEST" translatable="false">Highest</string>
     <string name="SCORE" translatable="false">score</string>
+    <string name="UI_num_people_got_wrong">%s people got wrong on question %d.</string>
 
     <string name="UI_create_module_notification">Please create a module before creating a quiz</string>
     <string name="UI_correct_answer">correct answer</string>

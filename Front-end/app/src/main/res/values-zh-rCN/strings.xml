@@ -122,4 +122,5 @@
     <string name="UI_quit_quiz_editing_warning">你确定要放弃这个测试的创建吗？所有的数据将被删除。</string>
     <string name="UI_quit_quiz_warning">你确定要退出这次测试吗？所有的数据将不会被记录。</string>
     <string name="UI_no_data">暂无数据。</string>
+    <string name="UI_num_people_got_wrong">%s人做错了第%d题</string>
 </resources>

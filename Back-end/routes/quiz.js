@@ -154,4 +154,37 @@ router.get("/", (req, res, next) => {
   
 });
 
+router.get("/studentWrongCounts", (req, res, next) => {
+  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
+  let classCode = Number(url.searchParams.get("classCode"));
+  let quizCode = Number(url.searchParams.get("quizCode"));
+  let classDbName = "class" + classCode;
+
+  db.collection("quizzes")
+    .find({$and: [{classCode}, {quizCode}]})
+    .project({_id:0, questionList: 1})
+    .toArray((err, data) => {
+      var questionList = data[0]["questionList"];
+      var len = questionList.length;
+
+      classesDb.collection(classDbName).find({})
+      .project({_id:0, ["quiz" + quizCode + "wrongQuestionIds"]: 1})
+      .toArray((err, wrongIds) => {
+        let count = [];
+        for (i = 0; i < len; i++) {
+          count.push(0);
+        }
+        for (var d of wrongIds) {
+          let val = Object.values(d)[0];
+          let currIds = val.substring(1, val.length - 1).split(",");
+          for (var id of currIds) {
+            count[Number(id) - 1] += 1;
+          }
+        }
+        res.send(count);
+      });
+  });
+
+});
+
 module.exports = router;
