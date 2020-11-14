@@ -1,8 +1,18 @@
 let express = require("express");
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 let router = express.Router();
-let db = require("../databaseAccess").db;
-let classDb = require("../databaseAccess").classesDb;
+let MongoClient = require("mongodb").MongoClient;
+let db;
+let classesDb;
+
+MongoClient.connect(
+    "mongodb://localhost:27017",
+    {useUnifiedTopology: true},
+    (err, client) => {
+      db = client.db("data");
+      classesDb = client.db("classes");
+    }
+);
 
 /* GET users listing. */
 router.get("/", (req, res, next) => {

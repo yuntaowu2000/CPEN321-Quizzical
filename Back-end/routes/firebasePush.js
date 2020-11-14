@@ -1,7 +1,16 @@
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 let firebaseAdmin = require("firebase-admin");
 let scheduler = require("node-schedule");
-let db = require("../databaseAccess").db;
+let MongoClient = require("mongodb").MongoClient;
+let db;
+
+MongoClient.connect(
+    "mongodb://localhost:27017",
+    {useUnifiedTopology: true},
+    (err, client) => {
+      db = client.db("data");
+    }
+);
 
 let serviceAccount = require("../plated-inn-286021-firebase-adminsdk-oxi0q-0e23826d54.json");
 firebaseAdmin.initializeApp({
