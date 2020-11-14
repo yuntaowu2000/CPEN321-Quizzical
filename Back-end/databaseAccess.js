@@ -28,8 +28,9 @@ MongoClient.connect(
           //console.log(err);
         }
       });
+      module.exports.db = db;
+      module.exports.classesDb = classesDb;
     }
 );
 
-module.exports.db = db;
-module.exports.classesDb = classesDb;
+
