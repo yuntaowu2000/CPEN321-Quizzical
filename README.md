@@ -41,6 +41,7 @@ The progress is written in the sequence of implementation.
     -   After the user finishes a quiz, they will be shown how they did in the quiz.  
     -   The quiz result (including score and wrong question numbers) will be uploaded to the server.  
     -   UI and logic set up for teacher creating quiz finished    
+    -   the wrong question ids will be sent to the server, and the students can view the questions they got wrong  
 
 -   Complex logic  
     -   A user is ranked by his/her overall EXP in a semester  
@@ -71,7 +72,6 @@ The progress is written in the sequence of implementation.
     -   delete class does not delete the class values in the student side  
 
 ## Discarded implementation
--   UI set up for home activity  
-    -   maybe we can add some review quizzes for all the wrong questions a student has got, the wrong question ids will be sent to the server(forget about this one)  
+-   maybe we can add some review quizzes for all the wrong questions a student has got(forget about this one)  
     
     
