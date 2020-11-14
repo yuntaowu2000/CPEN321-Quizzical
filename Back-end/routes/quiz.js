@@ -1,17 +1,18 @@
 let express = require("express");
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 let router = express.Router();
+let fs = require("fs");
 let MongoClient = require("mongodb").MongoClient;
 let db;
 let classesDb;
 
 MongoClient.connect(
-    "mongodb://localhost:27017",
-    {useUnifiedTopology: true},
-    (err, client) => {
-      db = client.db("data");
-      classesDb = client.db("classes");
-    }
+  "mongodb://localhost:27017",
+  {useUnifiedTopology: true},
+  (err, client) => {
+    db = client.db("data");
+    classesDb = client.db("classes");
+  }
 );
 
 function calculateAverage(data, quizScoreField) {
