@@ -188,3 +188,10 @@ router.get("/studentWrongCounts", (req, res, next) => {
 });
 
 module.exports = router;
+
+module.exports.calculateAverage = calculateAverage;
+module.exports.findMaxScore = findMaxScore;
+module.exports.fetchDataForTeachers = fetchDataForTeachers;
+module.exports.fetchWrongQuestions = fetchWrongQuestions;
+module.exports.findStudentScore = findStudentScore;
+module.exports.fetchDataForStudents = fetchDataForStudents;
