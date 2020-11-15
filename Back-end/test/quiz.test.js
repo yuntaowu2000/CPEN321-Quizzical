@@ -22,14 +22,20 @@ const res = await request.post('/')
       // etc
     })
 
-// test GET
+// test GET of '/' and '/studentWrongCounts'
 it('fetchDataForTeachers case of router.get("/") ', async done => {
-  const response = await request.get('/test').send({ url: , classCode: , quizCode: , type: , uid: , isInstructor: , })
-
-
-  expect(response.body.message).toBe('')
+  const response = await request.get('/').send({ url: , classCode: , quizCode: , type: , uid: , isInstructor: , });
+  expect(response.body.message).toBe('');
+	
+  const response = await request.get('/studentWrongCounts').send({ url: , classCode: , quizCode: , type: , uid: , isInstructor: , });
+  expect(response.body.message).toBe('');
+	
   done()
 })
+
+
+
+
 
 describe("Calculate Average function", () => {
   test("it should calculate the average score of quizScoreField values from the input data array", () => {
