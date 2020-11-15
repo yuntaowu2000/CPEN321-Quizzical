@@ -1,4 +1,5 @@
-quizModule = require('../routes/quiz.js');
+//quizModule = require('../routes/quiz.js');
+import * as quizModule from '../routes/quiz.js';
 const {MongoClient} = require('mongodb');
 
 
