@@ -3,12 +3,12 @@ let express = require("express");
 let router = express.Router();
 let fs = require("fs");
 let path = require("path");
+let util = require("util");
+let firebaseFunctions = require("./firebasePush");
+let emailFunctions = require("./emailSending");
 let MongoClient = require("mongodb").MongoClient;
 let db;
 let classesDb;
-let nodemailer = require("nodemailer");
-let util = require("util");
-let firebaseFunctions = require("./firebasePush");
 
 MongoClient.connect(
     "mongodb://localhost:27017",
@@ -62,31 +62,6 @@ function sendQuizModulePushNotification(classCode) {
   });
 }
 
-let transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
-  port: 587,
-  auth: {
-    user: "jessika.reichert39@ethereal.email",
-    pass: "gtZXRfDehhW2KBYEQy"
-  }
-});
-
-
-function sendEmail(emailAddr, emailSubject, emailHtml) {
-  let mailOptions = {
-    from: "test@quizzical.com",
-    to: emailAddr,
-    subject: emailSubject,
-    html: emailHtml
-  };
-
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      throw err;
-    }
-  });
-}
-
 function parseCreateClassEmailContent(username, className, classCode) {
   return util.format("<p>Congratulations, %s!</p><p>You have just created a new Class: %s</p><p>Your class code is: %d.</p><p>share it with the students and begin your quizzes!</p>", username, className, classCode);
 }
@@ -100,39 +75,10 @@ function sendCreateClassEmail(uid, className, classCode) {
       let username = Object.values(retval[0])[1];
       let email = Object.values(retval[0])[0];
       let parsedContent = parseCreateClassEmailContent(username, className, classCode);
-      sendEmail(email, "Quizzical: New class created", parsedContent);
+      emailFunctions.sendEmail(email, "Quizzical: New class created", parsedContent);
     }
   });
 }
-
-MongoClient.connect(
-  "mongodb://localhost:27017",
-  {useUnifiedTopology: true},
-  (err, client) => {
-    db = client.db("data");
-    classesDb = client.db("classes");
-    db.createCollection("classInfo", (err, res) => {
-      if (err) {
-        //console.error(err);
-      }
-    });
-    db.createCollection("userInfo", (err, res) => {
-      if (err) {
-        //console.error(err);
-      }
-    });
-    db.createCollection("notificationFrequency", (err, res) => {
-      if (err) {
-        //console.error(err);
-      }
-    });
-    db.createCollection("quizzes", (err, res) => {
-      if (err) {
-        //console.log(err);
-      }
-    });
-  }
-);
 
 router.use(express.json());
 
