@@ -1,7 +1,35 @@
 quizModule = require('../routes/quiz.js');
 //import * as quizModule from '../routes/quiz.js';
 const {MongoClient} = require('mongodb');
+const app = require(''../routes/quiz.js'') // link to server file
+const supertest = require('supertest')
+const request = supertest(app)
 
+const mongoose = require('mongoose')
+const databaseName = 'classes'
+
+// connect to a sample database for this test file
+beforeAll(async () => {
+  const url = `mongodb://127.0.0.1/${databaseName}`
+  await mongoose.connect(url, { useNewUrlParser: true })
+})
+
+// add sample data to test database
+const res = await request.post('/classes')
+	.send({
+      classCode: '',
+      quizCode: ''
+      // etc
+    })
+
+// test GET
+it('fetchDataForTeachers case of router.get("/") ', async done => {
+  const response = await request.get('/test').send({ url: , classCode: , quizCode: , type: , uid: , isInstructor: , })
+
+
+  expect(response.body.message).toBe('')
+  done()
+})
 
 describe("Calculate Average function", () => {
   test("it should calculate the average score of quizScoreField values from the input data array", () => {
