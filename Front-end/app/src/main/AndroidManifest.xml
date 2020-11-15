@@ -21,7 +21,8 @@
         android:theme="@style/AppTheme"
         tools:targetApi="n">
 
-        <activity android:name=".InitActivity">
+        <activity android:name=".InitActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,11 +32,16 @@
 
         <activity
             android:name=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".quizactivities.CreateQuizActivity"/>
-        <activity android:name=".quizactivities.QuizActivity" />
-        <activity android:name=".quizactivities.QuizFinishedActivity" />
-        <activity android:name=".PictureActivity" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".quizactivities.CreateQuizActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".quizactivities.QuizActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".quizactivities.QuizFinishedActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PictureActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".MyFirebaseMessagingService"

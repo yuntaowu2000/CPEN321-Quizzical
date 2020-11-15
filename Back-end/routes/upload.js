@@ -3,41 +3,41 @@ let express = require("express");
 let router = express.Router();
 let fs = require("fs");
 let path = require("path");
+let util = require("util");
+let firebaseFunctions = require("./firebasePush");
+let emailFunctions = require("./emailSending");
 let MongoClient = require("mongodb").MongoClient;
 let db;
 let classesDb;
-let nodemailer = require("nodemailer");
-let util = require("util");
-let firebaseAdmin = require("firebase-admin");
 
-let serviceAccount = require("../plated-inn-286021-firebase-adminsdk-oxi0q-0e23826d54.json");
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(serviceAccount),
-  databaseURL: "https://plated-inn-286021.firebaseio.com"
-});
-
-function sendMessage(userIds, message) {
-  let timeout = 2000;
-  db.collection("notificationFrequency").find({uid: {$in: userIds }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
-    if (err) {
-      throw err;
-    } else {
-      let userTokens = [];
-      for (var val of retval) {
-        userTokens.push(Object.values(val)[0]);
-      }
-
-      let payload = {
-        notification: {
-          title: "Quizzical",
-          body: message
-        },
-        tokens: userTokens
-      };
-      firebaseAdmin.messaging().sendMulticast(payload);
+MongoClient.connect(
+    "mongodb://localhost:27017",
+    {useUnifiedTopology: true},
+    (err, client) => {
+      db = client.db("data");
+      classesDb = client.db("classes");
+      db.createCollection("classInfo", (err, res) => {
+        if (err) {
+          //console.error(err);
+        }
+      });
+      db.createCollection("userInfo", (err, res) => {
+        if (err) {
+          //console.error(err);
+        }
+      });
+      db.createCollection("notificationFrequency", (err, res) => {
+        if (err) {
+          //console.error(err);
+        }
+      });
+      db.createCollection("quizzes", (err, res) => {
+        if (err) {
+          //console.log(err);
+        }
+      });
     }
-  });
-}
+);
 
 function sendQuizModulePushNotification(classCode) {
   let timeout = 2000;
@@ -48,34 +48,16 @@ function sendQuizModulePushNotification(classCode) {
     } else {
       let className = Object.values(retval[0])[0] + "";
       let message =  util.format("Quiz modules in %s has been updated.", className);
-      let userIds = ["105960354998423944600", "118436222585761741438"];
+
       //get all the students here and send the message to all students
-      sendMessage(userIds, message);
-    }
-  });
-}
-
-let transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
-  port: 587,
-  auth: {
-    user: "jessika.reichert39@ethereal.email",
-    pass: "gtZXRfDehhW2KBYEQy"
-  }
-});
-
-
-function sendEmail(emailAddr, emailSubject, emailHtml) {
-  let mailOptions = {
-    from: "test@quizzical.com",
-    to: emailAddr,
-    subject: emailSubject,
-    html: emailHtml
-  };
-
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      throw err;
+      classesDb.collection("class" + classCode).find({}).project({_id:0, uid: 1})
+      .toArray((err, data) => {
+        let userIds = [];
+        for (var d of data) {
+          userIds.push(Object.values(d)[0]);
+        }
+        firebaseFunctions.sendMessage(userIds, message);
+      });
     }
   });
 }
@@ -93,39 +75,10 @@ function sendCreateClassEmail(uid, className, classCode) {
       let username = Object.values(retval[0])[1];
       let email = Object.values(retval[0])[0];
       let parsedContent = parseCreateClassEmailContent(username, className, classCode);
-      sendEmail(email, "Quizzical: New class created", parsedContent);
+      emailFunctions.sendEmail(email, "Quizzical: New class created", parsedContent);
     }
   });
 }
-
-MongoClient.connect(
-  "mongodb://localhost:27017",
-  {useUnifiedTopology: true},
-  (err, client) => {
-    db = client.db("data");
-    classesDb = client.db("classes");
-    db.createCollection("classInfo", (err, res) => {
-      if (err) {
-        //console.error(err);
-      }
-    });
-    db.createCollection("userInfo", (err, res) => {
-      if (err) {
-        //console.error(err);
-      }
-    });
-    db.createCollection("notificationFrequency", (err, res) => {
-      if (err) {
-        //console.error(err);
-      }
-    });
-    db.createCollection("quizzes", (err, res) => {
-      if (err) {
-        //console.log(err);
-      }
-    });
-  }
-);
 
 router.use(express.json());
 
@@ -278,8 +231,17 @@ function updateStudentStats(student, studentQuizResult, studentUid) {
   let wrongQuestionIds = studentQuizResult.wrongQuestionIds;
 
   classesDb.collection("class" + studentQuizResult.classCode).updateOne({uid: studentUid},
-    {$set: {EXP: newEXP, userQuizCount: newUserQuizCount, score: newScore, [quizScoreFieldName]: currScore, [quizWrongQuestionFieldName]: wrongQuestionIds}},
+    {$set: {EXP: newEXP}},
     {upsert: true}, (err, res) => {
+      if (err) {
+        // console.error(err);
+      }
+    });
+
+  //update the score only if it does not exist
+  classesDb.collection("class" + studentQuizResult.classCode).updateOne({uid: studentUid, [quizScoreFieldName]: {$exists: false}}, 
+    {$set: {userQuizCount: newUserQuizCount, score: newScore, [quizScoreFieldName]: currScore, [quizWrongQuestionFieldName]: wrongQuestionIds}},
+    (err, res) => {
       if (err) {
         // console.error(err);
       }
@@ -333,33 +295,6 @@ router.post("/quiz", (req, res, next) => {
   res.end();
 });
 
-function checkLikedBefore(classCode, quizCode, likePersonUid) {
-  var likedPersons;
-  db.collection("quizzes").find({$and: [{classCode}, {quizCode}]}).project({_id:0,liked:1}).toArray((err, res) => {
-    if (!err) {
-      likedPersons = Object.values(res[0])[0];
-    }
-  });
-
-  if (likedPersons && likedPersons.hasLiked) {
-    likedPersons = likedPersons.liked;
-  }
-  //currently always return false, not sure why
-  if (likedPersons.includes(likePersonUid)) {
-    return true;
-  } else {
-    likedPersons.push(likePersonUid);
-    db.collection("quizzes").updateOne({$and: [{classCode}, {quizCode}]},
-      {$set: {liked: likedPersons} },
-      (err, res) => {
-        if (err) {
-          // console.error(err);
-        }
-      });
-    return false;
-  }
-}
-
 router.post("/like", (req, res, next) => {
   if (req.body.type === "like") {
     let likeDetails = JSON.parse(req.body.data);
@@ -368,18 +303,36 @@ router.post("/like", (req, res, next) => {
     let quizCode = Number(likeDetails.quizCode);
     let likePersonUid = req.body.uid;
 
-    if (!checkLikedBefore(classCode, quizCode, likePersonUid)) {
-      db.collection("userInfo").updateOne(
-        {uid: {$eq: instructorUID}},
-        {$inc: {EXP: 5}},
-        {upsert: true}, (err, res) => {
-          if (err) {
-            throw err;
-          }
+    db.collection("quizzes").find({$and: [{classCode: { $eq: classCode}}, {quizCode: {$eq: quizCode}}]}).project({_id:0,liked:1}).toArray((err, arr) => {
+      if (err) {
+        throw err;
+      }
+      var likedPersons = Object.values(arr[0])[0];
+      if (!Array.isArray(likedPersons)) {
+        likedPersons = [];
+      }
+
+      if (!likedPersons.includes(likePersonUid)) {
+        likedPersons.push(likePersonUid);
+        db.collection("quizzes").updateOne({$and: [{classCode: { $eq: classCode}}, {quizCode: {$eq: quizCode}}]},
+          {$set: {liked: likedPersons} },
+          (err, res) => {
+            if (err) {
+              throw err;
+            }
+          });
+        db.collection("userInfo").updateOne(
+          {uid: {$eq: instructorUID}},
+          {$inc: {EXP: 5}},
+          {upsert: true}, (err, res) => {
+            if (err) {
+              throw err;
+            }
         });
-      let userIds = [instructorUID];
-      sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
-    }
+        let userIds = [instructorUID];
+        firebaseFunctions.sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
+      }
+    });
   }
 
   res.statusCode = 200;
@@ -387,3 +340,10 @@ router.post("/like", (req, res, next) => {
 });
 
 module.exports = router;
+
+module.exports.sendQuizModulePushNotification = sendQuizModulePushNotification;
+module.exports.parseCreateClassEmailContent = parseCreateClassEmailContent;
+module.exports.sendCreateClassEmail = sendCreateClassEmail;
+module.exports.createClassFunction = createClassFunction;
+module.exports.joinClassFunction = joinClassFunction;
+module.exports.updateStudentStats = updateStudentStats;

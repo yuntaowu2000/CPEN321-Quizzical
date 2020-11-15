@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.InputType;
@@ -22,6 +23,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +42,6 @@ import com.cpen321.quizzical.quizactivities.CreateQuizActivity;
 import com.cpen321.quizzical.quizactivities.QuizActivity;
 import com.cpen321.quizzical.utils.OtherUtils;
 import com.cpen321.quizzical.utils.QuizPackage;
-import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
@@ -233,12 +235,134 @@ public class QuizFragment extends Fragment {
         assert thisContext != null;
 
         if (OtherUtils.stringIsNullOrEmpty(notesLink)) {
-            new AlertDialog.Builder(thisContext).setMessage("Not available.")
+            new AlertDialog.Builder(thisContext).setMessage(R.string.UI_no_data)
                     .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
                     .show();
         } else {
             //actually should be download a file
             OtherUtils.readFromURL(notesLink);
+        }
+    }
+
+    private TextView generateTableElement(String text) {
+        TextView textView = new TextView(this.getContext());
+
+        TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.MATCH_PARENT, 1.0f);
+        textViewParam.setMargins(10, 10, 10, 10);
+
+        textView.setLayoutParams(textViewParam);
+        textView.setGravity(Gravity.CENTER);
+        textView.setText(text);
+        textView.setTextSize(15);
+        return textView;
+    }
+
+    private TableLayout generateStudentScoreBoard(JSONArray classScores, String currQuizName) throws JSONException {
+        Context thisContext = this.getContext();
+        assert thisContext != null;
+        TableLayout tableLayout = new TableLayout(thisContext);
+
+        TableRow firstRow = new TableRow(thisContext);
+        firstRow.addView(generateTableElement(getString(R.string.USERNAME)), 0);
+        firstRow.addView(generateTableElement(getString(R.string.SCORE)), 1);
+        tableLayout.addView(firstRow, 0);
+
+        for (int i = 0; i < classScores.length(); i++) {
+            TableRow row = new TableRow(thisContext);
+            JSONObject jsonObject = classScores.getJSONObject(i);
+            String name = jsonObject.getString(getString(R.string.USERNAME));
+            double score = jsonObject.getDouble(currQuizName);
+            score = Math.round(score * 100.0) / 100.0;
+            row.addView(generateTableElement(name), 0);
+            row.addView(generateTableElement(String.valueOf(score)), 1);
+            tableLayout.addView(row);
+        }
+
+        return tableLayout;
+    }
+
+    private void setupStatsForInstructors(String statsLink, AlertDialog.Builder alertDialogBuilder) {
+        String val = OtherUtils.readFromURL(statsLink);
+        Context thisContext = this.getContext();
+        assert thisContext != null;
+        ScrollView scrollView = new ScrollView(thisContext);
+
+        LinearLayout linearLayout = new LinearLayout(thisContext);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        layoutParams.setMargins(10, 10, 10, 10);
+
+        Uri uri = Uri.parse(statsLink);
+        String currQuizName = getString(R.string.QUIZ_NUM_SCORE);
+        try {
+            currQuizName = String.format(getString(R.string.QUIZ_NUM_SCORE), uri.getQueryParameter(getString(R.string.QUIZ_CODE)));
+        } catch (Exception e) {
+            Log.d("parse", "parse quiz score name failed");
+        }
+
+        try {
+            JSONArray jsonArray = new JSONArray(val);
+            JSONArray classScores = jsonArray.getJSONArray(0);
+            double average = jsonArray.getDouble(1);
+            TextView avgField = new TextView(thisContext);
+            avgField.setText(String.format(getString(R.string.UI_average_score_text), average));
+            avgField.setGravity(Gravity.CENTER);
+            avgField.setLayoutParams(layoutParams);
+            linearLayout.addView(avgField);
+
+            double highest = jsonArray.getDouble(2);
+            TextView highestScoreField = new TextView(thisContext);
+            highestScoreField.setText(String.format(getString(R.string.UI_highest_score_text), highest));
+            highestScoreField.setGravity(Gravity.CENTER);
+            highestScoreField.setLayoutParams(layoutParams);
+            linearLayout.addView(highestScoreField);
+
+            TableLayout tableLayout = generateStudentScoreBoard(classScores, currQuizName);
+            tableLayout.setLayoutParams(layoutParams);
+            linearLayout.addView(tableLayout);
+            scrollView.addView(linearLayout);
+
+            alertDialogBuilder.setView(scrollView);
+        } catch (JSONException e) {
+            Log.d("parse_json", "failed. " + val);
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
+        }
+    }
+
+    private TextView setUpTextView(String text) {
+        Context thisContext = this.getContext();
+        assert thisContext != null;
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(10, 10, 10, 10);
+        TextView textView = new TextView(thisContext);
+        textView.setGravity(Gravity.CENTER);
+        textView.setText(text);
+        return textView;
+    }
+
+    private void setupStatsForStudents(String statsLink, AlertDialog.Builder alertDialogBuilder) {
+        Context thisContext = this.getContext();
+        assert thisContext != null;
+        String val = OtherUtils.readFromURL(statsLink);
+        try {
+            JSONArray jsonArray = new JSONArray(val);
+            double avg = jsonArray.getDouble(0);
+            avg = Math.round(avg * 100.0) / 100.0;
+            double highest = jsonArray.getDouble(1);
+            highest = Math.round(highest * 100.0) / 100.0;
+            double yourScore = jsonArray.getDouble(2);
+            yourScore = Math.round(yourScore * 100.0) / 100.0;
+            LinearLayout linearLayout = new LinearLayout(thisContext);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.addView(setUpTextView(String.format(getString(R.string.UI_average_score_text), avg)));
+            linearLayout.addView(setUpTextView(String.format(getString(R.string.UI_highest_score_text), highest)));
+            linearLayout.addView(setUpTextView(String.format(getString(R.string.UI_personal_score_string), yourScore)));
+
+            alertDialogBuilder.setView(linearLayout);
+        } catch (JSONException e) {
+            Log.d("parse_json", "failed. " + val);
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
         }
     }
 
@@ -248,26 +372,15 @@ public class QuizFragment extends Fragment {
 
         AlertDialog.Builder alertDialogBuilder= new AlertDialog.Builder(thisContext);
         alertDialogBuilder.setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()));
+        alertDialogBuilder.setTitle(R.string.UI_class_statistics);
 
         if (OtherUtils.stringIsNullOrEmpty(statsLink)) {
-            alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), 80.0, 100.0, 90.0));
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
+        } else if (isInstructor) {
+            setupStatsForInstructors(statsLink, alertDialogBuilder);
         } else {
-            if (isInstructor) {
-                alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), 80.0, 100.0, 90.0));
-            } else {
-                String val = OtherUtils.readFromURL(statsLink);
-                try {
-                    JSONArray jsonObject = new JSONArray(val);
-                    double avg = jsonObject.getDouble(0);
-                    double highest = jsonObject.getDouble(1);
-                    double your_score = jsonObject.getDouble(2);
-                    alertDialogBuilder.setMessage(String.format(getString(R.string.UI_stats_string), avg, highest, your_score));
-                } catch (JSONException e) {
-                    Log.d("parse_json", "failed. " + val);
-                }
-            }
+            setupStatsForStudents(statsLink, alertDialogBuilder);
         }
-
         alertDialogBuilder.show();
     }
 
@@ -312,7 +425,7 @@ public class QuizFragment extends Fragment {
         return layout;
     }
 
-    private View setUpWrongQuestionView(QuizPackage qp) {
+    private View setUpWrongQuestionView(QuizPackage qp, String[] wrongCountList) {
         Context thisContext = this.getContext();
         assert thisContext != null;
 
@@ -324,14 +437,74 @@ public class QuizFragment extends Fragment {
         layoutParams.setMargins(10, 10, 10, 10);
 
         List<IQuestion> questions = qp.getQuestionList();
-        for (IQuestion q : questions) {
-            View v = buildViewForEachWrongQuestion(q);
+        for (int i = 0; i < questions.size(); i++) {
+            View v = buildViewForEachWrongQuestion(questions.get(i));
             v.setLayoutParams(layoutParams);
             layout.addView(v);
+            if (isInstructor) {
+                TextView textView = new TextView(thisContext);
+                textView.setGravity(Gravity.CENTER);
+                textView.setText(String.format(getString(R.string.UI_num_people_got_wrong), wrongCountList[i], i+1));
+                textView.setLayoutParams(layoutParams);
+                layout.addView(textView);
+            }
         }
 
         scrollView.addView(layout);
         return scrollView;
+    }
+
+    private void setupWrongQuestionsForStudents(String wrongQuestionLink, AlertDialog.Builder alertDialogBuilder) {
+        String val = OtherUtils.readFromURL(wrongQuestionLink);
+        try {
+            QuizPackage qp = new QuizPackage();
+            JSONArray jsonArray = new JSONArray(val);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String jsonString = jsonObject.toString();
+                qp.addMCQuestion(jsonString);
+            }
+            alertDialogBuilder.setView(setUpWrongQuestionView(qp, null));
+        } catch (JSONException e) {
+            Log.d("parse_failed", "wrong question");
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
+        }
+    }
+
+    private void setupWrongQuestionsForTeachers(String wrongQuestionLink, AlertDialog.Builder alertDialogBuilder) {
+        String questionList = OtherUtils.readFromURL(wrongQuestionLink);
+
+        Uri uri = Uri.parse(wrongQuestionLink);
+        int currClassCode = currClass.getClassCode();
+        String quizCode = "0";
+        try {
+            quizCode = uri.getQueryParameter(getString(R.string.QUIZ_CODE));
+        } catch (Exception e) {
+            Log.d("parse", "parse quiz score name failed");
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
+            return;
+        }
+
+        String countUrl = getString(R.string.GET_URL) + "quiz/studentWrongCounts?"
+                + getString(R.string.CLASS_CODE) + "=" + currClassCode
+                + "&" + getString(R.string.QUIZ_CODE) + "=" + quizCode;
+
+        String wrongCountListStr = OtherUtils.readFromURL(countUrl);
+        String[] wrongCountList = wrongCountListStr.substring(1, wrongCountListStr.length() - 1).split(",");
+
+        try {
+            QuizPackage qp = new QuizPackage();
+            JSONArray jsonArray = new JSONArray(questionList);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String jsonString = jsonObject.toString();
+                qp.addMCQuestion(jsonString);
+            }
+            alertDialogBuilder.setView(setUpWrongQuestionView(qp, wrongCountList));
+        } catch (JSONException e) {
+            Log.d("parse_failed", "wrong question");
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
+        }
     }
 
     private void setupWrongQuestions(String wrongQuestionLink) {
@@ -340,22 +513,13 @@ public class QuizFragment extends Fragment {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(thisContext);
         alertDialogBuilder.setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()));
+        alertDialogBuilder.setTitle(R.string.UI_wrong_questions);
         if (OtherUtils.stringIsNullOrEmpty(wrongQuestionLink)) {
-            alertDialogBuilder.setView(setUpWrongQuestionView(new TestQuestionPackage().getPackage()));
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
+        } else if (isInstructor) {
+            setupWrongQuestionsForTeachers(wrongQuestionLink, alertDialogBuilder);
         } else {
-            String val = OtherUtils.readFromURL(wrongQuestionLink);
-            try {
-                QuizPackage qp = new QuizPackage();
-                JSONArray jsonArray = new JSONArray(val);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String jsonString = jsonObject.toString();
-                    qp.addMCQuestion(jsonString);
-                }
-                alertDialogBuilder.setView(setUpWrongQuestionView(qp));
-            } catch (JSONException e) {
-                Log.d("parse_failed", "wrong question");
-            }
+            setupWrongQuestionsForStudents(wrongQuestionLink, alertDialogBuilder);
         }
         alertDialogBuilder.show();
     }

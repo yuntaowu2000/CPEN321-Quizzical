@@ -15,8 +15,54 @@ MongoClient.connect(
   }
 );
 
-function fetchDataForTeachers(res, classCode, quizCode, type) {
+function calculateAverage(data, quizScoreField) {
+  let totalScore = 0;
+  for (var value of data) {
+    totalScore += value[quizScoreField + ""];
+  }
+  return totalScore / data.length;
+}
 
+function findMaxScore(data, quizScoreField) {
+  let maxScore = -1;
+  for (var value of data) {
+    if (value[quizScoreField + ""] > maxScore) {
+      maxScore = value[quizScoreField + ""];
+    }
+  }
+  return maxScore;
+}
+
+function fetchDataForTeachers(res, classCode, quizCode, type) {
+  let classDbName = "class" + classCode;
+  let quizScoreField = "quiz" + quizCode + "score";
+  if (type === "score") {
+    classesDb.collection(classDbName).find({})
+    .project({_id:0, [quizScoreField]: 1, username: 1})
+    .toArray((err, data) => {
+      if (err) {
+        throw err;
+      } else {
+        let resultArr = new Array();
+        resultArr.push(data);
+        resultArr.push(calculateAverage(data, quizScoreField));
+        resultArr.push(findMaxScore(data, quizScoreField));
+        res.send(resultArr);
+      }
+    });
+  } else {
+    db.collection("quizzes")
+    .find({$and: [{classCode}, {quizCode}]})
+    .project({_id:0})
+    .toArray((err, data) => {
+      if (err) {
+        throw err;
+      } else {
+        //correctly just send all questions back
+        res.send(data[0]["questionList"]);
+      }
+    });
+  }
 }
 
 function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) {
@@ -39,16 +85,29 @@ function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) {
   });
 }
 
+function findStudentScore(data, studentId, quizScoreField) {
+  for (var value of data) {
+    if (value["uid"] === studentId) {
+      return value[quizScoreField + ""];
+    }
+  }
+}
+
 function fetchDataForStudents(res, studentUid, classCode, quizCode, type) {
   let classDbName = "class" + classCode;
+  let quizScoreField = "quiz" + quizCode + "score";
   if (type === "score") {
-    classesDb.collection(classDbName).find({uid: {$eq: studentUid}})
-    .project({_id:0, ["quiz" + quizCode + "score"]: 1})
+    classesDb.collection(classDbName).find({})
+    .project({_id:0, [quizScoreField]: 1, uid: 1})
     .toArray((err, data) => {
       if (err) {
         throw err;
       } else {
-        res.send(data);
+        let resultArr = new Array();
+        resultArr.push(calculateAverage(data, quizScoreField));
+        resultArr.push(findMaxScore(data, quizScoreField));
+        resultArr.push(findStudentScore(data, studentUid, quizScoreField));
+        res.send(resultArr);
       }
     });
   } else {
@@ -95,4 +154,44 @@ router.get("/", (req, res, next) => {
   
 });
 
+router.get("/studentWrongCounts", (req, res, next) => {
+  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
+  let classCode = Number(url.searchParams.get("classCode"));
+  let quizCode = Number(url.searchParams.get("quizCode"));
+  let classDbName = "class" + classCode;
+
+  db.collection("quizzes")
+    .find({$and: [{classCode}, {quizCode}]})
+    .project({_id:0, questionList: 1})
+    .toArray((err, data) => {
+      var questionList = data[0]["questionList"];
+      var len = questionList.length;
+
+      classesDb.collection(classDbName).find({})
+      .project({_id:0, ["quiz" + quizCode + "wrongQuestionIds"]: 1})
+      .toArray((err, wrongIds) => {
+        let count = [];
+        for (var i = 0; i < len; i++) {
+          count.push(0);
+        }
+        for (var d of wrongIds) {
+          let val = Object.values(d)[0];
+          let currIds = val.substring(1, val.length - 1).split(",");
+          for (var id of currIds) {
+            count[Number(id) - 1] += 1;
+          }
+        }
+        res.send(count);
+      });
+  });
+
+});
+
 module.exports = router;
+
+module.exports.calculateAverage = calculateAverage;
+module.exports.findMaxScore = findMaxScore;
+module.exports.fetchDataForTeachers = fetchDataForTeachers;
+module.exports.fetchWrongQuestions = fetchWrongQuestions;
+module.exports.findStudentScore = findStudentScore;
+module.exports.fetchDataForStudents = fetchDataForStudents;

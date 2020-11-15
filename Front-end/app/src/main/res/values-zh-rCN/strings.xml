@@ -97,7 +97,7 @@
     <string name="UI_wrong_questions">错题集</string>
     <string name="UI_stats">班级数据</string>
     <string name="UI_notes">笔记</string>
-    <string name="UI_stats_string">平均：%.2f，最高分：%.2f，您的分数：%.2f</string>
+    <string name="UI_personal_score_string">您的分数：%.2f</string>
     <string name="UI_enter_module_name">请输入单元名称</string>
     <string name="UI_create_new_module">创建一个新的单元</string>
     <string name="UI_invalid_module_name">单元名无效</string>
@@ -117,4 +117,10 @@
     <string name="UI_too_few_choices">第%d题选项不足2个。</string>
     <string name="UI_check_delete_module">你确定要删除这个单元：%s吗？</string>
     <string name="UI_do_you_like_the_quiz">你喜欢这个测试吗？</string>
+    <string name="UI_highest_score_text">最高分：%.2f</string>
+    <string name="UI_average_score_text">平均分：%.2f</string>
+    <string name="UI_quit_quiz_editing_warning">你确定要放弃这个测试的创建吗？所有的数据将被删除。</string>
+    <string name="UI_quit_quiz_warning">你确定要退出这次测试吗？所有的数据将不会被记录。</string>
+    <string name="UI_no_data">暂无数据。</string>
+    <string name="UI_num_people_got_wrong">%s人做错了第%d题</string>
 </resources>

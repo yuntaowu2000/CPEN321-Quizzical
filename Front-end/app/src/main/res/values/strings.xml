@@ -22,6 +22,7 @@
     <string name="NO_VALUE_JSON" translatable="false">[]</string>
 
     <string name="QUIZ_URL" translatable="false"><![CDATA[http://quizzical.canadacentral.cloudapp.azure.com/quiz?classCode=%d&quizCode=%d]]></string>
+    <string name="QUIZ_NUM_SCORE" translatable="false">quiz%sscore</string>
     <string name="TYPE" translatable="false">type=</string>
 
     <string name="app_name" translatable="false">quizzical</string>
@@ -106,9 +107,6 @@
     <!--    <3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com>-->
     <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
 
-    <!--    used for debugging page, can be deleted later-->
-    <string name="test">Test</string>
-
     <!--    init_activity-->
     <string name="UI_welcome_str">Welcome to Quizzical</string>
 
@@ -152,14 +150,15 @@
     <string name="UI_student_delete_course">Do you want to quit this course?</string>
 
     <!--    used in quiz fragment-->
+    <string name="UI_no_data">No data.</string>
     <string name="go_to_quiz">Go to Quiz</string>
-    <string name="quiz_fragment_debug_text" translatable="false">This is the quiz page</string>
-    <string name="teacher_quiz_fragment_debug_text" translatable="false">This is the quiz page for teachers</string>
     <string name="UI_default_module_text">module 1</string>
     <string name="UI_wrong_questions">Wrong Questions</string>
     <string name="UI_stats">stats</string>
     <string name="UI_notes">notes</string>
-    <string name="UI_stats_string">Avg: %.2f, highest: %.2f, your score: %.2f</string>
+    <string name="UI_personal_score_string">your score: %.2f</string>
+    <string name="UI_highest_score_text">highest: %.2f</string>
+    <string name="UI_average_score_text">Average: %.2f</string>
 
     <string name="UI_create_new_module">Create new module</string>
     <string name="UI_enter_module_name">Please enter module name</string>
@@ -170,6 +169,7 @@
     <string name="AVERAGE" translatable="false">Average</string>
     <string name="HIGHEST" translatable="false">Highest</string>
     <string name="SCORE" translatable="false">score</string>
+    <string name="UI_num_people_got_wrong">%s people got wrong on question %d.</string>
 
     <string name="UI_create_module_notification">Please create a module before creating a quiz</string>
     <string name="UI_correct_answer">correct answer</string>
@@ -188,10 +188,7 @@
 
     <string name="UI_create_answer">Create answer</string>
     <string name="UI_delete">delete</string>
-
-
-    <!--    used in class statistic fragment (for teachers)-->
-    <string name="class_statistic_page_text1" translatable="false">This is the class statistic page for teachers</string>
+    <string name="UI_quit_quiz_editing_warning">Do you want to discard the quiz editing? Note that all your progress will be lost!</string>
 
     <!--    used in leader board fragment (for students)-->
     <string name="leader_board_page_text1" translatable="false">This is the leaderBoard page</string>
@@ -242,7 +239,7 @@
 
     <string name="VOTE_FOR_LIKE" translatable="false">like</string>
 
-    <string name="quiz_back_notification" translatable="false">You can\'t go back in a quiz. Don\'t be a cheater</string>
+    <string name="UI_quit_quiz_warning">Do you want to end the quiz? Note that all your progress will be lost!</string>
 
     <!--    used in quiz finish activity-->
     <string name="UI_quiz_finished_earned_exp_msg">You got %d EXP!</string>

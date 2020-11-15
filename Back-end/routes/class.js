@@ -3,6 +3,7 @@ let MongoClient = require("mongodb").MongoClient;
 let fs = require("fs");
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 let router = express.Router();
+let firebaseFunction = require("./firebasePush");
 let db;
 let classDb;
 
@@ -32,8 +33,7 @@ router.get("/", (req, res, next) => {
         res.send(classInfo);
       }
     });
-  } else if (type === "quizModules") 
-  {
+  } else if (type === "quizModules") {
     db.collection("classInfo").find({ classCode: { $eq: classCode }}).project({quizModules:1, _id:0}).maxTimeMS(timeout).toArray((err, quizModules) => {
       if (err) {
         throw err;
@@ -46,8 +46,6 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  // Note: when below cases are uncommented, Codacy complains about complexity(too many paths through code),
-  // maybe put in another router.get?
   else if (type === "classList") 
   {
     db.collection("classInfo").find({ classCode: { $eq: classCode }}).project({classList:1, _id:0}).maxTimeMS(timeout).toArray((err, classList) => {
@@ -57,13 +55,9 @@ router.get("/", (req, res, next) => {
         res.send(classList);
       }
     });
-  }
-  /*
-  else if (type === "classStatistics") 
-  {
+  } else {
+    res.send("invalid request");
   } 
-  
-  */
 });
 
 function handleDeleteClass(isInstructor, classCode, uid) {
@@ -91,6 +85,11 @@ function handleDeleteClass(isInstructor, classCode, uid) {
     });
   } else {
     //delete the student from the class.
+    classDb.collection("class" + classCode).deleteOne({uid: {$eq: uid}}, (err, db) => {
+      if (err) {
+        throw err;
+      }
+    });
   }
 }
 
@@ -112,6 +111,14 @@ router.delete("/delete", (req, res, next) => {
           throw err;
         }
       });
+    let classDbName = "class" + classCode;
+    let quizScoreField = "quiz" + quizCode + "score";
+    db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}}, {$unset: {[quizScoreField]: ""}},
+    (err, db) => {
+      if (err) {
+        throw err;
+      }
+    });
   }
 
   res.statusCode = 204;
