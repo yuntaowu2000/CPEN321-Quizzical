@@ -1,4 +1,4 @@
-quizModule = require('~/Back-end/routes/quiz.js');
+quizModule = require('../routes/quiz.js');
 const {MongoClient} = require('mongodb');
 
 
