@@ -194,4 +194,4 @@ module.exports.findMaxScore = findMaxScore;
 module.exports.fetchDataForTeachers = fetchDataForTeachers;
 module.exports.fetchWrongQuestions = fetchWrongQuestions;
 module.exports.findStudentScore = findStudentScore;
-module.export.fetchDataForStudents = fetchDataForStudents;
+module.exports.fetchDataForStudents = fetchDataForStudents;
