@@ -47,7 +47,7 @@ public class ProfileFragmentTest {
 
     @Test
     public void testInvalidUsernameChange() {
-        String newUserName = "Va+";
+        String newUserName = "Va";
         performChange(newUserName, R.id.profile_username_change_btn, R.string.UI_example_username);
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_username_invalid_msg))
@@ -123,14 +123,14 @@ public class ProfileFragmentTest {
                 .inRoot(RootMatchers.isDialog())
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
+        String prevImg = sp.getString(activityTestRule.getActivity().getString(R.string.PROFILE_IMG), "");
+
         Espresso.onView(ViewMatchers.withText(R.string.NO))
                 .inRoot(RootMatchers.isDialog())
                 .perform(ViewActions.click());
 
-        Espresso.onView(ViewMatchers.withText(R.string.UI_log_out))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-
-        Assert.assertTrue(true);
+        String currImg = sp.getString(activityTestRule.getActivity().getString(R.string.PROFILE_IMG), "");
+        Assert.assertEquals(prevImg, currImg);
     }
 
     @Test
