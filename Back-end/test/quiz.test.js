@@ -15,7 +15,7 @@ beforeAll(async () => {
 })
 
 // add sample data to test database
-const res = await request.post('/classes')
+const res = await request.post('/')
 	.send({
       classCode: '',
       quizCode: ''
