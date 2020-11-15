@@ -8,11 +8,11 @@ describe("Calculate Average function", () => {
     const input = [
       { score1: 1, score2: 20 },
       { score1: 2, score2: 1  },
-      { score1: 3, score2: 7  }
+      { score1: 3, score2: 6  }
     ];
 
     const output1 = 2;
-    const output2 = 14
+    const output2 = 9;
     
     expect(quizModule.calculateAverage(input, "score1")).toEqual(output1);
     expect(quizModule.calculateAverage(input, "score2")).toEqual(output2);
