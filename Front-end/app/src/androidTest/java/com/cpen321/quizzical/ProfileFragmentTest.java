@@ -144,6 +144,7 @@ public class ProfileFragmentTest {
 
         //reset the sp
         checkNotificationFrequency(notificationFrequencyArray[1], 1);
+        Assert.assertTrue(true);
     }
 
     private void checkNotificationFrequency(String value, int i) {

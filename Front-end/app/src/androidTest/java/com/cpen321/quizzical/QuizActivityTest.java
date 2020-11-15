@@ -112,7 +112,7 @@ public class QuizActivityTest {
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_submit))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -128,6 +128,6 @@ public class QuizActivityTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.quiz_page_refresh_layout))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-
+        Assert.assertTrue(true);
     }
 }
