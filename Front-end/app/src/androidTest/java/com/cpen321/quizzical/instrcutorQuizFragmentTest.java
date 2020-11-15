@@ -1,7 +1,6 @@
 package com.cpen321.quizzical;
 
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.Root;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.RootMatchers;
@@ -11,7 +10,6 @@ import androidx.test.rule.ActivityTestRule;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;

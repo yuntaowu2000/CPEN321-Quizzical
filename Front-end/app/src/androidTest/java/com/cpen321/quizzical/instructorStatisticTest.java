@@ -1,9 +1,5 @@
 package com.cpen321.quizzical;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
@@ -11,7 +7,6 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
