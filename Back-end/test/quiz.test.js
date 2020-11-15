@@ -37,3 +37,27 @@ describe("Find Max Score function", () => {
 });
 
 
+describe("Find Student Score function", () => {
+  test("it should check through the input data array for an element with matching studentID and return its quizScoreField value", () => {
+    const input = [
+      { uid: 1, Math: 100, Chemistry: 47, English: 77 },
+      { uid: 2, Math: 87, Chemistry: 53, English: 84 },
+      { uid: 3, Math: 93, Chemistry: 60, English: 90 }
+    ];
+    
+    expect(quizModule.findStudentScore(input, 1, "Math")).toEqual(100);
+    expect(quizModule.findStudentScore(input, 1, "Chemistry")).toEqual(47);
+    expect(quizModule.findStudentScore(input, 1, "English")).toEqual(77);
+    
+    expect(quizModule.findStudentScore(input, 2, "Math")).toEqual(87);
+    expect(quizModule.findStudentScore(input, 2, "Chemistry")).toEqual(53);
+    expect(quizModule.findStudentScore(input, 2, "English")).toEqual(84);
+    
+    expect(quizModule.findStudentScore(input, 3, "Math")).toEqual(93);
+    expect(quizModule.findStudentScore(input, 3, "Chemistry")).toEqual(60);
+    expect(quizModule.findStudentScore(input, 3, "English")).toEqual(90);    
+  });
+});
+
+
+// left: fetchDataForTeachers; fetchWrongQuestions; findStudentScore; fetchDataForStudents;
