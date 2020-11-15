@@ -6,12 +6,14 @@ let MongoClient = require("mongodb").MongoClient;
 let db;
 let classesDb;
 
+/*
 module.export.calculateAverage = calculateAverage;
 module.export.findMaxScore = findMaxScore;
 module.export.fetchDataForTeachers = fetchDataForTeachers;
 module.export.fetchWrongQuestions = fetchWrongQuestions;
 module.export.findStudentScore = findStudentScore;
 module.export.fetchDataForStudents = fetchDataForStudents;
+*/
 
 MongoClient.connect(
   "mongodb://localhost:27017",
