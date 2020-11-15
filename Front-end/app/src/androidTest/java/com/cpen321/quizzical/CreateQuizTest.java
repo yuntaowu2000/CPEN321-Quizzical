@@ -56,7 +56,8 @@ public class CreateQuizTest {
         Espresso.onView(ViewMatchers.withId(R.id.module_list)).perform(ViewActions.click());
         Espresso.onData(Matchers.is(value)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withText(value)).
-                inRoot(RootMatchers.withDecorView(Matchers.not(currActivity.getWindow().getDecorView()))).check(ViewAssertions.matches((ViewMatchers.isDisplayed())));
+                inRoot(RootMatchers.withDecorView(Matchers.not(currActivity.getWindow().getDecorView())))
+                .check(ViewAssertions.matches((ViewMatchers.isDisplayed())));
     }
 
     @Test
@@ -65,7 +66,7 @@ public class CreateQuizTest {
         for (int i = 0; i < moduleNames.length; i++) {
             checkModules(moduleNames[i], i);
             //make sure the previous toast has disappeared
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         }
 
         Assert.assertTrue(true);
@@ -142,13 +143,14 @@ public class CreateQuizTest {
     }
 
     @Test
-    public void testTooManyChoices() {
+    public void testTooManyChoices() throws InterruptedException {
 
         Espresso.onView(ViewMatchers.withId(R.id.add_question_button))
                 .perform(ViewActions.scrollTo(), ViewActions.click());
 
         for (int i = 0; i < 6; i++) {
             addNewAnswers(i);
+            Thread.sleep(1000);
         }
 
         Espresso.onView(ViewMatchers.withId(R.id.answer_input_button))
@@ -223,7 +225,7 @@ public class CreateQuizTest {
     }
 
     @Test
-    public void testNoCorrectAnswer() {
+    public void testNoCorrectAnswer() throws InterruptedException {
 
         Espresso.onView(ViewMatchers.withId(R.id.add_question_button))
                 .perform(ViewActions.scrollTo(), ViewActions.click());
@@ -233,7 +235,10 @@ public class CreateQuizTest {
 
         for (int i = 0; i < 3; i++) {
             addNewAnswers(i);
+            Thread.sleep(1000);
         }
+        Espresso.pressBack();
+
         Espresso.onView(ViewMatchers.withId(R.id.quiz_create_finish))
                 .perform(ViewActions.click());
 
