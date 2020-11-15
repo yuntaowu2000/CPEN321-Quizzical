@@ -6,15 +6,6 @@ let MongoClient = require("mongodb").MongoClient;
 let db;
 let classesDb;
 
-/*
-module.export.calculateAverage = calculateAverage;
-module.export.findMaxScore = findMaxScore;
-module.export.fetchDataForTeachers = fetchDataForTeachers;
-module.export.fetchWrongQuestions = fetchWrongQuestions;
-module.export.findStudentScore = findStudentScore;
-module.export.fetchDataForStudents = fetchDataForStudents;
-*/
-
 MongoClient.connect(
   "mongodb://localhost:27017",
   {useUnifiedTopology: true},
@@ -197,3 +188,10 @@ router.get("/studentWrongCounts", (req, res, next) => {
 });
 
 module.exports = router;
+
+module.exports.calculateAverage = calculateAverage;
+module.exports.findMaxScore = findMaxScore;
+module.exports.fetchDataForTeachers = fetchDataForTeachers;
+module.exports.fetchWrongQuestions = fetchWrongQuestions;
+module.exports.findStudentScore = findStudentScore;
+module.export.fetchDataForStudents = fetchDataForStudents;
