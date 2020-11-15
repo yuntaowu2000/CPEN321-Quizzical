@@ -184,8 +184,10 @@ public class instructorCreateClassTest {
         checkEachQuizModuleButtonNoData(R.string.UI_wrong_questions);
         checkEachQuizModuleButtonNoData(R.string.UI_notes);
         checkEachQuizModuleButtonNoData(R.string.UI_stats);
+        checkEachQuizModuleButtonNoData(R.string.go_to_quiz);
 
         testDeleteModule();
+        deleteClass();
     }
 
     private void checkEachQuizModuleButtonNoData(int textId) {
@@ -251,5 +253,6 @@ public class instructorCreateClassTest {
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_enter_module_name))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
     }
 }
