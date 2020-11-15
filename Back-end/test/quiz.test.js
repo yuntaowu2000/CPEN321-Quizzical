@@ -1,18 +1,16 @@
 quizModule = require('../routes/quiz.js');
 //import * as quizModule from '../routes/quiz.js';
 const {MongoClient} = require('mongodb');
+
 const app = require(''../routes/quiz.js'') // link to server file
 const supertest = require('supertest')
 const request = supertest(app)
 
-const mongoose = require('mongoose')
-const databaseName = 'classes'
+const { setupDB } = require('../test-setup.js')
 
-// connect to a sample database for this test file
-beforeAll(async () => {
-  const url = `mongodb://127.0.0.1/${databaseName}`
-  await mongoose.connect(url, { useNewUrlParser: true })
-})
+// Setup a Test Database
+setupDB('classes')
+
 
 // add sample data to test database
 const res = await request.post('/')
@@ -36,7 +34,7 @@ it('fetchDataForTeachers case of router.get("/") ', async done => {
 
 
 
-
+// non-endpoint tests
 describe("Calculate Average function", () => {
   test("it should calculate the average score of quizScoreField values from the input data array", () => {
     const input = [
