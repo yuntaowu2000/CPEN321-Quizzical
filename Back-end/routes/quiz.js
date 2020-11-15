@@ -15,7 +15,7 @@ MongoClient.connect(
   }
 );
 
-export function calculateAverage(data, quizScoreField) {
+function calculateAverage(data, quizScoreField) {
   let totalScore = 0;
   for (var value of data) {
     totalScore += value[quizScoreField + ""];
@@ -23,7 +23,7 @@ export function calculateAverage(data, quizScoreField) {
   return totalScore / data.length;
 }
 
-export function findMaxScore(data, quizScoreField) {
+function findMaxScore(data, quizScoreField) {
   let maxScore = -1;
   for (var value of data) {
     if (value[quizScoreField + ""] > maxScore) {
@@ -33,7 +33,7 @@ export function findMaxScore(data, quizScoreField) {
   return maxScore;
 }
 
-export function fetchDataForTeachers(res, classCode, quizCode, type) {
+function fetchDataForTeachers(res, classCode, quizCode, type) {
   let classDbName = "class" + classCode;
   let quizScoreField = "quiz" + quizCode + "score";
   if (type === "score") {
@@ -65,7 +65,7 @@ export function fetchDataForTeachers(res, classCode, quizCode, type) {
   }
 }
 
-export function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) {
+function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) {
   db.collection("quizzes")
   .find({$and: [{classCode}, {quizCode}]})
   .project({_id:0})
@@ -85,7 +85,7 @@ export function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) 
   });
 }
 
-export function findStudentScore(data, studentId, quizScoreField) {
+function findStudentScore(data, studentId, quizScoreField) {
   for (var value of data) {
     if (value["uid"] === studentId) {
       return value[quizScoreField + ""];
@@ -93,7 +93,7 @@ export function findStudentScore(data, studentId, quizScoreField) {
   }
 }
 
-export function fetchDataForStudents(res, studentUid, classCode, quizCode, type) {
+function fetchDataForStudents(res, studentUid, classCode, quizCode, type) {
   let classDbName = "class" + classCode;
   let quizScoreField = "quiz" + quizCode + "score";
   if (type === "score") {
