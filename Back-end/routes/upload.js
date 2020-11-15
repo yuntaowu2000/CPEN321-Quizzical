@@ -340,3 +340,10 @@ router.post("/like", (req, res, next) => {
 });
 
 module.exports = router;
+
+module.exports.sendQuizModulePushNotification = sendQuizModulePushNotification;
+module.exports.parseCreateClassEmailContent = parseCreateClassEmailContent;
+module.exports.sendCreateClassEmail = sendCreateClassEmail;
+module.exports.createClassFunction = createClassFunction;
+module.exports.joinClassFunction = joinClassFunction;
+module.exports.updateStudentStats = updateStudentStats;

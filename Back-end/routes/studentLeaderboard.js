@@ -62,3 +62,6 @@ router.get("/", (req, res, next) => {
 
 
 module.exports = router;
+
+module.exports.getUserPosition = getUserPosition;
+module.exports.refactorData = refactorData;
