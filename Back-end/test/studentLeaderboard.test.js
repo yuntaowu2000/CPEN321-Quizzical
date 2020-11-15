@@ -1,7 +1,34 @@
 quizModule = require('../routes/studentLeaderboard.js');
 const {MongoClient} = require('mongodb');
 
+const app = require(''../routes/studentLeaderboard.js'') // link to server file
+const supertest = require('supertest')
+const request = supertest(app)
 
+const { setupDB } = require('../test-setup.js')
+
+// Setup a Test Database
+setupDB('classes')
+
+
+// add sample data to test database
+const res = await request.post('/')
+	.send({
+      classCode: '',
+      quizCode: ''
+      // etc
+    })
+
+// test GET of '/'
+it('fetchDataForTeachers case of router.get("/") ', async done => {
+  const response = await request.get('/').send({ url: , classCode: , quizCode: , type: , uid: , isInstructor: , });
+  expect(response.body.message).toBe('');
+	
+  done()
+})
+
+
+// non-endpoint tests
 describe("User Position function", () => {
   test("it should return position of matching uid user in input data array", () => {
     const input = [
