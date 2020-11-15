@@ -261,6 +261,16 @@ public class CreateQuizActivity extends AppCompatActivity {
     }
 
     private boolean checkQuestionsValid() {
+
+        if (questionList.size() == 0) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.UI_warning))
+                    .setMessage(R.string.UI_invalid_quiz)
+                    .setPositiveButton(R.string.OK, ((dialogInterface, j) -> dialogInterface.dismiss()))
+                    .show();
+            return false;
+        }
+
         for (int i = 0; i < questionList.size(); i++) {
             QuestionsMC mc = (QuestionsMC)questionList.get(i);
 
@@ -299,16 +309,10 @@ public class CreateQuizActivity extends AppCompatActivity {
         return true;
     }
 
-    private void onFinishClicked() {
+    private void confirmedFinish() {
         int classCode = currClass.getClassCode();
         CourseCategory category = currClass.getCategory();
         String instructorUID = sp.getString(getString(R.string.UID), "");
-
-        formatImages();
-
-        if (!checkQuestionsValid()) {
-            return;
-        }
 
         QuizPackage quizPackage = new QuizPackage(classCode, category, instructorUID, currModule, questionList);
         quizPackage.setQuizCode(quiz_code);
@@ -354,7 +358,20 @@ public class CreateQuizActivity extends AppCompatActivity {
                     finish();
                 }))
                 .show();
+    }
 
+    private void onFinishClicked() {
+        formatImages();
+
+        if (!checkQuestionsValid()) {
+            return;
+        }
+
+        new AlertDialog.Builder(this).setTitle(R.string.UI_warning)
+                .setMessage(R.string.UI_finish_create_quiz)
+                .setPositiveButton(R.string.YES, ((dialogInterface, i) -> {dialogInterface.dismiss(); confirmedFinish();}))
+                .setNegativeButton(R.string.NO, (((dialogInterface, i) -> dialogInterface.dismiss())))
+                .show();
     }
 
     private void addNewAnswer(LinearLayout answersLayout, IQuestion q) {

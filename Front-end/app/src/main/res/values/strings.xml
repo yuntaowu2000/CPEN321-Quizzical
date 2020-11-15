@@ -185,6 +185,8 @@
     <string name="UI_too_many_choices">Too many choices. Max of %d supported.</string>
     <string name="UI_add_question">Add question</string>
     <string name="UI_too_many_questions">Too many questions. Maximum of %d supported.</string>
+    <string name="UI_invalid_quiz">There is no question in the quiz. Please use back button to exit if you want to discard this quiz.</string>
+    <string name="UI_finish_create_quiz">Are you sure you want to submit this quiz?</string>
 
     <string name="UI_create_answer">Create answer</string>
     <string name="UI_delete">delete</string>
@@ -210,6 +212,7 @@
     <string name="UI_course_created">Course created:</string>
     <string name="UI_log_out">Log out</string>
     <string name="UI_push_notification">Push notification</string>
+    <string name="UI_logout_msg">Do you want to log out?</string>
 
     <string-array name="notification_frequency">
         <item>Never</item>

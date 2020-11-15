@@ -75,7 +75,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Button logoutButton = Objects.requireNonNull(getView()).findViewById(R.id.profile_log_out_btn);
-        logoutButton.setOnClickListener(v -> logOut());
+        logoutButton.setOnClickListener(v -> checkForLogout());
 
         profileImageButton = Objects.requireNonNull(getView()).findViewById(R.id.profile_pic);
         profileImageButton.setOnClickListener(v -> decideSetUpProfileImage());
@@ -256,6 +256,17 @@ public class ProfileFragment extends Fragment {
         } else {
             pushNotificationSpinner.setSelection(defaultNotificationFreq);
         }
+    }
+
+    private void checkForLogout() {
+        Context thisContext = this.getContext();
+        assert thisContext != null;
+        new AlertDialog.Builder(thisContext)
+                .setTitle(R.string.UI_warning)
+                .setMessage(R.string.UI_logout_msg)
+                .setPositiveButton(R.string.YES, ((dialogInterface, i) -> {dialogInterface.dismiss(); logOut();}))
+                .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
+                .show();
     }
 
     private void logOut() {
