@@ -26,7 +26,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import com.cpen321.quizzical.HomeActivity;
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.PictureActivity;
 import com.cpen321.quizzical.data.Classes;
@@ -570,10 +572,14 @@ public class CreateQuizActivity extends AppCompatActivity {
     public void onBackPressed() {
         new AlertDialog.Builder(this).setTitle(R.string.UI_warning)
                 .setMessage(R.string.UI_quit_quiz_editing_warning)
-                .setPositiveButton(R.string.YES, (dialogInterface, i) -> finish())
+                .setPositiveButton(R.string.YES, (dialogInterface, i) -> goBackToHome())
                 .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
                 .show();
     }
 
-
+    public void goBackToHome() {
+        Intent intent = new Intent(CreateQuizActivity.this, HomeActivity.class);
+        startActivity(intent);
+        ActivityCompat.finishAffinity(this);
+    }
 }

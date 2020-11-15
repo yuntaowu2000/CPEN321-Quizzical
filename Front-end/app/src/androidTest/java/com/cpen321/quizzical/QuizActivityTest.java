@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
@@ -96,5 +97,37 @@ public class QuizActivityTest {
                     .check(ViewAssertions.matches(ViewMatchers.withText("You got 13 EXP!")));
 
         Assert.assertTrue(true);
+    }
+
+    @Test
+    public void backPressGuardingCheck() {
+        Espresso.pressBack();
+        Espresso.onView(ViewMatchers.withText(R.string.UI_quit_quiz_warning))
+                .inRoot(RootMatchers.isDialog())
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withText(R.string.NO))
+                .inRoot(RootMatchers.isDialog())
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withText(R.string.UI_submit))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+    }
+
+    @Test
+    public void backPressGuardingCheck2() {
+        Espresso.pressBack();
+        Espresso.onView(ViewMatchers.withText(R.string.UI_quit_quiz_warning))
+                .inRoot(RootMatchers.isDialog())
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withText(R.string.YES))
+                .inRoot(RootMatchers.isDialog())
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.quiz_page_refresh_layout))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
     }
 }

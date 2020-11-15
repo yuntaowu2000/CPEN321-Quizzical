@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.Root;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.RootMatchers;
@@ -68,5 +69,176 @@ public class CreateQuizTest {
         }
 
         Assert.assertTrue(true);
+    }
+
+    @Test
+    public void backPressGuardingCheck() {
+        Espresso.pressBack();
+        Espresso.onView(ViewMatchers.withText(R.string.UI_quit_quiz_editing_warning))
+                .inRoot(RootMatchers.isDialog())
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withText(R.string.NO))
+                .inRoot(RootMatchers.isDialog())
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withText(R.string.UI_finish))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+    }
+
+    @Test
+    public void backPressGuardingCheck2() {
+        Espresso.pressBack();
+        Espresso.onView(ViewMatchers.withText(R.string.UI_quit_quiz_editing_warning))
+                .inRoot(RootMatchers.isDialog())
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withText(R.string.YES))
+                .inRoot(RootMatchers.isDialog())
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.quiz_page_refresh_layout))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+    }
+
+    @Test
+    public void testSubmitNoQuestions() {
+        Espresso.onView(ViewMatchers.withId(R.id.quiz_create_finish))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withText(R.string.UI_invalid_quiz))
+                .inRoot(RootMatchers.isDialog())
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withText(R.string.OK))
+                .inRoot(RootMatchers.isDialog())
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.quiz_create_finish))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void testTooManyQuestions() {
+        for (int i = 0; i < 20; i++) {
+            Espresso.onView(ViewMatchers.withId(R.id.add_question_button))
+                    .perform(ViewActions.scrollTo(), ViewActions.click());
+        }
+        Espresso.onView(ViewMatchers.withId(R.id.add_question_button))
+                .perform(ViewActions.scrollTo(), ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withText(String.format(currActivity.getString(R.string.UI_too_many_questions), 20)))
+                .inRoot(RootMatchers.isDialog())
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withText(R.string.OK))
+                .inRoot(RootMatchers.isDialog())
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.quiz_create_finish))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void testTooManyChoices() {
+
+        Espresso.onView(ViewMatchers.withId(R.id.add_question_button))
+                .perform(ViewActions.scrollTo(), ViewActions.click());
+
+        for (int i = 0; i < 6; i++) {
+            addNewAnswers(i);
+        }
+
+        Espresso.onView(ViewMatchers.withId(R.id.answer_input_button))
+                .perform(ViewActions.scrollTo(), ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withText(String.format(currActivity.getString(R.string.UI_too_many_choices), 6)))
+                .inRoot(RootMatchers.isDialog())
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withText(R.string.OK))
+                .inRoot(RootMatchers.isDialog())
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.quiz_create_finish))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    private void addNewAnswers(int i) {
+        Espresso.onView(ViewMatchers.withId(R.id.answer_input_button))
+                .perform(ViewActions.scrollTo(), ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withHint(R.string.UI_example_answer))
+                .perform(ViewActions.typeText(String.valueOf(i)));
+
+        Espresso.onView(ViewMatchers.withText(R.string.UI_submit))
+                .perform(ViewActions.click());
+    }
+
+    @Test
+    public void testNoQuestionInput() {
+
+        Espresso.onView(ViewMatchers.withId(R.id.add_question_button))
+                .perform(ViewActions.scrollTo(), ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.quiz_create_finish))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withSubstring("no question field"))
+                .inRoot(RootMatchers.isDialog())
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void testTooFewChoices() {
+
+        Espresso.onView(ViewMatchers.withId(R.id.add_question_button))
+                .perform(ViewActions.scrollTo(), ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withHint(R.string.UI_example_question))
+                .perform(ViewActions.typeText("aaa"));
+
+        checkFewAnswer();
+
+        addNewAnswers(0);
+
+        checkFewAnswer();
+
+    }
+
+    private void checkFewAnswer() {
+        Espresso.pressBack();
+
+        Espresso.onView(ViewMatchers.withText(R.string.UI_finish))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withSubstring("has less than 2 choices."))
+                .inRoot(RootMatchers.isDialog())
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withText(R.string.OK))
+                .inRoot(RootMatchers.isDialog())
+                .perform(ViewActions.click());
+    }
+
+    @Test
+    public void testNoCorrectAnswer() {
+
+        Espresso.onView(ViewMatchers.withId(R.id.add_question_button))
+                .perform(ViewActions.scrollTo(), ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withHint(R.string.UI_example_question))
+                .perform(ViewActions.typeText("aaa"));
+
+        for (int i = 0; i < 3; i++) {
+            addNewAnswers(i);
+        }
+        Espresso.onView(ViewMatchers.withId(R.id.quiz_create_finish))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withSubstring("has no correct answer."))
+                .inRoot(RootMatchers.isDialog())
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 }

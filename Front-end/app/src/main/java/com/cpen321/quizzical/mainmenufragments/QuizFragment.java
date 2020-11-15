@@ -490,6 +490,10 @@ public class QuizFragment extends Fragment {
                 + "&" + getString(R.string.QUIZ_CODE) + "=" + quizCode;
 
         String wrongCountListStr = OtherUtils.readFromURL(countUrl);
+        if (wrongCountListStr.length() < 2) {
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
+            return;
+        }
         String[] wrongCountList = wrongCountListStr.substring(1, wrongCountListStr.length() - 1).split(",");
 
         try {

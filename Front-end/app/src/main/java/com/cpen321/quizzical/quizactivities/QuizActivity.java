@@ -18,6 +18,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.cpen321.quizzical.HomeActivity;
+import com.cpen321.quizzical.InitActivity;
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.data.Classes;
 import com.cpen321.quizzical.data.questions.IQuestion;
@@ -451,8 +453,14 @@ public class QuizActivity extends AppCompatActivity {
     public void onBackPressed() {
         new AlertDialog.Builder(this).setTitle(R.string.UI_warning)
                 .setMessage(R.string.UI_quit_quiz_warning)
-                .setPositiveButton(R.string.YES, (dialogInterface, i) -> finish())
+                .setPositiveButton(R.string.YES, (dialogInterface, i) -> goBackToHome())
                 .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
                 .show();
+    }
+
+    public void goBackToHome() {
+        Intent intent = new Intent(QuizActivity.this, HomeActivity.class);
+        startActivity(intent);
+        ActivityCompat.finishAffinity(this);
     }
 }
