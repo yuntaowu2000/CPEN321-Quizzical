@@ -137,7 +137,9 @@ public class CreateQuizActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-
+        if (data == null || data.getExtras() == null) {
+            return;
+        }
         if(requestCode == QUESTION_PICTURE_CAPTURE_CODE)
         {
             Bitmap orignalPic = (Bitmap) Objects.requireNonNull(data.getExtras()).get(getString(R.string.ORIGINAL_IMG));
