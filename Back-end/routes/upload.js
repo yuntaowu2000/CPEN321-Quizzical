@@ -291,7 +291,9 @@ router.post("/quiz", (req, res, next) => {
     });
     let classDbName = "class" + quizData.classCode;
     let quizScoreField = "quiz" + quizData.quizCode + "score";
-    db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}}, {$unset: {[quizScoreField]: 1}},
+    let quizWrongQuestionFieldName = "quiz" + quizData.quizCode + "wrongQuestionIds";
+    db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}}, 
+      {$unset: {[quizScoreField]: 1, [quizWrongQuestionFieldName]: ""}},
     (err, db) => {
       if (err) {
         throw err;
