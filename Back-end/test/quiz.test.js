@@ -1,32 +1,32 @@
-quizModule = require('../routes/quiz.js');
-//import * as quizModule from '../routes/quiz.js';
-const {MongoClient} = require('mongodb');
+quizModule = require("../routes/quiz.js");
+//import * as quizModule from "../routes/quiz.js";
+const {MongoClient} = require("mongodb");
 
-const app = require(''../routes/quiz.js'') // link to server file
-const supertest = require('supertest')
+const app = require("../routes/quiz.js") // link to server file
+const supertest = require("supertest")
 const request = supertest(app)
 
-const { setupDB } = require('../test-setup.js')
+const { setupDB } = require("../test-setup.js")
 
 // Setup a Test Database
-setupDB('classes')
+setupDB("classes")
 
 
 // add sample data to test database
-const res = await request.post('/')
+const res = await request.post("/")
 	.send({
-      classCode: '',
-      quizCode: ''
+      classCode: "",
+      quizCode: ""
       // etc
     })
 
-// test GET of '/' and '/studentWrongCounts'
-it('fetchDataForTeachers case of router.get("/") ', async done => {
-  const response = await request.get('/').send({ url: , classCode: , quizCode: , type: , uid: , isInstructor: , });
-  expect(response.body.message).toBe('');
+// test GET of "/" and "/studentWrongCounts"
+it("fetchDataForTeachers case of router.get("/") ", async done => {
+  const response = await request.get("/").send({ url: , classCode: , quizCode: , type: , uid: , isInstructor: , });
+  expect(response.body.message).toBe("");
 	
-  const response = await request.get('/studentWrongCounts').send({ url: , classCode: , quizCode: , type: , uid: , isInstructor: , });
-  expect(response.body.message).toBe('');
+  const response = await request.get("/studentWrongCounts").send({ url: , classCode: , quizCode: , type: , uid: , isInstructor: , });
+  expect(response.body.message).toBe("");
 	
   done()
 })
