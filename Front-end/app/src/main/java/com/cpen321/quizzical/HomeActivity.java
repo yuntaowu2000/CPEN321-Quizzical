@@ -400,8 +400,13 @@ public class HomeActivity extends AppCompatActivity {
         classScrollContentLayout.removeAllViews();
 
         generateClassButtonLayout();
-
-        switchClass(classList.get(0));
+        String savedClass = sp.getString(getString(R.string.CURR_CLASS), "");
+        if (!OtherUtils.stringIsNullOrEmpty(savedClass)) {
+            Classes currClass = new Classes(savedClass);
+            switchClass(currClass);
+        } else {
+            switchClass(classList.get(0));
+        }
     }
 
     private void appendNewClassToList(Classes mClass) {
