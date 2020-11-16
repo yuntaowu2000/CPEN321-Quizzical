@@ -19,11 +19,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 
-public class instructorCreateClassTest {
+public class InstructorCreateClassTest {
 
     @Rule
     public ActivityTestRule<HomeActivity> activityTestRule = new ActivityTestRule<HomeActivity>(HomeActivity.class);
-    private static final String testClassName = "CLASSINTEST";
+    private static final String testClassName = "CLASSINTEST2";
 
     @Before
     public void cleanUp() {
