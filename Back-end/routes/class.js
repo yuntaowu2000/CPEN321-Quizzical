@@ -113,7 +113,7 @@ router.delete("/delete", (req, res, next) => {
       });
     let classDbName = "class" + classCode;
     let quizScoreField = "quiz" + quizCode + "score";
-    db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}}, {$unset: {[quizScoreField]: ""}},
+    db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}}, {$unset: {[quizScoreField]: 1}},
     (err, db) => {
       if (err) {
         throw err;
