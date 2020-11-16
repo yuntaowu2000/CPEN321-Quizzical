@@ -54,6 +54,7 @@
     </string-array>
 
     <string name="UI_enter_class_code_msg">请输入老师提供的课程代码</string>
+    <string name="UI_class_joined_msg">你成功加入了一个课程</string>
     <string name="UI_select_course_category_msg">请选择课程类型</string>
     <string name="UI_invalid_class_code_msg">课程代码无效</string>
     <string name="UI_change_username">更改用户名</string>

@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class instrcutorQuizFragmentTest {
+public class instructorQuizFragmentTest {
     //checks whether quiz wrong question list and stats are set up correctly
     @Rule
     public ActivityTestRule<HomeActivity> activityTestRule = new ActivityTestRule<HomeActivity>(HomeActivity.class);

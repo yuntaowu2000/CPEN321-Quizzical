@@ -105,7 +105,7 @@
     <!--    for integrating Google login API-->
     <!--    andrew: <614503168151-hvg3r35tmfsqldrd32h25a9kb9inmvdv.apps.googleusercontent.com>-->
     <!--    <3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com>-->
-    <string name="client_id" translatable="false">3088778948-uq8tefiista247kqpgod301h2fllh9i4.apps.googleusercontent.com</string>
+    <string name="client_id" translatable="false">614503168151-hvg3r35tmfsqldrd32h25a9kb9inmvdv.apps.googleusercontent.com</string>
 
     <!--    init_activity-->
     <string name="UI_welcome_str">Welcome to Quizzical</string>
@@ -134,6 +134,7 @@
     <string name="UI_example_course_code" translatable="false">E.g. 123456</string>
     <string name="UI_invalid_class_code_msg">Invalid class code</string>
     <string name="UI_enter_class_code_msg">Please enter your class code</string>
+    <string name="UI_class_joined_msg">You have joined the class</string>
     <string name="UI_class_joined_already_msg">You have already joined the class</string>
 
     <string name="UI_creating_class_msg">Creating class</string>

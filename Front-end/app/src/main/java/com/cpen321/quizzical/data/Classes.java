@@ -1,5 +1,7 @@
 package com.cpen321.quizzical.data;
 
+import android.util.Log;
+
 import com.cpen321.quizzical.utils.OtherUtils;
 import com.google.gson.Gson;
 
@@ -56,6 +58,7 @@ public class Classes {
         if (!(other instanceof Classes)) {
             return false;
         }
+        Log.d("classes", (this+" "+other));
         Classes o = (Classes) other;
         return this.getClassName().equals(o.getClassName()) && this.getClassCode() == o.getClassCode();
     }
