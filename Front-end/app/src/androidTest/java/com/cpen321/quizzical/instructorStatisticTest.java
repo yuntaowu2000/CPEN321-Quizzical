@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class instructorStatisticTest {
+public class InstructorStatisticTest {
 
     @Rule
     public ActivityTestRule<HomeActivity> activityTestRule = new ActivityTestRule<HomeActivity>(HomeActivity.class);

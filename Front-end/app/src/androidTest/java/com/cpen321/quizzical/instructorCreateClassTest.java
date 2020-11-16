@@ -3,7 +3,6 @@ package com.cpen321.quizzical;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.view.View;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -20,7 +19,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 
-public class instructorCreateClassTest {
+public class InstructorCreateClassTest {
 
     @Rule
     public ActivityTestRule<HomeActivity> activityTestRule = new ActivityTestRule<HomeActivity>(HomeActivity.class);

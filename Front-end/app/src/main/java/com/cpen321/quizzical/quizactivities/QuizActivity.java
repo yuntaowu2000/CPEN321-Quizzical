@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.cpen321.quizzical.HomeActivity;
-import com.cpen321.quizzical.InitActivity;
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.data.Classes;
 import com.cpen321.quizzical.data.questions.IQuestion;

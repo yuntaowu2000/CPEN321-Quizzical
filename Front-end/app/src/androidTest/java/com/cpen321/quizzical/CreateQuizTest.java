@@ -27,14 +27,13 @@ public class CreateQuizTest {
 
     @Rule
     public ActivityTestRule<CreateQuizActivity> activityTestRule = new ActivityTestRule<CreateQuizActivity>(CreateQuizActivity.class);
-    Activity currActivity;
-    SharedPreferences sp;
-    String[] moduleNames;
+    private Activity currActivity;
+    private String[] moduleNames;
 
     @Before
     public void setupSharedPreference() {
         currActivity = activityTestRule.getActivity();
-        sp = currActivity.getSharedPreferences(currActivity.getString(R.string.curr_login_user), Context.MODE_PRIVATE);
+        SharedPreferences sp = currActivity.getSharedPreferences(currActivity.getString(R.string.curr_login_user), Context.MODE_PRIVATE);
 
         Classes currClass = new Classes(sp.getString(currActivity.getString(R.string.CURR_CLASS), ""));
 
@@ -51,7 +50,7 @@ public class CreateQuizTest {
         }
     }
 
-    private void checkModules(String value, int i) {
+    private void checkModules(String value) {
         Espresso.onView(ViewMatchers.withId(R.id.module_list)).perform(ViewActions.click());
         Espresso.onData(Matchers.is(value)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withText(value)).
@@ -63,7 +62,7 @@ public class CreateQuizTest {
     public void testChangingModules() throws InterruptedException {
 
         for (int i = 0; i < moduleNames.length; i++) {
-            checkModules(moduleNames[i], i);
+            checkModules(moduleNames[i]);
             //make sure the previous toast has disappeared
             Thread.sleep(5000);
         }
@@ -85,6 +84,7 @@ public class CreateQuizTest {
         Espresso.onView(ViewMatchers.withText(R.string.UI_finish))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -101,6 +101,7 @@ public class CreateQuizTest {
         Espresso.onView(ViewMatchers.withId(R.id.quiz_page_refresh_layout))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -118,6 +119,8 @@ public class CreateQuizTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.quiz_create_finish))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -139,6 +142,8 @@ public class CreateQuizTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.quiz_create_finish))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -165,6 +170,8 @@ public class CreateQuizTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.quiz_create_finish))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Assert.assertTrue(true);
     }
 
     private void addNewAnswers(int i) {
@@ -190,6 +197,8 @@ public class CreateQuizTest {
         Espresso.onView(ViewMatchers.withSubstring("no question field"))
                 .inRoot(RootMatchers.isDialog())
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -207,6 +216,7 @@ public class CreateQuizTest {
 
         checkFewAnswer();
 
+        Assert.assertTrue(true);
     }
 
     private void checkFewAnswer() {
@@ -244,5 +254,7 @@ public class CreateQuizTest {
         Espresso.onView(ViewMatchers.withSubstring("has no correct answer."))
                 .inRoot(RootMatchers.isDialog())
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Assert.assertTrue(true);
     }
 }
