@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-mongoose.set('useCreateIndex', true)
+const mongoose = require("mongoose")
+mongoose.set("useCreateIndex", true)
 mongoose.promise = global.Promise
 
 async function removeAllCollections () {
@@ -18,10 +18,10 @@ async function dropAllCollections () {
       await collection.drop()
     } catch (error) {
       // Sometimes this error happens, but you can safely ignore it
-      if (error.message === 'ns not found') return
+      if (error.message === "ns not found") return
       // This error occurs when you use it.todo. You can
       // safely ignore this error too
-      if (error.message.includes('a background operation is currently running')) return
+      if (error.message.includes("a background operation is currently running")) return
       console.log(error.message)
     }
   }
