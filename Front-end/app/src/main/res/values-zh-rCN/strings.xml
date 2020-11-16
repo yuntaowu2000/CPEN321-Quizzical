@@ -123,4 +123,7 @@
     <string name="UI_quit_quiz_warning">你确定要退出这次测试吗？所有的数据将不会被记录。</string>
     <string name="UI_no_data">暂无数据。</string>
     <string name="UI_num_people_got_wrong">%s人做错了第%d题</string>
+    <string name="UI_invalid_quiz">您没有创建任何题目。请使用后退键取消编辑。</string>
+    <string name="UI_finish_create_quiz">你确定要结束编辑并上传这份测试吗？</string>
+    <string name="UI_logout_msg">你确定要退出登陆吗？</string>
 </resources>

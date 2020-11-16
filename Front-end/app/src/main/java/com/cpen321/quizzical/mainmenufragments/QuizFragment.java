@@ -90,7 +90,7 @@ public class QuizFragment extends Fragment {
         if (OtherUtils.stringIsNullOrEmpty(quizContent) || quizContent.equals(getString(R.string.NO_VALUE_JSON))) {
             quizContent = sp.getString(localCacheModuleName, "");
             if (OtherUtils.stringIsNullOrEmpty(quizContent)) {
-                new AlertDialog.Builder(thisContext).setMessage("Not available.")
+                new AlertDialog.Builder(thisContext).setMessage(R.string.UI_no_data)
                         .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
                         .show();
                 return;
@@ -490,6 +490,10 @@ public class QuizFragment extends Fragment {
                 + "&" + getString(R.string.QUIZ_CODE) + "=" + quizCode;
 
         String wrongCountListStr = OtherUtils.readFromURL(countUrl);
+        if (wrongCountListStr.length() < 2) {
+            alertDialogBuilder.setMessage(R.string.UI_no_data);
+            return;
+        }
         String[] wrongCountList = wrongCountListStr.substring(1, wrongCountListStr.length() - 1).split(",");
 
         try {

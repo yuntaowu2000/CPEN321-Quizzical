@@ -85,4 +85,16 @@ public class InitActivityTest {
 
         Assert.assertTrue(true);
     }
+
+    @Test
+    public void directLogin() {
+        Espresso.onView(ViewMatchers.withId(R.id.sign_in_button))
+                .perform(ViewActions.click());
+//        Espresso.onView(ViewMatchers.withSubstring("yuntaowu2000@gmail.com"))
+//                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withText(R.string.UI_profile))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Assert.assertTrue(true);
+    }
 }

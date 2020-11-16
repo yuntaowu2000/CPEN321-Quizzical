@@ -26,7 +26,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import com.cpen321.quizzical.HomeActivity;
 import com.cpen321.quizzical.R;
 import com.cpen321.quizzical.PictureActivity;
 import com.cpen321.quizzical.data.Classes;
@@ -135,7 +137,9 @@ public class CreateQuizActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-
+        if (data == null || data.getExtras() == null) {
+            return;
+        }
         if(requestCode == QUESTION_PICTURE_CAPTURE_CODE)
         {
             Bitmap orignalPic = (Bitmap) Objects.requireNonNull(data.getExtras()).get(getString(R.string.ORIGINAL_IMG));
@@ -261,6 +265,16 @@ public class CreateQuizActivity extends AppCompatActivity {
     }
 
     private boolean checkQuestionsValid() {
+
+        if (questionList.size() == 0) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.UI_warning))
+                    .setMessage(R.string.UI_invalid_quiz)
+                    .setPositiveButton(R.string.OK, ((dialogInterface, j) -> dialogInterface.dismiss()))
+                    .show();
+            return false;
+        }
+
         for (int i = 0; i < questionList.size(); i++) {
             QuestionsMC mc = (QuestionsMC)questionList.get(i);
 
@@ -299,16 +313,10 @@ public class CreateQuizActivity extends AppCompatActivity {
         return true;
     }
 
-    private void onFinishClicked() {
+    private void confirmedFinish() {
         int classCode = currClass.getClassCode();
         CourseCategory category = currClass.getCategory();
         String instructorUID = sp.getString(getString(R.string.UID), "");
-
-        formatImages();
-
-        if (!checkQuestionsValid()) {
-            return;
-        }
 
         QuizPackage quizPackage = new QuizPackage(classCode, category, instructorUID, currModule, questionList);
         quizPackage.setQuizCode(quiz_code);
@@ -354,7 +362,20 @@ public class CreateQuizActivity extends AppCompatActivity {
                     finish();
                 }))
                 .show();
+    }
 
+    private void onFinishClicked() {
+        formatImages();
+
+        if (!checkQuestionsValid()) {
+            return;
+        }
+
+        new AlertDialog.Builder(this).setTitle(R.string.UI_warning)
+                .setMessage(R.string.UI_finish_create_quiz)
+                .setPositiveButton(R.string.YES, ((dialogInterface, i) -> {dialogInterface.dismiss(); confirmedFinish();}))
+                .setNegativeButton(R.string.NO, (((dialogInterface, i) -> dialogInterface.dismiss())))
+                .show();
     }
 
     private void addNewAnswer(LinearLayout answersLayout, IQuestion q) {
@@ -553,10 +574,14 @@ public class CreateQuizActivity extends AppCompatActivity {
     public void onBackPressed() {
         new AlertDialog.Builder(this).setTitle(R.string.UI_warning)
                 .setMessage(R.string.UI_quit_quiz_editing_warning)
-                .setPositiveButton(R.string.YES, (dialogInterface, i) -> finish())
+                .setPositiveButton(R.string.YES, (dialogInterface, i) -> goBackToHome())
                 .setNegativeButton(R.string.NO, (dialogInterface, i) -> dialogInterface.dismiss())
                 .show();
     }
 
-
+    public void goBackToHome() {
+        Intent intent = new Intent(CreateQuizActivity.this, HomeActivity.class);
+        startActivity(intent);
+        ActivityCompat.finishAffinity(this);
+    }
 }
