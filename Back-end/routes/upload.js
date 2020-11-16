@@ -289,6 +289,14 @@ router.post("/quiz", (req, res, next) => {
         // console.error(err);
       }
     });
+    let classDbName = "class" + quizData.classCode;
+    let quizScoreField = "quiz" + quizData.quizCode + "score";
+    db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}}, {$unset: {[quizScoreField]: 1}},
+    (err, db) => {
+      if (err) {
+        throw err;
+      }
+    });
   } else if (req.body.type === "quizModules") {
     db.collection("classInfo").updateOne({classCode: Number(req.body.uid)}, {$set: {"quizModules":req.body.data}}, {upsert: true}, (err, res) => {
       if (err) {
