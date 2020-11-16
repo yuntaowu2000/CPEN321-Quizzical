@@ -20,7 +20,6 @@ import org.junit.Test;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 public class studentClassTest {
