@@ -168,7 +168,7 @@ function createClassFunction(reqData, userId) {
 }
 
 function joinClassFunction(classCode, studentuid) {
-  classesDb.collection("class" + classCode).insertOne({uid: studentuid, userQuizCount: 0, score: 0},
+  classesDb.collection("class" + classCode).insertOne({uid: studentuid, userQuizCount: 0, score: 0, EXP: 0},
     (err, res) => {
       if (err) {
         throw err;
