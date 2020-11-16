@@ -168,12 +168,19 @@ function createClassFunction(reqData, userId) {
 }
 
 function joinClassFunction(classCode, studentuid) {
-  classesDb.collection("class" + classCode).insertOne({uid: studentuid, userQuizCount: 0, score: 0, EXP: 0},
-    (err, res) => {
-      if (err) {
-        throw err;
-      }
-    });
+  db.collection("userInfo").find({uid: studentuid})
+  .project({_id:0, username: 1})
+  .toArray((err, data) => {
+    let studentUsername = Object.values(data[0])[0];
+    classesDb.collection("class" + classCode)
+    .insertOne({uid: studentuid, username: studentUsername, userQuizCount: 0, score: 0, EXP: 0},
+      (err, res) => {
+        if (err) {
+          throw err;
+        }
+      });
+
+  });
 }
 
 router.post("/class", (req, res, next) => {
