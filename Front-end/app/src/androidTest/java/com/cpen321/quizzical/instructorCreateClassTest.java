@@ -3,7 +3,6 @@ package com.cpen321.quizzical;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.view.View;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
