@@ -121,7 +121,7 @@ public class HomeActivity extends AppCompatActivity {
                     classSwitchButton.setAnimation(rotateClose);
                     classScrollView.setAnimation(toBottom);
                     classScrollView.setVisibility(View.INVISIBLE);
-                    classScrollView.removeAllViews();
+                    classScrollContentLayout.removeAllViews();
                 }
             }
 
