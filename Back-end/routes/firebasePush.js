@@ -42,7 +42,7 @@ function sendMessage(userIds, message) {
 }
 
 //everyday push notification at 8pm
-scheduler.scheduleJob("* * 20 * * *", function() {
+scheduler.scheduleJob("0 0 20 * * *", function() {
     db.collection("notificationFrequency").find({notificationFrequency: {$eq : 1}})
     .project({uid: 1, _id: 0})
     .toArray((err, retval) => {
@@ -55,7 +55,7 @@ scheduler.scheduleJob("* * 20 * * *", function() {
 });
 
 //Weekly: every Monday push notification at 8pm
-scheduler.scheduleJob("* * 20 * * 1", function() {
+scheduler.scheduleJob("0 0 20 * * 1", function() {
     db.collection("notificationFrequency").find({notificationFrequency: {$eq : 2}})
     .project({uid: 1, _id: 0})
     .toArray((err, retval) => {
@@ -68,7 +68,7 @@ scheduler.scheduleJob("* * 20 * * 1", function() {
 });
 
 //Monthly: every 1st day of month push notification at 8pm
-scheduler.scheduleJob("* * 20 1 * *", function() {
+scheduler.scheduleJob("0 0 20 1 * *", function() {
     db.collection("notificationFrequency").find({notificationFrequency: {$eq : 3}})
     .project({uid: 1, _id: 0})
     .toArray((err, retval) => {
