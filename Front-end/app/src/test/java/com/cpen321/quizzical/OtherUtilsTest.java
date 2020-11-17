@@ -117,7 +117,34 @@ public class OtherUtilsTest {
         assertTrue(result.contains(expected_contains));
     }
 
+    @Test
+    public void checkReadURL1() {
+        // See if it gets my user
+        String result = OtherUtils.readFromURL("http://quizzical.canadacentral.cloudapp.azure.com/studentLeaderboard?userId=106073506650638811683&classCode=35609&isInstructor=false");
+        String expected_contains = "username";
+        assertTrue(result.contains(expected_contains));
+    }
 
+    @Test
+    public void checkReadURL2() {
+        // See if it gets a class
+        String result = OtherUtils.readFromURL("http://quizzical.canadacentral.cloudapp.azure.com/classes?userId=106073506650638811683&classCode=35607&type=quizModules");
+        String expected_contains = "quizLink";
+        assertTrue(result.contains(expected_contains));
+    }
+
+    @Test
+    public void checkUploadURL1() {
+        // See if it uploads my notification frequency
+        OtherUtils.uploadToServer(
+                "users/profile",
+                "106073506650638811683",
+                "profileImage",
+                "{\"notificationFrequency\":0,\"firebaseToken\":\"fiVv69FnSEKiI7ul1lZyeG:APA91bGY0TaMrZCur3ntNdtmuC1VRiP7GoujApAm5--iN3nuuNUzdIhKTw9bAYs-edSfUK_7rhLud7PSd9MbsoMNteexTzn-YxzFqv_idtcfQRcYQ9ABnZ2TACCgU-77zoJbhMIDNZeH\"}");
+        String result = OtherUtils.readFromURL("http://quizzical.canadacentral.cloudapp.azure.com/users/notifications?userId=106073506650638811683&type=notificationFrequency");
+        String expected_contains = "0";
+        assertTrue(result.contains(expected_contains));
+    }
     //following tests need mocking to work, comment out for now
 //    @Test
 //    public void imageTest() {
