@@ -212,12 +212,20 @@ public class HomeActivity extends AppCompatActivity {
 
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v ->
         {
-            int classCode = Integer.parseInt(editText.getText().toString());
-            Classes newClass = parseClassInfoForStudents(classCode);
-            if (newClass != null) {
-                appendNewClassToList(newClass);
-                alertDialog.dismiss();
-            } else {
+            boolean success = true;
+            try {
+                int classCode = Integer.parseInt(editText.getText().toString());
+                Classes newClass = parseClassInfoForStudents(classCode);
+                if (newClass != null) {
+                    appendNewClassToList(newClass);
+                    alertDialog.dismiss();
+                } else {
+                    success = false;
+                }
+            } catch (NumberFormatException e) {
+                success = false;
+            }
+            if (!success) {
                 errorText.setText(R.string.UI_invalid_class_code_msg);
             }
         });
@@ -436,6 +444,7 @@ public class HomeActivity extends AppCompatActivity {
         generateClassButtonLayout();
 
         switchClass(mClass);
+        Toast.makeText(this, R.string.UI_class_joined_msg, Toast.LENGTH_SHORT).show();
     }
 
     private boolean requestDeleteClass(Classes mClass) {
