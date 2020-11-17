@@ -145,6 +145,20 @@ public class OtherUtilsTest {
         String expected_contains = "0";
         assertTrue(result.contains(expected_contains));
     }
+    //more ideas: profile picture (very big...)
+//    @Test
+//    public void checkUploadURL2() {
+//        // See if it uploads my profile picture
+//        OtherUtils.uploadToServer(
+//                "users/profile",
+//                "106073506650638811683",
+//                "profileImage",
+//                ); <------How do we fit this, let alone convert image first?
+//        String result = OtherUtils.readFromURL("");
+//        String expected_contains = "0";
+//        assertTrue(result.contains(expected_contains));
+//    }
+
     //following tests need mocking to work, comment out for now
 //    @Test
 //    public void imageTest() {
