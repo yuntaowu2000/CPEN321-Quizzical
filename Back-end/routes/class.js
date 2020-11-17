@@ -40,9 +40,10 @@ router.get("/", (req, res, next) => {
       } else {
         if (quizModules == null) {
           res.send("");
+        } else {
+          quizModules = Object.values(quizModules[0]);
+          res.send("" + quizModules);
         }
-        quizModules = Object.values(quizModules[0]);
-        res.send("" + quizModules);
       }
     });
   }
