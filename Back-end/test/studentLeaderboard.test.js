@@ -21,7 +21,7 @@ const res = await request.post("/")
 
 // test GET of "/"
 it("fetchDataForTeachers case of router.get("/") ", async done => {
-  const response = await request.get("/").send({ url: , classCode: , quizCode: , type: , uid: , isInstructor: , });
+  const response = await request.get("/").send({ url: "", classCode: "", quizCode: "", type: "", uid: "", isInstructor: "", });
   expect(response.body.message).toBe("");
 	
   done()
