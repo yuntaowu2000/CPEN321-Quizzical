@@ -121,12 +121,7 @@ public class HomeActivity extends AppCompatActivity {
                     classSwitchButton.setAnimation(rotateClose);
                     classScrollView.setAnimation(toBottom);
                     classScrollView.setVisibility(View.INVISIBLE);
-                    for (Button b : classButtonList) {
-                        if (b.getVisibility() == View.VISIBLE) {
-                            b.setVisibility(View.INVISIBLE);
-                            b.setClickable(false);
-                        }
-                    }
+                    classScrollContentLayout.removeAllViews();
                 }
             }
 
@@ -399,9 +394,13 @@ public class HomeActivity extends AppCompatActivity {
 
         classScrollContentLayout.removeAllViews();
 
-        generateClassButtonLayout();
-
-        switchClass(classList.get(0));
+        String savedClass = sp.getString(getString(R.string.CURR_CLASS), "");
+        if (!OtherUtils.stringIsNullOrEmpty(savedClass)) {
+            Classes currClass = new Classes(savedClass);
+            switchClass(currClass);
+        } else {
+            switchClass(classList.get(0));
+        }
     }
 
     private void appendNewClassToList(Classes mClass) {
@@ -527,20 +526,12 @@ public class HomeActivity extends AppCompatActivity {
             classSwitchButton.setAnimation(rotateOpen);
             classScrollView.setAnimation(fromBottom);
             classScrollView.setVisibility(View.VISIBLE);
-            for (Button b : classButtonList) {
-                b.setVisibility(View.VISIBLE);
-                b.setClickable(true);
-            }
+            generateClassButtonLayout();
         } else {
             classSwitchButton.setAnimation(rotateClose);
             classScrollView.setAnimation(toBottom);
+            classScrollContentLayout.removeAllViews();
             classScrollView.setVisibility(View.INVISIBLE);
-            for (Button b : classButtonList) {
-                if (b.getVisibility() == View.VISIBLE) {
-                    b.setVisibility(View.INVISIBLE);
-                    b.setClickable(false);
-                }
-            }
         }
     }
 

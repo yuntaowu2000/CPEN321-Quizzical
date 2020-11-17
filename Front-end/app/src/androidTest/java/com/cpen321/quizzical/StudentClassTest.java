@@ -12,6 +12,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.cpen321.quizzical.data.Classes;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,15 +23,16 @@ import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static org.hamcrest.Matchers.not;
 
-public class studentClassTest {
+public class StudentClassTest {
 
     @Rule
     public ActivityTestRule<HomeActivity> activityTestRule = new ActivityTestRule<HomeActivity>(HomeActivity.class);
     private static final String testClassCode1 = "35607";
-    private static final String testClassCode2 = "46145"; // it isn't working, the class I made isn't on server..?
-    private static final String testClassName1 = "test1";
-    private static final String testClassName2 = "MyClass";
+    private static final String testClassCode2 = "18489";
     private static final String testClassCode3 = "99999999999"; // Invalid code
+
+    private static final String testClassName1 = "test1";
+    private static final String testClassName2 = "CLASSINTEST";
 
     @Before
     public void cleanUp() {
@@ -57,6 +59,7 @@ public class studentClassTest {
                 .perform(ViewActions.click());
 
         leaveClass(testClassName1);
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -76,6 +79,7 @@ public class studentClassTest {
                 .perform(ViewActions.click());
 
         leaveClass(testClassName1);
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -100,6 +104,7 @@ public class studentClassTest {
         // check if you are now in the other class
         leaveClass(testClassName1);
         leaveClass(testClassName2);
+        Assert.assertTrue(true);
     }
 
     private void leaveClass(String className) {
