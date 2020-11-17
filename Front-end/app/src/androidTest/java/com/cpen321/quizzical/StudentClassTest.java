@@ -3,11 +3,13 @@ package com.cpen321.quizzical;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.cpen321.quizzical.data.Classes;
@@ -17,10 +19,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withResourceName;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
 public class StudentClassTest {
@@ -42,10 +45,12 @@ public class StudentClassTest {
         String classListString = sp.getString(activity.getString(R.string.CLASS_LIST), "");
         String[] classList = classListString.split(";");
         for (String c : classList) {
-            Classes classes = new Classes(c);
+            Classes classes = new Classes(c); //TODO: For some reason sometimes it doesn't clean up properly. The buttons are there but they don't appear in the log, even though I can still get 'you already joined this class' messages
+            Log.d("testclass", ""+classes.getClassName());
             if (classes.getClassName().equals(validClassName1) ||
                 classes.getClassName().equals(validClassName2)) {
                 leaveClass(classes.getClassName());
+                Log.d("testclass", "removed");
                 break;
             }
         }
@@ -102,6 +107,7 @@ public class StudentClassTest {
         Espresso.onView(ViewMatchers.withText(R.string.UI_invalid_class_code_msg))
                 .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
+        Assert.assertTrue(true);
     }
 
     @Test
@@ -111,25 +117,36 @@ public class StudentClassTest {
 
         joinClass(invalidClassCode);
 
-        Espresso.onView(ViewMatchers.withText(R.string.UI_invalid_class_code_msg))
+        Espresso.onView(ViewMatchers.withText((R.string.UI_invalid_class_code_msg)))
                 .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
+        Assert.assertTrue(true);
     }
 
     @Test
     public void swapClassTest() {
+
         joinClass(validClassCode1);
 
         Espresso.onView(ViewMatchers.withId(R.id.class_switch_fab))
                 .perform(ViewActions.click());
 
+        Espresso.onView(allOf(ViewMatchers.withText(String.format(InstrumentationRegistry.getInstrumentation().getTargetContext().getResources().getString(R.string.UI_current_class_name), validClassName1)), withResourceName("quiz_page_class_info_text")))
+                .check(matches(isDisplayed()));
+
         joinClass(validClassCode2);
+
+        Espresso.onView(allOf(ViewMatchers.withText(String.format(InstrumentationRegistry.getInstrumentation().getTargetContext().getResources().getString(R.string.UI_current_class_name), validClassName2)), withResourceName("quiz_page_class_info_text")))
+                .check(matches(isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withText(validClassName1))
+                .perform(ViewActions.scrollTo(), ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.class_switch_fab))
                 .perform(ViewActions.click());
 
-        // click the other class
-        // check if you are now in the other class
+        Espresso.onView(allOf(ViewMatchers.withText(String.format(InstrumentationRegistry.getInstrumentation().getTargetContext().getResources().getString(R.string.UI_current_class_name), validClassName1)), withResourceName("quiz_page_class_info_text")))
+                .check(matches(isDisplayed()));
 
         leaveClass(validClassName1);
 
