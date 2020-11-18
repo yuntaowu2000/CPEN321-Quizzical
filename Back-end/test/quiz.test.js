@@ -13,19 +13,22 @@ setupDB("classes")
 
 
 // add sample data to test database
-const res = await request.post("/")
+let res;
+request.post("/")
 	.send({
       classCode: "",
       quizCode: ""
       // etc
-    })
+    }).then((output) => {
+      res = output;
+    });
 
 // test GET of "/" and "/studentWrongCounts"
-it("fetchDataForTeachers case of router.get("/") ", async done => {
-  const response = await request.get("/").send({ url: "", classCode: "", quizCode: "", type: "", uid: "", isInstructor: "", });
+it("fetchDataForTeachers case of router.get(\"/\") ", async done => {
+  const response = await request.get("/").send({ classCode: "", quizCode: "", type: "", userId: "", isInstructor: "", });
   expect(response.body.message).toBe("");
 	
-  const response = await request.get("/studentWrongCounts").send({ url: "", classCode: "", quizCode: "", type: "", uid: "" , isInstructor: "", });
+  response = await request.get("/studentWrongCounts").send({ classCode: "", quizCode: "", });
   expect(response.body.message).toBe("");
 	
   done()
