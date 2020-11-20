@@ -234,6 +234,12 @@ public class HomeActivity extends AppCompatActivity {
 
     private Classes parseClassInfoForStudents(int classCode) {
         // when a student join a class by class code, get the general class info from the server
+        for (Classes c : classList) {
+            if (c.getClassCode() == classCode) {
+                Toast.makeText(this, getText(R.string.UI_class_joined_already_msg), Toast.LENGTH_LONG).show();
+                return null;
+            }
+        }
 
         OtherUtils.uploadToServer(getString(R.string.CLASS_ENDPOINT),
                 sp.getString(getString(R.string.UID), ""),
