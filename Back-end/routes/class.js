@@ -79,6 +79,15 @@ function handleDeleteClass(isInstructor, classCode, uid) {
         }
     });
 
+    classDb.collection("class" + classCode).find().project({_id:0,uid:1}).forEach((doc) => {
+      let classList = {};
+      db.collection().find({uid: {$eq: doc.uid}}).project({_id:0,classList:1}).toArray((result) => {
+	classList = JSON.parse(result.classList);
+      });
+      // remove the class with classCode from classList
+      classList = JSON.stringify(classList);
+      db.collection().updateOne({uid: {$eq: doc.uid}}, {$set: {classList: classList}});
+    });
     classDb.collection("class" + classCode).drop((err, delOK) => {
       if (err) {
         throw err;
