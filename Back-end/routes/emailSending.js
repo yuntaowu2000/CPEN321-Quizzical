@@ -12,8 +12,8 @@ let transporter = nodemailer.createTransport({
     refreshToken: "1//04AXH_leqr9FyCgYIARAAGAQSNwF-L9IrFSYdmT4TTFArn9t99xw48tUWg1bGrxbu4_JsCf79txpBF7qfAtznL7jb38Gx7xEBJYc"
   }
 });
-  
-  
+
+
 function sendEmail(emailAddr, emailSubject, emailHtml) {
     let mailOptions = {
       from: "test@quizzical.com",
@@ -21,7 +21,7 @@ function sendEmail(emailAddr, emailSubject, emailHtml) {
       subject: emailSubject,
       html: emailHtml
     };
-  
+
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) {
         throw err;

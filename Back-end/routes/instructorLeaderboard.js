@@ -29,7 +29,7 @@ router.get("/", (req, res, next) => {
     let url = new URL(req.originalUrl, `http://${req.headers.host}`);
     let instructorUID = url.searchParams.get("userId");
     let timeout = 2000;
-    
+
     db.collection("userInfo")
       .find({isInstructor: true})
       .project({_id:0, username: 1, EXP: 1, uid: 1})

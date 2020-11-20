@@ -151,7 +151,7 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  
+
 });
 
 router.get("/studentWrongCounts", (req, res, next) => {

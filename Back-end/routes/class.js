@@ -47,7 +47,7 @@ router.get("/", (req, res, next) => {
       }
     });
   }
-  else if (type === "classList") 
+  else if (type === "classList")
   {
     db.collection("classInfo").find({ classCode: { $eq: classCode }}).project({classList:1, _id:0}).maxTimeMS(timeout).toArray((err, classList) => {
       if (err) {
@@ -58,7 +58,7 @@ router.get("/", (req, res, next) => {
     });
   } else {
     res.send("invalid request");
-  } 
+  }
 });
 
 function handleDeleteClass(isInstructor, classCode, uid) {
@@ -70,7 +70,7 @@ function handleDeleteClass(isInstructor, classCode, uid) {
           throw err;
         }
     });
-    
+
     db.collection("quizzes").deleteMany(
       {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]},
       (err, db) => {
@@ -115,7 +115,7 @@ router.delete("/delete", (req, res, next) => {
     let classDbName = "class" + classCode;
     let quizScoreField = "quiz" + quizCode + "score";
     let quizWrongQuestionFieldName = "quiz" + quizCode + "wrongQuestionIds";
-    db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}}, 
+    db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}},
       {$unset: {[quizScoreField]: 1, [quizWrongQuestionFieldName]: ""}},
     (err, db) => {
       if (err) {

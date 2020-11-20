@@ -42,7 +42,7 @@ router.get("/", (req, res, next) => {
     let isInstructor = url.searchParams.get("isInstructor");
     let classCode = url.searchParams.get("classCode");
     let timeout = 2000;
-    
+
     classesDb.collection("class" + classCode)
       .find({})
       .project({_id:0, username: 1, EXP: 1, uid: 1, score: 1})

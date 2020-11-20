@@ -246,7 +246,7 @@ function updateStudentStats(student, studentQuizResult, studentUid) {
     });
 
   //update the score only if it does not exist
-  classesDb.collection("class" + studentQuizResult.classCode).updateOne({uid: studentUid, [quizScoreFieldName]: {$exists: false}}, 
+  classesDb.collection("class" + studentQuizResult.classCode).updateOne({uid: studentUid, [quizScoreFieldName]: {$exists: false}},
     {$set: {userQuizCount: newUserQuizCount, score: newScore, [quizScoreFieldName]: currScore, [quizWrongQuestionFieldName]: wrongQuestionIds}},
     (err, res) => {
       if (err) {
@@ -292,7 +292,7 @@ router.post("/quiz", (req, res, next) => {
     let classDbName = "class" + quizData.classCode;
     let quizScoreField = "quiz" + quizData.quizCode + "score";
     let quizWrongQuestionFieldName = "quiz" + quizData.quizCode + "wrongQuestionIds";
-    db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}}, 
+    db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}},
       {$unset: {[quizScoreField]: 1, [quizWrongQuestionFieldName]: ""}},
     (err, db) => {
       if (err) {
