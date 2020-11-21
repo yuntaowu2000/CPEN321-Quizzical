@@ -85,12 +85,12 @@ router.use(express.json());
 router.post("/profileImg", (req, res, next) => {
   if (req.body.type === "profileImage")
   {
-    let folderPath = path.resolve("/images", req.body.uid);
+    const folderPath = path.join("images", req.body.uid);
     if (!fs.existsSync(folderPath))
     {
       fs.mkdirSync(folderPath, {recursive:true});
     }
-    let filename = path.resolve(folderPath, "profile_img.jpg");
+    const filename = path.join(folderPath, "profile_img.jpg");
     fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
   }
 

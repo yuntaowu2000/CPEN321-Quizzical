@@ -170,9 +170,8 @@ router.get("/profile", (req, res, next) => {
   let uid = url.searchParams.get("userId");
   let type = url.searchParams.get("type");
 
-  let timeout = 2000;
   if (type === "profileImage") {
-    let filepath = path.resolve("/images", uid, "profile_img.jpg");
+    const filepath = path.join("images", uid, "profile_img.jpg");
     let string = "";
     if (fs.existsSync(filepath)) {
       let bitmap = fs.readFileSync(filepath);
