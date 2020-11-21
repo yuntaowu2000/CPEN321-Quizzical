@@ -88,12 +88,11 @@ function handleDeleteClass(isInstructor, classCode, uid) {
 	}
       });
       // remove the class with classCode from classList
-      let i = 0;
-      while (true) {
-	if (classList[i].classCode === classCode) {
-    classList.splice(i,1);
-    break;
-	} i++;
+      for (let i = 0; i < classList.length; i++) {
+        if (classList[i].classCode === classCode) {
+          classList.splice(i,1);
+          break;
+        }
       }
       let classListString = "";
       for (let userClass of classList) {
