@@ -1,15 +1,15 @@
-quizModule = require("../routes/quiz.js");
+const quizModule = require("../routes/quiz.js");
 //import * as quizModule from "../routes/quiz.js";
 const {MongoClient} = require("mongodb");
 
-const app = require("../routes/quiz.js") // link to server file
-const supertest = require("supertest")
-const request = supertest(app)
+const app = require("../routes/quiz.js"); // link to server file
+const supertest = require("supertest");
+const request = supertest(app);
 
-const { setupDB } = require("../test-setup.js")
+const { setupDB } = require("../test-setup.js");
 
 // Setup a Test Database
-setupDB("classes")
+setupDB("classes");
 
 
 // add sample data to test database
@@ -24,14 +24,14 @@ request.post("/")
     });
 
 // test GET of "/" and "/studentWrongCounts"
-it("fetchDataForTeachers case of router.get(\"/\") ", async done => {
+it("fetchDataForTeachers case of router.get(\"/\") ", async (done) => {
   const response = await request.get("/").send({ classCode: "", quizCode: "", type: "", userId: "", isInstructor: "", });
   expect(response.body.message).toBe("");
 	
   response = await request.get("/studentWrongCounts").send({ classCode: "", quizCode: "", });
   expect(response.body.message).toBe("");
 	
-  done()
+  done();
 })
 
 
@@ -64,7 +64,7 @@ describe("Find Max Score function", () => {
     ];
 
     const output1 = 3;
-    const output2 = 20
+    const output2 = 20;
     
     expect(quizModule.findMaxScore(input, "score1")).toEqual(output1);
     expect(quizModule.findMaxScore(input, "score2")).toEqual(output2);

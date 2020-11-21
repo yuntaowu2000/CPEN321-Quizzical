@@ -1,14 +1,14 @@
-quizModule = require("../routes/studentLeaderboard.js");
+const quizModule = require("../routes/studentLeaderboard.js");
 const {MongoClient} = require("mongodb");
 
-const app = require("../routes/studentLeaderboard.js") // link to server file
-const supertest = require("supertest")
-const request = supertest(app)
+const app = require("../routes/studentLeaderboard.js"); // link to server file
+const supertest = require("supertest");
+const request = supertest(app);
 
-const { setupDB } = require("../test-setup.js")
+const { setupDB } = require("../test-setup.js");
 
 // Setup a Test Database
-setupDB("classes")
+setupDB("classes");
 
 
 // add sample data to test database
@@ -23,12 +23,12 @@ request.post("/")
     });
 
 // test GET of "/"
-it("fetchDataForTeachers case of router.get(\"/\") ", async done => {
+it("fetchDataForTeachers case of router.get(\"/\") ", async (done) => {
   const response = await request.get("/").send({ classCode: "", type: "", userId: "", isInstructor: "", });
   expect(response.body.message).toBe("");
 	
-  done()
-})
+  done();
+});
 
 
 // non-endpoint tests
