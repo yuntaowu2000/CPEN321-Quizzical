@@ -84,20 +84,20 @@ function handleDeleteClass(isInstructor, classCode, uid) {
       db.collection("userInfo").find({uid: {$eq: doc.uid}}).project({_id:0,classList:1}).toArray((result) => {
 	let classListString = result.classList;
 	while (classListString) {
-	  classList.push(JSON.parse(classListString.slice(0,classListString.indexOf(';'))));
+    classList.push(JSON.parse(classListString.slice(0,classListString.indexOf(";"))));
 	}
       });
       // remove the class with classCode from classList
       let i = 0;
       while (true) {
-	if (classList[i].classCode == classCode) {
-	  classList.splice(i,1);
-	  break;
+	if (classList[i].classCode === classCode) {
+    classList.splice(i,1);
+    break;
 	} i++;
       }
       let classListString = "";
       for (let userClass of classList) {
-	classListString += JSON.stringify(userClass) + ';';
+	classListString += JSON.stringify(userClass) + ";";
       }
       classListString = classListString.substring(0,classListString.length-1);
       db.collection().updateOne({uid: {$eq: doc.uid}}, {$set: {classList: classListString}});
