@@ -97,7 +97,7 @@ function fetchDataForStudents(res, studentUid, classCode, quizCode, type) {
   let classDbName = "class" + classCode;
   let quizScoreField = "quiz" + quizCode + "score";
   if (type === "score") {
-    classesDb.collection(classDbName).find({})
+    classesDb.collection(classDbName).find({[quizScoreField]: {$ne: null}})
     .project({_id:0, [quizScoreField]: 1, uid: 1})
     .toArray((err, data) => {
       if (err) {
