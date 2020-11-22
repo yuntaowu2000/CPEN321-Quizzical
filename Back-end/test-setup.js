@@ -41,4 +41,4 @@ module.exports = {
       await mongoose.connection.close();
     });
   }
-}
+};
