@@ -230,19 +230,19 @@ public class QuizFragment extends Fragment {
         }
     }
 
-    private void setupNotes(String notesLink) {
-        Context thisContext = this.getContext();
-        assert thisContext != null;
-
-        if (OtherUtils.stringIsNullOrEmpty(notesLink)) {
-            new AlertDialog.Builder(thisContext).setMessage(R.string.UI_no_data)
-                    .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
-                    .show();
-        } else {
-            //actually should be download a file
-            OtherUtils.readFromURL(notesLink);
-        }
-    }
+//    private void setupNotes(String notesLink) {
+//        Context thisContext = this.getContext();
+//        assert thisContext != null;
+//
+//        if (OtherUtils.stringIsNullOrEmpty(notesLink)) {
+//            new AlertDialog.Builder(thisContext).setMessage(R.string.UI_no_data)
+//                    .setPositiveButton(R.string.OK, ((dialogInterface, i) -> dialogInterface.dismiss()))
+//                    .show();
+//        } else {
+//            //actually should be download a file
+//            OtherUtils.readFromURL(notesLink);
+//        }
+//    }
 
     private TextView generateTableElement(String text) {
         TextView textView = new TextView(this.getContext());
@@ -565,8 +565,8 @@ public class QuizFragment extends Fragment {
             String localCacheModuleName = getString(R.string.QUIZ) + "_" + qm.getModuleName();
             quizButton.setOnClickListener(v -> setupQuiz(qm.getQuizLink(), localCacheModuleName));
 
-            Button notesButton = layout.findViewById(R.id.notes_button);
-            notesButton.setOnClickListener(v -> setupNotes(qm.getNotesLink()));
+//            Button notesButton = layout.findViewById(R.id.notes_button);
+//            notesButton.setOnClickListener(v -> setupNotes(qm.getNotesLink()));
 
             Button statsButton = layout.findViewById(R.id.stats_button);
             statsButton.setOnClickListener(v -> setupStats(qm.getStatsLink()));

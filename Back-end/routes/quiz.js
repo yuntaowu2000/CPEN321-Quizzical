@@ -167,7 +167,7 @@ router.get("/studentWrongCounts", (req, res, next) => {
       var questionList = data[0]["questionList"];
       var len = questionList.length;
 
-      classesDb.collection(classDbName).find({})
+      classesDb.collection(classDbName).find({["quiz" + quizCode + "wrongQuestionIds"]: {$exists: true}})
       .project({_id:0, ["quiz" + quizCode + "wrongQuestionIds"]: 1})
       .toArray((err, wrongIds) => {
         let count = [];
