@@ -114,8 +114,8 @@ function fetchDataForStudents(res, studentUid, classCode, quizCode, type) {
     classesDb.collection(classDbName).find({uid: {$eq: studentUid}})
     .project({_id:0, ["quiz" + quizCode + "wrongQuestionIds"]: 1})
     .toArray((err, data) => {
-      if (err) {
-        throw err;
+      if (data === null) {
+        res.send("");
       } else {
         fetchWrongQuestions(res, classCode, quizCode, Object.values(data[0]));
       }
