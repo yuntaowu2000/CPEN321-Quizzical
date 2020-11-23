@@ -26,7 +26,7 @@ import com.cpen321.quizzical.data.questions.QuestionType;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.cpen321.quizzical.utils.ChoicePair;
 import com.cpen321.quizzical.utils.OtherUtils;
-import com.cpen321.quizzical.utils.QuizPackage;
+import com.cpen321.quizzical.data.QuizPackage;
 import com.cpen321.quizzical.utils.TestQuestionPackage;
 import com.cpen321.quizzical.utils.buttonwrappers.ButtonTypes;
 import com.cpen321.quizzical.utils.buttonwrappers.IButtons;

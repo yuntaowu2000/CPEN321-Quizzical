@@ -38,7 +38,7 @@ import com.cpen321.quizzical.data.questions.IQuestion;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.cpen321.quizzical.utils.ChoicePair;
 import com.cpen321.quizzical.utils.OtherUtils;
-import com.cpen321.quizzical.utils.QuizPackage;
+import com.cpen321.quizzical.data.QuizPackage;
 
 import java.util.ArrayList;
 import java.util.List;

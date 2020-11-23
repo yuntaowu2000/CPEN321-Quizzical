@@ -3,7 +3,7 @@ package com.cpen321.quizzical;
 import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
 import com.cpen321.quizzical.utils.ChoicePair;
-import com.cpen321.quizzical.utils.QuizPackage;
+import com.cpen321.quizzical.data.QuizPackage;
 
 import org.junit.Test;
 

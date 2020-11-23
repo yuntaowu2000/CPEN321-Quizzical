@@ -1,10 +1,12 @@
-package com.cpen321.quizzical.utils;
+package com.cpen321.quizzical.data;
 
 import android.util.Log;
 
 import com.cpen321.quizzical.data.CourseCategory;
 import com.cpen321.quizzical.data.questions.IQuestion;
 import com.cpen321.quizzical.data.questions.QuestionsMC;
+import com.cpen321.quizzical.utils.ChoicePair;
+import com.cpen321.quizzical.utils.InterfaceAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
