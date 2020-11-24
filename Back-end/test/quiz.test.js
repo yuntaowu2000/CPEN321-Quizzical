@@ -27,10 +27,10 @@ request.post("/")
 it("fetchDataForTeachers case of router.get(\"/\") ", async (done) => {
   let response = await request.get("/").send({ classCode: "", quizCode: "", type: "", userId: "", isInstructor: "", });
   expect(response.body.message).toBe("");
-	
+
   response = await request.get("/studentWrongCounts").send({ classCode: "", quizCode: "", });
   expect(response.body.message).toBe("");
-	
+
   done();
 });
 
@@ -48,10 +48,10 @@ describe("Calculate Average function", () => {
 
     const output1 = 2;
     const output2 = 9;
-    
+
     expect(quizModule.calculateAverage(input, "score1")).toEqual(output1);
     expect(quizModule.calculateAverage(input, "score2")).toEqual(output2);
-    
+
   });
 });
 
@@ -65,10 +65,10 @@ describe("Find Max Score function", () => {
 
     const output1 = 3;
     const output2 = 20;
-    
+
     expect(quizModule.findMaxScore(input, "score1")).toEqual(output1);
     expect(quizModule.findMaxScore(input, "score2")).toEqual(output2);
-    
+
   });
 });
 
@@ -80,18 +80,18 @@ describe("Find Student Score function", () => {
       { uid: 2, Math: 87, Chemistry: 53, English: 84 },
       { uid: 3, Math: 93, Chemistry: 60, English: 90 }
     ];
-    
+
     expect(quizModule.findStudentScore(input, 1, "Math")).toEqual(100);
     expect(quizModule.findStudentScore(input, 1, "Chemistry")).toEqual(47);
     expect(quizModule.findStudentScore(input, 1, "English")).toEqual(77);
-    
+
     expect(quizModule.findStudentScore(input, 2, "Math")).toEqual(87);
     expect(quizModule.findStudentScore(input, 2, "Chemistry")).toEqual(53);
     expect(quizModule.findStudentScore(input, 2, "English")).toEqual(84);
-    
+
     expect(quizModule.findStudentScore(input, 3, "Math")).toEqual(93);
     expect(quizModule.findStudentScore(input, 3, "Chemistry")).toEqual(60);
-    expect(quizModule.findStudentScore(input, 3, "English")).toEqual(90);    
+    expect(quizModule.findStudentScore(input, 3, "English")).toEqual(90);
   });
 });
 

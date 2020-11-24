@@ -26,7 +26,7 @@ request.post("/")
 it("fetchDataForTeachers case of router.get(\"/\") ", async (done) => {
   const response = await request.get("/").send({ classCode: "", type: "", userId: "", isInstructor: "", });
   expect(response.body.message).toBe("");
-	
+
   done();
 });
 
@@ -43,11 +43,11 @@ describe("User Position function", () => {
     const output1 = [1, { uid: 1 }];
     const output2 = [2, { uid: 2 }];
     const output3 = [3, { uid: 3 }];
-    
+
     expect(quizModule.getUserPosition(input, 1)).toEqual(output1);
     expect(quizModule.getUserPosition(input, 2)).toEqual(output2);
     expect(quizModule.getUserPosition(input, 3)).toEqual(output3);
-    
+
   });
 });
 
@@ -70,11 +70,11 @@ describe("Refactor Data function", () => {
     const output1 = [ { uid: 1 }, { uid: 2 }, { uid: 3 }, { uid: 4 }, { uid: 5 }, { uid: 6}, { uid: 7 }, { uid: 8 }, { uid: 9 }, { uid: 10 }, 1, { uid: 1 }];
     const output2 = [ { uid: 1 }, { uid: 2 }, { uid: 3 }, { uid: 4 }, { uid: 5 }, { uid: 6}, { uid: 7 }, { uid: 8 }, { uid: 9 }, { uid: 10 }, 2, { uid: 2 }];
     const output3 = [ { uid: 1 }, { uid: 2 }, { uid: 3 }, { uid: 4 }, { uid: 5 }, { uid: 6}, { uid: 7 }, { uid: 8 }, { uid: 9 }, { uid: 10 }, 3, { uid: 3 }];
-    
+
     expect(quizModule.refactorData(input, 1)).toEqual(output1);
     expect(quizModule.refactorData(input, 2)).toEqual(output2);
     expect(quizModule.refactorData(input, 3)).toEqual(output3);
-    
+
   });
 });
 
