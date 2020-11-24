@@ -171,7 +171,7 @@ router.get("/profile", (req, res, next) => {
   let type = url.searchParams.get("type");
 
   if (type === "profileImage") {
-    const filepath = path.join("images", uid, "profile_img.jpg");
+    const filepath = "images/"+uid+"/profile_img.jpg";
     let string = "";
     if (fs.existsSync(filepath)) {
       let bitmap = fs.readFileSync(filepath);

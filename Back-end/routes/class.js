@@ -69,7 +69,7 @@ function handleDeleteClass(isInstructor, classCode, uid) {
         if (err) {
           throw err;
         }
-    });
+      });
 
     db.collection("quizzes").deleteMany(
       {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]},
@@ -77,26 +77,27 @@ function handleDeleteClass(isInstructor, classCode, uid) {
         if (err) {
           throw err;
         }
-    });
+      });
 
     classDb.collection("class" + classCode).find().project({_id:0,uid:1}).forEach((doc) => {
       let classList = [];
       db.collection("userInfo").find({uid: {$eq: doc.uid}}).project({_id:0,classList:1}).toArray((result) => {
-	let classListString = result.classList;
-	while (classListString) {
-    classList.push(JSON.parse(classListString.slice(0,classListString.indexOf(";"))));
-	}
+        let classListString = result.classList;
+        while (classListString) {
+          classList.push(JSON.parse(classListString.slice(0,classListString.indexOf(";"))));
+        }
       });
       // remove the class with classCode from classList
       for (let i = 0; i < classList.length; i++) {
-        if (classList[i].classCode === classCode) {
+        let currentClassList = classList[i];
+        if (currentClassList.classCode === classCode) {
           classList.splice(i,1);
           break;
         }
       }
       let classListString = "";
       for (let userClass of classList) {
-	classListString += JSON.stringify(userClass) + ";";
+        classListString += JSON.stringify(userClass) + ";";
       }
       classListString = classListString.substring(0,classListString.length-1);
       db.collection().updateOne({uid: {$eq: doc.uid}}, {$set: {classList: classListString}});
@@ -140,11 +141,11 @@ router.delete("/delete", (req, res, next) => {
     let quizWrongQuestionFieldName = "quiz" + quizCode + "wrongQuestionIds";
     db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}},
       {$unset: {[quizScoreField]: 1, [quizWrongQuestionFieldName]: ""}},
-    (err, db) => {
-      if (err) {
-        throw err;
-      }
-    });
+      (err, db) => {
+        if (err) {
+          throw err;
+        }
+      });
   }
 
   res.statusCode = 204;

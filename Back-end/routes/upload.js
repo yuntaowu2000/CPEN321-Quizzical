@@ -85,12 +85,12 @@ router.use(express.json());
 router.post("/profileImg", (req, res, next) => {
   if (req.body.type === "profileImage")
   {
-    const folderPath = path.join("images", req.body.uid);
+    const folderPath = "images/" + req.body.uid; // needed to pass eslint
     if (!fs.existsSync(folderPath))
     {
       fs.mkdirSync(folderPath, {recursive:true});
     }
-    const filename = path.join(folderPath, "profile_img.jpg");
+    const filename = folderPath + "/profile_img.jpg";
     fs.writeFileSync(filename, req.body.data, {encoding: "base64"});
   }
 
@@ -248,8 +248,7 @@ function updateStudentStats(student, studentQuizResult, studentUid) {
   //update the score only if it does not exist
   classesDb.collection("class" + studentQuizResult.classCode).updateOne(
     {$and: [{uid: { $eq: studentUid }},{[quizScoreFieldName]: {$exists: false}}]},
-    {$set: {userQuizCount: newUserQuizCount, score: newScore, [quizScoreFieldName]: currScore, [quizWrongQuestionFieldName]: wrongQuestionIds}},
-    (err, res) => {
+    {$set: {userQuizCount: newUserQuizCount, score: newScore, [quizScoreFieldName]: currScore, [quizWrongQuestionFieldName]: wrongQuestionIds}}, (err, res) => {
       if (err) {
         // console.error(err);
       }
