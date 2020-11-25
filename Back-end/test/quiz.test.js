@@ -1,11 +1,14 @@
+const express = require("express");
 const quizModule = require("../routes/quiz.js");
 //import * as quizModule from "../routes/quiz.js";
 const {MongoClient} = require("mongodb");
 
 const app = require("../routes/quiz.js"); // link to server file
-app.listen(3001);
+const server = express();
+server.use("/", app);
+server.listen(3001);
 const supertest = require("supertest");
-const request = supertest(app);
+const request = supertest(server);
 
 const { setupDB } = require("../test-setup.js");
 

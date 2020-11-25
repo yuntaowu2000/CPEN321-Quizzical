@@ -1,10 +1,13 @@
+const express = require("express");
 const quizModule = require("../routes/studentLeaderboard.js");
 const {MongoClient} = require("mongodb");
 
 const app = require("../routes/studentLeaderboard.js"); // link to server file
-app.listen(3002);
+const server = express();
+server.use("/", app);
+server.listen(3002);
 const supertest = require("supertest");
-const request = supertest(app);
+const request = supertest(server);
 
 const { setupDB } = require("../test-setup.js");
 
