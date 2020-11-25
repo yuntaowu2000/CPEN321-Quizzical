@@ -175,6 +175,7 @@ router.get("/profile", (req, res, next) => {
     let string = "";
     /* eslint no-detect-non-literal-fs-filename: "error" */
     if (fs.existsSync(filepath)) {
+      /* eslint-disable-next-line detect-non-literal-fs-filename */
       let bitmap = fs.readFileSync(filepath);
       string = Buffer(bitmap).toString("base64");
     }
