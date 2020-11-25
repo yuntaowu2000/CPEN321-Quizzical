@@ -86,6 +86,7 @@ router.post("/profileImg", (req, res, next) => {
   if (req.body.type === "profileImage")
   {
     const folderPath = "images/" + req.body.uid; // needed to pass eslint
+    /* eslint no-detect-non-literal-fs-filename: "error" */
     if (!fs.existsSync(folderPath))
     {
       fs.mkdirSync(folderPath, {recursive:true});

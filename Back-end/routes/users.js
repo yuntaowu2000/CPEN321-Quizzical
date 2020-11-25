@@ -173,6 +173,7 @@ router.get("/profile", (req, res, next) => {
   if (type === "profileImage") {
     const filepath = "images/"+uid+"/profile_img.jpg";
     let string = "";
+    /* eslint no-detect-non-literal-fs-filename: "error" */
     if (fs.existsSync(filepath)) {
       let bitmap = fs.readFileSync(filepath);
       string = Buffer(bitmap).toString("base64");
