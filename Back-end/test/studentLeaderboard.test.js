@@ -5,7 +5,7 @@ const {MongoClient} = require("mongodb");
 const app = require("../routes/studentLeaderboard.js"); // link to server file
 const server = express();
 server.use("/", app);
-server.listen(3002);
+server.listen(3001);
 const supertest = require("supertest");
 const request = supertest(server);
 
@@ -29,7 +29,7 @@ request.post("/")
 // test GET of "/"
 it("fetchDataForTeachers case of router.get(\"/\") ", async (done) => {
   const response = await request.get("/").send({ classCode: "", type: "", userId: "", isInstructor: "", });
-  expect(response.body.message).toBe("");
+  expect(response.body.message).toBeUndefined();
 
   done();
 });

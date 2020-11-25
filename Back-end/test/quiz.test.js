@@ -30,7 +30,7 @@ request.post("/")
 // test GET of "/" and "/studentWrongCounts"
 it("fetchDataForTeachers case of router.get(\"/\") ", async (done) => {
   let response = await request.get("/").send({ classCode: "", quizCode: "", type: "", userId: "", isInstructor: "", });
-  expect(response.body.message).toBe("");
+  expect(response.body.message).toBeUndefined();
 
   response = await request.get("/studentWrongCounts").send({ classCode: "", quizCode: "", });
   expect(response.body.message).toBe("");
