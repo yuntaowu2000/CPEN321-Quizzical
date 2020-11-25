@@ -2,6 +2,7 @@ const quizModule = require("../routes/studentLeaderboard.js");
 const {MongoClient} = require("mongodb");
 
 const app = require("../routes/studentLeaderboard.js"); // link to server file
+app.listen(3002);
 const supertest = require("supertest");
 const request = supertest(app);
 

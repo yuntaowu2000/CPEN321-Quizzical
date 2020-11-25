@@ -3,6 +3,7 @@ const quizModule = require("../routes/quiz.js");
 const {MongoClient} = require("mongodb");
 
 const app = require("../routes/quiz.js"); // link to server file
+app.listen(3001);
 const supertest = require("supertest");
 const request = supertest(app);
 
