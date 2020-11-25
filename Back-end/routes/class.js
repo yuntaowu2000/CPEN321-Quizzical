@@ -89,7 +89,7 @@ function handleDeleteClass(isInstructor, classCode, uid) {
       });
       // remove the class with classCode from classList
       for (let i = 0; i < classList.length; i++) {
-        /* eslint-disable-next-line detect-object-injection */
+        /* eslint-disable-next-line security/detect-object-injection */
         let currentClassList = classList[i];
         if (currentClassList.classCode === classCode) {
           classList.splice(i,1);
