@@ -164,7 +164,7 @@ router.get("/studentWrongCounts", (req, res, next) => {
     .find({$and: [{classCode}, {quizCode}]})
     .project({_id:0, questionList: 1})
     .toArray((err, data) => {
-      if (data.length == 0) {
+      if (data.length === 0) {
         res.send("");
       }
       var questionList = data[0]["questionList"];
