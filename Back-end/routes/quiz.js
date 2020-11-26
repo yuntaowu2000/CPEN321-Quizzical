@@ -58,7 +58,7 @@ function fetchDataForTeachers(res, classCode, quizCode, type) {
       if (err) {
         throw err;
       } else {
-        //correctly just send all questions back
+        //just send all questions back
         res.send(data[0]["questionList"]);
       }
     });
@@ -164,6 +164,9 @@ router.get("/studentWrongCounts", (req, res, next) => {
     .find({$and: [{classCode}, {quizCode}]})
     .project({_id:0, questionList: 1})
     .toArray((err, data) => {
+      if (data.length == 0) {
+        res.send("");
+      }
       var questionList = data[0]["questionList"];
       var len = questionList.length;
 
