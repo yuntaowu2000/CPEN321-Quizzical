@@ -771,6 +771,7 @@ public class QuizFragment extends Fragment {
                 max = qm.getId();
             }
         }
+        //for easier database management when deleting, only increment the module code.
         return max + 1;
     }
 
