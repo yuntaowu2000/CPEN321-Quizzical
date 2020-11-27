@@ -38,6 +38,7 @@ public class QuizModules {
         }
         Gson g = new Gson();
         QuizModules q = g.fromJson(jsonString, QuizModules.class);
+        this.id = q.id;
         this.moduleName = q.moduleName;
         this.classCode = q.classCode;
         this.category = q.category;

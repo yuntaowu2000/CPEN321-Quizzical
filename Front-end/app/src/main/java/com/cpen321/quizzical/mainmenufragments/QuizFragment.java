@@ -541,7 +541,7 @@ public class QuizFragment extends Fragment {
             if (qm.getId() == 0) {
                 qm.setId(i);
             }
-            String quiz_link = String.format(getString(R.string.QUIZ_URL), currClass.getClassCode(), i);
+            String quiz_link = String.format(getString(R.string.QUIZ_URL), currClass.getClassCode(), qm.getId());
             String wrong_question_link = quiz_link + "&type=wrongQuestionList&userId=" + sp.getString(getString(R.string.UID), "")
                     + "&isInstructor=" + sp.getBoolean(getString(R.string.IS_INSTRUCTOR), false);
             String stats_link = quiz_link + "&type=score&userId=" + sp.getString(getString(R.string.UID), "")
@@ -733,9 +733,9 @@ public class QuizFragment extends Fragment {
             String newModuleName = editText.getText().toString();
 
             if (checkModuleName(newModuleName)) {
+                int quiz_code = getNextModuleCode();
                 QuizModules qm = new QuizModules(newModuleName, currClass.getClassCode(), currClass.getCategory());
                 modulesList.add(qm);
-                int quiz_code = modulesList.size() - 1;
                 qm.setId(quiz_code);
                 String quiz_link = String.format(getString(R.string.QUIZ_URL), currClass.getClassCode(), quiz_code);
                 String wrong_question_link = quiz_link + "&type=wrongQuestionList&userId=" + sp.getString(getString(R.string.UID), "")
@@ -762,6 +762,16 @@ public class QuizFragment extends Fragment {
                 errorText.setText(R.string.UI_invalid_module_name);
             }
         });
+    }
+
+    private int getNextModuleCode() {
+        int max = 0;
+        for (QuizModules qm : modulesList) {
+            if (qm.getId() > max) {
+                max = qm.getId();
+            }
+        }
+        return max + 1;
     }
 
     private boolean checkModuleName(String moduleName) {
