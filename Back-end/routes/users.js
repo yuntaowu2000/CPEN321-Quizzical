@@ -77,6 +77,16 @@ router.get("/contact", (req, res, next) => {
   }
 });
 
+router.get("/classList", (req, res, next) => {
+  let url = new URL(req.originalUrl, `http://${req.headers.host}`);
+  let uid = url.searchParams.get("userId");
+  db.collection("userInfo").find({uid: {$eq: uid}}).project({classList:1, _id:0})
+  .toArray((err, classList) => {
+    classList = Object.values(classList[0])[0];
+    res.send("" + classList);
+  });
+});
+
 router.get("/classDetails", (req, res, next) => {
   let url = new URL(req.originalUrl, `http://${req.headers.host}`);
   let uid = url.searchParams.get("userId");
