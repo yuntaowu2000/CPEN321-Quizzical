@@ -140,13 +140,13 @@ public class HomeActivity extends AppCompatActivity {
 
     private void parseClassListFromString() {
         classList = new ArrayList<>();
-        String classListString = sp.getString(getString(R.string.CLASS_LIST), "");
-//        if (OtherUtils.stringIsNullOrEmpty(classListString)) {
-//            String url = getString(R.string.GET_URL) + "/users?"
-//                    + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "")
-//                    + "&type=" + getString(R.string.CLASS_LIST);
-//            classListString = OtherUtils.readFromURL(url);
-//        }
+        String url = getString(R.string.GET_URL) + "users/" + getString(R.string.CLASS_LIST)
+                + "?" + getString(R.string.UID) + "=" + sp.getString(getString(R.string.UID), "");
+        String classListString = OtherUtils.readFromURL(url);
+
+        if (OtherUtils.stringIsNullOrEmpty(classListString)) {
+            classListString = sp.getString(getString(R.string.CLASS_LIST), "");
+        }
 
         if (OtherUtils.stringIsNullOrEmpty(classListString)) {
             return;
@@ -411,7 +411,11 @@ public class HomeActivity extends AppCompatActivity {
         String savedClass = sp.getString(getString(R.string.CURR_CLASS), "");
         if (!OtherUtils.stringIsNullOrEmpty(savedClass)) {
             Classes currClass = new Classes(savedClass);
-            switchClass(currClass);
+            if (classList.contains((currClass))) {
+                switchClass(currClass);
+            } else {
+                switchClass(classList.get(0));
+            }
         } else {
             switchClass(classList.get(0));
         }
