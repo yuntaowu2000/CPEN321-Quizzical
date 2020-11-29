@@ -38,7 +38,7 @@ router.get("/", (req, res, next) => {
       if (err) {
         throw err;
       } else {
-        if (quizModules == null) {
+        if (quizModules === null || quizModules.length === 0) {
           res.send("");
         } else {
           quizModules = Object.values(quizModules[0]);
