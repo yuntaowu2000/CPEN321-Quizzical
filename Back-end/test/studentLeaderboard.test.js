@@ -5,7 +5,7 @@ const {MongoClient} = require("mongodb");
 const app = require("../routes/studentLeaderboard.js"); // link to server file
 const server = express();
 server.use("/", app);
-server.listen(3001);
+server.listen(3002);
 const supertest = require("supertest");
 const request = supertest(server);
 
