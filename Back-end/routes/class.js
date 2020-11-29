@@ -61,8 +61,32 @@ router.get("/", (req, res, next) => {
   }
 });
 
+function sendClassDeletedNotification(classCode) {
+  let timeout = 2000;
+
+  db.collection("classInfo").find({classCode: { $eq: classCode }}).project({className:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
+    if (err) {
+      throw err;
+    } else {
+      let className = Object.values(retval[0])[0] + "";
+      let message =  util.format("Class %s has been deleted. If your class list has not been correctly populated, please delete the class yourself.", className);
+
+      //get all the students here and send the message to all students
+      classesDb.collection("class" + classCode).find({}).project({_id:0, uid: 1})
+      .toArray((err, data) => {
+        let userIds = [];
+        for (var d of data) {
+          userIds.push(Object.values(d)[0]);
+        }
+        firebaseFunctions.sendMessage(userIds, message);
+      });
+    }
+  });
+}
+
 function handleDeleteClass(isInstructor, classCode, uid) {
   if (isInstructor === "true") {
+    sendClassDeletedNotification(classCode);
     db.collection("classInfo").deleteOne(
       {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]},
       (err, db) => {
