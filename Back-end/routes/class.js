@@ -107,7 +107,7 @@ function handleDeleteClass(isInstructor, classCode, uid) {
     classDb.collection("class" + classCode).find().project({_id:0,uid:1}).toArray((err, docs) => {
       let uidList = [];
       for (var user of docs) {
-        uidList.push(Object.values(user)[0])
+        uidList.push(Object.values(user)[0]);
       }
       db.collection("userInfo").find({uid: {$in: uidList}}).project({_id:0, uid:1, classList:1}).toArray((err, result) => {
         if (result === null || result.length === 0) {
@@ -119,7 +119,7 @@ function handleDeleteClass(isInstructor, classCode, uid) {
           classList = classListString.split(";");
           classListString = "";
           for (var userClass of classList) {
-            if (userClass.search("" + classCode) == -1) {
+            if (userClass.search("" + classCode) === -1) {
               classListString += userClass + ";";
             }
           }
