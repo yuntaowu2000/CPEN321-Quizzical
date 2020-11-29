@@ -69,7 +69,7 @@ function sendClassDeletedNotification(classCode, uid) {
       throw err;
     } else {
       let className = Object.values(retval[0])[0] + "";
-      let message =  util.format("Class %s has been deleted. If your class list has not been correctly populated, please delete the class yourself.", className);
+      let message =  util.format("Class %s has been deleted. If your class list has not been correctly populated, please restart the app or delete the class yourself.", className);
 
       //get all the students here and send the message to all students
       classDb.collection("class" + classCode).find({}).project({_id:0, uid: 1})
