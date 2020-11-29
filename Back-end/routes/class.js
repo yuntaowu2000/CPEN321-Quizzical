@@ -61,7 +61,7 @@ router.get("/", (req, res, next) => {
   }
 });
 
-function sendClassDeletedNotification(classCode) {
+function sendClassDeletedNotification(classCode, uid) {
   let timeout = 2000;
 
   db.collection("classInfo").find({classCode: { $eq: classCode }}).project({className:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
@@ -94,7 +94,7 @@ function sendClassDeletedNotification(classCode) {
 
 function handleDeleteClass(isInstructor, classCode, uid) {
   if (isInstructor === "true") {
-    sendClassDeletedNotification(classCode);
+    sendClassDeletedNotification(classCode, uid);
 
     db.collection("quizzes").deleteMany(
       {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]},
