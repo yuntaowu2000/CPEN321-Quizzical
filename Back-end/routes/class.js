@@ -79,6 +79,14 @@ function sendClassDeletedNotification(classCode) {
           userIds.push(Object.values(d)[0]);
         }
         firebaseFunction.sendMessage(userIds, message);
+        //wait for everything is done, then delete. 
+        db.collection("classInfo").deleteOne(
+          {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]},
+          (err, db) => {
+            if (err) {
+              throw err;
+            }
+          });
       });
     }
   });
@@ -87,13 +95,6 @@ function sendClassDeletedNotification(classCode) {
 function handleDeleteClass(isInstructor, classCode, uid) {
   if (isInstructor === "true") {
     sendClassDeletedNotification(classCode);
-    db.collection("classInfo").deleteOne(
-      {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]},
-      (err, db) => {
-        if (err) {
-          throw err;
-        }
-      });
 
     db.collection("quizzes").deleteMany(
       {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]},
@@ -103,36 +104,41 @@ function handleDeleteClass(isInstructor, classCode, uid) {
         }
       });
 
-    classDb.collection("class" + classCode).find().project({_id:0,uid:1}).forEach((doc) => {
-      let classList = [];
-      db.collection("userInfo").find({uid: {$eq: doc.uid}}).project({_id:0,classList:1}).toArray((result) => {
-        let classListString = result.classList;
-        while (classListString) {
-          classList.push(JSON.parse(classListString.slice(0,classListString.indexOf(";"))));
+    classDb.collection("class" + classCode).find().project({_id:0,uid:1}).toArray((err, docs) => {
+
+      docs.forEach((doc) => {
+          let classList = [];
+          db.collection("userInfo").find({uid: {$eq: doc.uid}}).project({_id:0,classList:1}).toArray((result) => {
+            let classListString = result.classList;
+            while (classListString) {
+              classList.push(JSON.parse(classListString.slice(0,classListString.indexOf(";"))));
+            }
+          });
+          // remove the class with classCode from classList
+          for (let i = 0; i < classList.length; i++) {
+            /* eslint-disable-next-line security/detect-object-injection */
+            let currentClassList = classList[i];
+            if (currentClassList.classCode === classCode) {
+              classList.splice(i,1);
+              break;
+            }
+          }
+          let classListString = "";
+          for (let userClass of classList) {
+            classListString += JSON.stringify(userClass) + ";";
+          }
+          classListString = classListString.substring(0,classListString.length-1);
+          db.collection("userInfo").updateOne({uid: {$eq: doc.uid}}, {$set: {classList: classListString}});
+      });
+
+      //wait for everything is done, then delete. 
+      classDb.collection("class" + classCode).drop((err, delOK) => {
+        if (err) {
+          throw err;
         }
       });
-      // remove the class with classCode from classList
-      for (let i = 0; i < classList.length; i++) {
-        /* eslint-disable-next-line security/detect-object-injection */
-        let currentClassList = classList[i];
-        if (currentClassList.classCode === classCode) {
-          classList.splice(i,1);
-          break;
-        }
-      }
-      let classListString = "";
-      for (let userClass of classList) {
-        classListString += JSON.stringify(userClass) + ";";
-      }
-      classListString = classListString.substring(0,classListString.length-1);
-      db.collection("userInfo").updateOne({uid: {$eq: doc.uid}}, {$set: {classList: classListString}});
     });
 
-    classDb.collection("class" + classCode).drop((err, delOK) => {
-      if (err) {
-        throw err;
-      }
-    });
   } else {
     //delete the student from the class.
     classDb.collection("class" + classCode).deleteOne({uid: {$eq: uid}}, (err, db) => {
