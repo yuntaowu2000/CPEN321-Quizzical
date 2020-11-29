@@ -101,7 +101,7 @@ function handleDeleteClass(isInstructor, classCode, uid) {
         classListString += JSON.stringify(userClass) + ";";
       }
       classListString = classListString.substring(0,classListString.length-1);
-      db.collection().updateOne({uid: {$eq: doc.uid}}, {$set: {classList: classListString}});
+      db.collection("userInfo").updateOne({uid: {$eq: doc.uid}}, {$set: {classList: classListString}});
     });
 
     classDb.collection("class" + classCode).drop((err, delOK) => {
