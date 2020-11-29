@@ -267,5 +267,6 @@
 
     <!--    used for beautifying choices-->
     <string name="mid_align_format" translatable="false"><![CDATA[<p align=\"middle\">%s</p>]]></string>
+    <string name="UI_empty_choice">Some choice in question %d is empty string.</string>
 
 </resources>

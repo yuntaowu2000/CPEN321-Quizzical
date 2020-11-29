@@ -16,7 +16,6 @@
     <string name="UI_server_failure_msg">服务器链接失败</string>
     <string name="UI_question">题目</string>
     <string name="UI_is_instructor_msg">老师？</string>
-    <string name="test">测试功能</string>
     <string name="UI_log_out">退出登录</string>
     <string name="UI_finish_quiz_msg">你完成了这次测试！</string>
     <string name="UI_back_to_main_menu">回到主界面</string>
@@ -127,4 +126,5 @@
     <string name="UI_invalid_quiz">您没有创建任何题目。请使用后退键取消编辑。</string>
     <string name="UI_finish_create_quiz">你确定要结束编辑并上传这份测试吗？</string>
     <string name="UI_logout_msg">你确定要退出登陆吗？</string>
+    <string name="UI_empty_choice">题目%d中有选项为空。</string>
 </resources>

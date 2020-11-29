@@ -260,6 +260,8 @@ public class CreateQuizActivity extends AppCompatActivity {
                 String encodedImage = OtherUtils.encodeImage(imageList.get(i));
                 questionList.get(i).setHasPic(true);
                 questionList.get(i).setPicSrc(encodedImage);
+            } else {
+                questionList.get(i).setHasPic(false);
             }
         }
     }
@@ -296,6 +298,17 @@ public class CreateQuizActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.OK, ((dialogInterface, j) -> dialogInterface.dismiss()))
                         .show();
                 return false;
+            }
+
+            for (ChoicePair cp : mc.getChoices()) {
+                if (OtherUtils.stringIsNullOrEmpty(cp.getStr())) {
+                    new AlertDialog.Builder(this)
+                            .setTitle(getString(R.string.UI_warning))
+                            .setMessage(String.format(getString(R.string.UI_empty_choice), i))
+                            .setPositiveButton(R.string.OK, ((dialogInterface, j) -> dialogInterface.dismiss()))
+                            .show();
+                    return false;
+                }
             }
 
             //check if the correct answer is given
