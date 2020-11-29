@@ -105,30 +105,28 @@ function handleDeleteClass(isInstructor, classCode, uid) {
       });
 
     classDb.collection("class" + classCode).find().project({_id:0,uid:1}).toArray((err, docs) => {
-
-      docs.forEach((doc) => {
+      let uidList = [];
+      for (var user of docs) {
+        uidList.push(Object.values(user)[0])
+      }
+      db.collection("userInfo").find({uid: {$in: uidList}}).project({_id:0, uid:1, classList:1}).toArray((err, result) => {
+        if (result === null || result.length === 0) {
+          return;
+        }
+        result.forEach((doc) => {
           let classList = [];
-          db.collection("userInfo").find({uid: {$eq: doc.uid}}).project({_id:0,classList:1}).toArray((result) => {
-            let classListString = result.classList;
-            while (classListString) {
-              classList.push(JSON.parse(classListString.slice(0,classListString.indexOf(";"))));
+          let classListString = doc.classList;
+          classList = classListString.split(";");
+          classListString = "";
+          for (var userClass of classList) {
+            if (userClass.search("" + classCode) == -1) {
+              classListString += userClass + ";";
             }
-          });
-          // remove the class with classCode from classList
-          for (let i = 0; i < classList.length; i++) {
-            /* eslint-disable-next-line security/detect-object-injection */
-            let currentClassList = classList[i];
-            if (currentClassList.classCode === classCode) {
-              classList.splice(i,1);
-              break;
-            }
-          }
-          let classListString = "";
-          for (let userClass of classList) {
-            classListString += JSON.stringify(userClass) + ";";
           }
           classListString = classListString.substring(0,classListString.length-1);
           db.collection("userInfo").updateOne({uid: {$eq: doc.uid}}, {$set: {classList: classListString}});
+        });
+
       });
 
       //wait for everything is done, then delete. 
