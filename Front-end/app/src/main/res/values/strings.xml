@@ -114,7 +114,7 @@
     <string name="UI_username">Username</string>
     <string name="UI_username_msg">Please enter a user name</string>
     <string name="UI_example_username" translatable="false">E.g. Valhalla</string>
-    <string name="UI_username_invalid_msg">Username invalid: 3-15 characters with a-z,A-Z,0-9 and _ allowed.</string>
+    <string name="UI_username_invalid_msg">Username invalid: 3–15 characters with a–z,A–Z,0–9 and _ allowed.</string>
 
     <string name="UI_email_msg">Please enter your email address</string>
     <string name="UI_example_email" translatable="false">E.g. abc@example.com</string>
@@ -182,23 +182,23 @@
     <string name="UI_example_question" translatable="false">E.g. 1+1=?</string>
     <string name="UI_example_answer" translatable="false">E.g. 2</string>
     <string name="UI_picture">Picture</string>
-    <string name="UI_has_pic">has pic</string>
+    <string name="UI_has_pic">Include Image</string>
     <string name="UI_too_many_choices">Too many choices. Max of %d supported.</string>
     <string name="UI_add_question">Add question</string>
     <string name="UI_too_many_questions">Too many questions. Maximum of %d supported.</string>
     <string name="UI_invalid_quiz">There is no question in the quiz. Please use back button to exit if you want to discard this quiz.</string>
     <string name="UI_finish_create_quiz">Are you sure you want to submit this quiz?</string>
 
-    <string name="UI_create_answer">Create answer</string>
-    <string name="UI_delete">delete</string>
+    <string name="UI_create_answer">Add Answer</string>
+    <string name="UI_delete">Delete</string>
     <string name="UI_quit_quiz_editing_warning">Do you want to discard the quiz editing? Note that all your progress will be lost!</string>
 
     <!--    used in leader board fragment (for students)-->
-    <string name="leader_board_page_text1" translatable="false">This is the leaderBoard page</string>
-    <string name="UI_teachers_leaderboard">Teacher\'s leaderboard</string>
+    <string name="leader_board_page_text1" translatable="false">This is the Leaderboard page</string>
+    <string name="UI_teachers_leaderboard">Teacher\'s Leaderboard</string>
     <string name="UI_leaderboard_number" translatable="false">#</string>
     <string name="UI_leaderboard_score">Score</string>
-    <string name="UI_back_to_statistics">Back to statistics</string>
+    <string name="UI_back_to_statistics">Back to Statistics</string>
     <string name="UI_current_class_name">Current class name: %s</string>
 
     <!--    used in profile fragment-->
@@ -267,6 +267,6 @@
 
     <!--    used for beautifying choices-->
     <string name="mid_align_format" translatable="false"><![CDATA[<p align=\"middle\">%s</p>]]></string>
-    <string name="UI_empty_choice">Some choice in question %d is empty string.</string>
+    <string name="UI_empty_choice">Some choice in question %d is empty.</string>
 
 </resources>

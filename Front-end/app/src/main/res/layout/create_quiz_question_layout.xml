@@ -17,10 +17,12 @@
             tools:visibility="visible">
 
             <TextView
-                    android:id="@+id/question_number"
+                android:id="@+id/question_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:width="100dp"
+                android:width="80dp"
+                android:gravity="center"
+                android:paddingLeft="15dp"
                 android:text="@string/UI_question"
                 tools:layout_conversion_absoluteHeight="19dp"
                 tools:layout_conversion_absoluteWidth="200dp" />
@@ -30,10 +32,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:autofillHints=""
                 android:ems="10"
-                android:inputType="textPersonName"
                 android:hint="@string/UI_example_question"
-                android:autofillHints="" />
+                android:inputType="textPersonName"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp" />
         </LinearLayout>
 
         <RelativeLayout
@@ -47,10 +51,13 @@
                 android:id="@+id/question_has_pic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/UI_has_pic"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_margin="10dp"/>
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/UI_has_pic" />
 
             <ImageButton
                 android:id="@+id/take_picture_button"
@@ -61,15 +68,21 @@
                 android:layout_centerInParent="true" />
 
             <ImageButton
-                android:contentDescription="@string/UI_delete"
                 android:id="@+id/delete_question_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_margin="10dp"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                app:srcCompat="@drawable/ic_baseline_delete_24" />
+                android:layout_alignParentRight="true"
+                android:layout_gravity="end"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/UI_delete"
+                app:srcCompat="@drawable/ic_baseline_delete_24"
+                tools:layout_centerVertical="true" />
 
         </RelativeLayout>
 
@@ -93,6 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/UI_create_answer" />
+            android:text="@string/UI_create_answer"
+            android:textAllCaps="true" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
