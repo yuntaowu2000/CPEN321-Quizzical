@@ -1,8 +1,8 @@
 let express = require("express");
 let MongoClient = require("mongodb").MongoClient;
-let fs = require("fs");
 /*eslint new-cap: ["error", { "capIsNew": false }]*/
 let router = express.Router();
+let util = require("util");
 let firebaseFunction = require("./firebasePush");
 let db;
 let classDb;
@@ -72,13 +72,13 @@ function sendClassDeletedNotification(classCode) {
       let message =  util.format("Class %s has been deleted. If your class list has not been correctly populated, please delete the class yourself.", className);
 
       //get all the students here and send the message to all students
-      classesDb.collection("class" + classCode).find({}).project({_id:0, uid: 1})
+      classDb.collection("class" + classCode).find({}).project({_id:0, uid: 1})
       .toArray((err, data) => {
         let userIds = [];
         for (var d of data) {
           userIds.push(Object.values(d)[0]);
         }
-        firebaseFunctions.sendMessage(userIds, message);
+        firebaseFunction.sendMessage(userIds, message);
       });
     }
   });
