@@ -108,7 +108,7 @@ public class CreateQuizActivity extends AppCompatActivity {
         moduleList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 int selectedPosition = moduleList.getSelectedItemPosition();
-                quiz_code = selectedPosition;
+                quiz_code = quizModuleList.get(selectedPosition).getId();
                 currModule = moduleNames[selectedPosition];
                 Toast.makeText(getBaseContext(), currModule, Toast.LENGTH_LONG).show();
             }

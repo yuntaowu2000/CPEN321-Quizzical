@@ -20,6 +20,9 @@ firebaseAdmin.initializeApp({
 
 function sendMessage(userIds, message) {
   let timeout = 2000;
+  if (userIds === null || userIds.length === 0) {
+    return;
+  }
   db.collection("notificationFrequency").find({uid: {$in: userIds }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
     if (err) {
       throw err;
