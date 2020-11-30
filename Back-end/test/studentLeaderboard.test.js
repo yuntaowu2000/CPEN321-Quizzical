@@ -9,10 +9,10 @@ server.listen(3002);
 const supertest = require("supertest");
 const request = supertest(server);
 
-const { setupDB } = require("../test-setup.js");
+// const { setupDB } = require("../test-setup.js");
 
 // Setup a Test Database
-setupDB("classes");
+// setupDB("classes");
 
 
 // add sample data to test database
