@@ -21,7 +21,7 @@ describe("class test", () => {
     afterAll(async() => {
       var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
       var db = await client.db("data");
-      await db.collection("classInfo").drop();
+      await db.dropCollection("classInfo");
       await client.close();
     });
   

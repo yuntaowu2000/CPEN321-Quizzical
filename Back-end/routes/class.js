@@ -120,11 +120,7 @@ function handleDeleteClass(isInstructor, classCode, uid) {
       });
 
       //wait for everything is done, then delete. 
-      classDb.collection("class" + classCode).drop((err, delOK) => {
-        if (err) {
-          throw err;
-        }
-      });
+      classDb.dropCollection("class" + classCode);
     });
 
   } else {
