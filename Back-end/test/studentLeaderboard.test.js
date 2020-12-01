@@ -44,6 +44,7 @@ describe("test student leaderboard", () => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var db = await client.db("classes");
     await db.dropCollection("class1");
+    await db.close();
     await client.close();
   });
 
