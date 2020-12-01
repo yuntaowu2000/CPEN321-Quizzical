@@ -11,9 +11,7 @@ describe("class test", () => {
       var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
       var classDb = await client.db("data");
   
-      await classDb.createCollection("classInfo", (err, res) => {
-        if (err) {throw err;}
-      });
+      await classDb.createCollection("classInfo");
 
       await classDb.collection("classInfo").insertOne({"classCode" : 1, "uid" : "1", "category" : "Math", "className" : "testClass1", "instructorUID" : "1", "quizModules" : "{\"category\":\"Math\",\"classCode\":1,\"id\":0,\"moduleName\":\"module1\"}"});
   

@@ -17,9 +17,7 @@ describe("test student leaderboard", () => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var classDb = await client.db("classes");
 
-    await classDb.createCollection("class1", (err, res) => {
-      if (err) {throw err;}
-    });
+    await classDb.createCollection("class1");
 
     await classDb.collection("class1").insertOne({ "uid" : "1", "username" : "student1", "EXP" : 10, "score" : 100});
 

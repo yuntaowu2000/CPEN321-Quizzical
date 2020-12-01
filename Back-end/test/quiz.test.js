@@ -13,12 +13,8 @@ describe("fetchDataForTeachers", () => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var classDb = await client.db("classes");
 
-    await classDb.createCollection("class1", (err, res) => {
-      if (err) {throw err;}
-    });
-    await classDb.createCollection("class2", (err, res) => {
-      if (err) {throw err;}
-    });
+    await classDb.createCollection("class1");
+    await classDb.createCollection("class2");
     await classDb.collection("class1").insertOne({ "uid" : "1", "username" : "student1", "userQuizCount" : 1, "score" : 100, "EXP" : 72, "quiz0score" : 100, "quiz0wrongQuestionIds" : null});
 
     await classDb.collection("class1").insertOne({ "uid" : "2", "username" : "student2", "userQuizCount" : 1, "score" : 75, "EXP" : 72, "quiz0score" : 75, "quiz0wrongQuestionIds" : "[2]"});
