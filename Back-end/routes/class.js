@@ -46,16 +46,6 @@ router.get("/", (req, res, next) => {
         }
       }
     });
-  }
-  else if (type === "classList")
-  {
-    db.collection("classInfo").find({ classCode: { $eq: classCode }}).project({classList:1, _id:0}).maxTimeMS(timeout).toArray((err, classList) => {
-      if (err) {
-        throw err;
-      } else {
-        res.send(classList);
-      }
-    });
   } else {
     res.send("invalid request");
   }
