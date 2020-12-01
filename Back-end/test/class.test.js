@@ -65,7 +65,6 @@ describe("class quiz module test", () => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var db = await client.db("data");
     await db.dropCollection("classInfo");
-    await db.close();
     await client.close();
   });
 
