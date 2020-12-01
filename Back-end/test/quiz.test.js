@@ -3,7 +3,7 @@ const quizModule = require("../routes/quiz.js");
 //import * as quizModule from "../routes/quiz.js";
 const MongoClient = require("mongodb").MongoClient;
 
-const app = require("../routes/quiz.js"); // link to server file
+const app = require("../app.js"); // link to server file
 const server = express();
 server.use("/", app);
 server.listen(3001);
@@ -28,7 +28,7 @@ describe("fetchDataForTeachers", () => {
     await classDb.collection("class1").insertOne({ "uid" : "2", "username" : "student2", "userQuizCount" : 1, "score" : 75, "EXP" : 72, "quiz0score" : 75, "quiz0wrongQuestionIds" : "[2]"});
 
     await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student3", "userQuizCount" : 2, "score" : 75, "EXP" : 72, "quiz0score" : 80, "quiz0wrongQuestionIds" : "[1]", 
-    "quiz1score" : 70, "quiz0wrongQuestionIds" : "[1,2]"});
+    "quiz1score" : 70, "quiz1wrongQuestionIds" : "[1,2]"});
 
     await classDb.collection("class2").insertOne({ "uid" : "1", "username" : "student1", "userQuizCount" : 1, "score" : 100, "EXP" : 72, "quiz0score" : 100, "quiz0wrongQuestionIds" : null});
     await client.close();
@@ -44,25 +44,25 @@ describe("fetchDataForTeachers", () => {
 
   // test GET of "/" and "/studentWrongCounts"
   test("fetchDataForTeachers case of router.get(\"/\") with one student class ", async (done) => {
-    let response = await request.get("/").send({ classCode: "2", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
+    let response = await request.get("/quiz").query({classCode: "2", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
     expect(response.body.message).toBe("[[{\"username\":\"student1\",\"quiz0score\":100}],100,100]");
     done();
   });
 
   test("fetchDataForTeachers case of router.get(\"/\") with class undefined ", async (done) => {
-    let response = await request.get("/").send({ classCode: "3", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
+    let response = await request.get("/quiz").query({classCode: "3", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
     expect(response.body.message).toBe("[[],null,-1]");
     done();
   });
 
   test("fetchDataForTeachers case of router.get(\"/\") with a class with more than 1 student", async (done) => {
-    let response = await request.get("/").send({ classCode: "1", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
+    let response = await request.get("/quiz").query({classCode: "1", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
     expect(response.body.message).toBe("[[{\"username\":\"student1\",\"quiz0score\":100}, {\"username\":\"student2\",\"quiz0score\":75}, {\"username\":\"student3\",\"quiz0score\":80}],85,100]");
     done();
   });
 
   test("fetchDataForTeachers case of students wrong counts", async (done) => {
-    response = await request.get("/studentWrongCounts").send({ classCode: "0", quizCode: "0", });
+    let response = await request.get("/quiz/studentWrongCounts").query({classCode: "0", quizCode: "0"});
     expect(response.body.message).toBe("");
     done();
   });
@@ -95,19 +95,19 @@ describe("fetchDataForStudents", () => {
 
   // test GET of "/"
   test("fetchDataForStudents case of router.get(\"/\") with student highest ", async (done) => {
-    let response = await request.get("/").send({ classCode: "1", quizCode: "0", type: "score", userId: "1", isInstructor: "false"});
+    let response = await request.get("/quiz").query({classCode: 1, quizCode:0, type:"score", userId: 1, isInstructor:false});
     expect(response.body.message).toBe("[85,100,100]");
     done();
   });
 
   test("fetchDataForStudents case of router.get(\"/\") with some other student ", async (done) => {
-    let response = await request.get("/").send({ classCode: "1", quizCode: "0", type: "score", userId: "1", isInstructor: "false"});
+    let response = await request.get("/quiz").query({classCode: 1, quizCode:0, type:"score", userId: 2, isInstructor:false});
     expect(response.body.message).toBe("[85,100,75]");
     done();
   });
 
   test("fetchDataForStudents case of router.get(\"/\") with class undefined ", async (done) => {
-    let response = await request.get("/").send({ classCode: "3", quizCode: "0", type: "score", userId: "1", isInstructor: "false"});
+    let response = await request.get("/quiz").query({classCode: 3, quizCode:0, type:"score", userId: 1, isInstructor:false});
     expect(response.body.message).toBe("[null,-1,null]");
     done();
   });

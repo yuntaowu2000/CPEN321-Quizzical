@@ -1,8 +1,8 @@
 const express = require("express");
-const quizModule = require("../routes/studentLeaderboard.js");
+const studentLeaderboardModule = require("../routes/studentLeaderboard.js");
 const MongoClient = require("mongodb").MongoClient;
 
-const app = require("../routes/studentLeaderboard.js"); // link to server file
+const app = require("../app.js"); // link to server file
 const server = express();
 server.use("/", app);
 server.listen(3002);
@@ -57,19 +57,19 @@ describe("test student leaderboard", () => {
 
   // test GET of "/"
   test("get leaderboard with student highest ", async (done) => {
-    let response = await request.get("/").send({ classCode: "1", userId: "1", isInstructor: "false"});
+    let response = await request.get("/studentLeaderboard").query({ classCode: "1", userId: "1", isInstructor: "false"});
     expect(response.body.message).toBe("[{\"uid\":\"1\",\"username\":\"student1\",\"score\":100,\"EXP\":10},{\"uid\":\"2\",\"username\":\"student2\",\"score\":100,\"EXP\":9},{\"uid\":\"3\",\"username\":\"student3\",\"score\":100,\"EXP\":8},{\"uid\":\"4\",\"username\":\"student4\",\"score\":100,\"EXP\":7},{\"uid\":\"5\",\"username\":\"student5\",\"score\":100,\"EXP\":6},{\"uid\":\"6\",\"username\":\"student6\",\"score\":100,\"EXP\":5},{\"uid\":\"7\",\"username\":\"student7\",\"score\":100,\"EXP\":4},{\"uid\":\"8\",\"username\":\"student8\",\"score\":100,\"EXP\":3},{\"uid\":\"9\",\"username\":\"student9\",\"score\":100,\"EXP\":2},{\"uid\":\"10\",\"username\":\"student10\",\"score\":100,\"EXP\":1},1,{\"uid\":\"1\",\"username\":\"student1\",\"score\":100,\"EXP\":10}]");
     done();
   });
 
   test("get leaderboard with student lowest (out of 10) ", async (done) => {
-    let response = await request.get("/").send({ classCode: "1", userId: "11", isInstructor: "false"});
+    let response = await request.get("/studentLeaderboard").query({ classCode: "1", userId: "11", isInstructor: "false"});
     expect(response.body.message).toBe("[{\"uid\":\"1\",\"username\":\"student1\",\"score\":100,\"EXP\":10},{\"uid\":\"2\",\"username\":\"student2\",\"score\":100,\"EXP\":9},{\"uid\":\"3\",\"username\":\"student3\",\"score\":100,\"EXP\":8},{\"uid\":\"4\",\"username\":\"student4\",\"score\":100,\"EXP\":7},{\"uid\":\"5\",\"username\":\"student5\",\"score\":100,\"EXP\":6},{\"uid\":\"6\",\"username\":\"student6\",\"score\":100,\"EXP\":5},{\"uid\":\"7\",\"username\":\"student7\",\"score\":100,\"EXP\":4},{\"uid\":\"8\",\"username\":\"student8\",\"score\":100,\"EXP\":3},{\"uid\":\"9\",\"username\":\"student9\",\"score\":100,\"EXP\":2},{\"uid\":\"10\",\"username\":\"student10\",\"score\":100,\"EXP\":1},11,{\"uid\":\"11\",\"username\":\"student11\",\"score\":100,\"EXP\":0}]");
     done();
   });
 
   test("get leaderboard with student somewhere in between ", async (done) => {
-    let response = await request.get("/").send({ classCode: "1", userId: "5", isInstructor: "false"});
+    let response = await request.get("/studentLeaderboard").query({ classCode: "1", userId: "5", isInstructor: "false"});
     expect(response.body.message).toBe("[{\"uid\":\"1\",\"username\":\"student1\",\"score\":100,\"EXP\":10},{\"uid\":\"2\",\"username\":\"student2\",\"score\":100,\"EXP\":9},{\"uid\":\"3\",\"username\":\"student3\",\"score\":100,\"EXP\":8},{\"uid\":\"4\",\"username\":\"student4\",\"score\":100,\"EXP\":7},{\"uid\":\"5\",\"username\":\"student5\",\"score\":100,\"EXP\":6},{\"uid\":\"6\",\"username\":\"student6\",\"score\":100,\"EXP\":5},{\"uid\":\"7\",\"username\":\"student7\",\"score\":100,\"EXP\":4},{\"uid\":\"8\",\"username\":\"student8\",\"score\":100,\"EXP\":3},{\"uid\":\"9\",\"username\":\"student9\",\"score\":100,\"EXP\":2},{\"uid\":\"10\",\"username\":\"student10\",\"score\":100,\"EXP\":1},5,{\"uid\":\"5\",\"username\":\"student5\",\"score\":100,\"EXP\":6}]");
     done();
   });
@@ -90,9 +90,9 @@ describe("User Position function", () => {
     const output2 = [2, { uid: 2 }];
     const output3 = [3, { uid: 3 }];
 
-    expect(quizModule.getUserPosition(input, 1)).toEqual(output1);
-    expect(quizModule.getUserPosition(input, 2)).toEqual(output2);
-    expect(quizModule.getUserPosition(input, 3)).toEqual(output3);
+    expect(studentLeaderboardModule.getUserPosition(input, 1)).toEqual(output1);
+    expect(studentLeaderboardModule.getUserPosition(input, 2)).toEqual(output2);
+    expect(studentLeaderboardModule.getUserPosition(input, 3)).toEqual(output3);
 
   });
 });
@@ -117,9 +117,9 @@ describe("Refactor Data function", () => {
     const output2 = [ { uid: 1 }, { uid: 2 }, { uid: 3 }, { uid: 4 }, { uid: 5 }, { uid: 6}, { uid: 7 }, { uid: 8 }, { uid: 9 }, { uid: 10 }, 2, { uid: 2 }];
     const output3 = [ { uid: 1 }, { uid: 2 }, { uid: 3 }, { uid: 4 }, { uid: 5 }, { uid: 6}, { uid: 7 }, { uid: 8 }, { uid: 9 }, { uid: 10 }, 3, { uid: 3 }];
 
-    expect(quizModule.refactorData(input, 1)).toEqual(output1);
-    expect(quizModule.refactorData(input, 2)).toEqual(output2);
-    expect(quizModule.refactorData(input, 3)).toEqual(output3);
+    expect(studentLeaderboardModule.refactorData(input, 1)).toEqual(output1);
+    expect(studentLeaderboardModule.refactorData(input, 2)).toEqual(output2);
+    expect(studentLeaderboardModule.refactorData(input, 3)).toEqual(output3);
 
   });
 });
