@@ -17,29 +17,29 @@ describe("test student leaderboard", () => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var classDb = await client.db("classes");
 
-    await classDb.createCollection("class1");
+    var classOneCollection = await classDb.getCollection("class1");
 
-    await classDb.collection("class1").insertOne({ "uid" : "1", "username" : "student1", "EXP" : 10, "score" : 100});
+    await classOneCollection.insertOne({ "uid" : "1", "username" : "student1", "EXP" : 10, "score" : 100});
 
-    await classDb.collection("class1").insertOne({ "uid" : "2", "username" : "student2", "EXP" : 9, "score" : 100});
+    await classOneCollection.insertOne({ "uid" : "2", "username" : "student2", "EXP" : 9, "score" : 100});
 
-    await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student3", "EXP" : 8, "score" : 100});
+    await classOneCollection.insertOne({ "uid" : "3", "username" : "student3", "EXP" : 8, "score" : 100});
 
-    await classDb.collection("class1").insertOne({ "uid" : "4", "username" : "student4", "EXP" : 7, "score" : 100});
+    await classOneCollection.insertOne({ "uid" : "4", "username" : "student4", "EXP" : 7, "score" : 100});
 
-    await classDb.collection("class1").insertOne({ "uid" : "5", "username" : "student5", "EXP" : 6, "score" : 100});
+    await classOneCollection.insertOne({ "uid" : "5", "username" : "student5", "EXP" : 6, "score" : 100});
 
-    await classDb.collection("class1").insertOne({ "uid" : "6", "username" : "student6", "EXP" : 5, "score" : 100});
+    await classOneCollection.insertOne({ "uid" : "6", "username" : "student6", "EXP" : 5, "score" : 100});
 
-    await classDb.collection("class1").insertOne({ "uid" : "7", "username" : "student7", "EXP" : 4, "score" : 100});
+    await classOneCollection.insertOne({ "uid" : "7", "username" : "student7", "EXP" : 4, "score" : 100});
 
-    await classDb.collection("class1").insertOne({ "uid" : "8", "username" : "student8", "EXP" : 3, "score" : 100});
+    await classOneCollection.insertOne({ "uid" : "8", "username" : "student8", "EXP" : 3, "score" : 100});
 
-    await classDb.collection("class1").insertOne({ "uid" : "9", "username" : "student9", "EXP" : 2, "score" : 100});
+    await classOneCollection.insertOne({ "uid" : "9", "username" : "student9", "EXP" : 2, "score" : 100});
 
-    await classDb.collection("class1").insertOne({ "uid" : "10", "username" : "student10", "EXP" : 1, "score" : 100});
+    await classOneCollection.insertOne({ "uid" : "10", "username" : "student10", "EXP" : 1, "score" : 100});
 
-    await classDb.collection("class1").insertOne({ "uid" : "11", "username" : "student11", "EXP" : 0, "score" : 100});
+    await classOneCollection.insertOne({ "uid" : "11", "username" : "student11", "EXP" : 0, "score" : 100});
   });
 
   afterAll(async() => {
