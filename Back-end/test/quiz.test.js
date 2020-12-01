@@ -1,7 +1,7 @@
 const express = require("express");
 const quizModule = require("../routes/quiz.js");
 //import * as quizModule from "../routes/quiz.js";
-const {MongoClient} = require("mongodb");
+const MongoClient = require("mongodb").MongoClient;
 
 const app = require("../routes/quiz.js"); // link to server file
 const server = express();
@@ -9,37 +9,109 @@ server.use("/", app);
 server.listen(3001);
 const supertest = require("supertest");
 const request = supertest(server);
+//const { setupDB } = require("../test-setup.js");
 
-// const { setupDB } = require("../test-setup.js");
+describe("fetchDataForTeachers", () => {
+  
+  beforeAll(async() => {
+    var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+    var classDb = await client.db("classes");
 
-// Setup a Test Database
-// setupDB("classes");
-
-
-// add sample data to test database
-let res;
-request.post("/")
-	.send({
-      classCode: "",
-      quizCode: ""
-      // etc
-    }).then((output) => {
-      res = output;
+    await classDb.createCollection("class1", (err, res) => {
+      if (err) {throw err;}
     });
+    await classDb.createCollection("class2", (err, res) => {
+      if (err) {throw err;}
+    });
+    await classDb.collection("class1").insertOne({ "uid" : "1", "username" : "student1", "userQuizCount" : 1, "score" : 100, "EXP" : 72, "quiz0score" : 100, "quiz0wrongQuestionIds" : null});
 
-// test GET of "/" and "/studentWrongCounts"
-it("fetchDataForTeachers case of router.get(\"/\") ", async (done) => {
-  let response = await request.get("/").send({ classCode: "", quizCode: "", type: "", userId: "", isInstructor: "", });
-  expect(response.body.message).toBeUndefined();
+    await classDb.collection("class1").insertOne({ "uid" : "2", "username" : "student2", "userQuizCount" : 1, "score" : 75, "EXP" : 72, "quiz0score" : 75, "quiz0wrongQuestionIds" : "[2]"});
 
-  response = await request.get("/studentWrongCounts").send({ classCode: "", quizCode: "", });
-  expect(response.body.message).toBe("");
+    await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student3", "userQuizCount" : 2, "score" : 75, "EXP" : 72, "quiz0score" : 80, "quiz0wrongQuestionIds" : "[1]", 
+    "quiz1score" : 70, "quiz0wrongQuestionIds" : "[1,2]"});
 
-  done();
+    await classDb.collection("class2").insertOne({ "uid" : "1", "username" : "student1", "userQuizCount" : 1, "score" : 100, "EXP" : 72, "quiz0score" : 100, "quiz0wrongQuestionIds" : null});
+    await client.close();
+  });
+
+  afterAll(async() => {
+    var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+    var db = await client.db("classes");
+    await db.collection("class1").drop();
+    await db.collection("class2").drop();
+    await client.close();
+  });
+
+  // test GET of "/" and "/studentWrongCounts"
+  test("fetchDataForTeachers case of router.get(\"/\") with one student class ", async (done) => {
+    let response = await request.get("/").send({ classCode: "2", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
+    expect(response.body.message).toBe("[[{\"username\":\"student1\",\"quiz0score\":100}],100,100]");
+    done();
+  });
+
+  test("fetchDataForTeachers case of router.get(\"/\") with class undefined ", async (done) => {
+    let response = await request.get("/").send({ classCode: "3", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
+    expect(response.body.message).toBe("[[],null,-1]");
+    done();
+  });
+
+  test("fetchDataForTeachers case of router.get(\"/\") with a class with more than 1 student", async (done) => {
+    let response = await request.get("/").send({ classCode: "1", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
+    expect(response.body.message).toBe("[[{\"username\":\"student1\",\"quiz0score\":100}, {\"username\":\"student2\",\"quiz0score\":75}, {\"username\":\"student3\",\"quiz0score\":80}],85,100]");
+    done();
+  });
+
+  test("fetchDataForTeachers case of students wrong counts", async (done) => {
+    response = await request.get("/studentWrongCounts").send({ classCode: "0", quizCode: "0", });
+    expect(response.body.message).toBe("");
+    done();
+  });
 });
 
+describe("fetchDataForStudents", () => {
+  
+  beforeAll(async() => {
+    var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+    var classDb = await client.db("classes");
 
+    await classDb.createCollection("class1", (err, res) => {
+      if (err) {throw err;}
+    });
 
+    await classDb.collection("class1").insertOne({ "uid" : "1", "username" : "student1", "userQuizCount" : 1, "score" : 100, "EXP" : 72, "quiz0score" : 100, "quiz0wrongQuestionIds" : null});
+
+    await classDb.collection("class1").insertOne({ "uid" : "2", "username" : "student2", "userQuizCount" : 1, "score" : 75, "EXP" : 72, "quiz0score" : 75, "quiz0wrongQuestionIds" : "[2]"});
+
+    await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student3", "userQuizCount" : 2, "score" : 75, "EXP" : 72, "quiz0score" : 80, "quiz0wrongQuestionIds" : "[1]", 
+    "quiz1score" : 70, "quiz0wrongQuestionIds" : "[1,2]"});
+  });
+
+  afterAll(async() => {
+    var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+    var db = await client.db("classes");
+    await db.collection("class1").drop();
+    await client.close();
+  });
+
+  // test GET of "/"
+  test("fetchDataForStudents case of router.get(\"/\") with student highest ", async (done) => {
+    let response = await request.get("/").send({ classCode: "1", quizCode: "0", type: "score", userId: "1", isInstructor: "false"});
+    expect(response.body.message).toBe("[85,100,100]");
+    done();
+  });
+
+  test("fetchDataForStudents case of router.get(\"/\") with some other student ", async (done) => {
+    let response = await request.get("/").send({ classCode: "1", quizCode: "0", type: "score", userId: "1", isInstructor: "false"});
+    expect(response.body.message).toBe("[85,100,75]");
+    done();
+  });
+
+  test("fetchDataForStudents case of router.get(\"/\") with class undefined ", async (done) => {
+    let response = await request.get("/").send({ classCode: "3", quizCode: "0", type: "score", userId: "1", isInstructor: "false"});
+    expect(response.body.message).toBe("[null,-1,null]");
+    done();
+  });
+});
 
 // non-endpoint tests
 describe("Calculate Average function", () => {
