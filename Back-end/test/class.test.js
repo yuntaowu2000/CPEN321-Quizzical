@@ -69,19 +69,19 @@ describe("class quiz module test", () => {
   });
 
   // test GET of "/" and "/studentWrongCounts"
-  test("get general class info", async (done) => {
+  test("get class 2 quiz module", async (done) => {
       let response = await request.get("/classes").query({classCode: "2", type: "quizModules"});
       expect(response.status).toBe(200);
       done();
   });
 
-  test("get general class info 2", async (done) => {
+  test("get class 1 quiz module", async (done) => {
       let response = await request.get("/classes").query({classCode: "1", type: "quizModules"});
       expect(response.status).toBe(200);
       done();
   });
 
-  test("get general class info with class undefined", async (done) => {
+  test("get class quiz module info with class undefined", async (done) => {
       let response = await request.get("/classes").query({classCode: "11111", type: "quizModules"});
       expect(response.status).toBe(200);
       done();
