@@ -80,6 +80,7 @@ describe("fetchDataForStudents", () => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var db = await client.db("classes");
     await db.collection("class1").drop();
+    await db.close();
     await client.close();
   });
 
