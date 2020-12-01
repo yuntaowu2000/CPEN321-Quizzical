@@ -83,7 +83,7 @@ describe("fetchDataForStudents", () => {
     await classDb.collection("class1").insertOne({ "uid" : "2", "username" : "student2", "userQuizCount" : 1, "score" : 75, "EXP" : 72, "quiz0score" : 75, "quiz0wrongQuestionIds" : "[2]"});
 
     await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student3", "userQuizCount" : 2, "score" : 75, "EXP" : 72, "quiz0score" : 80, "quiz0wrongQuestionIds" : "[1]", 
-    "quiz1score" : 70, "quiz0wrongQuestionIds" : "[1,2]"});
+    "quiz1score" : 70, "quiz1wrongQuestionIds" : "[1,2]"});
   });
 
   afterAll(async() => {
