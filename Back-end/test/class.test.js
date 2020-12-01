@@ -2,11 +2,8 @@ const express = require("express");
 const MongoClient = require("mongodb").MongoClient;
 
 const app = require("../app.js"); // link to server file
-const server = express();
-server.use("/", app);
-server.listen(3003);
 const supertest = require("supertest");
-const request = supertest(server);
+const request = supertest(app);
 
 describe("class test", () => {
   
