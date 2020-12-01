@@ -60,7 +60,7 @@ describe("fetchDataForTeachers", () => {
 
 describe("fetchDataForStudents", () => {
   
-  beforeAll(async() => {
+  beforeAll(async(done) => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var classDb = await client.db("classes");
 
@@ -74,14 +74,16 @@ describe("fetchDataForStudents", () => {
 
     await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student3", "userQuizCount" : 2, "score" : 75, "EXP" : 72, "quiz0score" : 80, "quiz0wrongQuestionIds" : "[1]", 
     "quiz1score" : 70, "quiz1wrongQuestionIds" : "[1,2]"});
+    done();
   });
 
-  afterAll(async() => {
+  afterAll(async(done) => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var db = await client.db("classes");
     await db.collection("class1").drop();
     await db.close();
     await client.close();
+    done();
   });
 
   // test GET of "/"

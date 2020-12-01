@@ -7,7 +7,7 @@ const request = supertest(app);
 
 describe("class test", () => {
   
-    beforeAll(async() => {
+    beforeAll(async(done) => {
       var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
       var classDb = await client.db("data");
 
@@ -16,14 +16,16 @@ describe("class test", () => {
       await classDb.collection("classInfo").insertOne({"classCode" : 2, "uid" : "2", "category" : "English", "className" : "testClass2", "instructorUID" : "2", "quizModules" : "{\"category\":\"English\",\"classCode\":2,\"id\":0,\"moduleName\":\"module1\"}"});
   
       await client.close();
+      done();
     });
   
-    afterAll(async() => {
+    afterAll(async(done) => {
       var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
       var db = await client.db("data");
       await db.dropCollection("classInfo");
       await db.close();
       await client.close();
+      done();
     });
   
     // test GET of "/" and "/studentWrongCounts"

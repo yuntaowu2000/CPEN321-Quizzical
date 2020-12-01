@@ -13,7 +13,7 @@ const request = supertest(app);
 // test GET of "/"
 describe("test student leaderboard", () => {
   
-  beforeAll(async() => {
+  beforeAll(async(done) => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var classDb = await client.db("classes");
 
@@ -38,14 +38,16 @@ describe("test student leaderboard", () => {
     await classDb.collection("class1").insertOne({ "uid" : "10", "username" : "student10", "EXP" : 1, "score" : 100});
 
     await classDb.collection("class1").insertOne({ "uid" : "11", "username" : "student11", "EXP" : 0, "score" : 100});
+    done();
   });
 
-  afterAll(async() => {
+  afterAll(async(done) => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var db = await client.db("classes");
     await db.dropCollection("class1");
     await db.close();
     await client.close();
+    done();
   });
 
   // test GET of "/"
