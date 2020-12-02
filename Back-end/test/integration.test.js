@@ -9,7 +9,8 @@ describe("test account related post/get requests", () => {
     beforeAll(async(done) => {
         var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
         var db = client.db("data");
-        await db.createCollection("userInfo");
+        //insert dummy variable to implicitly create a database to avoid troubles caused by not properly drop the database
+        await db.collection("userInfo").insertOne({ "uid" : "0", "username" : "dummy"});
     });
   
     afterAll(async(done) => {
@@ -106,7 +107,8 @@ describe("test notification related post/get", () => {
     beforeAll(async(done) => {
         var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
         var db = client.db("data");
-        await db.createCollection("notificationFrequency");
+        //insert dummy variable to implicitly create a database to avoid troubles caused by not properly drop the database
+        await db.collection("notificationFrequency").insertOne({ "uid" : "0", "notificationFrequency" : 0, firebaseToken: "aaa"});
     });
   
     afterAll(async(done) => {
