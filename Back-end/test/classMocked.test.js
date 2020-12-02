@@ -1,6 +1,6 @@
 const MongoClient = require("mongodb").MongoClient;
 
-const app = require("../routes/class"); // link to server file
+const app = require("../app"); // link to server file
 jest.mock("../routes/emailSending");
 jest.mock("../routes/firebasePush");
 jest.mock("../routes/index");
@@ -35,21 +35,21 @@ describe("class test", () => {
     });
   
     test("get general class info", async (done) => {
-        let response = await request.get("/").query({classCode: "2"});
+        let response = await request.get("/classes").query({classCode: "2"});
         expect(response.status).toBe(200);
         expect(response.text).toBe("[{\"classCode\":2,\"uid\":\"2\",\"category\":\"English\",\"className\":\"testClass2\",\"instructorUID\":\"2\"}]");
         done();
     });
   
     test("get general class info 2", async (done) => {
-        let response = await request.get("/").query({classCode: "1"});
+        let response = await request.get("/classes").query({classCode: "1"});
         expect(response.status).toBe(200);
         expect(response.text).toBe("[{\"classCode\":1,\"uid\":\"1\",\"category\":\"Math\",\"className\":\"testClass1\",\"instructorUID\":\"1\"}]");
         done();
     });
 
     test("get general class info with class undefined", async (done) => {
-        let response = await request.get("/").query({classCode: "11111"});
+        let response = await request.get("/classes").query({classCode: "11111"});
         expect(response.text).toBe("[]");
         expect(response.status).toBe(200);
         done();
@@ -79,21 +79,21 @@ describe("class quiz module test", () => {
   });
 
   test("get class 2 quiz module", async (done) => {
-      let response = await request.get("/").query({classCode: "2", type: "quizModules"});
+      let response = await request.get("/classes").query({classCode: "2", type: "quizModules"});
       expect(response.text).toBe("{\"category\":\"English\",\"classCode\":2,\"id\":0,\"moduleName\":\"module1\"}");
       expect(response.status).toBe(200);
       done();
   });
 
   test("get class 1 quiz module", async (done) => {
-      let response = await request.get("/").query({classCode: "1", type: "quizModules"});
+      let response = await request.get("/classes").query({classCode: "1", type: "quizModules"});
       expect(response.text).toBe("{\"category\":\"Math\",\"classCode\":1,\"id\":0,\"moduleName\":\"module1\"}");
       expect(response.status).toBe(200);
       done();
   });
 
   test("get class quiz module info with class undefined", async (done) => {
-      let response = await request.get("/").query({classCode: "11111", type: "quizModules"});
+      let response = await request.get("/classes").query({classCode: "11111", type: "quizModules"});
       expect(response.text).toBe("");
       expect(response.status).toBe(200);
       done();
@@ -148,19 +148,19 @@ describe("delete test", () => {
   });
 
   test("student delete a class", async (done) => {
-    let response = await request.delete("/delete").query({classCode: "1", type: "deleteClass", uid:"3", isInstructor: "false"});
+    let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"3", isInstructor: "false"});
     expect(response.status).toBe(204);
     done();
   });
 
   test("teacher delete a class", async (done) => {
-    let response = await request.delete("/delete").query({classCode: "3", type: "deleteClass", uid:"1", isInstructor: "true"});
+    let response = await request.delete("/classes/delete").query({classCode: "3", type: "deleteClass", uid:"1", isInstructor: "true"});
     expect(response.status).toBe(204);
     done();
   });
 
   test("teacher delete a quiz", async (done) => {
-    let response = await request.delete("/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "1"});
+    let response = await request.delete("/classes/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "1"});
     expect(response.status).toBe(204);
     done();
   });
@@ -169,7 +169,7 @@ describe("delete test", () => {
 
 describe("test invalid gets", () => {
   test("invalid get", async(done) => {
-    let response = await request.get("/").query({type: "sometype"});
+    let response = await request.get("/classes").query({type: "sometype"});
     expect(response.text).toBe("invalid request");
     done();
   });

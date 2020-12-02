@@ -2,7 +2,7 @@ const quizModule = require("../routes/quiz.js");
 //import * as quizModule from "../routes/quiz.js";
 const MongoClient = require("mongodb").MongoClient;
 
-const app = require("../routes/quiz"); // link to server file
+const app = require("../app"); // link to server file
 jest.mock("../routes/emailSending");
 jest.mock("../routes/firebasePush");
 jest.mock("../routes/index");
