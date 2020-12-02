@@ -22,15 +22,15 @@ describe("test account related post/get requests", () => {
     });
   
     test("test create account and get user data (username, email, EXP, user quiz count)", async (done) => {
-        let response = await request.post("/upload/user").send({ "uid": "1", "type": "userInfo", "data": "{\"username\": \"student1\", \"email\": \"student1@ubc.ca\", \"isInstructor\": false, \"userQuizCount\": 0, \"EXP\": 0}"});
+        let response = await request.post("/upload/user").send({ "uid": "1", "type": "userInfo", "data": "{\"username\": \"student1\", \"Email\": \"student1@ubc.ca\", \"isInstructor\": false, \"userQuizCount\": 0, \"EXP\": 0}"});
         expect(response.status).toBe(200);
 
         response = await request.get("/users").query({userId: "1"});
-        expect(response.text).toBe("[{\"uid\":\"1\",\"EXP\":0,\"email\":\"student1@ubc.ca\",\"isInstructor\":false,\"userQuizCount\":0,\"username\":\"student1\"}]");
+        expect(response.text).toBe("[{\"uid\":\"1\",\"EXP\":0,\"Email\":\"student1@ubc.ca\",\"isInstructor\":false,\"userQuizCount\":0,\"username\":\"student1\"}]");
         expect(response.status).toBe(200);
 
         response = await request.get("/users").query({userId: "1", type: "userInfo"});
-        expect(response.text).toBe("[{\"uid\":\"1\",\"EXP\":0,\"email\":\"student1@ubc.ca\",\"isInstructor\":false,\"userQuizCount\":0,\"username\":\"student1\"}]");
+        expect(response.text).toBe("[{\"uid\":\"1\",\"EXP\":0,\"Email\":\"student1@ubc.ca\",\"isInstructor\":false,\"userQuizCount\":0,\"username\":\"student1\"}]");
         expect(response.status).toBe(200);
 
         response = await request.get("/users/contact").query({type: "username", userId: "1"});
