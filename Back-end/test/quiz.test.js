@@ -107,6 +107,43 @@ describe("fetchDataForStudents", () => {
   });
 });
 
+describe("fetch quiz", () => {
+  beforeAll(async(done) => {
+    var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+    var db = await client.db("data");
+
+    await db.collection("quizzes").insertOne([{"classCode":1,"moduleName":"module2","uid":"1","courseCategory":"Math","instructorUID":"1","questionList":[{"HasPic":false,"category":"Math","choices":[{"isPic":false,"str":"5"},{"isPic":false,"str":"6"}],"correctAnsNum":1,"index":1,"picSrc":"","question":"2+3=?","questionType":"MC"}],"quizCode":1}]);
+
+    done();
+  });
+
+  afterAll(async(done) => {
+    var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+    var db = await client.db("data");
+    await db.collection("quizzes").drop();
+    await client.close();
+    done();
+  });
+
+  test("fetch an existing quiz", async(done) => {
+    let response = await request.get("/quiz").query({classCode: 1, quizCode:1});
+    expect(response.status).toBe(200);
+    done();
+  });
+
+  test("fetch an non-existing quiz (quiz module does not exist)", async(done) => {
+    let response = await request.get("/quiz").query({classCode: 1, quizCode:0});
+    expect(response.status).toBe(200);
+    done();
+  });
+
+  test("fetch an non-existing quiz (class not exist)", async(done) => {
+    let response = await request.get("/quiz").query({classCode: 2, quizCode:0});
+    expect(response.status).toBe(200);
+    done();
+  });
+});
+
 // non-endpoint tests
 describe("Calculate Average function", () => {
   test("it should calculate the average score of quizScoreField values from the input data array", () => {

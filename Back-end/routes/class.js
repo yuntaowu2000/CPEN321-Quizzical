@@ -55,30 +55,21 @@ function sendClassDeletedNotification(classCode, uid) {
   let timeout = 2000;
 
   db.collection("classInfo").find({classCode: { $eq: classCode }}).project({className:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
-    if (err) {
-      throw err;
-    } else {
-      let className = Object.values(retval[0])[0] + "";
-      let message =  util.format("Class %s has been deleted. If your class list has not been correctly populated, please restart the app or delete the class yourself.", className);
+    let className = Object.values(retval[0])[0] + "";
+    let message =  util.format("Class %s has been deleted. If your class list has not been correctly populated, please restart the app or delete the class yourself.", className);
 
-      //get all the students here and send the message to all students
-      classDb.collection("class" + classCode).find({}).project({_id:0, uid: 1})
-      .toArray((err, data) => {
-        let userIds = [];
-        for (var d of data) {
-          userIds.push(Object.values(d)[0]);
-        }
-        firebaseFunction.sendMessage(userIds, message);
-        //wait for everything is done, then delete. 
-        db.collection("classInfo").deleteOne(
-          {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]},
-          (err, db) => {
-            if (err) {
-              throw err;
-            }
-          });
-      });
-    }
+    //get all the students here and send the message to all students
+    classDb.collection("class" + classCode).find({}).project({_id:0, uid: 1})
+    .toArray((err, data) => {
+      let userIds = [];
+      for (var d of data) {
+        userIds.push(Object.values(d)[0]);
+      }
+      firebaseFunction.sendMessage(userIds, message);
+      //wait for everything is done, then delete. 
+      db.collection("classInfo").deleteOne(
+        {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]});
+    });
   });
 }
 
@@ -86,13 +77,7 @@ function handleDeleteClass(isInstructor, classCode, uid) {
   if (isInstructor === "true") {
     sendClassDeletedNotification(classCode, uid);
 
-    db.collection("quizzes").deleteMany(
-      {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]},
-      (err, db) => {
-        if (err) {
-          throw err;
-        }
-      });
+    db.collection("quizzes").deleteMany({$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}]});
 
     classDb.collection("class" + classCode).find().project({_id:0,uid:1}).toArray((err, docs) => {
       let uidList = [];
@@ -125,11 +110,7 @@ function handleDeleteClass(isInstructor, classCode, uid) {
 
   } else {
     //delete the student from the class.
-    classDb.collection("class" + classCode).deleteOne({uid: {$eq: uid}}, (err, db) => {
-      if (err) {
-        throw err;
-      }
-    });
+    classDb.collection("class" + classCode).deleteOne({uid: {$eq: uid}});
   }
 }
 
@@ -145,22 +126,12 @@ router.delete("/delete", (req, res, next) => {
   } else if (type === "deleteQuiz") {
     let quizCode = Number(url.searchParams.get("quizModules"));
     db.collection("quizzes").deleteOne(
-      {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}, {quizCode: { $eq: quizCode }}]},
-      (err, db) => {
-        if (err) {
-          throw err;
-        }
-      });
+      {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}, {quizCode: { $eq: quizCode }}]});
     let classDbName = "class" + classCode;
     let quizScoreField = "quiz" + quizCode + "score";
     let quizWrongQuestionFieldName = "quiz" + quizCode + "wrongQuestionIds";
     db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}},
-      {$unset: {[quizScoreField]: 1, [quizWrongQuestionFieldName]: ""}},
-      (err, db) => {
-        if (err) {
-          throw err;
-        }
-      });
+      {$unset: {[quizScoreField]: 1, [quizWrongQuestionFieldName]: ""}});
   }
 
   res.statusCode = 204;

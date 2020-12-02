@@ -9,11 +9,11 @@ describe("class test", () => {
   
     beforeAll(async(done) => {
       var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
-      var classDb = await client.db("data");
+      var db = await client.db("data");
 
-      await classDb.collection("classInfo").insertOne({"classCode" : 1, "uid" : "1", "category" : "Math", "className" : "testClass1", "instructorUID" : "1", "quizModules" : "{\"category\":\"Math\",\"classCode\":1,\"id\":0,\"moduleName\":\"module1\"}"});
+      await db.collection("classInfo").insertOne({"classCode" : 1, "uid" : "1", "category" : "Math", "className" : "testClass1", "instructorUID" : "1", "quizModules" : "{\"category\":\"Math\",\"classCode\":1,\"id\":0,\"moduleName\":\"module1\"}"});
   
-      await classDb.collection("classInfo").insertOne({"classCode" : 2, "uid" : "2", "category" : "English", "className" : "testClass2", "instructorUID" : "2", "quizModules" : "{\"category\":\"English\",\"classCode\":2,\"id\":0,\"moduleName\":\"module1\"}"});
+      await db.collection("classInfo").insertOne({"classCode" : 2, "uid" : "2", "category" : "English", "className" : "testClass2", "instructorUID" : "2", "quizModules" : "{\"category\":\"English\",\"classCode\":2,\"id\":0,\"moduleName\":\"module1\"}"});
   
       await client.close();
       done();
@@ -52,11 +52,11 @@ describe("class quiz module test", () => {
   
   beforeAll(async(done) => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
-    var classDb = await client.db("data");
+    var db = await client.db("data");
 
-    await classDb.collection("classInfo").insertOne({"classCode" : 1, "uid" : "1", "category" : "Math", "className" : "testClass1", "instructorUID" : "1", "quizModules" : "{\"category\":\"Math\",\"classCode\":1,\"id\":0,\"moduleName\":\"module1\"}"});
+    await db.collection("classInfo").insertOne({"classCode" : 1, "uid" : "1", "category" : "Math", "className" : "testClass1", "instructorUID" : "1", "quizModules" : "{\"category\":\"Math\",\"classCode\":1,\"id\":0,\"moduleName\":\"module1\"}"});
 
-    await classDb.collection("classInfo").insertOne({"classCode" : 2, "uid" : "2", "category" : "English", "className" : "testClass2", "instructorUID" : "2", "quizModules" : "{\"category\":\"English\",\"classCode\":2,\"id\":0,\"moduleName\":\"module1\"}"});
+    await db.collection("classInfo").insertOne({"classCode" : 2, "uid" : "2", "category" : "English", "className" : "testClass2", "instructorUID" : "2", "quizModules" : "{\"category\":\"English\",\"classCode\":2,\"id\":0,\"moduleName\":\"module1\"}"});
 
     await client.close();
     done();
@@ -87,6 +87,65 @@ describe("class quiz module test", () => {
       let response = await request.get("/classes").query({classCode: "11111", type: "quizModules"});
       expect(response.status).toBe(200);
       done();
+  });
+
+});
+
+describe("delete test", () => {
+  beforeAll(async(done) => {
+    var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+    var db = await client.db("data");
+    var classDb = await client.db("classes");
+
+    await db.collection("classInfo").insertOne({"classCode" : 1, "uid" : "1", "category" : "Math", "className" : "testClass1", "instructorUID" : "1", "quizModules" : "{\"category\":\"Math\",\"classCode\":1,\"id\":0,\"moduleName\":\"module1\"}"});
+
+    await db.collection("classInfo").insertOne({"classCode" : 2, "uid" : "2", "category" : "English", "className" : "testClass2", "instructorUID" : "2", "quizModules" : "{\"category\":\"English\",\"classCode\":2,\"id\":0,\"moduleName\":\"module1\"}"});
+
+    await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0});
+
+    await client.close();
+    done();
+  });
+
+  afterAll(async(done) => {
+    var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+    var db = await client.db("data");
+    var classDb = await client.db("classes");
+    await db.dropCollection("classInfo");
+    await classDb.dropCollection("class1");
+    await client.close();
+    done();
+  });
+
+  // test GET of "/" and "/studentWrongCounts"
+  test("student delete a class", async (done) => {
+    let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"3", isInstructor: "false"});
+    expect(response.status).toBe(204);
+    done();
+  });
+
+  test("teacher delete a class", async (done) => {
+    let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"1", isInstructor: "true"});
+    expect(response.status).toBe(204);
+    done();
+  });
+
+  test("teacher delete a non-existing class", async (done) => {
+    let response = await request.delete("/classes/delete").query({classCode: "100", type: "deleteClass", uid:"1", isInstructor: "true"});
+    expect(response.status).toBe(204);
+    done();
+  });
+
+  test("teacher delete a quiz", async (done) => {
+    let response = await request.delete("/classes/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "0"});
+    expect(response.status).toBe(204);
+    done();
+  });
+
+  test("teacher delete a quiz with non-existing quiz", async (done) => {
+    let response = await request.delete("/classes/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "10"});
+    expect(response.status).toBe(204);
+    done();
   });
 
 });

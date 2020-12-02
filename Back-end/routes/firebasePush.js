@@ -24,23 +24,19 @@ function sendMessage(userIds, message) {
     return;
   }
   db.collection("notificationFrequency").find({uid: {$in: userIds }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
-    if (err) {
-      throw err;
-    } else {
-      let userTokens = [];
-      for (var val of retval) {
-        userTokens.push(Object.values(val)[0]);
-      }
-
-      let payload = {
-        notification: {
-          title: "Quizzical",
-          body: message
-        },
-        tokens: userTokens
-      };
-      firebaseAdmin.messaging().sendMulticast(payload);
+    let userTokens = [];
+    for (var val of retval) {
+      userTokens.push(Object.values(val)[0]);
     }
+
+    let payload = {
+      notification: {
+        title: "Quizzical",
+        body: message
+      },
+      tokens: userTokens
+    };
+    firebaseAdmin.messaging().sendMulticast(payload);
   });
 }
 

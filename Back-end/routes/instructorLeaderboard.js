@@ -36,17 +36,13 @@ router.get("/", (req, res, next) => {
       .sort({EXP: -1})
       .maxTimeMS(timeout)
       .toArray((err, data) => {
-      if (err) {
-        throw err;
-      } else {
-        var userValues = getUserPosition(data, instructorUID);
-        if (data.length > 10) {
-            data = data.slice(0, 10);
-        }
-        data.push(userValues[0]);
-        data.push(userValues[1]);
-        res.send(data);
+      var userValues = getUserPosition(data, instructorUID);
+      if (data.length > 10) {
+          data = data.slice(0, 10);
       }
+      data.push(userValues[0]);
+      data.push(userValues[1]);
+      res.send(data);
     });
 });
 
