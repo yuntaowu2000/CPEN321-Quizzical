@@ -35,7 +35,7 @@ function sendMessage(userIds, message) {
       },
       tokens: userTokens
     };
-    if (userTokens.length === 0) {
+    if (userTokens.length === 0 || userTokens.indexOf(null) !== -1) {
       return;
     }
     firebaseAdmin.messaging().sendMulticast(payload);
