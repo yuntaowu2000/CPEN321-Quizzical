@@ -295,8 +295,8 @@ describe("quiz integration test", () => {
         var db = await client.db("data");
         //insert dummy variable to implicitly create a database to avoid troubles caused by not properly drop the database
         await db.collection("userInfo").insertOne({ "uid" : "0", "username" : "dummy"});
-        await db.collection("userInfo").insertOne({"uid":"1", "username": "instructor1", "Email": "yuntaowu2009@hotmail.com"});
-        await db.collection("userInfo").insertOne({"uid":"2", "username":"student1", "Email": "test@ece.ubc.ca"})
+        await db.collection("userInfo").insertOne({"uid":"1", "username": "instructor1", "Email": "yuntaowu2009@hotmail.com", "isInstructor": true, "userQuizCount": "0", "EXP": "0"});
+        await db.collection("userInfo").insertOne({"uid":"2", "username":"student1", "Email": "test@ece.ubc.ca", "isInstructor": false, "userQuizCount": "0", "EXP": "0"})
         await db.collection("classInfo").insertOne({"classCode":1,"uid":"1","category":"Math","className":"testClass1","instructorUID":"1"});
         await classDb.collection("testClass1").insertOne({ "uid" : "2", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0})
         done();
