@@ -364,7 +364,7 @@ describe("quiz integration test", () => {
 
 });
 
-describe("upload invalid type", async(done) => {
+describe("upload invalid type", () => {
     test("quiz invalid type", async(done) => {
         let response = await request.post("/upload/quiz").send({"type": "someType"});
         expect(response.status).toBe(200);
