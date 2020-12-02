@@ -26,11 +26,11 @@ describe("test account related post/get requests", () => {
         expect(response.status).toBe(200);
 
         response = await request.get("/users").query({userId: "1"});
-        expect(response.text).toBe("{\"uid\":\"1\",\"EXP\":0,\"Email\":\"student1@ubc.ca\",\"isInstructor\":false,\"userQuizCount\":0,\"username\":\"student1\"}");
+        expect(response.text).toBe("[{\"uid\":\"1\",\"EXP\":0,\"email\":\"student1@ubc.ca\",\"isInstructor\":false,\"userQuizCount\":0,\"username\":\"student1\"}]");
         expect(response.status).toBe(200);
 
         response = await request.get("/users").query({userId: "1", type: "userInfo"});
-        expect(response.text).toBe("{\"uid\":\"1\",\"EXP\":0,\"Email\":\"student1@ubc.ca\",\"isInstructor\":false,\"userQuizCount\":0,\"username\":\"student1\"}");
+        expect(response.text).toBe("[{\"uid\":\"1\",\"EXP\":0,\"email\":\"student1@ubc.ca\",\"isInstructor\":false,\"userQuizCount\":0,\"username\":\"student1\"}]");
         expect(response.status).toBe(200);
 
         response = await request.get("/users/contact").query({type: "username", userId: "1"});
