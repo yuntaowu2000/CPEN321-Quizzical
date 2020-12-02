@@ -137,17 +137,17 @@ describe("delete test", () => {
     done();
   });
 
-  test("teacher delete a class", async (done) => {
-    let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"1", isInstructor: "true"});
-    expect(response.status).toBe(204);
-    done();
-  });
-
-  // test("teacher delete a quiz", async (done) => {
-  //   let response = await request.delete("/classes/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "1"});
+  // test("teacher delete a class", async (done) => {
+  //   let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"1", isInstructor: "true"});
   //   expect(response.status).toBe(204);
   //   done();
   // });
+
+  test("teacher delete a quiz", async (done) => {
+    let response = await request.delete("/classes/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "1"});
+    expect(response.status).toBe(204);
+    done();
+  });
 
 });
 
