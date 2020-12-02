@@ -107,7 +107,7 @@ describe("delete test", () => {
 
     await db.collection("userInfo").insertOne({"uid": "4", "username" : "student2", "Email": "example@ubc.ca", "isInstructor": false, "classList": "{\"category\":\"Math\",\"classCode\":1,\"className\":\"testClass1\",\"instructorUID\":\"1\"}"});
 
-    await db.collection("notificationFrequency").insertOne({"uid": "3", "notificationFrequency": 0});
+    await db.collection("notificationFrequency").insertOne({"uid": "3", "notificationFrequency": 0, "firebaseToken": "aaa"});
 
     await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0});
 

@@ -27,11 +27,7 @@ router.get("/", (req, res, next) => {
 
   if (type === null) {
     db.collection("classInfo").find({ classCode: { $eq: classCode }}).project({quizModules:0, _id:0}).maxTimeMS(timeout).toArray((err, classInfo) => {
-      if (err) {
-        throw err;
-      } else {
-        res.send(classInfo);
-      }
+      res.send(classInfo);
     });
   } else if (type === "quizModules") {
     db.collection("classInfo").find({ classCode: { $eq: classCode }}).project({quizModules:1, _id:0}).maxTimeMS(timeout).toArray((err, quizModules) => {

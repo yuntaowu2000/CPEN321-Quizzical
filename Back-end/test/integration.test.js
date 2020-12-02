@@ -186,6 +186,9 @@ describe("test create/join class, create quiz modules", () => {
         //student joins a class
         response = await request.post("/upload/class").send({"uid":"2","type":"joinClass","data":"1"});
         expect(response.status).toBe(200);
+        
+        response = await request.post("/upload/class").send({"uid":"2","type":"classList","data":"{\"category\":\"Math\",\"classCode\":1,\"className\":\"testClass1\",\"instructorUID\":\"1\"}"});
+        expect(response.status).toBe(200);
 
         response = await request.get("/classes").query({classCode: 1});
         expect(response.text).toBe("[{\"classCode\":1,\"uid\":\"1\",\"category\":\"Math\",\"className\":\"testClass1\",\"instructorUID\":\"1\"}]");

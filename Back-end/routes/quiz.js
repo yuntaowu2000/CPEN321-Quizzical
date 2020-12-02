@@ -40,25 +40,21 @@ function fetchDataForTeachers(res, classCode, quizCode, type) {
     classesDb.collection(classDbName).find({[quizScoreField]: {$ne: null}})
     .project({_id:0, [quizScoreField]: 1, username: 1})
     .toArray((err, data) => {
-      if (err) {
-        throw err;
-      } else {
-        let resultArr = new Array();
-        resultArr.push(data);
-        resultArr.push(calculateAverage(data, quizScoreField));
-        resultArr.push(findMaxScore(data, quizScoreField));
-        res.send(resultArr);
-      }
+      let resultArr = new Array();
+      resultArr.push(data);
+      resultArr.push(calculateAverage(data, quizScoreField));
+      resultArr.push(findMaxScore(data, quizScoreField));
+      res.send(resultArr);
     });
   } else {
     db.collection("quizzes")
     .find({$and: [{classCode}, {quizCode}]})
     .project({_id:0})
     .toArray((err, data) => {
-      if (err) {
-        throw err;
+      //just send all questions back
+      if (data.length === 0 || data[0] === null) {
+        res.send("");
       } else {
-        //just send all questions back
         res.send(data[0]["questionList"]);
       }
     });
