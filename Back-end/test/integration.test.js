@@ -162,7 +162,7 @@ describe("test create/join class, create quiz modules", () => {
         //insert dummy variable to implicitly create a database to avoid troubles caused by not properly drop the database
         await db.collection("userInfo").insertOne({ "uid" : "0", "username" : "dummy"});
         await db.collection("userInfo").insertOne({"uid":"1", "username": "instructor1", "Email": "yuntaowu2009@hotmail.com"});
-        await db.collection("userInfo").insertOne({"uid":"2", "username":"student1", "Email": "test@ece.ubc.ca"})
+        await db.collection("userInfo").insertOne({"uid":"2", "username":"student1", "Email": "test@ece.ubc.ca"});
         await db.collection("classInfo").insertOne({"classCode":0,"uid":"0","category":"Math","className":"testClass1","instructorUID":"1"});
         done();
     });
@@ -188,7 +188,7 @@ describe("test create/join class, create quiz modules", () => {
         expect(response.status).toBe(200);
 
         response = await request.get("/classes").query({classCode: 1});
-        expect(response.text).toBe("[{\"classCode\":1,\"uid\":\"1\",\"category\":\"Math\",\"className\":\"testClass1\",\"instructorUID\":\"1\"}]")
+        expect(response.text).toBe("[{\"classCode\":1,\"uid\":\"1\",\"category\":\"Math\",\"className\":\"testClass1\",\"instructorUID\":\"1\"}]");
         expect(response.status).toBe(200);
 
         done();
@@ -199,7 +199,7 @@ describe("test create/join class, create quiz modules", () => {
         expect(response.status).toBe(200);
 
         response = await request.get("/classes").query({classCode: 2});
-        expect(response.text).toBe("[]")
+        expect(response.text).toBe("[]");
         expect(response.status).toBe(200);
 
         done();
@@ -231,7 +231,7 @@ describe("test instructor leader board", () => {
 
         await db.collection("userInfo").insertOne({ "uid" : "10", "username" : "instructor10", "EXP" : 1, "isInstructor": true});
 
-        await db.collection("userInfo").insertOne({"uid": "11", "username": "student1", "EXP" : 100, "isInstructor": false})
+        await db.collection("userInfo").insertOne({"uid": "11", "username": "student1", "EXP" : 100, "isInstructor": false});
 
         await db.collection("userInfo").insertOne({ "uid" : "14", "username" : "instructor11", "EXP" : 0, "isInstructor": true});
         done();
@@ -296,9 +296,9 @@ describe("quiz integration test", () => {
         //insert dummy variable to implicitly create a database to avoid troubles caused by not properly drop the database
         await db.collection("userInfo").insertOne({ "uid" : "0", "username" : "dummy"});
         await db.collection("userInfo").insertOne({"uid":"1", "username": "instructor1", "Email": "yuntaowu2009@hotmail.com", "isInstructor": true, "userQuizCount": "0", "EXP": 0});
-        await db.collection("userInfo").insertOne({"uid":"2", "username":"student1", "Email": "test@ece.ubc.ca", "isInstructor": false, "userQuizCount": "0", "EXP": 0})
+        await db.collection("userInfo").insertOne({"uid":"2", "username":"student1", "Email": "test@ece.ubc.ca", "isInstructor": false, "userQuizCount": "0", "EXP": 0});
         await db.collection("classInfo").insertOne({"classCode":1,"uid":"1","category":"Math","className":"testClass1","instructorUID":"1"});
-        await classDb.collection("testClass1").insertOne({ "uid" : "2", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0})
+        await classDb.collection("class1").insertOne({ "uid" : "2", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0});
         done();
     });
 
@@ -321,14 +321,14 @@ describe("quiz integration test", () => {
         response = await request.post("/upload/quiz").send({"uid":"1","type":"createQuiz","data":"{\"classCode\":1,\"courseCategory\":\"Math\",\"instructorUID\":\"1\",\"moduleName\":\"module1\",\"questionList\":[{\"HasPic\":false,\"category\":\"Math\",\"choices\":[{\"isPic\":false,\"str\":\"2\"},{\"isPic\":false,\"str\":\"3\"}],\"correctAnsNum\":1,\"index\":1,\"picSrc\":\"\",\"question\":\"1+1\\u003d?\",\"questionType\":\"MC\"}],\"quizCode\":1}"});
         expect(response.status).toBe(200);
         //update EXP and user quiz count
-        response = await request.post("upload/instructorStats").send({"uid":"1","type":"EXP","data":"10"});
+        response = await request.post("/upload/instructorStats").send({"uid":"1","type":"EXP","data":"10"});
         expect(response.status).toBe(200);
 
         response = await request.get("/users/classStats").query({type: "EXP", userId: "1"});
         expect(response.text).toBe("10");
         expect(response.status).toBe(200);
 
-        response = await request.post("upload/instructorStats").send({"uid":"1","type":"userQuizCount","data":"1"});
+        response = await request.post("/upload/instructorStats").send({"uid":"1","type":"userQuizCount","data":"1"});
         expect(response.status).toBe(200);
 
         response = await request.get("/users/classStats").query({type: "userQuizCount", userId: "1"});
