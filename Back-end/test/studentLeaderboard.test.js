@@ -69,6 +69,25 @@ describe("test student leaderboard", () => {
     done();
   });
 
+  test("get student leaderboard as a teacher", async (done) => {
+    let response = await request.get("/studentLeaderboard").query({ classCode: "1", userId: "5", isInstructor: "true"});
+    expect(response.text).toBe("[{\"uid\":\"1\",\"username\":\"student1\",\"EXP\":10,\"score\":100},{\"uid\":\"2\",\"username\":\"student2\",\"EXP\":9,\"score\":100},{\"uid\":\"3\",\"username\":\"student3\",\"EXP\":8,\"score\":100},{\"uid\":\"4\",\"username\":\"student4\",\"EXP\":7,\"score\":100},{\"uid\":\"5\",\"username\":\"student5\",\"EXP\":6,\"score\":100},{\"uid\":\"6\",\"username\":\"student6\",\"EXP\":5,\"score\":100},{\"uid\":\"7\",\"username\":\"student7\",\"EXP\":4,\"score\":100},{\"uid\":\"8\",\"username\":\"student8\",\"EXP\":3,\"score\":100},{\"uid\":\"9\",\"username\":\"student9\",\"EXP\":2,\"score\":100},{\"uid\":\"10\",\"username\":\"student10\",\"EXP\":1,\"score\":100},{\"uid\":\"11\",\"username\":\"student11\",\"EXP\":0,\"score\":100}]");
+    expect(response.status).toBe(200);
+    done();
+  });
+
+  test("get student leaderboard with less than or equal to 10 students in total", async(done) => {
+    var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+    var db= await client.db("classes");
+
+    await db.collection("class1").deleteOne({"uid" : "11"});
+
+    let response = await request.get("/studentLeaderboard").query({ classCode: "1", userId: "5", isInstructor: "false"});
+    expect(response.text).toBe("[{\"uid\":\"1\",\"username\":\"student1\",\"EXP\":10,\"score\":100},{\"uid\":\"2\",\"username\":\"student2\",\"EXP\":9,\"score\":100},{\"uid\":\"3\",\"username\":\"student3\",\"EXP\":8,\"score\":100},{\"uid\":\"4\",\"username\":\"student4\",\"EXP\":7,\"score\":100},{\"uid\":\"5\",\"username\":\"student5\",\"EXP\":6,\"score\":100},{\"uid\":\"6\",\"username\":\"student6\",\"EXP\":5,\"score\":100},{\"uid\":\"7\",\"username\":\"student7\",\"EXP\":4,\"score\":100},{\"uid\":\"8\",\"username\":\"student8\",\"EXP\":3,\"score\":100},{\"uid\":\"9\",\"username\":\"student9\",\"EXP\":2,\"score\":100},{\"uid\":\"10\",\"username\":\"student10\",\"EXP\":1,\"score\":100},5,{\"uid\":\"5\",\"username\":\"student5\",\"EXP\":6,\"score\":100}]");
+    expect(response.status).toBe(200);
+    done();
+  });
+
 });
 
 

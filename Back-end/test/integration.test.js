@@ -178,11 +178,11 @@ describe("test create/join class, create quiz modules", () => {
     test("create class and a student join the class", async(done) => {
         //most functionalities has been tested in class.test.js
         //teacher creates a class
-        let response = await request.post("/class").send({"uid":"1","type":"createClass","data":"{\"category\":\"Math\",\"classCode\":1,\"className\":\"testClass1\",\"instructorUID\":\"1\"}"});
+        let response = await request.post("/upload/class").send({"uid":"1","type":"createClass","data":"{\"category\":\"Math\",\"classCode\":1,\"className\":\"testClass1\",\"instructorUID\":\"1\"}"});
         expect(response.status).toBe(200);
 
         //student joins a class
-        response = await request.post("/class").send({"uid":"2","type":"joinClass","data":"1"});
+        response = await request.post("/upload/class").send({"uid":"2","type":"joinClass","data":"1"});
         expect(response.status).toBe(200);
 
         response = await request.get("/classes").query({classCode: 1});
@@ -193,7 +193,7 @@ describe("test create/join class, create quiz modules", () => {
     });
 
     test("joining a class that does not exist", async(done) => {
-        let response = await request.post("/class").send({"uid":"2","type":"joinClass","data":"2"});
+        let response = await request.post("/upload/class").send({"uid":"2","type":"joinClass","data":"2"});
         expect(response.status).toBe(200);
 
         response = await request.get("/classes").query({classCode: 2});
@@ -207,7 +207,7 @@ describe("test create/join class, create quiz modules", () => {
 describe("test instructor leader board", () => {
     beforeAll(async(done) => {
         var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
-        var db = await client.db("data");
+        var db= await client.db("data");
 
         await db.collection("userInfo").insertOne({ "uid" : "1", "username" : "instructor1", "EXP" : 10, "isInstructor": true});
 
@@ -245,16 +245,28 @@ describe("test instructor leader board", () => {
 
     test("get leaderboard with teacher lowest (out of 10) ", async (done) => {
         let response = await request.get("/instructorLeaderboard").query({userId: "14"});
-        expect(response.text).toBe("[{\"uid\":\"1\",\"EXP\":10,\"username\":\"instructor1\"},{\"uid\":\"2\",\"EXP\":9,\"username\":\"instructor2\"},{\"uid\":\"3\",\"EXP\":8,\"username\":\"instructor3\"},{\"uid\":\"4\",\"EXP\":7,\"username\":\"instructor4\"},{\"uid\":\"5\",\"EXP\":6,\"username\":\"instructor5\"},{\"uid\":\"6\",\"EXP\":5,\"username\":\"instructor6\"},{\"uid\":\"7\",\"EXP\":4,\"username\":\"instructor7\"},{\"uid\":\"8\",\"EXP\":3,\"username\":\"instructor8\"},{\"uid\":\"9\",\"EXP\":2,\"username\":\"instructor9\"},{\"uid\":\"10\",\"EXP\":1,\"username\":\"instructor10\"},11,{\"uid\":\"14\",\"username\":\"instructor11\",\"EXP\":0}]");
+        expect(response.text).toBe("[{\"uid\":\"1\",\"username\":\"instructor1\",\"EXP\":10},{\"uid\":\"2\",\"username\":\"instructor2\",\"EXP\":9},{\"uid\":\"3\",\"username\":\"instructor3\",\"EXP\":8},{\"uid\":\"4\",\"username\":\"instructor4\",\"EXP\":7},{\"uid\":\"5\",\"username\":\"instructor5\",\"EXP\":6},{\"uid\":\"6\",\"username\":\"instructor6\",\"EXP\":5},{\"uid\":\"7\",\"username\":\"instructor7\",\"EXP\":4m},{\"uid\":\"8\",\"username\":\"instructor8\",\"EXP\":3},{\"uid\":\"9\",\"username\":\"instructor9\",\"EXP\":2},{\"uid\":\"10\",\"username\":\"instructor10\",\"EXP\":1},11,{\"uid\":\"14\",\"username\":\"instructor11\",\"EXP\":0}]");
         expect(response.status).toBe(200);
         done();
     });
 
     test("get leaderboard with teacher somewhere in between ", async (done) => {
         let response = await request.get("/instructorLeaderboard").query({userId: "5"});
-        expect(response.text).toBe("[{\"uid\":\"1\",\"EXP\":10,\"username\":\"instructor1\"},{\"uid\":\"2\",\"EXP\":9,\"username\":\"instructor2\"},{\"uid\":\"3\",\"EXP\":8,\"username\":\"instructor3\"},{\"uid\":\"4\",\"EXP\":7,\"username\":\"instructor4\"},{\"uid\":\"5\",\"EXP\":6,\"username\":\"instructor5\"},{\"uid\":\"6\",\"EXP\":5,\"username\":\"instructor6\"},{\"uid\":\"7\",\"EXP\":4,\"username\":\"instructor7\"},{\"uid\":\"8\",\"EXP\":3,\"username\":\"instructor8\"},{\"uid\":\"9\",\"EXP\":2,\"username\":\"instructor9\"},{\"uid\":\"10\",\"EXP\":1,\"username\":\"instructor10\"},5,{\"uid\":\"5\",\"username\":\"instructor5\",\"EXP\":6}]");
+        expect(response.text).toBe("[{\"uid\":\"1\",\"username\":\"instructor1\",\"EXP\":10},{\"uid\":\"2\",\"username\":\"instructor2\",\"EXP\":9},{\"uid\":\"3\",\"username\":\"instructor3\",\"EXP\":8},{\"uid\":\"4\",\"username\":\"instructor4\",\"EXP\":7},{\"uid\":\"5\",\"username\":\"instructor5\",\"EXP\":6},{\"uid\":\"6\",\"username\":\"instructor6\",\"EXP\":5},{\"uid\":\"7\",\"username\":\"instructor7\",\"EXP\":4},{\"uid\":\"8\",\"username\":\"instructor8\",\"EXP\":3},{\"uid\":\"9\",\"username\":\"instructor9\",\"EXP\":2},{\"uid\":\"10\",\"username\":\"instructor10\",\"EXP\":1},5,{\"uid\":\"5\",\"username\":\"instructor5\",\"EXP\":6}]");
         expect(response.status).toBe(200);
         done();
       });
+
+      test("get leaderboard with less than or equal to 10 teachers ", async (done) => {
+        var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+        var db= await client.db("data");
+
+        await db.collection("userInfo").deleteOne({"uid" : "14"});
+
+        let response = await request.get("/instructorLeaderboard").query({userId: "5"});
+        expect(response.text).toBe("[{\"uid\":\"1\",\"username\":\"instructor1\",\"EXP\":10},{\"uid\":\"2\",\"username\":\"instructor2\",\"EXP\":9},{\"uid\":\"3\",\"username\":\"instructor3\",\"EXP\":8},{\"uid\":\"4\",\"username\":\"instructor4\",\"EXP\":7},{\"uid\":\"5\",\"username\":\"instructor5\",\"EXP\":6},{\"uid\":\"6\",\"username\":\"instructor6\",\"EXP\":5},{\"uid\":\"7\",\"username\":\"instructor7\",\"EXP\":4},{\"uid\":\"8\",\"username\":\"instructor8\",\"EXP\":3},{\"uid\":\"9\",\"username\":\"instructor9\",\"EXP\":2},{\"uid\":\"10\",\"username\":\"instructor10\",\"EXP\":1},5,{\"uid\":\"5\",\"username\":\"instructor5\",\"EXP\":6}]");
+        expect(response.status).toBe(200);
+        done();
+    });
 
 });
