@@ -26,5 +26,4 @@ install:
 - sudo systemctl daemon-reload
 - sudo systemctl start mongod
 script:
-- npm test
-- jest --forceExit --coverage
+- npm test --detectOpenHandles --forceExit --coverage
