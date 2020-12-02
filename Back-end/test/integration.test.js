@@ -299,6 +299,8 @@ describe("quiz integration test", () => {
         await db.collection("userInfo").insertOne({"uid":"2", "username":"student1", "Email": "test@ece.ubc.ca", "isInstructor": false, "userQuizCount": "0", "EXP": 0});
         await db.collection("classInfo").insertOne({"classCode":1,"uid":"1","category":"Math","className":"testClass1","instructorUID":"1"});
         await classDb.collection("class1").insertOne({ "uid" : "2", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0});
+
+        await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student2", "userQuizCount" : 1, "score" : 0, "EXP" : 10, "quiz1score" : 0, "quiz1wrongQuestionIds" : "[1]"});
         done();
     });
 
@@ -359,6 +361,24 @@ describe("quiz integration test", () => {
 
         response = await request.get("/users/classStats").query({type: "EXP", userId: "1"});
         expect(response.text).toBe("15");
+        expect(response.status).toBe(200);
+
+        done();
+    });
+
+    test("get wrong questions", async(done) => {
+        let response = await request.get("/quiz/studentWrongCounts").query({classCode:1, quizCode:1});
+        expect(response.text).toBe("[1]");
+        expect(response.status).toBe(200);
+
+        //get wrong question list for teacher
+        response = await request.get("/quiz").query({classCode:1, quizCode:1, isInstructor: true, userId: "1"});
+        expect(response.text).toBe("[1]");
+        expect(response.status).toBe(200);
+
+        //get wrong question list for student
+        response = await request.get("/quiz").query({classCode:1, quizCode:1, isInstructor: false, userId: "3"});
+        expect(response.text).toBe("[1]");
         expect(response.status).toBe(200);
 
         done();
