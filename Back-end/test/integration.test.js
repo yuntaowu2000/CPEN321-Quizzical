@@ -11,6 +11,7 @@ describe("test account related post/get requests", () => {
         var db = client.db("data");
         //insert dummy variable to implicitly create a database to avoid troubles caused by not properly drop the database
         await db.collection("userInfo").insertOne({ "uid" : "0", "username" : "dummy"});
+        done();
     });
   
     afterAll(async(done) => {
@@ -54,7 +55,7 @@ describe("test account related post/get requests", () => {
         expect(response.status).toBe(200);
 
         done();
-    });
+    }, 50000);
 
     test("test invalid get request", async (done) => {
         let response = await request.get("/users").query({type: "user", userId: "1"});
@@ -69,7 +70,7 @@ describe("test account related post/get requests", () => {
         response = await request.get("/users/classStats").query({type: "Email", userId: "1"});
         expect(response.text).toBe("request invalid");
         done();
-    });
+    }, 50000);
 
     test("test change username", async (done) => {
         let response = await request.post("/upload/user").send({ "uid": "1", "type": "username", "data": "newUserName1"});
@@ -80,7 +81,7 @@ describe("test account related post/get requests", () => {
 
         await request.post("/upload/user").send({ "uid": "1", "type": "username", "data": "student1"});
         done();
-    });
+    }, 50000);
 
     test("test change email", async (done) => {
         let response = await request.post("/upload/user").send({ "uid": "1", "type": "Email", "data": "cpen321@ece.ubc.ca"});
@@ -89,7 +90,7 @@ describe("test account related post/get requests", () => {
         response = await request.get("/users/contact").query({"type": "Email", "userId": "1"});
         expect(response.text).toBe("cpen321@ece.ubc.ca");
         done();
-    });
+    }, 60000);
 
     test("test class list", async(done) => {
         let response = await request.post("/upload/class").send({ "uid": "1", "type": "classList", "data": "{\"category\":\"Math\",\"classCode\":35608,\"className\":\"test2\",\"instructorUID\":\"2\"}"});
@@ -98,7 +99,7 @@ describe("test account related post/get requests", () => {
         response = await request.get("/users/classList").query({userId: "1"});
         expect(response.text).toBe("{\"category\":\"Math\",\"classCode\":35608,\"className\":\"test2\",\"instructorUID\":\"2\"}");
         done();
-    });
+    }, 70000);
   
 });
   
@@ -109,6 +110,7 @@ describe("test notification related post/get", () => {
         var db = client.db("data");
         //insert dummy variable to implicitly create a database to avoid troubles caused by not properly drop the database
         await db.collection("notificationFrequency").insertOne({ "uid" : "0", "notificationFrequency" : 0, firebaseToken: "aaa"});
+        done();
     });
   
     afterAll(async(done) => {
@@ -132,7 +134,7 @@ describe("test notification related post/get", () => {
         response = await request.get("/users/notifications").query({type: "notificationFrequency", userId: "1"});
         expect(response.text).toBe("0");
         done();
-    });
+    }, 80000);
 
     test("test notification frequency update", async(done) => {
         let response = await request.post("/upload/notifications").send({ "uid": "1", "type": "notificationFrequency", "data": "{\"notificationFrequency\":1,\"firebaseToken\":\"aaa\"}"});
@@ -141,7 +143,7 @@ describe("test notification related post/get", () => {
         response = await request.get("/users/notifications").query({type: "notificationFrequency", userId: "1"});
         expect(response.text).toBe("1");
         done();
-    });
+    }, 90000);
 
     test("test invalid notification frequency get request", async(done) => {
         let response = await request.post("/upload/notifications").send({ "uid": "1", "type": "notificationFrequency", "data": "{\"notificationFrequency\":1,\"firebaseToken\":\"aaa\"}"});
@@ -150,5 +152,5 @@ describe("test notification related post/get", () => {
         response = await request.get("/users/notifications").query({type: "username", userId: "1"});
         expect(response.text).toBe("request invalid");
         done();
-    });
+    }, 100000);
 });
