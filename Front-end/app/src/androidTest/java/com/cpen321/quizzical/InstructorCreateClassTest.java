@@ -20,7 +20,11 @@ import org.junit.Test;
 
 
 public class InstructorCreateClassTest {
-
+    /*Note: if you want to run the tests on your own machine,
+        you may need to replace the client id with your own google client id at line 108 in CPEN321-Quizzical\Front-end\app\src\main\res\values\strings.xml
+        and sign in the app properly.
+        You need an instructor account for the tests here.
+        */
     @Rule
     public ActivityTestRule<HomeActivity> activityTestRule = new ActivityTestRule<HomeActivity>(HomeActivity.class);
     private static final String testClassName = "CLASSINTEST2";
