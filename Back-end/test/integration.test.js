@@ -360,6 +360,8 @@ describe("quiz integration test", () => {
         response = await request.get("/users/classStats").query({type: "EXP", userId: "1"});
         expect(response.text).toBe("15");
         expect(response.status).toBe(200);
+
+        done();
     });
 
 });
