@@ -112,7 +112,7 @@ describe("fetch quiz", () => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var db = await client.db("data");
 
-    await db.collection("quizzes").insertOne([{"classCode":1,"moduleName":"module2","uid":"1","courseCategory":"Math","instructorUID":"1","quizCode":1}]);
+    await db.collection("quizzes").insertOne({"classCode":1,"moduleName":"module2","uid":"1","courseCategory":"Math","instructorUID":"1","questionList":[{"HasPic":false,"category":"Math","choices":[{"isPic":false,"str":"5"},{"isPic":false,"str":"6"}],"correctAnsNum":1,"index":1,"picSrc":"","question":"2+3=?","questionType":"MC"}],"quizCode":1});
 
     done();
   });

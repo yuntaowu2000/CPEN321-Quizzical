@@ -103,7 +103,7 @@ describe("delete test", () => {
 
     await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0});
 
-    await db.collection("quizzes").insertOne([{"classCode":1,"moduleName":"module2","uid":"1","courseCategory":"Math","instructorUID":"1","quizCode":1}]);
+    await db.collection("quizzes").insertOne({"classCode":1,"moduleName":"module2","uid":"1","courseCategory":"Math","instructorUID":"1","questionList":[{"HasPic":false,"category":"Math","choices":[{"isPic":false,"str":"5"},{"isPic":false,"str":"6"}],"correctAnsNum":1,"index":1,"picSrc":"","question":"2+3=?","questionType":"MC"}],"quizCode":1});
 
     await client.close();
     done();
