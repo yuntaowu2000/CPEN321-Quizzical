@@ -129,12 +129,12 @@ router.delete("/delete", (req, res, next) => {
   } else if (type === "deleteQuiz") {
     let quizCode = Number(url.searchParams.get("quizModules"));
     db.collection("quizzes").deleteOne(
-      {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}, {quizCode: { $eq: quizCode }}]});
+      {$and: [{instructorUID: { $eq: uid }},{classCode: { $eq: classCode }}, {quizCode: { $eq: quizCode }}]}, (err, res) => {return;});
     let classDbName = "class" + classCode;
     let quizScoreField = "quiz" + quizCode + "score";
     let quizWrongQuestionFieldName = "quiz" + quizCode + "wrongQuestionIds";
     db.collection(classDbName).updateMany({[quizScoreField]: {$exists: true}},
-      {$unset: {[quizScoreField]: 1, [quizWrongQuestionFieldName]: ""}});
+      {$unset: {[quizScoreField]: 1, [quizWrongQuestionFieldName]: ""}}, (err, res) => {return;});
   }
 
   res.statusCode = 204;

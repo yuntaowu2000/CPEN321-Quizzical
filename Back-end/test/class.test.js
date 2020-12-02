@@ -116,6 +116,7 @@ describe("delete test", () => {
     var db = await client.db("data");
     var classDb = await client.db("classes");
     await db.dropCollection("classInfo");
+    await db.dropCollection("quizzes");
     await classDb.dropCollection("class1");
     await classDb.dropCollection("class2");
     await client.close();
@@ -129,14 +130,14 @@ describe("delete test", () => {
     done();
   });
 
-  test("teacher delete a class", async (done) => {
-    let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"1", isInstructor: "true"});
+  test("teacher delete a quiz", async (done) => {
+    let response = await request.delete("/classes/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "1"});
     expect(response.status).toBe(204);
     done();
   });
 
-  test("teacher delete a quiz", async (done) => {
-    let response = await request.delete("/classes/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "1"});
+  test("teacher delete a class", async (done) => {
+    let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"1", isInstructor: "true"});
     expect(response.status).toBe(204);
     done();
   });

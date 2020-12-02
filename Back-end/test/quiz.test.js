@@ -120,7 +120,7 @@ describe("fetch quiz", () => {
   afterAll(async(done) => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var db = await client.db("data");
-    await db.collection("quizzes").drop();
+    await db.dropCollection("quizzes");
     await client.close();
     done();
   });
