@@ -101,6 +101,8 @@ describe("delete test", () => {
 
     await db.collection("classInfo").insertOne({"classCode" : 2, "uid" : "2", "category" : "English", "className" : "testClass2", "instructorUID" : "2", "quizModules" : "{\"category\":\"English\",\"classCode\":2,\"id\":0,\"moduleName\":\"module1\"}"});
 
+    await db.collection("userInfo").insertOne({"uid": "3", "username" : "student1", "classList": "{\"category\":\"Math\",\"classCode\":1,\"className\":\"testClass1\",\"instructorUID\":\"1\"}"});
+
     await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0});
 
     await classDb.collection("class2").insertOne({ "uid" : "3", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0});
@@ -116,6 +118,7 @@ describe("delete test", () => {
     var db = await client.db("data");
     var classDb = await client.db("classes");
     await db.dropCollection("classInfo");
+    await db.dropCollection("userInfo");
     await db.dropCollection("quizzes");
     await classDb.dropCollection("class1");
     await classDb.dropCollection("class2");
@@ -130,14 +133,14 @@ describe("delete test", () => {
     done();
   });
 
-  test("teacher delete a quiz", async (done) => {
-    let response = await request.delete("/classes/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "1"});
+  test("teacher delete a class", async (done) => {
+    let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"1", isInstructor: "true"});
     expect(response.status).toBe(204);
     done();
   });
 
-  test("teacher delete a class", async (done) => {
-    let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"1", isInstructor: "true"});
+  test("teacher delete a quiz", async (done) => {
+    let response = await request.delete("/classes/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "1"});
     expect(response.status).toBe(204);
     done();
   });
