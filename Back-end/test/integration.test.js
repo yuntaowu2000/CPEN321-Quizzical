@@ -204,6 +204,12 @@ describe("test create/join class, create quiz modules", () => {
 
         done();
     });
+
+    test("test delete class", async(done) => {
+        let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"1", isInstructor: "true"});
+        expect(response.status).toBe(204);
+        done();
+    });
 });
 
 describe("test instructor leader board", () => {
