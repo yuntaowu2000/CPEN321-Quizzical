@@ -382,7 +382,7 @@ describe("quiz integration test", () => {
         expect(response.status).toBe(200);
 
         response = await request.get("/quiz").query({classCode:1, quizCode:1, isInstructor: false, userId: "2"});
-        expect(response.text).toBe("[]");
+        expect(response.text).toBe("");
         expect(response.status).toBe(200);
         done();
     });
