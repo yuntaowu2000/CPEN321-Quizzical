@@ -28,6 +28,12 @@ import static org.hamcrest.Matchers.not;
 
 public class StudentClassTest {
 
+    /*Note: if you want to run the tests on your own machine,
+    you may need to replace the client id with your own google client id at line 108 in CPEN321-Quizzical\Front-end\app\src\main\res\values\strings.xml
+    and sign in the app properly.
+    You need a student account for the tests here.
+    */
+
     @Rule
     public ActivityTestRule<HomeActivity> activityTestRule = new ActivityTestRule<HomeActivity>(HomeActivity.class);
     private static final String validClassCode1 = "35607";
@@ -75,7 +81,7 @@ public class StudentClassTest {
     }
 
     @Test
-    public void joinClassAlreadyTest() {
+    public void joinClassAlreadyTest() throws InterruptedException {
 
         Activity activity = activityTestRule.getActivity();
 
@@ -85,10 +91,14 @@ public class StudentClassTest {
                 .perform(ViewActions.click());
 
         joinClass(validClassCode1);
+        Espresso.pressBack();
+        Thread.sleep(1000);
 
-        Espresso.onView(ViewMatchers.withText(R.string.UI_class_joined_already_msg))
+        Espresso.onView(ViewMatchers.withText((R.string.UI_invalid_class_code_msg)))
                 .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
+
+        Espresso.pressBack();
 
         Espresso.onView(ViewMatchers.withId(R.id.class_switch_fab))
                 .perform(ViewActions.click());

@@ -23,6 +23,9 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class QuizActivityTest {
+    /*Note: if you want to run the tests on your own machine,
+    you may need to replace the client id with your own google client id at line 108 in CPEN321-Quizzical\Front-end\app\src\main\res\values\strings.xml
+    and sign in the app properly.*/
     @Rule
     public ActivityTestRule<QuizActivity> activityTestRule = new ActivityTestRule<>(QuizActivity.class);
     private boolean isInstructor = false;

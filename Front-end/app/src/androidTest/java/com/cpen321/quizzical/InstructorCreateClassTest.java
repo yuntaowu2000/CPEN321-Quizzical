@@ -20,7 +20,11 @@ import org.junit.Test;
 
 
 public class InstructorCreateClassTest {
-
+    /*Note: if you want to run the tests on your own machine,
+        you may need to replace the client id with your own google client id at line 108 in CPEN321-Quizzical\Front-end\app\src\main\res\values\strings.xml
+        and sign in the app properly.
+        You need an instructor account for the tests here.
+        */
     @Rule
     public ActivityTestRule<HomeActivity> activityTestRule = new ActivityTestRule<HomeActivity>(HomeActivity.class);
     private static final String testClassName = "CLASSINTEST2";
@@ -94,7 +98,7 @@ public class InstructorCreateClassTest {
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.add_class_button))
-                .perform(ViewActions.click());
+                .perform(ViewActions.scrollTo(), ViewActions.click());
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_creating_class_msg))
                 .inRoot(RootMatchers.isDialog())
@@ -128,7 +132,7 @@ public class InstructorCreateClassTest {
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.add_class_button))
-                .perform(ViewActions.click());
+                .perform(ViewActions.scrollTo(), ViewActions.click());
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_creating_class_msg))
                 .inRoot(RootMatchers.isDialog())
@@ -183,7 +187,6 @@ public class InstructorCreateClassTest {
                 .perform(ViewActions.click());
 
         checkEachQuizModuleButtonNoData(R.string.UI_wrong_questions);
-        checkEachQuizModuleButtonNoData(R.string.UI_notes);
         checkEachQuizModuleButtonNoData(R.string.UI_stats);
         checkEachQuizModuleButtonNoData(R.string.go_to_quiz);
 

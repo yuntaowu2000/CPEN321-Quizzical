@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class InitActivityTest {
-
+    /*Note: discarded tests.*/
     @Rule
     public ActivityTestRule<InitActivity> activityTestRule = new ActivityTestRule<InitActivity>(InitActivity.class);
     private SharedPreferences sp;

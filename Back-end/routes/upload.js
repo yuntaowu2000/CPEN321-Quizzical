@@ -175,13 +175,9 @@ function joinClassFunction(classCode, studentuid) {
   .project({_id:0, username: 1})
   .toArray((err, data) => {
     
-    db.listCollections({name: "class" + classCode}).toArray((err, result) => {
-      if (result.indexOf("class" + classCode) !== -1) {
-        let studentUsername = Object.values(data[0])[0];
-        classesDb.collection("class" + classCode)
-        .insertOne({uid: studentuid, username: studentUsername, userQuizCount: 0, score: 0, EXP: 0});
-      }
-    });
+    let studentUsername = Object.values(data[0])[0];
+    classesDb.collection("class" + classCode)
+    .insertOne({uid: studentuid, username: studentUsername, userQuizCount: 0, score: 0, EXP: 0});
   });
 }
 
@@ -222,11 +218,11 @@ router.post("/instructorStats", (req, res, next) => {
 });
 
 function updateStudentStats(student, studentQuizResult, studentUid) {
-  let prevScore = student.score;
-  let prevUserQuizCount = student.userQuizCount;
-  let prevEXP = student.EXP;
+  let prevScore = Number(student.score);
+  let prevUserQuizCount = Number(student.userQuizCount);
+  let prevEXP = Number(student.EXP);
 
-  let currScore = studentQuizResult.score;
+  let currScore = Number(studentQuizResult.score);
 
   let newUserQuizCount = prevUserQuizCount + 1;
 
