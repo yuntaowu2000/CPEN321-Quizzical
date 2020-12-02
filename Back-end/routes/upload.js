@@ -323,9 +323,6 @@ router.post("/like", (req, res, next) => {
     let likePersonUid = req.body.uid;
 
     db.collection("quizzes").find({$and: [{classCode: { $eq: classCode}}, {quizCode: {$eq: quizCode}}]}).project({_id:0,liked:1}).toArray((err, arr) => {
-      if (err) {
-        throw err;
-      }
       var likedPersons = Object.values(arr[0])[0];
       if (!Array.isArray(likedPersons)) {
         likedPersons = [];
@@ -334,20 +331,11 @@ router.post("/like", (req, res, next) => {
       if (!likedPersons.includes(likePersonUid)) {
         likedPersons.push(likePersonUid);
         db.collection("quizzes").updateOne({$and: [{classCode: { $eq: classCode}}, {quizCode: {$eq: quizCode}}]},
-          {$set: {liked: likedPersons} },
-          (err, res) => {
-            if (err) {
-              throw err;
-            }
-          });
+          {$set: {liked: likedPersons} });
         db.collection("userInfo").updateOne(
           {uid: {$eq: instructorUID}},
           {$inc: {EXP: 5}},
-          {upsert: true}, (err, res) => {
-            if (err) {
-              throw err;
-            }
-        });
+          {upsert: true});
         let userIds = [instructorUID];
         firebaseFunctions.sendMessage(userIds, "Someone liked your quiz and you earned 5 EXP!");
       }
