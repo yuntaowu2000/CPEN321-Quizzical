@@ -282,8 +282,98 @@ describe("some useless testing for index.js and app.js (just to increase coverag
     });
 
     test("get error", async(done) => {
-        let response = await request.get("/someUnkownEndpoint");
+        let response = await request.get("/someUnknownEndpoint");
         expect(response.status).toBe(404);
         done();
-    })
-})
+    });
+});
+
+describe("quiz integration test", () => {
+    beforeAll(async(done) => {
+        var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+        var classDb = await client.db("classes");
+        var db = await client.db("data");
+        //insert dummy variable to implicitly create a database to avoid troubles caused by not properly drop the database
+        await db.collection("userInfo").insertOne({ "uid" : "0", "username" : "dummy"});
+        await db.collection("userInfo").insertOne({"uid":"1", "username": "instructor1", "Email": "yuntaowu2009@hotmail.com"});
+        await db.collection("userInfo").insertOne({"uid":"2", "username":"student1", "Email": "test@ece.ubc.ca"})
+        await db.collection("classInfo").insertOne({"classCode":1,"uid":"1","category":"Math","className":"testClass1","instructorUID":"1"});
+        await classDb.collection("testClass1").insertOne({ "uid" : "2", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0})
+        done();
+    });
+
+    afterAll(async(done) => {
+        var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+        var classDb = await client.db("classes");
+        var db = await client.db("data");
+        await db.dropDatabase();
+        await classDb.dropDatabase();
+        await client.close();
+        done();
+    });
+
+    test("create quiz", async(done) => {
+        //create quiz module
+        let response = await request.post("/upload/quiz").send({"uid":"1","type":"quizModules","data":"{\"category\":\"Math\",\"classCode\":1,\"id\":1,\"moduleName\":\"module1\"}"});
+        expect(response.status).toBe(200);
+
+        //create quiz
+        response = await request.post("/upload/quiz").send({"uid":"1","type":"createQuiz","data":"{\"classCode\":1,\"courseCategory\":\"Math\",\"instructorUID\":\"1\",\"moduleName\":\"module1\",\"questionList\":[{\"HasPic\":false,\"category\":\"Math\",\"choices\":[{\"isPic\":false,\"str\":\"2\"},{\"isPic\":false,\"str\":\"3\"}],\"correctAnsNum\":1,\"index\":1,\"picSrc\":\"\",\"question\":\"1+1\\u003d?\",\"questionType\":\"MC\"}],\"quizCode\":1}"});
+        expect(response.status).toBe(200);
+        //update EXP and user quiz count
+        response = await request.post("upload/instructorStats").send({"uid":"1","type":"EXP","data":"10"});
+        expect(response.status).toBe(200);
+
+        response = await request.get("/users/classStats").query({type: "EXP", userId: "1"});
+        expect(response.text).toBe("10");
+        expect(response.status).toBe(200);
+
+        response = await request.post("upload/instructorStats").send({"uid":"1","type":"userQuizCount","data":"1"});
+        expect(response.status).toBe(200);
+
+        response = await request.get("/users/classStats").query({type: "userQuizCount", userId: "1"});
+        expect(response.text).toBe("1");
+        expect(response.status).toBe(200);
+        done();
+    });
+
+    test("student do quiz", async(done) => {
+        let response = await request.get("/quiz").query({classCode:1, quizCode:1});
+        expect(response.status).toBe(200);
+
+        response = await request.post("/upload/studentStats").send({"uid":"2","type":"Quiz 1 result","data":"{\"userQuizCount\":1,\"EXP\":15,\"score\":100.0,\"classCode\":1,\"instructorUID\":\"1\",\"quizCode\":1}"});
+        expect(response.status).toBe(200);
+
+        response = await request.get("/users/classStats").query({type: "EXP", userId: "2"});
+        expect(response.text).toBe("15");
+        expect(response.status).toBe(200);
+
+        response = await request.get("/users/classStats").query({type: "userQuizCount", userId: "2"});
+        expect(response.text).toBe("1");
+        expect(response.status).toBe(200);
+
+        //like the quiz
+
+        response = await request.post("/upload/like").send({"uid":"2","type":"like","data":"{\"classCode\":1,\"quizCode\":1,\"instructorUID\":\"1\"}"});
+        expect(response.status).toBe(200);
+
+        response = await request.get("/users/classStats").query({type: "EXP", userId: "1"});
+        expect(response.text).toBe("15");
+        expect(response.status).toBe(200);
+    });
+
+});
+
+describe("upload invalid type", async(done) => {
+    test("quiz invalid type", async(done) => {
+        let response = await request.post("/upload/quiz").send({"type": "someType"});
+        expect(response.status).toBe(200);
+        done();
+    });
+
+    test("instructor status invalid type", async(done) => {
+        let response = await request.post("/upload/instructorStats").send({"type": "someType"});
+        expect(response.status).toBe(200);
+        done();
+    });
+});

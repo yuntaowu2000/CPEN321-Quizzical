@@ -144,11 +144,7 @@ router.get("/", (req, res, next) => {
       .project({_id:0, liked:0})
       .maxTimeMS(timeout)
       .toArray((err, data) => {
-      if (err) {
-        throw err;
-      } else {
-        res.send(data);
-      }
+      res.send(data);
     });
   }
 
