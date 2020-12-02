@@ -49,7 +49,7 @@ describe("test account related post/get requests", () => {
         expect(response.text).toBe("0");
         expect(response.status).toBe(200);
 
-        response = await request.get("/users/userQuizCount").query({type: "EXP", userId: "1"});
+        response = await request.get("/users/classStats").query({type: "userQuizCount", userId: "1"});
         expect(response.text).toBe("0");
         expect(response.status).toBe(200);
 
