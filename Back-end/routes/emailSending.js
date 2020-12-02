@@ -22,7 +22,11 @@ function sendEmail(emailAddr, emailSubject, emailHtml) {
       html: emailHtml
     };
 
-    transporter.sendMail(mailOptions);
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        //console.log(err);
+      } 
+    });
 }
 
 module.exports.sendEmail = sendEmail;
