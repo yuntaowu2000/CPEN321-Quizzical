@@ -81,7 +81,7 @@ public class StudentClassTest {
     }
 
     @Test
-    public void joinClassAlreadyTest() {
+    public void joinClassAlreadyTest() throws InterruptedException {
 
         Activity activity = activityTestRule.getActivity();
 
@@ -91,10 +91,14 @@ public class StudentClassTest {
                 .perform(ViewActions.click());
 
         joinClass(validClassCode1);
+        Espresso.pressBack();
+        Thread.sleep(1000);
 
-        Espresso.onView(ViewMatchers.withText(R.string.UI_class_joined_already_msg))
+        Espresso.onView(ViewMatchers.withText((R.string.UI_invalid_class_code_msg)))
                 .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
+
+        Espresso.pressBack();
 
         Espresso.onView(ViewMatchers.withId(R.id.class_switch_fab))
                 .perform(ViewActions.click());

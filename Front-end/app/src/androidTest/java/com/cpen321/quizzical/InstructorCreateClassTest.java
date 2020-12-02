@@ -98,7 +98,7 @@ public class InstructorCreateClassTest {
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.add_class_button))
-                .perform(ViewActions.click());
+                .perform(ViewActions.scrollTo(), ViewActions.click());
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_creating_class_msg))
                 .inRoot(RootMatchers.isDialog())
@@ -132,7 +132,7 @@ public class InstructorCreateClassTest {
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.add_class_button))
-                .perform(ViewActions.click());
+                .perform(ViewActions.scrollTo(), ViewActions.click());
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_creating_class_msg))
                 .inRoot(RootMatchers.isDialog())
@@ -187,7 +187,6 @@ public class InstructorCreateClassTest {
                 .perform(ViewActions.click());
 
         checkEachQuizModuleButtonNoData(R.string.UI_wrong_questions);
-        checkEachQuizModuleButtonNoData(R.string.UI_notes);
         checkEachQuizModuleButtonNoData(R.string.UI_stats);
         checkEachQuizModuleButtonNoData(R.string.go_to_quiz);
 

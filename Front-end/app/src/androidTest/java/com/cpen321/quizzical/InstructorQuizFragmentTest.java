@@ -92,7 +92,7 @@ public class InstructorQuizFragmentTest {
         Espresso.onView(first(ViewMatchers.withText(R.string.UI_wrong_questions)))
                 .perform(ViewActions.click());
 
-        Espresso.onView(ViewMatchers.withSubstring("people got wrong"))
+        Espresso.onView(first(ViewMatchers.withSubstring("people got wrong")))
                 .inRoot(RootMatchers.isDialog())
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
 
