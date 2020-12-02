@@ -71,7 +71,7 @@ function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) {
   .project({_id:0})
   .toArray((err, data) => {
     if (err || wrongQuestionIds[0] === null) {
-      return;
+      res.send("");
     } else {
       // not sending the correct values
       let questions = new Array();
