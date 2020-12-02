@@ -273,3 +273,17 @@ describe("test instructor leader board", () => {
 
 });
 
+describe("some useless testing for index.js and app.js (just to increase coverage)", () => {
+
+    test("get initial page", async(done) => {
+        let response = await request.get("/");
+        expect(response.status).toBe(200);
+        done();
+    });
+
+    test("get error", async(done) => {
+        let response = await request.get("/someUnkownEndpoint");
+        expect(response.status).toBe(404);
+        done();
+    })
+})

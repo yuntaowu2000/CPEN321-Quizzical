@@ -46,7 +46,6 @@ describe("class test", () => {
         expect(response.status).toBe(200);
         done();
     });
-  
 });
 
 describe("class quiz module test", () => {
@@ -149,5 +148,13 @@ describe("delete test", () => {
     done();
   });
 
+});
+
+describe("test invalid gets", () => {
+  test("invalid get", async(done) => {
+    let response = await request.get("/classes").query({type: "sometype"});
+    expect(response.text).toBe("invalid request");
+    done();
+  });
 });
 

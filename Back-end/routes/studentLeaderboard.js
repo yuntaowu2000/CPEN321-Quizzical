@@ -49,14 +49,10 @@ router.get("/", (req, res, next) => {
       .sort({EXP: -1})
       .maxTimeMS(timeout)
       .toArray((err, data) => {
-      if (err) {
-        throw err;
-      } else {
         if (isInstructor === "false") {
             data = refactorData(data, uid);
         }
         res.send(data);
-      }
     });
 });
 
