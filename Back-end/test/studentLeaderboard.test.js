@@ -10,7 +10,6 @@ const request = supertest(app);
 // Setup a Test Database
 // setupDB("classes");
 
-// test GET of "/"
 describe("test student leaderboard", () => {
   
   beforeAll(async(done) => {
@@ -49,7 +48,6 @@ describe("test student leaderboard", () => {
     done();
   });
 
-  // test GET of "/"
   test("get leaderboard with student highest ", async (done) => {
     let response = await request.get("/studentLeaderboard").query({ classCode: "1", userId: "1", isInstructor: "false"});
     expect(response.status).toBe(200);
@@ -117,29 +115,3 @@ describe("Refactor Data function", () => {
 
   });
 });
-
-/*
-function getUserPosition(data, uid) {
-    var userRank = 1;
-    var userData;
-    for (var user of data) {
-        if (Object.values(user)[0] === uid) {
-            userData = user;
-            break;
-        }
-        userRank += 1;
-    }
-    return [userRank, userData];
-}
-
-function refactorData(data, uid) {
-    var newData = data;
-    var userValues = getUserPosition(data, uid);
-    if (data.length > 10) {
-        newData = data.slice(0, 10);
-    }
-    newData.push(userValues[0]);
-    newData.push(userValues[1]);
-    return newData;
-}
-*/

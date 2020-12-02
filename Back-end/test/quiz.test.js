@@ -34,7 +34,6 @@ describe("fetchDataForTeachers", () => {
     done();
   });
 
-  // test GET of "/" and "/studentWrongCounts"
   test("fetchDataForTeachers case of router.get(\"/\") with one student class ", async (done) => {
     let response = await request.get("/quiz").query({classCode: "2", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
     expect(response.status).toBe(200);
@@ -202,5 +201,3 @@ describe("Find Student Score function", () => {
   });
 });
 
-
-// left: fetchDataForTeachers; fetchWrongQuestions; findStudentScore; fetchDataForStudents;

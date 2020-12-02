@@ -1,4 +1,3 @@
-const express = require("express");
 const MongoClient = require("mongodb").MongoClient;
 
 const app = require("../app.js"); // link to server file
@@ -27,7 +26,6 @@ describe("class test", () => {
       done();
     });
   
-    // test GET of "/" and "/studentWrongCounts"
     test("get general class info", async (done) => {
         let response = await request.get("/classes").query({classCode: "2"});
         expect(response.status).toBe(200);
@@ -70,7 +68,6 @@ describe("class quiz module test", () => {
     done();
   });
 
-  // test GET of "/" and "/studentWrongCounts"
   test("get class 2 quiz module", async (done) => {
       let response = await request.get("/classes").query({classCode: "2", type: "quizModules"});
       expect(response.status).toBe(200);
@@ -101,7 +98,9 @@ describe("delete test", () => {
 
     await db.collection("classInfo").insertOne({"classCode" : 2, "uid" : "2", "category" : "English", "className" : "testClass2", "instructorUID" : "2", "quizModules" : "{\"category\":\"English\",\"classCode\":2,\"id\":0,\"moduleName\":\"module1\"}"});
 
-    await db.collection("userInfo").insertOne({"uid": "3", "username" : "student1", "classList": "{\"category\":\"Math\",\"classCode\":1,\"className\":\"testClass1\",\"instructorUID\":\"1\"}"});
+    await db.collection("userInfo").insertOne({"uid": "3", "username" : "student1", "isInstructor": false, "classList": "{\"category\":\"Math\",\"classCode\":1,\"className\":\"testClass1\",\"instructorUID\":\"1\"}"});
+
+    await db.collection("notificationFrequency").insertOne({"uid": "3", "notificationFrequency": 0});
 
     await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0});
 
@@ -126,7 +125,6 @@ describe("delete test", () => {
     done();
   });
 
-  // test GET of "/" and "/studentWrongCounts"
   test("student delete a class", async (done) => {
     let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"3", isInstructor: "false"});
     expect(response.status).toBe(204);
