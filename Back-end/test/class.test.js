@@ -105,9 +105,13 @@ describe("delete test", () => {
 
     await db.collection("userInfo").insertOne({"uid": "3", "username" : "student1", "isInstructor": false, "classList": "{\"category\":\"Math\",\"classCode\":1,\"className\":\"testClass1\",\"instructorUID\":\"1\"}"});
 
+    await db.collection("userInfo").insertOne({"uid": "4", "username" : "student2", "Email": "example@ubc.ca", "isInstructor": false, "classList": "{\"category\":\"Math\",\"classCode\":1,\"className\":\"testClass1\",\"instructorUID\":\"1\"}"});
+
     await db.collection("notificationFrequency").insertOne({"uid": "3", "notificationFrequency": 0});
 
     await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0});
+
+    await classDb.collection("class1").insertOne({ "uid" : "4", "username" : "student2", "userQuizCount" : 0, "score" : 0, "EXP" : 0});
 
     await classDb.collection("class2").insertOne({ "uid" : "3", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0});
 
@@ -136,11 +140,11 @@ describe("delete test", () => {
     done();
   });
 
-  // test("teacher delete a class", async (done) => {
-  //   let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"1", isInstructor: "true"});
-  //   expect(response.status).toBe(204);
-  //   done();
-  // });
+  test("teacher delete a class", async (done) => {
+    let response = await request.delete("/classes/delete").query({classCode: "1", type: "deleteClass", uid:"1", isInstructor: "true"});
+    expect(response.status).toBe(204);
+    done();
+  });
 
   test("teacher delete a quiz", async (done) => {
     let response = await request.delete("/classes/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "1"});
