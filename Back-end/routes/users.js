@@ -83,14 +83,7 @@ router.get("/classDetails", (req, res, next) => {
       isInstructor = Object.values(isInstructor[0])[0];
       res.send(""+isInstructor);
     });
-  }
-  else if (type === "classCode") {
-    db.collection("classInfo").find({ uid: { $eq: uid }}).project({classCode:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
-      classCode = Object.values(classCode[0])[0];
-      res.send(""+classCode);
-    });
-  }
-  else {
+  } else {
     res.send("request invalid");
   }
 });
