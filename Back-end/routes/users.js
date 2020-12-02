@@ -24,20 +24,12 @@ router.get("/", (req, res, next) => {
 
   if (type === null) {
     db.collection("userInfo").find({ uid: { $eq: uid }}).project({profileImage:0, _id:0}).maxTimeMS(timeout).toArray((err,data) => {
-      if (err) {
-        throw err;
-      } else {
-        res.send(data);
-      }
+      res.send(data);
     });
   }
   else if (type === "userInfo") {
     db.collection("userInfo").find({ uid: { $eq: uid }}).project({_id:0}).maxTimeMS(timeout).toArray((err,data) => {
-      if (err) {
-        throw err;
-      } else {
-        res.send(data);
-      }
+      res.send(data);
     });
   }
   else {
@@ -54,22 +46,14 @@ router.get("/contact", (req, res, next) => {
 
   if (type === "username") {
     db.collection("userInfo").find({ uid: { $eq: uid }}).project({username:1, _id:0}).maxTimeMS(timeout).toArray((err, username) => {
-      if (err) {
-        throw err;
-      } else {
-        username = Object.values(username[0])[0];
-        res.send(""+username);
-      }
+      username = Object.values(username[0])[0];
+      res.send(""+username);
     });
   }
   else if (type === "Email") {
     db.collection("userInfo").find({ uid: { $eq: uid }}).project({Email:1, _id:0}).maxTimeMS(timeout).toArray((err, email) => {
-      if (err) {
-        throw err;
-      } else {
-        email = Object.values(email[0])[0];
-        res.send(""+email);
-      }
+      email = Object.values(email[0])[0];
+      res.send(""+email);
     });
   }
   else {
@@ -96,22 +80,14 @@ router.get("/classDetails", (req, res, next) => {
 
   if (type === "isInstructor") {
     db.collection("userInfo").find({ uid: { $eq: uid }}).project({isInstructor:1, _id:0}).maxTimeMS(timeout).toArray((err, isInstructor) => {
-      if (err) {
-        throw err;
-      } else {
-        isInstructor = Object.values(isInstructor[0])[0];
-        res.send(""+isInstructor);
-      }
+      isInstructor = Object.values(isInstructor[0])[0];
+      res.send(""+isInstructor);
     });
   }
   else if (type === "classCode") {
     db.collection("classInfo").find({ uid: { $eq: uid }}).project({classCode:1, _id:0}).maxTimeMS(timeout).toArray((err, classCode) => {
-      if (err) {
-        throw err;
-      } else {
-        classCode = Object.values(classCode[0])[0];
-        res.send(""+classCode);
-      }
+      classCode = Object.values(classCode[0])[0];
+      res.send(""+classCode);
     });
   }
   else {
@@ -128,12 +104,8 @@ router.get("/classStats", (req, res, next) => {
 
   if (type === "EXP") {
     db.collection("userInfo").find({ uid: { $eq: uid }}).project({EXP:1, _id:0}).maxTimeMS(timeout).toArray((err, exp) => {
-      if (err) {
-        throw err;
-      } else {
-        exp = Object.values(exp[0])[0];
-        res.send(""+exp);
-      }
+      exp = Object.values(exp[0])[0];
+      res.send(""+exp);
     });
   }
   else if (type === "userQuizCount") {
