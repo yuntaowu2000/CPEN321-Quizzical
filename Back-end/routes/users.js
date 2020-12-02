@@ -138,12 +138,8 @@ router.get("/classStats", (req, res, next) => {
   }
   else if (type === "userQuizCount") {
     db.collection("userInfo").find({ uid: { $eq: uid }}).project({userQuizCount:1, _id:0}).maxTimeMS(timeout).toArray((err, quizCount) => {
-      if (err) {
-        throw err;
-      } else {
-        quizCount = Object.values(quizCount[0])[0];
-        res.send(""+quizCount);
-      }
+      quizCount = Object.values(quizCount[0])[0];
+      res.send(""+quizCount);
     });
   }
   else {
@@ -160,12 +156,8 @@ router.get("/notifications", (req, res, next) => {
 
   if (type === "notificationFrequency") {
     db.collection("notificationFrequency").find({ uid: { $eq: uid }}).project({notificationFrequency:1, _id:0}).maxTimeMS(timeout).toArray((err, frequency) => {
-      if (err) {
-        throw err;
-      } else {
-        frequency = Object.values(frequency[0])[0];
-        res.send(""+frequency);
-      }
+      frequency = Object.values(frequency[0])[0];
+      res.send(""+frequency);
     });
   }
   else {
