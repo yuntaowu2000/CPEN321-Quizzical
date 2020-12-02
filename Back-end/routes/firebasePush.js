@@ -28,7 +28,6 @@ function sendMessage(userIds, message) {
     for (var val of retval) {
       userTokens.push(Object.values(val)[0]);
     }
-
     let payload = {
       notification: {
         title: "Quizzical",
@@ -36,6 +35,9 @@ function sendMessage(userIds, message) {
       },
       tokens: userTokens
     };
+    if (userTokens.length === 0) {
+      return;
+    }
     firebaseAdmin.messaging().sendMulticast(payload);
   });
 }

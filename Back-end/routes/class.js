@@ -55,6 +55,9 @@ function sendClassDeletedNotification(classCode, uid) {
   let timeout = 2000;
 
   db.collection("classInfo").find({classCode: { $eq: classCode }}).project({className:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
+    if (retval.length === 0 || retval === null) {
+      return;
+    }
     let className = Object.values(retval[0])[0] + "";
     let message =  util.format("Class %s has been deleted. If your class list has not been correctly populated, please restart the app or delete the class yourself.", className);
 
