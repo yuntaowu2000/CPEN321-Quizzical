@@ -26,7 +26,9 @@ function sendMessage(userIds, message) {
   db.collection("notificationFrequency").find({uid: {$in: userIds }}).project({firebaseToken:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
     let userTokens = [];
     for (var val of retval) {
-      userTokens.push(Object.values(val)[0]);
+      if (Object.values(val)[0] !== null) {
+        userTokens.push(Object.values(val)[0]);
+      }
     }
     let payload = {
       notification: {
@@ -35,7 +37,7 @@ function sendMessage(userIds, message) {
       },
       tokens: userTokens
     };
-    if (userTokens.length === 0 || userTokens.indexOf(null) !== -1) {
+    if (userTokens.length === 0) {
       return;
     }
     firebaseAdmin.messaging().sendMulticast(payload);
