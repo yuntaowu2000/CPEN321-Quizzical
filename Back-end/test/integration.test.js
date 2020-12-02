@@ -59,7 +59,7 @@ describe("test account related post/get requests", () => {
         let response = await request.get("/users").query({type: "user", userId: "1"});
         expect(response.text).toBe("request invalid");
 
-        let response = await request.get("/users/contact").query({type: "EXP", userId: "1"});
+        response = await request.get("/users/contact").query({type: "EXP", userId: "1"});
         expect(response.text).toBe("request invalid");
 
         response = await request.get("/users/classDetails").query({type: "username", userId: "1"});
