@@ -51,7 +51,7 @@ function sendClassDeletedNotification(classCode, uid) {
   let timeout = 2000;
 
   db.collection("classInfo").find({classCode: { $eq: classCode }}).project({className:1, _id:0}).maxTimeMS(timeout).toArray((err, retval) => {
-    if (retval.length === 0 || retval === null) {
+    if (retval.length === 0 || retval === null || retval[0] === null) {
       return;
     }
     let className = Object.values(retval[0])[0] + "";
@@ -84,7 +84,7 @@ function handleDeleteClass(isInstructor, classCode, uid) {
         uidList.push(Object.values(user)[0]);
       }
       db.collection("userInfo").find({uid: {$in: uidList}}).project({_id:0, uid:1, classList:1}).toArray((err, result) => {
-        if (result === null || result.length === 0) {
+        if (result === null || result.length === 0 || result[0] === null) {
           return;
         }
         result.forEach((doc) => {
