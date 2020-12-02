@@ -161,6 +161,8 @@ describe("test create/join class, create quiz modules", () => {
         var db = await client.db("data");
         //insert dummy variable to implicitly create a database to avoid troubles caused by not properly drop the database
         await db.collection("userInfo").insertOne({ "uid" : "0", "username" : "dummy"});
+        await db.collection("userInfo").insertOne({"uid":"1", "username": "instructor1", "Email": "yuntaowu2009@hotmail.com"});
+        await db.collections("userInfo").insertOne({"uid":"2", "username":"student1", "Email": "test@ece.ubc.ca"})
         await db.collection("classInfo").insertOne({"classCode":0,"uid":"0","category":"Math","className":"testClass1","instructorUID":"1"});
         done();
     });
@@ -245,7 +247,7 @@ describe("test instructor leader board", () => {
 
     test("get leaderboard with teacher lowest (out of 10) ", async (done) => {
         let response = await request.get("/instructorLeaderboard").query({userId: "14"});
-        expect(response.text).toBe("[{\"uid\":\"1\",\"username\":\"instructor1\",\"EXP\":10},{\"uid\":\"2\",\"username\":\"instructor2\",\"EXP\":9},{\"uid\":\"3\",\"username\":\"instructor3\",\"EXP\":8},{\"uid\":\"4\",\"username\":\"instructor4\",\"EXP\":7},{\"uid\":\"5\",\"username\":\"instructor5\",\"EXP\":6},{\"uid\":\"6\",\"username\":\"instructor6\",\"EXP\":5},{\"uid\":\"7\",\"username\":\"instructor7\",\"EXP\":4m},{\"uid\":\"8\",\"username\":\"instructor8\",\"EXP\":3},{\"uid\":\"9\",\"username\":\"instructor9\",\"EXP\":2},{\"uid\":\"10\",\"username\":\"instructor10\",\"EXP\":1},11,{\"uid\":\"14\",\"username\":\"instructor11\",\"EXP\":0}]");
+        expect(response.text).toBe("[{\"uid\":\"1\",\"username\":\"instructor1\",\"EXP\":10},{\"uid\":\"2\",\"username\":\"instructor2\",\"EXP\":9},{\"uid\":\"3\",\"username\":\"instructor3\",\"EXP\":8},{\"uid\":\"4\",\"username\":\"instructor4\",\"EXP\":7},{\"uid\":\"5\",\"username\":\"instructor5\",\"EXP\":6},{\"uid\":\"6\",\"username\":\"instructor6\",\"EXP\":5},{\"uid\":\"7\",\"username\":\"instructor7\",\"EXP\":4},{\"uid\":\"8\",\"username\":\"instructor8\",\"EXP\":3},{\"uid\":\"9\",\"username\":\"instructor9\",\"EXP\":2},{\"uid\":\"10\",\"username\":\"instructor10\",\"EXP\":1},11,{\"uid\":\"14\",\"username\":\"instructor11\",\"EXP\":0}]");
         expect(response.status).toBe(200);
         done();
     });

@@ -174,15 +174,14 @@ function joinClassFunction(classCode, studentuid) {
   db.collection("userInfo").find({uid: studentuid})
   .project({_id:0, username: 1})
   .toArray((err, data) => {
-    let studentUsername = Object.values(data[0])[0];
-    classesDb.collection("class" + classCode)
-    .insertOne({uid: studentuid, username: studentUsername, userQuizCount: 0, score: 0, EXP: 0},
-      (err, res) => {
-        if (err) {
-          throw err;
-        }
-      });
-
+    
+    db.listCollections({name: "class" + classCode}).toArray((err, result) => {
+      if (result.indexOf("class" + classCode) !== -1) {
+        let studentUsername = Object.values(data[0])[0];
+        classesDb.collection("class" + classCode)
+        .insertOne({uid: studentuid, username: studentUsername, userQuizCount: 0, score: 0, EXP: 0});
+      }
+    });
   });
 }
 
