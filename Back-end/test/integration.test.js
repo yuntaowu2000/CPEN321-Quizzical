@@ -162,7 +162,7 @@ describe("test create/join class, create quiz modules", () => {
         //insert dummy variable to implicitly create a database to avoid troubles caused by not properly drop the database
         await db.collection("userInfo").insertOne({ "uid" : "0", "username" : "dummy"});
         await db.collection("userInfo").insertOne({"uid":"1", "username": "instructor1", "Email": "yuntaowu2009@hotmail.com"});
-        await db.collections("userInfo").insertOne({"uid":"2", "username":"student1", "Email": "test@ece.ubc.ca"})
+        await db.collection("userInfo").insertOne({"uid":"2", "username":"student1", "Email": "test@ece.ubc.ca"})
         await db.collection("classInfo").insertOne({"classCode":0,"uid":"0","category":"Math","className":"testClass1","instructorUID":"1"});
         done();
     });
@@ -188,7 +188,7 @@ describe("test create/join class, create quiz modules", () => {
         expect(response.status).toBe(200);
 
         response = await request.get("/classes").query({classCode: 1});
-        expect(response.text).toBe("[{\"category\":\"Math\",\"classCode\":1,\"className\":\"testClass1\",\"instructorUID\":\"1\"}]")
+        expect(response.text).toBe("[{\"classCode\":1,\"uid\":\"1\",\"category\":\"Math\",\"className\":\"testClass1\",\"instructorUID\":\"1\"}]")
         expect(response.status).toBe(200);
 
         done();
@@ -272,3 +272,4 @@ describe("test instructor leader board", () => {
     });
 
 });
+
