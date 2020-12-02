@@ -29,17 +29,20 @@ describe("class test", () => {
     test("get general class info", async (done) => {
         let response = await request.get("/classes").query({classCode: "2"});
         expect(response.status).toBe(200);
+        expect(response.text).toBe("[{\"classCode\":2,\"uid\":\"2\",\"category\":\"English\",\"className\":\"testClass2\",\"instructorUID\":\"2\"}]");
         done();
     });
   
     test("get general class info 2", async (done) => {
         let response = await request.get("/classes").query({classCode: "1"});
         expect(response.status).toBe(200);
+        expect(response.text).toBe("[{\"classCode\":1,\"uid\":\"1\",\"category\":\"Math\",\"className\":\"testClass1\",\"instructorUID\":\"1\"}]");
         done();
     });
 
     test("get general class info with class undefined", async (done) => {
         let response = await request.get("/classes").query({classCode: "11111"});
+        expect(response.text).toBe("[]");
         expect(response.status).toBe(200);
         done();
     });
@@ -70,18 +73,21 @@ describe("class quiz module test", () => {
 
   test("get class 2 quiz module", async (done) => {
       let response = await request.get("/classes").query({classCode: "2", type: "quizModules"});
+      expect(response.text).toBe("{\"category\":\"English\",\"classCode\":2,\"id\":0,\"moduleName\":\"module1\"}");
       expect(response.status).toBe(200);
       done();
   });
 
   test("get class 1 quiz module", async (done) => {
       let response = await request.get("/classes").query({classCode: "1", type: "quizModules"});
+      expect(response.text).toBe("{\"category\":\"Math\",\"classCode\":1,\"id\":0,\"moduleName\":\"module1\"}");
       expect(response.status).toBe(200);
       done();
   });
 
   test("get class quiz module info with class undefined", async (done) => {
       let response = await request.get("/classes").query({classCode: "11111", type: "quizModules"});
+      expect(response.text).toBe("");
       expect(response.status).toBe(200);
       done();
   });
@@ -137,11 +143,11 @@ describe("delete test", () => {
     done();
   });
 
-  test("teacher delete a quiz", async (done) => {
-    let response = await request.delete("/classes/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "1"});
-    expect(response.status).toBe(204);
-    done();
-  });
+  // test("teacher delete a quiz", async (done) => {
+  //   let response = await request.delete("/classes/delete").query({classCode: "2", type: "deleteQuiz", uid:"1", quizModules: "1"});
+  //   expect(response.status).toBe(204);
+  //   done();
+  // });
 
 });
 

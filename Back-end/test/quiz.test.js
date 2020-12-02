@@ -37,23 +37,27 @@ describe("fetchDataForTeachers", () => {
   test("fetchDataForTeachers case of router.get(\"/\") with one student class ", async (done) => {
     let response = await request.get("/quiz").query({classCode: "2", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
     expect(response.status).toBe(200);
+    expect(response.text).toBe("[[{\"username\":\"student1\",\"quiz0score\":100}],100,100]");
     done();
   });
 
   test("fetchDataForTeachers case of router.get(\"/\") with class undefined ", async (done) => {
     let response = await request.get("/quiz").query({classCode: "3", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
+    expect(response.text).toBe("[[],null,-1]");
     expect(response.status).toBe(200);
     done();
   });
 
   test("fetchDataForTeachers case of router.get(\"/\") with a class with more than 1 student", async (done) => {
     let response = await request.get("/quiz").query({classCode: "1", quizCode: "0", type: "score", userId: "4", isInstructor: "true"});
+    expect(response.text).toBe("[[{\"username\":\"student1\",\"quiz0score\":100}, {\"username\":\"student2\",\"quiz0score\":75}, {\"username\":\"student3\",\"quiz0score\":80}],85,100]");
     expect(response.status).toBe(200);
     done();
   });
 
   test("fetchDataForTeachers case of students wrong counts", async (done) => {
     let response = await request.get("/quiz/studentWrongCounts").query({classCode: "0", quizCode: "0"});
+    expect(response.text).toBe("");
     expect(response.status).toBe(200);
     done();
   });
@@ -89,18 +93,21 @@ describe("fetchDataForStudents", () => {
   // test GET of "/"
   test("fetchDataForStudents case of router.get(\"/\") with student highest ", async (done) => {
     let response = await request.get("/quiz").query({classCode: 1, quizCode:0, type:"score", userId: 1, isInstructor:false});
+    expect(response.text).toBe("[85,100,100]");
     expect(response.status).toBe(200);
     done();
   });
 
   test("fetchDataForStudents case of router.get(\"/\") with some other student ", async (done) => {
     let response = await request.get("/quiz").query({classCode: 1, quizCode:0, type:"score", userId: 2, isInstructor:false});
+    expect(response.text).toBe("[85,100,75]");
     expect(response.status).toBe(200);
     done();
   });
 
   test("fetchDataForStudents case of router.get(\"/\") with class undefined ", async (done) => {
     let response = await request.get("/quiz").query({classCode: 3, quizCode:0, type:"score", userId: 1, isInstructor:false});
+    expect(response.text).toBe("[null,-1,null]");
     expect(response.status).toBe(200);
     done();
   });
@@ -126,18 +133,21 @@ describe("fetch quiz", () => {
 
   test("fetch an existing quiz", async(done) => {
     let response = await request.get("/quiz").query({classCode: 1, quizCode:1});
+    expect(response.text).toBe("[{\"classCode\":1,\"moduleName\":\"module2\",\"uid\":\"1\",\"courseCategory\":\"Math\",\"instructorUID\":\"1\",\"questionList\":[{\"HasPic\":\"false\",\"category\":\"Math\",\"choices\":[{\"isPic\":\"false\",\"str\":\"5\"},{\"isPic\":false,\"str\":\"6\"}],\"correctAnsNum\":1,\"index\":1,\"picSrc\":\"\",\"question\":\"2+3=?\",\"questionType\":\"MC\"}],\"quizCode\":1}]");
     expect(response.status).toBe(200);
     done();
   });
 
   test("fetch an non-existing quiz (quiz module does not exist)", async(done) => {
     let response = await request.get("/quiz").query({classCode: 1, quizCode:0});
+    expect(response.text).toBe("");
     expect(response.status).toBe(200);
     done();
   });
 
   test("fetch an non-existing quiz (class not exist)", async(done) => {
     let response = await request.get("/quiz").query({classCode: 2, quizCode:0});
+    expect(response.text).toBe("");
     expect(response.status).toBe(200);
     done();
   });
