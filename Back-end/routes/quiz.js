@@ -70,8 +70,8 @@ function fetchWrongQuestions(res, classCode, quizCode, wrongQuestionIds) {
   .find({$and: [{classCode}, {quizCode}]})
   .project({_id:0})
   .toArray((err, data) => {
-    if (err) {
-      throw err;
+    if (err || wrongQuestionIds[0] === null) {
+      return;
     } else {
       // not sending the correct values
       let questions = new Array();
@@ -114,7 +114,7 @@ function fetchDataForStudents(res, studentUid, classCode, quizCode, type) {
     classesDb.collection(classDbName).find({uid: {$eq: studentUid}})
     .project({_id:0, ["quiz" + quizCode + "wrongQuestionIds"]: 1})
     .toArray((err, data) => {
-      if (data === null) {
+      if (data === null || data.length === 0) {
         res.send("");
       } else {
         fetchWrongQuestions(res, classCode, quizCode, Object.values(data[0]));
