@@ -149,6 +149,57 @@ describe("fetch quiz", () => {
   });
 });
 
+describe("quiz integration test", () => {
+  beforeAll(async(done) => {
+      var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+      var classDb = await client.db("classes");
+      var db = await client.db("data");
+      //insert dummy variable to implicitly create a database to avoid troubles caused by not properly drop the database
+      await db.collection("userInfo").insertOne({ "uid" : "0", "username" : "dummy"});
+      await db.collection("userInfo").insertOne({"uid":"1", "username": "instructor1", "Email": "yuntaowu2009@hotmail.com", "isInstructor": true, "userQuizCount": "0", "EXP": 0});
+      await db.collection("userInfo").insertOne({"uid":"2", "username":"student1", "Email": "test@ece.ubc.ca", "isInstructor": false, "userQuizCount": "0", "EXP": 0});
+      await db.collection("classInfo").insertOne({"classCode":1,"uid":"1","category":"Math","className":"testClass1","instructorUID":"1"});
+      await classDb.collection("class1").insertOne({ "uid" : "2", "username" : "student1", "userQuizCount" : 0, "score" : 0, "EXP" : 0});
+
+      await classDb.collection("class1").insertOne({ "uid" : "3", "username" : "student2", "userQuizCount" : 1, "score" : 0, "EXP" : 10, "quiz1score" : 0, "quiz1wrongQuestionIds" : "[1]"});
+
+      await db.collection("quizzes").insertOne({"classCode" : 1, "moduleName" : "module1", "uid" : "1", "courseCategory" : "Math", "instructorUID" : "1", "questionList" : [ { "HasPic" : false, "category" : "Math", "choices" : [ { "isPic" : false, "str" : "2" }, { "isPic" : false, "str" : "3" } ], "correctAnsNum" : 1, "index" : 1, "picSrc" : "", "question" : "1+1=?", "questionType" : "MC" } ], "quizCode" : 1 });
+      
+      done();
+  });
+
+  afterAll(async(done) => {
+      var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
+      var classDb = await client.db("classes");
+      var db = await client.db("data");
+      await db.dropDatabase();
+      await classDb.dropDatabase();
+      await client.close();
+      done();
+  });
+
+  test("get wrong questions", async(done) => {
+      let response = await request.get("/quiz/studentWrongCounts").query({classCode:1, quizCode:1});
+      expect(response.text).toBe("[1]");
+      expect(response.status).toBe(200);
+
+      //get wrong question list for teacher
+      response = await request.get("/quiz").query({classCode:1, quizCode:1, isInstructor: true, userId: "1"});
+      expect(response.text).toBe("[{\"HasPic\":false,\"category\":\"Math\",\"choices\":[{\"isPic\":false,\"str\":\"2\"},{\"isPic\":false,\"str\":\"3\"}],\"correctAnsNum\":1,\"index\":1,\"picSrc\":\"\",\"question\":\"1+1=?\",\"questionType\":\"MC\"}]");
+      expect(response.status).toBe(200);
+
+      //get wrong question list for student
+      response = await request.get("/quiz").query({classCode:1, quizCode:1, isInstructor: false, userId: "3"});
+      expect(response.text).toBe("[{\"HasPic\":false,\"category\":\"Math\",\"choices\":[{\"isPic\":false,\"str\":\"2\"},{\"isPic\":false,\"str\":\"3\"}],\"correctAnsNum\":1,\"index\":1,\"picSrc\":\"\",\"question\":\"1+1=?\",\"questionType\":\"MC\"}]");
+      expect(response.status).toBe(200);
+
+      response = await request.get("/quiz").query({classCode:1, quizCode:1, isInstructor: false, userId: "2"});
+      expect(response.text).toBe("");
+      expect(response.status).toBe(200);
+      done();
+  });
+});
+
 // non-endpoint tests
 describe("Calculate Average function", () => {
   test("it should calculate the average score of quizScoreField values from the input data array", () => {
