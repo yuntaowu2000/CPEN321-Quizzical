@@ -1,7 +1,17 @@
 const studentLeaderboardModule = require("../routes/studentLeaderboard.js");
 const MongoClient = require("mongodb").MongoClient;
 
-const app = require("../routes/studentLeaderboard"); // link to server file
+/*global jest*/
+/*eslint no-undef: "error"*/
+jest.mock("../routes/emailSending");
+jest.mock("../routes/firebasePush");
+jest.mock("../routes/index");
+jest.mock("../routes/instructorLeaderboard");
+jest.mock("../routes/class");
+jest.mock("../routes/quiz");
+jest.mock("../routes/upload");
+jest.mock("../routes/users");
+const app = require("../app"); // link to server file
 const supertest = require("supertest");
 const request = supertest(app);
 
