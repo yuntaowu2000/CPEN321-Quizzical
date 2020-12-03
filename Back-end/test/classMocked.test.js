@@ -1,23 +1,26 @@
 const MongoClient = require("mongodb").MongoClient;
 
-const app = require("../app.js"); // link to server file
+const express = require("express");
+const server = express();
+const app = require("../routes/class.js"); // link to server file
+server.use("/classes", app);
 const supertest = require("supertest");
-const request = supertest(app);
+const request = supertest(server);
 
 describe("class test", () => {
-  
+
     beforeAll(async(done) => {
       var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
       var db = await client.db("data");
 
       await db.collection("classInfo").insertOne({"classCode" : 1, "uid" : "1", "category" : "Math", "className" : "testClass1", "instructorUID" : "1", "quizModules" : "{\"category\":\"Math\",\"classCode\":1,\"id\":0,\"moduleName\":\"module1\"}"});
-  
+
       await db.collection("classInfo").insertOne({"classCode" : 2, "uid" : "2", "category" : "English", "className" : "testClass2", "instructorUID" : "2", "quizModules" : "{\"category\":\"English\",\"classCode\":2,\"id\":0,\"moduleName\":\"module1\"}"});
-  
+
       await client.close();
       done();
     });
-  
+
     afterAll(async(done) => {
       var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
       var db = await client.db("data");
@@ -25,14 +28,14 @@ describe("class test", () => {
       await client.close();
       done();
     });
-  
+
     test("get general class info", async (done) => {
         let response = await request.get("/classes").query({classCode: "2"});
         expect(response.status).toBe(200);
         expect(response.text).toBe("[{\"classCode\":2,\"uid\":\"2\",\"category\":\"English\",\"className\":\"testClass2\",\"instructorUID\":\"2\"}]");
         done();
     });
-  
+
     test("get general class info 2", async (done) => {
         let response = await request.get("/classes").query({classCode: "1"});
         expect(response.status).toBe(200);
@@ -49,7 +52,7 @@ describe("class test", () => {
 });
 
 describe("class quiz module test", () => {
-  
+
   beforeAll(async(done) => {
     var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
     var db = await client.db("data");
