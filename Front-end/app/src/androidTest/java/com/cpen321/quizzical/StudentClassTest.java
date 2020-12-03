@@ -31,7 +31,7 @@ public class StudentClassTest {
     /*Note: if you want to run the tests on your own machine,
     you may need to replace the client id with your own google client id at line 108 in CPEN321-Quizzical\Front-end\app\src\main\res\values\strings.xml
     and sign in the app properly.
-    You need a student account for the tests here.
+    You need a student account for the tests here, and please join a class 35608 before triggering the test.
     */
 
     @Rule
