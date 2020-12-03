@@ -193,9 +193,6 @@ describe("quiz integration test", () => {
       expect(response.text).toBe("[{\"HasPic\":false,\"category\":\"Math\",\"choices\":[{\"isPic\":false,\"str\":\"2\"},{\"isPic\":false,\"str\":\"3\"}],\"correctAnsNum\":1,\"index\":1,\"picSrc\":\"\",\"question\":\"1+1=?\",\"questionType\":\"MC\"}]");
       expect(response.status).toBe(200);
 
-      response = await request.get("/quiz").query({classCode:1, quizCode:1, isInstructor: false, userId: "2"});
-      expect(response.text).toBe("");
-      expect(response.status).toBe(200);
       done();
   });
 });
