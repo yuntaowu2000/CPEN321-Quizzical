@@ -149,7 +149,7 @@ describe("fetch quiz", () => {
   });
 });
 
-describe("quiz integration test", () => {
+describe("wrong question test", () => {
   beforeAll(async(done) => {
       var client = await MongoClient.connect("mongodb://localhost:27017",  {useNewUrlParser: true, useUnifiedTopology: true});
       var classDb = await client.db("classes");
