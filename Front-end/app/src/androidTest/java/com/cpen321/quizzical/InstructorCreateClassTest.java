@@ -13,6 +13,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.cpen321.quizzical.data.Classes;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -65,7 +66,7 @@ public class InstructorCreateClassTest {
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.add_class_button))
-                .perform(ViewActions.click());
+                .perform(ViewActions.scrollTo(), ViewActions.click());
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_creating_class_msg))
                 .inRoot(RootMatchers.isDialog())

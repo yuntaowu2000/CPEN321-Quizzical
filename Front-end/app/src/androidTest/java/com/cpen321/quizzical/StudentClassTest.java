@@ -185,7 +185,7 @@ public class StudentClassTest {
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.add_class_button))
-                .perform(ViewActions.click());
+                .perform(ViewActions.scrollTo(), ViewActions.click());
 
         Espresso.onView(ViewMatchers.withText(R.string.UI_enter_class_code_msg))
                 .inRoot(RootMatchers.isDialog())
