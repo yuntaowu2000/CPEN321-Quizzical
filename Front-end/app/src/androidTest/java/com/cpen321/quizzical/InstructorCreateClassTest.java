@@ -13,7 +13,6 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.cpen321.quizzical.data.Classes;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
