@@ -66,13 +66,5 @@ The progress is written in the sequence of implementation.
 -   email when class created  
 -   push notification when quiz module updated  
 -   notification based on user selected frequency  
-
-## TODO list
--   bugs to fix  
-    -   delete quiz module does not unset the values correctly  
-    -   delete class does not delete the class values in the student side  
-
-## Discarded implementation
--   maybe we can add some review quizzes for all the wrong questions a student has got(forget about this one)  
     
     
